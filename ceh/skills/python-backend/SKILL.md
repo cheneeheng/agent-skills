@@ -1,5 +1,5 @@
 ---
-name: "ceh-python-backend"
+name: "python-backend"
 description: >
   Load this skill when writing, reviewing, or debugging Python backend code using the FastAPI +
   uv + asyncpg stack. Covers the complete development loop: setting up and managing the environment

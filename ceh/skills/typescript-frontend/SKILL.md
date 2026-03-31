@@ -1,5 +1,5 @@
 ---
-name: "ceh-typescript-frontend"
+name: "typescript-frontend"
 description: >
   Load this skill when writing, reviewing, or debugging TypeScript and SvelteKit frontend code
   using the Bun + SvelteKit + Vitest + Playwright stack. Covers the full development loop:

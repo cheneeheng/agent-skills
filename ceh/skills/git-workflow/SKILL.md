@@ -1,5 +1,5 @@
 ---
-name: "ceh-git-workflow"
+name: "git-workflow"
 description: >
   Load this skill when writing commit messages, naming branches, opening pull requests, reviewing
   code, configuring CI checks, or evaluating new dependencies. Covers the full team collaboration

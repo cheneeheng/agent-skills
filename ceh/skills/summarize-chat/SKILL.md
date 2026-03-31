@@ -1,5 +1,5 @@
 ---
-name: "ceh-summarize-chat"
+name: "summarize-chat"
 description: >
   Use this skill to summarize the current conversation history into a structured markdown document
   that an LLM can read and act on in a future session. Produces a concise, factual summary covering

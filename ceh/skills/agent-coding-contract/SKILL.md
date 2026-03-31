@@ -1,5 +1,5 @@
 ---
-name: "ceh-agent-coding-contract"
+name: "agent-coding-contract"
 description: >
   Load this skill at the start of any session where a coding agent is assisting with code changes.
   Defines the rules governing how the agent operates: two execution modes (Interactive default vs

@@ -1,0 +1,11 @@
+{
+  "name": "ceh",
+  "version": "1.0.0",
+  "description": "CEH agent skills: coding contract, architecture design, Python backend, TypeScript frontend, Git workflow, release ops, and chat summarization.",
+  "author": {
+    "name": "Chen"
+  },
+  "repository": "https://github.com/chen/agent-skills",
+  "license": "MIT",
+  "keywords": ["agent", "coding-contract", "architecture", "python", "typescript", "git", "release"]
+}

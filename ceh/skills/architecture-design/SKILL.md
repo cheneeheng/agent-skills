@@ -1,5 +1,5 @@
 ---
-name: "ceh-architecture-design"
+name: "architecture-design"
 description: >
   Load this skill when making structural decisions, designing new APIs, defining domain models,
   working on event-sourced state, designing or modifying database schemas, or wiring up an LLM

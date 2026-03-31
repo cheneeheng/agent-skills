@@ -1,5 +1,5 @@
 ---
-name: "ceh-release-ops"
+name: "release-ops"
 description: >
   Load this skill when working on deployments, database migrations, rollbacks, incident response,
   observability setup, security configuration, or quality gates. Covers the complete release and
