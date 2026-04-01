@@ -5,6 +5,36 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.0.2] — 2026-04-01
+
+### Added
+
+18 micro-skills for precise auto-triggering. Each is a thin skill that points to the relevant
+reference file(s) already defined in the bundle skills — no content duplication.
+
+| Micro-skill | Sources | Auto-triggers when |
+|---|---|---|
+| `adr` | architecture-design/adrs | Making significant design decisions |
+| `domain-modeling` | architecture-design/domain-modeling | Designing entities, IDs, status fields |
+| `event-sourcing` | architecture-design/event-sourcing | Working with event log or state snapshots |
+| `rest-api` | architecture-design/rest-api | Building endpoints, choosing HTTP codes |
+| `postgresql` | architecture-design/postgresql + python-backend/database | Writing SQL, asyncpg queries, schema changes |
+| `llm-integration` | architecture-design/llm-integration | Integrating LLM calls or handling output |
+| `fastapi` | python-backend/fastapi + python-backend/exceptions | Writing route handlers, DI, exception hierarchy |
+| `python-testing` | python-backend/testing | Writing Python tests |
+| `sveltekit` | typescript-frontend/sveltekit + typescript-frontend/error-handling | Routes, stores, components, API client |
+| `frontend-testing` | typescript-frontend/testing | Writing frontend tests |
+| `accessibility` | typescript-frontend/accessibility | Writing Svelte component markup |
+| `observability` | python-backend/observability + release-ops/observability | Logging, metrics, health checks |
+| `database-migrations` | release-ops/migrations | Writing or running Alembic migrations |
+| `incidents` | release-ops/incidents + release-ops/hotfix | Production incidents, post-mortems |
+| `definition-of-done` | release-ops/definition-of-done | Preparing to open a PR |
+| `security` | python-backend/security + release-ops/security | Secrets, CORS, rate limiting, input validation |
+| `code-review` | git-workflow/code-review | Reviewing PRs, leaving review comments |
+| `dependency-management` | git-workflow/dependencies | Adding or upgrading packages |
+
+---
+
 ## [1.0.1] — 2026-04-01
 
 ### Changed
