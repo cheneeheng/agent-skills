@@ -47,3 +47,19 @@
 **What happened:** A Read call for `release-ops/SKILL.md` was rejected by the user mid-session. When the same file was re-read in a follow-up attempt, the Read tool returned "File unchanged since last read" — but the content was never actually available in context. The workaround was to fall back to `Bash cat` to retrieve the content.
 
 **Lesson:** "File unchanged since last read" does not mean the content is in context — it only means the file on disk hasn't changed. If a prior Read was rejected or interrupted and the content is absent from context, use Bash to cat the file directly instead of relying on the Read tool's cache response.
+
+---
+
+## 2026-04-01 — Edit tool used on a file that had not been read in the same session
+
+**What happened:** Attempted to edit `.claude-plugin/marketplace.json` with the Edit tool without having read it first. The tool returned "File has not been read yet. Read it first before writing to it." and the edit was rejected.
+
+**Lesson:** The Edit tool requires a prior Read of the file in the current session before any edit can be made. When editing a file that has not been read yet, always Read it first — even if the change is trivial.
+
+---
+
+## 2026-04-01 — Attempted to commit new skills before updating the README
+
+**What happened:** Created 18 new micro-skills and immediately staged and attempted to commit them without updating the README. The user interrupted the commit to request the README be updated first to document the bundle vs micro-skill distinction.
+
+**Lesson:** When adding new skills to the plugin, updating the README is part of the same unit of work — not a follow-up. Stage and commit README changes together with the skill files, never after.
