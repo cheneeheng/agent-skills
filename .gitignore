@@ -1,0 +1,23 @@
+# Environment
+.venv/
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+
+# Node / Bun
+node_modules/
+.svelte-kit/
+dist/
+build/
+
+# Database
+*.db
+
+# Local settings
+.claude/settings.local.json
