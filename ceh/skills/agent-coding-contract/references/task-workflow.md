@@ -1,0 +1,29 @@
+# Task Workflow
+
+## Five-Step Workflow
+
+Every task follows this order. No skipping.
+
+1. **Understand** — clarify the request, affected files, and potential risks
+2. **Confirm scope** — verify authorization; stop if unclear (Interactive Mode)
+3. **Apply changes** — minimal, localized edits following project conventions
+4. **Validate** — run checks **only if explicitly requested**
+5. **Summarize** — what changed, why, any assumptions, any decisions logged
+
+**Hard rule:** Validation, testing, building, formatting, and command execution must not occur unless explicitly requested. This applies in all modes.
+
+## Task Decomposition
+
+For large tasks:
+- Break into sequential subtasks
+- Complete and confirm each subtask before proceeding (Interactive Mode)
+- Document decomposition decisions in `DECISION_LOG.md` (Autonomous Mode)
+- Never silently combine unrelated changes into a single subtask
+
+## Task Completion Output
+
+End every task with:
+- Concise summary of what changed and why
+- Any assumptions made (state them, never hide them)
+- Decision log entries added (if any)
+- Follow-up actions the user should take

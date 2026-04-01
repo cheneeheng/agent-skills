@@ -39,3 +39,11 @@
 **What happened:** `ceh/.claude-plugin/plugin.json` was created with `"repository": "https://github.com/chen/agent-skills"` — a placeholder using a guessed username. The actual GitHub username is `cheneeheng`. The incorrect URL persisted across multiple commits until it was caught and fixed when creating `marketplace.json`.
 
 **Lesson:** Never use a placeholder repo URL in a manifest file. Look up the actual remote URL with `git remote get-url origin` before writing it, or leave the field empty until it can be verified.
+
+---
+
+## 2026-04-01 — Read tool returns "File unchanged" after a rejected read, even though content is not in context
+
+**What happened:** A Read call for `release-ops/SKILL.md` was rejected by the user mid-session. When the same file was re-read in a follow-up attempt, the Read tool returned "File unchanged since last read" — but the content was never actually available in context. The workaround was to fall back to `Bash cat` to retrieve the content.
+
+**Lesson:** "File unchanged since last read" does not mean the content is in context — it only means the file on disk hasn't changed. If a prior Read was rejected or interrupted and the content is absent from context, use Bash to cat the file directly instead of relying on the Read tool's cache response.

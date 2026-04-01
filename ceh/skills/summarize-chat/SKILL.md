@@ -9,9 +9,11 @@ description: >
   as a reusable context document.
 ---
 
-# Chat History Summarizer: Structured Markdown Summary for LLM Context, Covering Session Goal, Actions Taken, Decisions Made, Problems and Solutions, Current State, and Pending Work
+# Chat History Summarizer
 
----
+Produces a structured markdown summary of the current session that a future LLM can read and act
+on without re-reading the full conversation. Covers session goal, actions taken, decisions made,
+problems and solutions, current file state, pending work, and key facts for the next session.
 
 ## Purpose
 
