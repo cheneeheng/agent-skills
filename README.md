@@ -13,29 +13,28 @@ A Claude Code plugin providing engineering standards for AI coding agents. Skill
 | TypeScript Frontend | `/ceh:typescript-frontend` | Writing or reviewing SvelteKit + Bun + Vitest TypeScript code |
 | Release Ops | `/ceh:release-ops` | Deployments, migrations, incident response, or observability setup |
 | Summarize Chat | `/ceh:summarize-chat` | Summarizing the current session for handoff to a future LLM session |
+| Lessons Learned | `/ceh:lessons-learned` | Extracting lessons learned from the current session into `LESSONS_LEARNED.md` |
 
 ## Installing in Claude Code
 
 ### Step 1 — Add the marketplace
 
 ```
-/plugin marketplace add https://github.com/chen/agent-skills.git
+/plugin marketplace add cheneeheng/agent-skills
 ```
-
-> Replace the URL with the actual repository URL if it differs.
 
 ### Step 2 — Install the plugin
 
 For the current project only:
 
 ```
-/plugin install ceh --scope project
+/plugin install ceh@ceh-plugins --scope project
 ```
 
 For all projects (user-wide):
 
 ```
-/plugin install ceh --scope user
+/plugin install ceh@ceh-plugins --scope user
 ```
 
 ### Step 3 — Verify
@@ -50,10 +49,10 @@ The `ceh:` skills should appear in the skills list.
 
 ### Manual installation (alternative)
 
-If you prefer not to use a marketplace, clone this repo and point Claude Code at it directly:
+If you prefer not to use a marketplace, clone this repo and point Claude Code at the `ceh/` subdirectory directly:
 
 ```bash
-git clone https://github.com/chen/agent-skills.git ~/agent-skills
+git clone https://github.com/cheneeheng/agent-skills.git ~/agent-skills
 ```
 
 Then add the plugin path to your Claude Code settings (`~/.claude/settings.json`):
