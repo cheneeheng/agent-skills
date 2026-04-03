@@ -38,7 +38,7 @@ Two kinds of skills exist in this plugin:
 
 PATCH bump for new or updated skills. Follow Conventional Commits.
 Both `plugin.json` and `marketplace.json` must be bumped in the same commit.
-Current version: **1.0.2**
+Current version: **1.0.3**
 
 ## Key Files
 

@@ -73,6 +73,13 @@ to the relevant reference content in its parent bundle — no duplication.
 
 | Skill | Invoke as | Auto-triggers when |
 |-------|-----------|-------------------|
+| Branch | `/ceh:branch` | Creating or naming a branch |
+| Commit | `/ceh:commit` | Writing a commit message or staging changes |
+| Open PR | `/ceh:open-pr` | Opening a pull request or writing a PR description |
+| Merge | `/ceh:merge` | Merging a branch or choosing a merge strategy |
+| Hotfix | `/ceh:hotfix` | Executing a critical production fix |
+| Release | `/ceh:release` | Tagging a release or bumping a version |
+| Gitignore | `/ceh:gitignore` | Creating or editing a `.gitignore` file |
 | Code Review | `/ceh:code-review` | Reviewing a PR or leaving review comments |
 | Dependency Management | `/ceh:dependency-management` | Adding or upgrading a package |
 

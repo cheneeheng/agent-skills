@@ -5,6 +5,25 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.0.3] — 2026-04-03
+
+### Added
+
+7 micro-skills extracted from `git-workflow` for fine-grained auto-triggering on individual
+git operations.
+
+| Micro-skill | Sources | Auto-triggers when |
+|---|---|---|
+| `branch` | git-workflow/branching + workflows | Creating or naming a branch |
+| `commit` | git-workflow/commits + workflows | Writing a commit message or staging changes |
+| `open-pr` | git-workflow/pull-requests + workflows | Opening a pull request or writing a PR description |
+| `merge` | git-workflow/merging | Merging a branch or choosing a merge strategy |
+| `hotfix` | git-workflow/workflows + releases | Executing a critical production fix |
+| `release` | git-workflow/releases + workflows | Tagging a release or bumping a version |
+| `gitignore` | git-workflow/gitignore | Creating or editing a `.gitignore` file |
+
+---
+
 ## [1.0.2] — 2026-04-01
 
 ### Added
