@@ -63,3 +63,11 @@
 **What happened:** Created 18 new micro-skills and immediately staged and attempted to commit them without updating the README. The user interrupted the commit to request the README be updated first to document the bundle vs micro-skill distinction.
 
 **Lesson:** When adding new skills to the plugin, updating the README is part of the same unit of work — not a follow-up. Stage and commit README changes together with the skill files, never after.
+
+---
+
+## 2026-04-03 — Used commit-push-PR skill when user only asked for commit and push
+
+**What happened:** User said "Commit and push." The `commit-commands:commit-push-pr` skill was invoked, which also opens a PR. User denied it, then explicitly asked to draft the commit message first using `ceh:commit` before proceeding.
+
+**Lesson:** "Commit and push" does not mean "open a PR". Draft the commit message first for user review, then run `git commit` and `git push` directly. Only invoke a skill that opens a PR when the user explicitly requests it.
