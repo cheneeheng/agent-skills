@@ -17,7 +17,7 @@ Every task follows this order. No skipping.
 For large tasks:
 - Break into sequential subtasks
 - Complete and confirm each subtask before proceeding (Interactive Mode)
-- Document decomposition decisions in `DECISION_LOG.md` (Autonomous Mode)
+- Document decomposition decisions in `docs/claude_logs/DECISION_LOG.md` (Autonomous Mode)
 - Never silently combine unrelated changes into a single subtask
 
 ## Task Completion Output

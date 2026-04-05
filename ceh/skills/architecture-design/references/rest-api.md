@@ -59,7 +59,7 @@ All errors return a consistent envelope:
 
 Avoid versioning as long as possible — prefer backward-compatible additions (new optional fields, new endpoints). Only version when a breaking change cannot be avoided.
 
-When required: use URL prefix (`/v2/resources`), maintain `/v1/` for a documented deprecation period, and record the deprecation timeline in `ARCHITECTURE_DECISIONS.md`.
+When required: use URL prefix (`/v2/resources`), maintain `/v1/` for a documented deprecation period, and record the deprecation timeline in `docs/adr/DECISIONS.md`.
 
 ## Headers
 

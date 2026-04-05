@@ -20,7 +20,7 @@ A single "just do it" on a clearly scoped task activates autonomous mode for tha
 In Autonomous Mode:
 - Ambiguity → **DECIDE → DOCUMENT → continue**
 - Decisions must be conservative and reasonable
-- Every decision must be logged in `DECISION_LOG.md`
+- Every decision must be logged in `docs/claude_logs/DECISION_LOG.md`
 
 ## Authority Hierarchy (When Context Files Conflict)
 

@@ -71,3 +71,19 @@
 **What happened:** User said "Commit and push." The `commit-commands:commit-push-pr` skill was invoked, which also opens a PR. User denied it, then explicitly asked to draft the commit message first using `ceh:commit` before proceeding.
 
 **Lesson:** "Commit and push" does not mean "open a PR". Draft the commit message first for user review, then run `git commit` and `git push` directly. Only invoke a skill that opens a PR when the user explicitly requests it.
+
+---
+
+## 2026-04-05 — Incomplete first-pass scan missed 6 file references needing path updates
+
+**What happened:** When tasked with updating file paths across all skills, only 2 files were found and updated on the first pass (`lessons-learned/SKILL.md` and `agent-coding-contract/references/decision-log.md`). The user challenged the result, prompting a broader search that revealed 6 additional files still referencing old paths (`task-workflow.md`, `execution-modes.md`, `dependencies.md`, `rollback.md`, `code-review.md`, `rest-api.md`).
+
+**Lesson:** When updating a named value (file path, constant, URL) that may appear across many files, always run a repo-wide grep for the exact string before declaring the task done. Do not rely on a targeted search of likely locations.
+
+---
+
+## 2026-04-05 — Developer-facing file incorrectly placed under docs/claude_logs/
+
+**What happened:** `ARCHITECTURE_DECISIONS.md` was moved to `docs/claude_logs/` alongside Claude-specific session logs (`DECISION_LOG.md`, `LESSONS_LEARNED.md`). The user pointed out that this file is shared project documentation for all developers, not a Claude session artifact, and it was subsequently moved to `docs/adr/DECISIONS.md`.
+
+**Lesson:** Before placing a file under `docs/claude_logs/`, verify the audience. `docs/claude_logs/` is for Claude-generated session output only. Files that record durable project decisions readable by the whole team (ADRs, deprecation timelines) belong in `docs/adr/` or equivalent project-level docs.

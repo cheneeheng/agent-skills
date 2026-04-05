@@ -1,6 +1,6 @@
 # Decision Log Format
 
-When operating in Autonomous Mode, append each decision to `DECISION_LOG.md`:
+When operating in Autonomous Mode, append each decision to `docs/claude_logs/DECISION_LOG.md`. Create the file and any missing parent directories if they do not exist.
 
 ```markdown
 ### Entry <ID>

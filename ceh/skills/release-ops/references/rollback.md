@@ -15,7 +15,7 @@ Roll back **immediately** — do not wait for root cause analysis — when any o
 2. Verify `GET /health` returns `200`
 3. Confirm error rate and latency return to baseline within 2 minutes
 4. Open a P1/P2 incident if production was impacted
-5. Document the rollback in `DECISION_LOG.md`
+5. Document the rollback in `docs/claude_logs/DECISION_LOG.md`
 
 ## Database Rollback Considerations
 

@@ -38,7 +38,7 @@ Two kinds of skills exist in this plugin:
 
 PATCH bump for new or updated skills. Follow Conventional Commits.
 Both `plugin.json` and `marketplace.json` must be bumped in the same commit.
-Current version: **1.0.3**
+Current version: **1.0.4**
 
 ## Key Files
 
@@ -47,5 +47,5 @@ Current version: **1.0.3**
 | `ceh/.claude-plugin/plugin.json` | Plugin version and metadata |
 | `.claude-plugin/marketplace.json` | Marketplace listing (also has version) |
 | `CHANGELOG.md` | Release history |
-| `LESSONS_LEARNED.md` | Session retrospectives — append, never overwrite |
+| `docs/claude_logs/LESSONS_LEARNED.md` | Session retrospectives — append, never overwrite |
 | `README.md` | User-facing docs — bundle and micro-skill tables both live here |

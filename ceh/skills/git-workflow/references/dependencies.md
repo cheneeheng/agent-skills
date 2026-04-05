@@ -31,7 +31,7 @@ uv run pip-audit          # Python
 bun audit                 # TypeScript/JavaScript
 ```
 
-Address all high-severity findings before release. Document any accepted medium-severity exceptions in `DECISION_LOG.md`.
+Address all high-severity findings before release. Document any accepted medium-severity exceptions in `docs/claude_logs/DECISION_LOG.md`.
 
 ## Major Version Upgrades
 

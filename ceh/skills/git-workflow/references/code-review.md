@@ -29,4 +29,4 @@ Every comment must be clearly marked as **blocking** or **advisory**. Ambiguous 
 
 Do not leave style comments that a linter would catch. Configure the linter instead.
 
-Review does not re-litigate resolved decisions in `ARCHITECTURE_DECISIONS.md` unless new risk is identified.
+Review does not re-litigate resolved decisions in `docs/adr/DECISIONS.md` unless new risk is identified.

@@ -12,7 +12,7 @@ description: >
 # Lessons Learned Extractor
 
 Review the full conversation history, identify moments where something went wrong or required
-correction, and append structured lessons to `LESSONS_LEARNED.md` in the current working directory.
+correction, and append structured lessons to `docs/claude_logs/LESSONS_LEARNED.md` in the current working directory.
 
 ---
 
@@ -59,8 +59,8 @@ to avoid repeating this.
 
 ## File handling
 
-1. Check whether `LESSONS_LEARNED.md` exists in the current working directory
-2. If it does not exist, create it with this header before appending:
+1. Check whether `docs/claude_logs/LESSONS_LEARNED.md` exists in the current working directory
+2. If it does not exist, create it (including any missing parent directories) with this header before appending:
    ```markdown
    # Lessons Learned
 
