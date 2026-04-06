@@ -1,6 +1,6 @@
 {
   "name": "ceh",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "CEH agent skills: coding contract, architecture design, Python backend, TypeScript frontend, Git workflow, release ops, and chat summarization.",
   "author": {
     "name": "Chen"

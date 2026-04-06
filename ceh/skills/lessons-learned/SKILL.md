@@ -66,8 +66,9 @@ to avoid repeating this.
 
    ---
    ```
-3. Append new lessons after any existing content — never overwrite or reorder existing entries
-4. Separate each lesson from the previous content with a blank line
+3. Append new lessons at the very end of the file — after the last existing entry, not before it. Never insert between existing entries.
+4. Use the Write tool to rewrite the full file with the new lesson appended at the bottom, or use the Edit tool with the final line(s) of the file as the `old_string` anchor so the insertion lands at the true end.
+5. Separate each new lesson from the previous content with a blank line
 
 ---
 

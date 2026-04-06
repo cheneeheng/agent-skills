@@ -5,6 +5,14 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.0.5] — 2026-04-06
+
+### Fixed
+
+- `lessons-learned` skill: clarified append instruction to always add new entries at the very end of `LESSONS_LEARNED.md`, never before the last existing entry.
+
+---
+
 ## [1.0.4] — 2026-04-05
 
 ### Changed
