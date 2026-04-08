@@ -1,7 +1,23 @@
 # Changelog
 
-All notable changes to the `ceh` plugin are documented here.
+All notable changes to the `ceh-*` plugins are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
+
+---
+
+## [2.0.0] — 2026-04-08 (all plugins)
+
+### Changed
+
+- **Breaking**: split the monolithic `ceh` plugin into 8 standalone plugins, one per domain:
+  `ceh-agent-coding-contract`, `ceh-architecture-design`, `ceh-python-backend`,
+  `ceh-typescript-frontend`, `ceh-git-workflow`, `ceh-release-ops`,
+  `ceh-summarize-chat`, `ceh-lessons-learned`.
+- Each bundle skill and its associated micro-skills now live in the same plugin. Skill invoke
+  prefixes changed from `ceh:*` to `ceh-<plugin>:*` (e.g. `ceh:commit` → `ceh-git-workflow:commit`).
+- Cross-bundle micro-skills (`postgresql`, `observability`, `security`) retain identical relative
+  reference paths; foreign reference files are duplicated into the host plugin where needed.
+- `marketplace.json` updated to list all 8 plugins; old `ceh` entry removed.
 
 ---
 
