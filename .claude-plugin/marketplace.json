@@ -8,16 +8,84 @@
   },
   "plugins": [
     {
-      "name": "ceh",
-      "source": "./ceh",
-      "description": "CEH agent skills: coding contract, architecture design, Python backend, TypeScript frontend, Git workflow, release ops, and chat summarization.",
-      "version": "1.0.5",
-      "author": {
-        "name": "cheneeheng"
-      },
+      "name": "ceh-agent-coding-contract",
+      "source": "./ceh-agent-coding-contract",
+      "description": "CEH agent coding contract: interactive vs autonomous modes and the five-step task workflow.",
+      "version": "2.0.0",
+      "author": { "name": "cheneeheng" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
-      "keywords": ["agent", "coding-contract", "architecture", "python", "typescript", "git", "release"]
+      "keywords": ["agent", "coding-contract", "workflow"]
+    },
+    {
+      "name": "ceh-architecture-design",
+      "source": "./ceh-architecture-design",
+      "description": "CEH architecture design: API design, domain modeling, event sourcing, LLM integration, PostgreSQL, and REST API standards.",
+      "version": "2.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "architecture", "domain-modeling", "event-sourcing", "postgresql", "rest-api", "llm"]
+    },
+    {
+      "name": "ceh-python-backend",
+      "source": "./ceh-python-backend",
+      "description": "CEH Python backend: FastAPI, asyncpg, uv, testing, observability, and security standards.",
+      "version": "2.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "python", "fastapi", "asyncpg", "testing"]
+    },
+    {
+      "name": "ceh-typescript-frontend",
+      "source": "./ceh-typescript-frontend",
+      "description": "CEH TypeScript frontend: SvelteKit, Bun, Vitest, Playwright, accessibility, and testing standards.",
+      "version": "2.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "typescript", "sveltekit", "frontend", "testing", "accessibility"]
+    },
+    {
+      "name": "ceh-git-workflow",
+      "source": "./ceh-git-workflow",
+      "description": "CEH Git workflow: commits, branching, PRs, merging, releases, code review, and dependency management.",
+      "version": "2.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "git", "commits", "branching", "pull-requests", "releases"]
+    },
+    {
+      "name": "ceh-release-ops",
+      "source": "./ceh-release-ops",
+      "description": "CEH release ops: deployments, migrations, incident response, observability, security, and definition of done.",
+      "version": "2.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "release", "operations", "migrations", "incidents", "observability", "security"]
+    },
+    {
+      "name": "ceh-summarize-chat",
+      "source": "./ceh-summarize-chat",
+      "description": "CEH summarize chat: structured session summary for LLM handoff.",
+      "version": "2.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "summarize", "session", "handoff"]
+    },
+    {
+      "name": "ceh-lessons-learned",
+      "source": "./ceh-lessons-learned",
+      "description": "CEH lessons learned: extract and record session retrospectives into LESSONS_LEARNED.md.",
+      "version": "2.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "lessons-learned", "retrospective"]
     }
   ]
 }

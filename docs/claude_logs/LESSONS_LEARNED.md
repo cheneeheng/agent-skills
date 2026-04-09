@@ -87,3 +87,19 @@
 **What happened:** `ARCHITECTURE_DECISIONS.md` was moved to `docs/claude_logs/` alongside Claude-specific session logs (`DECISION_LOG.md`, `LESSONS_LEARNED.md`). The user pointed out that this file is shared project documentation for all developers, not a Claude session artifact, and it was subsequently moved to `docs/adr/DECISIONS.md`.
 
 **Lesson:** Before placing a file under `docs/claude_logs/`, verify the audience. `docs/claude_logs/` is for Claude-generated session output only. Files that record durable project decisions readable by the whole team (ADRs, deprecation timelines) belong in `docs/adr/` or equivalent project-level docs.
+
+---
+
+## 2026-04-08 — Read individual skill files when README already had the grouping
+
+**What happened:** When tasked with splitting the `ceh` plugin into per-domain plugins, started reading each `SKILL.md` individually to determine micro-skill-to-bundle mappings. The user interrupted: "You do not need to read the skill files individually. The readme has the info you need." — the README already contained the full micro-skill grouping table.
+
+**Lesson:** Before reading individual skill/config files to infer groupings or mappings, check top-level docs (`README.md`, `CLAUDE.md`) first. If a summary table exists there, use it and skip the per-file reads.
+
+---
+
+## 2026-04-08 — Applied a change based on ambiguous single-character message "2"
+
+**What happened:** After the `claude-md-improver` workflow completed and the user approved the diff, they sent a follow-up message containing only `2`. This was interpreted as "apply recommendation #2 from the quality report" and a second edit was made to `CLAUDE.md`. The user then said "Undo the last update."
+
+**Lesson:** A bare number sent after a multi-step workflow is ambiguous — do not infer it means "apply item N from the previous list". Ask for clarification before acting on single-character or otherwise ambiguous follow-up messages.

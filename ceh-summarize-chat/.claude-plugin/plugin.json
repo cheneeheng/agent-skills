@@ -1,0 +1,9 @@
+{
+  "name": "ceh-summarize-chat",
+  "version": "2.0.0",
+  "description": "CEH summarize chat: structured session summary for LLM handoff.",
+  "author": { "name": "Chen" },
+  "repository": "https://github.com/cheneeheng/agent-skills",
+  "license": "MIT",
+  "keywords": ["agent", "summarize", "session", "handoff"]
+}
