@@ -30,8 +30,8 @@
     {
       "name": "ceh-python-backend",
       "source": "./ceh-python-backend",
-      "description": "CEH Python backend: FastAPI, asyncpg, uv, testing, observability, and security standards.",
-      "version": "2.0.0",
+      "description": "CEH Python backend: FastAPI, asyncpg, uv, testing (unit/integration/system), observability, and security standards.",
+      "version": "2.1.0",
       "author": { "name": "cheneeheng" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
@@ -40,8 +40,8 @@
     {
       "name": "ceh-typescript-frontend",
       "source": "./ceh-typescript-frontend",
-      "description": "CEH TypeScript frontend: SvelteKit, Bun, Vitest, Playwright, accessibility, and testing standards.",
-      "version": "2.0.0",
+      "description": "CEH TypeScript frontend: SvelteKit, Bun, Vitest, Playwright, accessibility, and testing agents (unit/integration/system).",
+      "version": "2.1.0",
       "author": { "name": "cheneeheng" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
@@ -50,8 +50,8 @@
     {
       "name": "ceh-git-workflow",
       "source": "./ceh-git-workflow",
-      "description": "CEH Git workflow: commits, branching, PRs, merging, releases, code review, and dependency management.",
-      "version": "2.0.0",
+      "description": "CEH Git workflow: commits, branching, PRs, merging, releases, code review, dependency management, and changelog/README agents.",
+      "version": "2.1.0",
       "author": { "name": "cheneeheng" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
@@ -60,8 +60,8 @@
     {
       "name": "ceh-release-ops",
       "source": "./ceh-release-ops",
-      "description": "CEH release ops: deployments, migrations, incident response, observability, security, and definition of done.",
-      "version": "2.0.0",
+      "description": "CEH release ops: deployments, migrations, incident response, observability, security, GitHub Actions, and GitLab CI agents.",
+      "version": "2.1.0",
       "author": { "name": "cheneeheng" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
@@ -86,6 +86,16 @@
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
       "keywords": ["agent", "lessons-learned", "retrospective"]
+    },
+    {
+      "name": "ceh-dev-tools",
+      "source": "./ceh-dev-tools",
+      "description": "CEH developer tools: repository exploration, mapping, and codebase orientation agents.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "dev-tools", "repo-map", "codebase", "exploration"]
     }
   ]
 }

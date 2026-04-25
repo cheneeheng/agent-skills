@@ -1,7 +1,48 @@
 # Changelog
 
-All notable changes to the `ceh-*` plugins are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
+Versions refer to the Marketplace versions.
+
+---
+
+## [2.1.0] — 2026-04-25
+
+### Added
+
+- **`ceh-dev-tools` plugin (new, v1.0.0)** — developer productivity agents with no prior home:
+  - `repo-tree-mapper` agent: walks a repo and produces an annotated, clickable `REPO_MAP.md`.
+  - `walk-repo.sh` script: git-aware directory walker used by the agent.
+
+- **`ceh-git-workflow` agents** (v2.1.0):
+  - `changelog-agent`: generates or updates `CHANGELOG.md` following Keep a Changelog + semver.
+  - `readme-updater`: applies surgical README edits after significant feature changes.
+  - `check-semver.py` script: validates all version headers in a changelog file.
+
+- **`ceh-python-backend` agents** (v2.1.0):
+  - `python-unit-tester`: writes isolated pytest unit tests with mocked dependencies.
+  - `python-integration-tester`: writes pytest integration tests against real internal components.
+  - `python-system-tester`: writes full-stack scenario tests with Docker Compose support.
+  - `run-unit-tests.sh`, `run-integration-tests.sh`, `run-system-tests.sh` scripts.
+
+- **`ceh-typescript-frontend` agents** (v2.1.0):
+  - `ts-unit-tester`: writes isolated Vitest/Jest/Mocha unit tests.
+  - `ts-integration-tester`: writes in-process multi-module tests with supertest/testcontainers.
+  - `ts-system-tester`: writes Playwright/Cypress E2E tests with compose stack management.
+  - `detect-test-framework.sh`, `run-unit-tests.sh`, `run-integration-tests.sh`,
+    `check-coverage.sh`, `run-e2e.sh`, `setup-test-db.sh` scripts.
+
+- **`ceh-release-ops` agents** (v2.1.0):
+  - `github-actions`: creates, reviews, and debugs GitHub Actions workflows.
+  - `gitlab-ci`: creates, reviews, and debugs GitLab CI pipelines.
+  - `gh-detect-stack.sh`, `gh-scaffold.sh`, `gh-validate.sh`, `gh-analyze-failure.sh` scripts.
+  - `gl-detect-stack.sh`, `gl-scaffold.sh`, `gl-validate.sh`, `gl-analyze-failure.sh` scripts.
+
+### Changed
+
+- All agent script references migrated from `.claude/scripts/` to `${CLAUDE_PLUGIN_ROOT}/scripts/`
+  so scripts resolve correctly from the installed plugin path.
+- Python test runner scripts no longer navigate relative to their own location; they run from
+  the project root as invoked by the agent.
 
 ---
 

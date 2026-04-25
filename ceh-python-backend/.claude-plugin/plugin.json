@@ -1,7 +1,7 @@
 {
   "name": "ceh-python-backend",
-  "version": "2.0.0",
-  "description": "CEH Python backend: FastAPI, asyncpg, uv, testing, observability, and security standards.",
+  "version": "2.1.0",
+  "description": "CEH Python backend: FastAPI, asyncpg, uv, testing (unit/integration/system), observability, and security standards.",
   "author": { "name": "Chen" },
   "repository": "https://github.com/cheneeheng/agent-skills",
   "license": "MIT",
