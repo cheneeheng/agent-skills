@@ -15,6 +15,7 @@ backend/
 └── tests/
     ├── unit/         # Isolated — no I/O, mock all external dependencies
     ├── integration/  # Real database, mock only external APIs (LLM, payment)
+    ├── system/       # Full-stack E2E scenarios — real infra, real HTTP
     └── conftest.py   # Shared fixtures: test DB, async client, mock factories
 ```
 

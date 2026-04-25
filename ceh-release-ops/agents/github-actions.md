@@ -70,7 +70,7 @@ readable workflows — not bloated YAML.
 
 1. `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gh-detect-stack.sh"` — detect stack + existing workflows.
 2. `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gh-scaffold.sh" <stack>` — emit a starter for common stacks
-   (node, python, go, rust, generic). Customize before writing.
+   (node, python-uv, python, go, rust, generic). Customize before writing.
 3. Write the file to `.github/workflows/<name>.yml`.
 4. `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gh-validate.sh" .github/workflows/<name>.yml` — validate.
 
@@ -101,7 +101,7 @@ readable workflows — not bloated YAML.
 All scripts live in `${CLAUDE_PLUGIN_ROOT}/scripts/`:
 
 - `gh-detect-stack.sh` — identifies project stack and existing GH workflows
-- `gh-scaffold.sh <stack>` — emits a starter workflow for common stacks
+- `gh-scaffold.sh <stack>` — emits a starter workflow for common stacks (node, python-uv, python, go, rust, generic)
 - `gh-validate.sh <file>` — YAML lint + actionlint (if installed)
 - `gh-analyze-failure.sh <logfile>` — extracts first failure signal from a CI log
 

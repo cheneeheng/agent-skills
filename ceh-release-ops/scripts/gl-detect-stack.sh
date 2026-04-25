@@ -12,7 +12,9 @@ echo "repo_root=$ROOT"
 
 # --- Language / stack detection ---
 [[ -f package.json     ]] && echo "stack=node"
-[[ -f pyproject.toml   ]] && echo "stack=python-poetry"
+if [[ -f pyproject.toml ]]; then
+  [[ -f uv.lock ]] && echo "stack=python-uv" || echo "stack=python-poetry"
+fi
 [[ -f requirements.txt && ! -f pyproject.toml ]] && echo "stack=python-pip"
 [[ -f go.mod           ]] && echo "stack=go"
 [[ -f Cargo.toml       ]] && echo "stack=rust"
@@ -24,6 +26,7 @@ echo "repo_root=$ROOT"
 
 # Node package manager
 if [[ -f package.json ]]; then
+  [[ -f bun.lockb         ]] && echo "node_pm=bun"
   [[ -f pnpm-lock.yaml    ]] && echo "node_pm=pnpm"
   [[ -f yarn.lock         ]] && echo "node_pm=yarn"
   [[ -f package-lock.json ]] && echo "node_pm=npm"

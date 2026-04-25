@@ -41,6 +41,35 @@ jobs:
 YAML
 ;;
 
+python-uv)
+cat <<'YAML'
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version-file: pyproject.toml
+      - run: pip install uv
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run mypy --strict src/
+      - run: uv run pytest -q --tb=short
+YAML
+;;
+
 python)
 cat <<'YAML'
 name: CI

@@ -82,6 +82,8 @@ to the relevant reference content in its parent bundle — no duplication.
 | Incidents | `/ceh-release-ops:incidents` | Responding to a production incident or writing a post-mortem |
 | Definition of Done | `/ceh-release-ops:definition-of-done` | Preparing to open a pull request |
 | Security | `/ceh-release-ops:security` | Handling secrets, CORS, rate limiting, or input validation |
+| Versioning | `/ceh-release-ops:versioning` | Bumping a version, tagging a release, or classifying a change |
+| Rollback | `/ceh-release-ops:rollback` | Deciding to roll back a deployment or recovering from a failed migration |
 
 ### Git Workflow (`ceh-git-workflow`)
 

@@ -74,14 +74,14 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     done
   done | sort -u
 else
-  # No git — fall back to find
-  find . -maxdepth "$MAX_DEPTH" \
-    \( -type d \( "${PRUNE_EXPR[@]}" \) -prune \) -o \
-    \( -type f -print \) -o \
-    \( -type d -print \) 2>/dev/null | \
-    sed 's|^\./||' | \
-    awk '{
-      if (system("[ -d \"" $0 "\" ]") == 0) print $0 "/"
-      else print $0
-    }' | sort -u | grep -v '^$'
+  # No git — fall back to find. Two passes: files then dirs (avoids per-path
+  # shell subprocesses to determine type).
+  {
+    find . -maxdepth "$MAX_DEPTH" \
+      \( -type d \( "${PRUNE_EXPR[@]}" \) -prune \) -o \
+      -type f -print 2>/dev/null | sed 's|^\./||'
+    find . -maxdepth "$MAX_DEPTH" \
+      \( -type d \( "${PRUNE_EXPR[@]}" \) -prune \) -o \
+      -type d ! -name '.' -print 2>/dev/null | sed 's|^\./||; s|$|/|'
+  } | sort -u | grep -v '^$'
 fi

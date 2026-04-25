@@ -28,7 +28,7 @@ class LLMAPIError(AppError):
 ## Rules
 
 - Services raise domain exceptions
-- Route handlers convert domain exceptions to `HTTPException`
+- Global exception handlers in `app/core/middleware.py` map domain exceptions to HTTP responses — never do this per-route
 - Never raise `HTTPException` inside a service layer
 - Never swallow exceptions silently with bare `except:`
 - Always log unexpected exceptions before re-raising

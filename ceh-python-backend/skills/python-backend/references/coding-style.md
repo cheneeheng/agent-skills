@@ -100,7 +100,7 @@ def send_message(session_id: str, body: MessageRequest) -> MessageResponse:
 
 If a blocking library must be used, delegate to a thread pool:
 ```python
-result = await asyncio.get_event_loop().run_in_executor(None, blocking_fn, arg)
+result = await asyncio.get_running_loop().run_in_executor(None, blocking_fn, arg)
 ```
 
 Do not use `time.sleep()` — use `await asyncio.sleep()`.

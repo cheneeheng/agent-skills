@@ -22,9 +22,9 @@ if [[ -z "${TEST_DATABASE_URL:-}" ]]; then
   exit 1
 fi
 
-# Ensure pytest is available
-if ! command -v pytest &>/dev/null; then
-  echo "ERROR: pytest not found. Run: pip install pytest pytest-mock"
+# Ensure uv is available
+if ! command -v uv &>/dev/null; then
+  echo "ERROR: uv not found. Install from https://docs.astral.sh/uv/"
   exit 1
 fi
 
@@ -32,7 +32,7 @@ echo "==> Using database: $TEST_DATABASE_URL"
 
 # Filter by marker so tests without @pytest.mark.integration are skipped.
 # The integration agent is instructed to add this marker to every test.
-pytest "$TARGET" \
+uv run pytest "$TARGET" \
   --tb=short \
   -v \
   --no-header \

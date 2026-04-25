@@ -68,6 +68,58 @@ build:
 YAML
 ;;
 
+python-uv)
+cat <<'YAML'
+# .gitlab-ci.yml — Python (uv)
+default:
+  image: python:3.12-slim
+  cache:
+    key:
+      files:
+        - uv.lock
+    paths:
+      - .uv-cache/
+
+stages: [lint, test]
+
+variables:
+  UV_CACHE_DIR: "$CI_PROJECT_DIR/.uv-cache"
+
+.python-base:
+  before_script:
+    - pip install --quiet uv
+    - uv sync --frozen
+
+lint:
+  stage: lint
+  extends: .python-base
+  script:
+    - uv run ruff check .
+    - uv run mypy --strict src/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+test:
+  stage: test
+  extends: .python-base
+  script:
+    - uv run pytest --junitxml=report.xml --cov --cov-report=xml -q
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+YAML
+;;
+
 python)
 cat <<'YAML'
 # .gitlab-ci.yml — Python

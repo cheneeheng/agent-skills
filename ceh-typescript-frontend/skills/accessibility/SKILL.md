@@ -1,10 +1,9 @@
 ---
 name: "accessibility"
 description: >
-  Load this skill when writing Svelte component markup: adding interactive elements, images,
-  navigation, forms, or any HTML structure where keyboard accessibility or semantic HTML is
-  relevant. Auto-load whenever a .svelte file is created or modified and HTML elements are
-  being written or reviewed.
+  Load this skill when writing Svelte component markup with interactive elements, images,
+  forms, or navigation. Auto-load whenever a .svelte file is created or modified and HTML
+  structure is being written or reviewed.
 ---
 
 # Accessibility

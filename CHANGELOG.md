@@ -12,6 +12,25 @@ Versions refer to the Marketplace versions.
 - **`ceh-dev-tools` plugin (new, v1.0.0)** — developer productivity agents with no prior home:
   - `repo-tree-mapper` agent: walks a repo and produces an annotated, clickable `REPO_MAP.md`.
   - `walk-repo.sh` script: git-aware directory walker used by the agent.
+  - `README.md`.
+
+### Fixed
+
+- **`ceh-python-backend`** (v2.1.0):
+  - `references/exceptions.md`: removed contradictory rule "route handlers convert domain exceptions
+    to HTTPException"; global exception handlers in `app/core/middleware.py` are now the stated
+    pattern, consistent with `fastapi.md`.
+  - `references/coding-style.md`: replaced deprecated `asyncio.get_event_loop()` with
+    `asyncio.get_running_loop()` (Python 3.10+).
+  - `references/testing.md`: added `system/` directory to the test structure tree.
+  - `run-unit-tests.sh`, `run-integration-tests.sh`, `run-system-tests.sh`: replaced bare `pytest`
+    calls with `uv run pytest`; replaced `pip install` error messages with `uv add --dev`.
+
+- **`ceh-typescript-frontend`** (v2.2.0):
+  - `references/error-handling.md`: component example now uses `onSuccess` callback instead of writing `sessionStore` directly, consistent with the SvelteKit convention.
+  - `scripts/setup-test-db.sh`: removed — Postgres setup script does not belong in a frontend plugin.
+
+### Changed
 
 - **`ceh-git-workflow` agents** (v2.1.0):
   - `changelog-agent`: generates or updates `CHANGELOG.md` following Keep a Changelog + semver.
@@ -23,6 +42,9 @@ Versions refer to the Marketplace versions.
   - `python-integration-tester`: writes pytest integration tests against real internal components.
   - `python-system-tester`: writes full-stack scenario tests with Docker Compose support.
   - `run-unit-tests.sh`, `run-integration-tests.sh`, `run-system-tests.sh` scripts.
+  - Token optimizations: trimmed all three tester agents by 40–52% (removed redundant bash
+    find/cat commands, duplicate pytest marker-registration sections, verbose step narration);
+    hard rules and key process steps retained in full.
 
 - **`ceh-typescript-frontend` agents** (v2.1.0):
   - `ts-unit-tester`: writes isolated Vitest/Jest/Mocha unit tests.
@@ -30,19 +52,17 @@ Versions refer to the Marketplace versions.
   - `ts-system-tester`: writes Playwright/Cypress E2E tests with compose stack management.
   - `detect-test-framework.sh`, `run-unit-tests.sh`, `run-integration-tests.sh`,
     `check-coverage.sh`, `run-e2e.sh`, `setup-test-db.sh` scripts.
+  - `skills/linting/SKILL.md`: new micro-skill for ESLint/Prettier/svelte-check/tsc configuration.
+  - `skills/coding-style/SKILL.md`: new micro-skill for TypeScript type conventions and naming.
+  - `references/accessibility.md`: expanded with ARIA patterns, focus management, keyboard nav, form labelling, and color contrast rules.
 
 - **`ceh-release-ops` agents** (v2.1.0):
   - `github-actions`: creates, reviews, and debugs GitHub Actions workflows.
   - `gitlab-ci`: creates, reviews, and debugs GitLab CI pipelines.
   - `gh-detect-stack.sh`, `gh-scaffold.sh`, `gh-validate.sh`, `gh-analyze-failure.sh` scripts.
   - `gl-detect-stack.sh`, `gl-scaffold.sh`, `gl-validate.sh`, `gl-analyze-failure.sh` scripts.
-
-### Changed
-
-- All agent script references migrated from `.claude/scripts/` to `${CLAUDE_PLUGIN_ROOT}/scripts/`
-  so scripts resolve correctly from the installed plugin path.
-- Python test runner scripts no longer navigate relative to their own location; they run from
-  the project root as invoked by the agent.
+  - `skills/versioning/SKILL.md`: new micro-skill — triggers on version bumps, release tagging, and change classification.
+  - `skills/rollback/SKILL.md`: new micro-skill — triggers on deployment health-check failures and post-deploy metric spikes.
 
 ---
 

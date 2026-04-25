@@ -2,7 +2,7 @@
   "name": "ceh-dev-tools",
   "version": "1.0.0",
   "description": "CEH developer tools: repository exploration, mapping, and codebase orientation agents.",
-  "author": { "name": "Chen" },
+  "author": { "name": "cheneeheng" },
   "repository": "https://github.com/cheneeheng/agent-skills",
   "license": "MIT",
   "keywords": ["agent", "dev-tools", "repo-map", "codebase", "exploration"]

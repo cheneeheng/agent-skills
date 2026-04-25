@@ -74,16 +74,16 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# Ensure pytest + pytest-timeout are available
-if ! command -v pytest &>/dev/null; then
-  echo "ERROR: pytest not found. Run: pip install pytest pytest-mock pytest-timeout"
+# Ensure uv is available
+if ! command -v uv &>/dev/null; then
+  echo "ERROR: uv not found. Install from https://docs.astral.sh/uv/"
   exit 1
 fi
 
 # Run system tests — longer timeout, sequential to avoid port conflicts.
-# Requires: pip install pytest-timeout
+# Requires: uv add --dev pytest-timeout
 # Filter by marker so only @pytest.mark.system tests run, even if path is broad.
-pytest "$TARGET" \
+uv run pytest "$TARGET" \
   --tb=long \
   -v \
   --no-header \

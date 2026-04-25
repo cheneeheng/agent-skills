@@ -81,7 +81,7 @@ clean, efficient, secure pipelines — not legacy `only/except` spaghetti.
 
 1. `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gl-detect-stack.sh"` — detect stack + existing CI.
 2. `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gl-scaffold.sh" <stack>` — emit a starter for common
-   stacks (node, python, go, rust, generic). Customize before writing.
+   stacks (node, python-uv, python, go, rust, generic). Customize before writing.
 3. Write the file to `.gitlab-ci.yml` (and split into `.gitlab/ci/*.yml` if large).
 4. `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gl-validate.sh" .gitlab-ci.yml` — validate.
 
@@ -112,7 +112,7 @@ clean, efficient, secure pipelines — not legacy `only/except` spaghetti.
 All scripts live in `${CLAUDE_PLUGIN_ROOT}/scripts/`:
 
 - `gl-detect-stack.sh` — identifies project stack and existing GitLab CI config
-- `gl-scaffold.sh <stack>` — emits a starter `.gitlab-ci.yml` for common stacks
+- `gl-scaffold.sh <stack>` — emits a starter `.gitlab-ci.yml` for common stacks (node, python-uv, python, go, rust, generic)
 - `gl-validate.sh <file>` — YAML lint + glab ci lint (if installed)
 - `gl-analyze-failure.sh <logfile>` — extracts first failure signal from a job log
 

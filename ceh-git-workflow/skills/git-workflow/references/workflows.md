@@ -75,6 +75,7 @@ gh pr create \
 - [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
 - [ ] No secrets or credentials in code
 - [ ] Migrations (if any) are backward-compatible
+- [ ] DECISIONS.md updated (if a durable decision was made)
 EOF
 )"
 ```

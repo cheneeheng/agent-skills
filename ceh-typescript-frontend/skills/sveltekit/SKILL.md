@@ -1,10 +1,9 @@
 ---
 name: "sveltekit"
 description: >
-  Load this skill when working on SvelteKit frontend code: adding or modifying routes, writing
-  load functions, managing Svelte stores, building components, integrating the API client, or
-  handling component-level errors. Auto-load whenever a +page.svelte, +page.server.ts, +page.ts,
-  store file, or component file is created or modified.
+  Load this skill when adding or modifying SvelteKit routes, writing load functions, managing
+  Svelte stores, or building components. Auto-load whenever a +page.svelte, +page.server.ts,
+  +page.ts, store, or component file is created or modified.
 ---
 
 # SvelteKit Conventions

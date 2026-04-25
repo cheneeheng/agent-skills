@@ -21,8 +21,13 @@ class ApiRequestError extends Error {
 
 ## Component Error Handling
 
+Components communicate results upward via callback props — never write stores directly (see SvelteKit conventions).
+
 ```svelte
 <script lang="ts">
+  export let sessionId: string;
+  export let onSuccess: (state: SessionState) => void;  // parent updates the store
+
   let error: string | null = null;
   let loading = false;
 
@@ -31,7 +36,7 @@ class ApiRequestError extends Error {
     loading = true;
     try {
       const result = await apiClient.sendMessage(sessionId, input);
-      sessionStore.set(result.state);
+      onSuccess(result.state);
     } catch (e) {
       error = e instanceof ApiRequestError
         ? e.error.message

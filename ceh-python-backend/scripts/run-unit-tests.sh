@@ -14,15 +14,15 @@ TARGET="${1:-tests/unit}"
 
 echo "==> Running unit tests: $TARGET"
 
-# Ensure pytest is available
-if ! command -v pytest &>/dev/null; then
-  echo "ERROR: pytest not found. Run: pip install pytest pytest-mock"
+# Ensure uv is available
+if ! command -v uv &>/dev/null; then
+  echo "ERROR: uv not found. Install from https://docs.astral.sh/uv/"
   exit 1
 fi
 
 # The -m filter excludes integration/system/e2e tests based on their markers.
 # No need for --ignore flags, which would break if user passes a specific file.
-pytest "$TARGET" \
+uv run pytest "$TARGET" \
   --tb=short \
   -v \
   --no-header \
