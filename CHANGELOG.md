@@ -5,6 +5,14 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.1.1] — 2026-04-26
+
+### Fixed
+
+- Added full list of agents to the readme.
+
+---
+
 ## [2.1.0] — 2026-04-26
 
 ### Plugin versions
