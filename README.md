@@ -43,48 +43,6 @@ Load these explicitly at the start of a session or when you need the full domain
 
 ---
 
-## Agents
-
-Agents run autonomously for a defined task and hand results back to the parent session.
-
-### Dev Tools (`ceh-dev-tools`)
-
-| Agent | Invoke as | When to use |
-|-------|-----------|-------------|
-| Repo Tree Mapper | `/ceh-dev-tools:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
-
-### Git Workflow (`ceh-git-workflow`)
-
-| Agent | Invoke as | When to use |
-|-------|-----------|-------------|
-| Changelog Agent | `/ceh-git-workflow:changelog-agent` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
-| README Updater | `/ceh-git-workflow:readme-updater` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
-
-### Python Backend (`ceh-python-backend`)
-
-| Agent | Invoke as | When to use |
-|-------|-----------|-------------|
-| Python Unit Tester | `/ceh-python-backend:python-unit-tester` | Write isolated pytest unit tests for functions, classes, or modules with mocked dependencies |
-| Python Integration Tester | `/ceh-python-backend:python-integration-tester` | Write tests for real component interactions — DB, HTTP between internal services, service boundaries |
-| Python System Tester | `/ceh-python-backend:python-system-tester` | Write full end-to-end / acceptance tests that exercise the entire application stack |
-
-### TypeScript Frontend (`ceh-typescript-frontend`)
-
-| Agent | Invoke as | When to use |
-|-------|-----------|-------------|
-| TS Unit Tester | `/ceh-typescript-frontend:ts-unit-tester` | Write isolated Vitest unit tests for functions, classes, and modules with mocked dependencies |
-| TS Integration Tester | `/ceh-typescript-frontend:ts-integration-tester` | Write tests wiring real Svelte stores, MSW handlers, and multiple components together |
-| TS System Tester | `/ceh-typescript-frontend:ts-system-tester` | Write Playwright E2E tests that exercise the full running stack as a real user would |
-
-### Release Ops (`ceh-release-ops`)
-
-| Agent | Invoke as | When to use |
-|-------|-----------|-------------|
-| GitHub Actions | `/ceh-release-ops:github-actions` | Create or fix GitHub Actions workflows, jobs, matrix builds, OIDC, reusable workflows |
-| GitLab CI | `/ceh-release-ops:gitlab-ci` | Create or fix `.gitlab-ci.yml` pipelines, DAG stages, rules, protected variables, runners |
-
----
-
 ## Micro-Skills
 
 Narrow skills designed to auto-trigger based on what you are actively working on. Each points
@@ -143,6 +101,48 @@ to the relevant reference content in its parent bundle — no duplication.
 | Gitignore | `/ceh-git-workflow:gitignore` | Creating or editing a `.gitignore` file |
 | Code Review | `/ceh-git-workflow:code-review` | Reviewing a PR or leaving review comments |
 | Dependency Management | `/ceh-git-workflow:dependency-management` | Adding or upgrading a package |
+
+---
+
+## Agents
+
+Agents run autonomously for a defined task and hand results back to the parent session.
+
+### Dev Tools (`ceh-dev-tools`)
+
+| Agent | Invoke as | When to use |
+|-------|-----------|-------------|
+| Repo Tree Mapper | `/ceh-dev-tools:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
+
+### Git Workflow (`ceh-git-workflow`)
+
+| Agent | Invoke as | When to use |
+|-------|-----------|-------------|
+| Changelog Agent | `/ceh-git-workflow:changelog-agent` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
+| README Updater | `/ceh-git-workflow:readme-updater` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
+
+### Python Backend (`ceh-python-backend`)
+
+| Agent | Invoke as | When to use |
+|-------|-----------|-------------|
+| Python Unit Tester | `/ceh-python-backend:python-unit-tester` | Write isolated pytest unit tests for functions, classes, or modules with mocked dependencies |
+| Python Integration Tester | `/ceh-python-backend:python-integration-tester` | Write tests for real component interactions — DB, HTTP between internal services, service boundaries |
+| Python System Tester | `/ceh-python-backend:python-system-tester` | Write full end-to-end / acceptance tests that exercise the entire application stack |
+
+### TypeScript Frontend (`ceh-typescript-frontend`)
+
+| Agent | Invoke as | When to use |
+|-------|-----------|-------------|
+| TS Unit Tester | `/ceh-typescript-frontend:ts-unit-tester` | Write isolated Vitest unit tests for functions, classes, and modules with mocked dependencies |
+| TS Integration Tester | `/ceh-typescript-frontend:ts-integration-tester` | Write tests wiring real Svelte stores, MSW handlers, and multiple components together |
+| TS System Tester | `/ceh-typescript-frontend:ts-system-tester` | Write Playwright E2E tests that exercise the full running stack as a real user would |
+
+### Release Ops (`ceh-release-ops`)
+
+| Agent | Invoke as | When to use |
+|-------|-----------|-------------|
+| GitHub Actions | `/ceh-release-ops:github-actions` | Create or fix GitHub Actions workflows, jobs, matrix builds, OIDC, reusable workflows |
+| GitLab CI | `/ceh-release-ops:gitlab-ci` | Create or fix `.gitlab-ci.yml` pipelines, DAG stages, rules, protected variables, runners |
 
 ---
 

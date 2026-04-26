@@ -52,7 +52,7 @@ Two kinds of skills exist in each plugin:
 5. Update `README.md` skills tables:
    - Bundle skill → add a row to the "Bundle Skills" table
    - Micro-skill → add a row under the correct group in the "Micro-Skills" section
-6. Add a `CHANGELOG.md` entry and bump version in both:
+6. Bump version in both:
    - `ceh-<plugin>/.claude-plugin/plugin.json`
    - `.claude-plugin/marketplace.json`
 
@@ -94,6 +94,4 @@ Current version: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plu
 |------|---------|
 | `ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version and metadata |
 | `.claude-plugin/marketplace.json` | Marketplace listing (all plugins) |
-| `CHANGELOG.md` | Release history |
-| `docs/claude_logs/LESSONS_LEARNED.md` | Session retrospectives — append, never overwrite |
-| `README.md` | User-facing docs — bundle and micro-skill tables both live here |
+| `README.md` | User-facing docs — bundle and micro-skill and agents tables live here |

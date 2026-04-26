@@ -5,6 +5,33 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.2.0] — 2026-04-26
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.0.1 |
+| `ceh-architecture-design` | v2.0.1 |
+| `ceh-dev-tools` | v1.1.0 |
+| `ceh-git-workflow` | v2.2.0 |
+| `ceh-lessons-learned` | v2.0.1 |
+| `ceh-python-backend` | v2.1.1 |
+| `ceh-release-ops` | v2.1.1 |
+| `ceh-summarize-chat` | v2.0.1 |
+| `ceh-typescript-frontend` | v2.1.1 |
+
+### Changed
+
+- **`ceh-dev-tools`** (v1.1.0):
+  - `repo-tree-mapper` agent: defaults to running in background.
+
+- **`ceh-git-workflow`** (v2.2.0):
+  - `changelog-agent` agent: defaults to running in background.
+  - `readme-updater` agent: defaults to running in background.
+
+---
+
 ## [2.1.1] — 2026-04-26
 
 ### Fixed

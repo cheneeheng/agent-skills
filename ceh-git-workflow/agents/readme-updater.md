@@ -11,6 +11,7 @@ tools: Read, Glob, Grep, Edit, Write, Bash
 permissionMode: acceptEdits
 maxTurns: 15
 effort: medium
+background: true
 ---
 
 # README Updater

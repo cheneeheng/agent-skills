@@ -11,6 +11,7 @@ tools: Read, Glob, Grep, LS, Bash, Write, Edit, MultiEdit, TodoRead, TodoWrite
 permissionMode: acceptEdits
 maxTurns: 25
 effort: medium
+background: true
 ---
 
 # Changelog Agent

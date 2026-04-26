@@ -6,6 +6,7 @@ model: haiku
 tools: Read, Glob, Grep, Bash, Write
 permissionMode: acceptEdits
 maxTurns: 8
+background: true
 ---
 
 # Repo Tree Mapper
