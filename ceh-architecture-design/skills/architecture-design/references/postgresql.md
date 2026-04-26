@@ -25,15 +25,9 @@ CREATE INDEX idx_entities_status ON entities(status) WHERE status != 'deleted';
 Never use string interpolation in SQL. Use positional parameters (`$1`, `$2`, etc.) always.
 
 ```python
-# good
 row = await conn.fetchrow(
     "SELECT entity_id, status FROM entities WHERE entity_id = $1 AND owner_id = $2",
     entity_id, owner_id
-)
-
-# bad — SQL injection risk
-row = await conn.fetchrow(
-    f"SELECT * FROM entities WHERE entity_id = '{entity_id}'"
 )
 ```
 

@@ -4,13 +4,11 @@ Frameworks: **Vitest** (unit + component), **@testing-library/svelte** (componen
 
 ## Test Structure
 
-```
-frontend/
-└── tests/
-    ├── unit/       # Pure function tests — no DOM, no fetch
-    ├── component/  # Svelte component render and interaction tests
-    └── e2e/        # Full browser tests against the running application
-```
+| Folder | Contents |
+|--------|---------|
+| `tests/unit/` | Pure function tests — no DOM, no fetch |
+| `tests/component/` | Svelte component render and interaction tests |
+| `tests/e2e/` | Full browser tests against the running application |
 
 Naming: `<subject>.test.ts` for unit/component, `<scenario>.spec.ts` for E2E. One behavior per test.
 
@@ -44,7 +42,7 @@ it('renders open challenges', () => {
 });
 ```
 
-Do **not** use snapshot tests — they hide intentional vs unintentional changes. Use explicit assertions on rendered content.
+No snapshot tests — explicit assertions on rendered content only.
 
 ## API Mocking with MSW — Do Not Mock `fetch` Directly
 
@@ -78,6 +76,6 @@ test('user can start a session and receive a challenge', async ({ page }) => {
 });
 ```
 
-E2E tests are expensive. Keep them focused on happy paths and critical failure modes. Do not duplicate unit or component test coverage.
+Critical paths only. Do not duplicate unit or component test coverage.
 
 **Coverage target:** 70% for `src/lib/`

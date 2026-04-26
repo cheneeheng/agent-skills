@@ -30,6 +30,7 @@ ceh-<plugin-name>/
 | `ceh-release-ops` | Deployments, migrations, incidents, observability, security |
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
+| `ceh-dev-tools` | Repository exploration and codebase orientation agents |
 
 ## Skill Types
 

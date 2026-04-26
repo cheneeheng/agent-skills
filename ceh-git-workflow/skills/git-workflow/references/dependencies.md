@@ -2,8 +2,6 @@
 
 ## Evaluation Criteria — Before Adding Any Package
 
-Ask all five questions:
-
 1. **Necessity** — can this be done with < 20 lines of code in-house?
 2. **Maintenance** — actively maintained? Last commit < 6 months?
 3. **Popularity and trust** — download volume, stars, known maintainers?

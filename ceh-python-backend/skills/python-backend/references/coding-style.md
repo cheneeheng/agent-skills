@@ -48,7 +48,7 @@ Use descriptive, intention-revealing names. Avoid abbreviations except well-know
 ```python
 # 1. Standard library
 import asyncio
-from typing import Optional
+from datetime import datetime
 
 # 2. Third-party
 import asyncpg
@@ -60,7 +60,7 @@ from app.models.session import SessionState
 from app.services.reasoning import ReasoningEngine
 ```
 
-Use `isort` (via ruff) to enforce this automatically. Never use wildcard imports (`from module import *`).
+Never use wildcard imports (`from module import *`).
 
 ## Data Models — Pydantic v2 for Everything Structured
 
@@ -85,16 +85,9 @@ Use `BaseModel` for all API request/response types and domain entities. Reserve 
 All FastAPI route handlers must be `async def`. All I/O calls must use `await`. Never call blocking functions directly in async handlers.
 
 ```python
-# good
 @router.post("/sessions/{session_id}/message")
 async def send_message(session_id: str, body: MessageRequest) -> MessageResponse:
     state = await state_manager.load(session_id)
-    ...
-
-# bad — blocks the event loop
-@router.post("/sessions/{session_id}/message")
-def send_message(session_id: str, body: MessageRequest) -> MessageResponse:
-    state = state_manager.load_sync(session_id)
     ...
 ```
 

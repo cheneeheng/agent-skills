@@ -11,7 +11,6 @@ description: |
   and expensive; only use when the user specifically requests this level. Delegate
   unit and component-level tests to python-unit-tester and python-integration-tester.
 model: sonnet
-effort: high
 tools: Read, Glob, Grep, Write, Edit, Bash
 permissionMode: acceptEdits
 maxTurns: 40

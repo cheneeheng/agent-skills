@@ -1,8 +1,5 @@
 # Git Workflows
 
-Step-by-step command sequences for common operations. Each sequence enforces the standards
-defined in the other reference files — branch naming, commit format, merge policy, etc.
-
 Use the Bash tool to execute these commands.
 
 ---
@@ -44,8 +41,10 @@ EOF
 ```bash
 git fetch origin
 git rebase origin/main
-# if conflicts arise, resolve them, then:
+# resolve conflicts, then:
 git rebase --continue
+# to abandon:
+git rebase --abort
 ```
 
 ---
@@ -115,6 +114,7 @@ git checkout main && git pull origin main
 git tag v<X.Y.Z>
 git push origin v<X.Y.Z>
 git branch -d fix/critical-<description>
+git push origin --delete fix/critical-<description>
 ```
 
 ---

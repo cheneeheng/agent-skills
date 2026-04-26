@@ -8,14 +8,9 @@ All log output is structured JSON. Never use `print()` or unstructured string in
 import structlog
 log = structlog.get_logger()
 
-# good
 log.info("request_completed", endpoint="/resources", status=200, duration_ms=42)
 log.warning("upstream_timeout", service="payment-api", attempt=2)
 log.error("database_connection_failed", host=settings.db_host, error=str(e))
-
-# bad — unstructured strings
-print(f"Request completed in {duration}ms")
-logging.info("Database error: " + str(e))
 ```
 
 ## Log Levels

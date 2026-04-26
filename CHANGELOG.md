@@ -5,6 +5,72 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.1.5] — 2026-04-26
+
+### Changed
+
+- **`ceh-release-ops`** (v2.1.1):
+  - Fixed `skills/definition-of-done/SKILL.md`: domain services coverage target 90% → 95%.
+  - Synced `skills/python-backend/references/observability.md` stub with source — added log level table and Correlation IDs section.
+  - Trimmed `skills/release-ops/references/observability.md`: removed redundant bad-example block.
+  - Added `README.md` and `CHANGELOG.md`.
+
+---
+
+## [2.1.4] — 2026-04-26
+
+### Changed
+
+- **`ceh-lessons-learned`** (v2.0.1):
+  - Trimmed `SKILL.md` description (9 lines → 4); consolidated "Do NOT capture" to one line; simplified file handling step 4 to single method.
+  - Added `README.md`.
+- **`ceh-summarize-chat`** (v2.0.1):
+  - Trimmed `SKILL.md` description (9 lines → 3); removed redundant good/bad example; tightened Writing Rules section.
+  - Added `README.md`.
+
+---
+
+## [2.1.3] — 2026-04-26
+
+### Changed
+
+- **`ceh-python-backend`** (v2.1.1):
+  - Added `references/migrations.md`: Alembic setup, autogenerate, upgrade/downgrade, test DB management.
+  - Added `README.md`: plugin documentation with skills, agents, scripts, and reference index.
+  - Added `CHANGELOG.md` to the plugin root.
+  - Fixed `agents/python-system-tester.md`: removed non-standard `effort: high` frontmatter field.
+  - Fixed `references/security.md`: `uv run pip-audit` → `uvx pip-audit`.
+  - Trimmed `skills/python-backend/SKILL.md` description (12 lines → 4); added `migrations.md` row.
+  - Trimmed `references/coding-style.md`: removed deprecated `from typing import Optional`; removed sync handler anti-pattern block (~11 lines).
+
+---
+
+## [2.1.2] — 2026-04-26
+
+### Fixed
+
+- **`ceh-dev-tools`** (v1.0.1):
+  - `repo-tree-mapper`: trimmed description ~50%; reduced `maxTurns` from 25 to 8.
+  - `walk-repo.sh`: replaced non-portable `$skip && continue` with `[[ $skip == true ]] && continue`.
+  - `README.md`: expanded with invoke syntax, output example, and install instructions.
+  - Added `CHANGELOG.md`.
+  - Registered in top-level `README.md` plugins table, Agents section, and install commands.
+  - Added to `CLAUDE.md` plugins table.
+
+---
+
+## [2.1.1] — 2026-04-26
+
+### Changed
+
+- **`ceh-agent-coding-contract`** (v2.0.1):
+  - Merged `agent-role.md` into `core-rules.md`; deleted the standalone file.
+  - `SKILL.md`: trimmed description; updated body to instruct loading all references (full contract,
+    not selective).
+  - Added `README.md` to the plugin root.
+
+---
+
 ## [2.1.0] — 2026-04-25
 
 ### Added

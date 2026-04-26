@@ -56,7 +56,7 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
         break
       fi
     done
-    $skip && continue
+    [[ $skip == true ]] && continue
 
     # Depth check
     depth=$(echo "$file" | tr -cd '/' | wc -c)

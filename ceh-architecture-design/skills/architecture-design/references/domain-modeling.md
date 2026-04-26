@@ -14,7 +14,7 @@ session_id = generate_id("sess")   # sess_abc123...
 resource_id = generate_id("res")   # res_xyz456...
 ```
 
-## Status Enums — Bounded, Not Free-Form Strings
+## Bounded Status Enums
 
 Status values must come from an explicit, closed set. Never trust free-form strings from external callers for status fields.
 

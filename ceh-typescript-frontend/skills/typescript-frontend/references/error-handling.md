@@ -21,8 +21,6 @@ class ApiRequestError extends Error {
 
 ## Component Error Handling
 
-Components communicate results upward via callback props — never write stores directly (see SvelteKit conventions).
-
 ```svelte
 <script lang="ts">
   export let sessionId: string;

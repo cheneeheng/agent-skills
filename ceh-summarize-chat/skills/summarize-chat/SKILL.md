@@ -1,23 +1,20 @@
 ---
 name: "summarize-chat"
 description: >
-  Use this skill to summarize the current conversation history into a structured markdown document
-  that an LLM can read and act on in a future session. Produces a concise, factual summary covering
-  what was worked on, decisions made, problems encountered, solutions applied, and current state.
+  Summarize the current conversation into a structured markdown document for LLM handoff.
   Trigger when the user asks to "summarize the chat", "summarize the conversation", "create a
-  session summary", "summarize what we did", or any similar request to capture the current session
-  as a reusable context document.
+  session summary", or "summarize what we did".
 ---
 
 # Chat History Summarizer
 
-Produces a structured markdown summary of the current session that a future LLM can read and act
-on without re-reading the full conversation. Covers session goal, actions taken, decisions made,
-problems and solutions, current file state, pending work, and key facts for the next session.
+Produces a structured markdown summary a future LLM can read and act on without re-reading the
+full conversation. Covers session goal, actions taken, decisions made, problems and solutions,
+current file state, pending work, and key facts for the next session.
 
 ## Output Format
 
-Return the summary as a markdown document using this structure. Only include sections that are relevant — omit empty ones.
+Only include sections that are relevant — omit empty ones.
 
 ```markdown
 # Session Summary
@@ -25,56 +22,54 @@ Return the summary as a markdown document using this structure. Only include sec
 **Branch / Repo:** <branch name and repo if known>
 
 ## Goal
-One or two sentences: what was the user trying to accomplish in this session?
+One or two sentences: what was the user trying to accomplish?
 
 ## What Was Done
-Ordered list of actions taken, from first to last. Each item is one line.
+Ordered list of actions taken, first to last. One line per item.
 - Action 1
 - Action 2
-- ...
 
 ## Decisions Made
-Decisions that affect future work — naming conventions chosen, locations agreed on, approaches selected.
+Decisions that affect future work — naming, locations, approaches.
 | Decision | Rationale |
 |----------|-----------|
 | ... | ... |
 
 ## Problems and Solutions
-Issues that came up and how they were resolved. Only include non-obvious problems — skip routine steps.
+Non-obvious issues and how they were resolved.
 | Problem | Solution |
 |---------|----------|
 | ... | ... |
 
 ## Current State
-What is the repo / codebase in right now? What files were created, changed, or deleted?
+What files were created, changed, or deleted?
 - Created: `path/to/file` — purpose
 - Modified: `path/to/file` — what changed
 - Deleted: `path/to/file`
 
 ## Pending / Next Steps
-Work that was discussed but not completed, or logical next actions.
+Work discussed but not completed, or logical next actions.
 - [ ] Item
 
 ## Key Facts for Next Session
-Non-obvious facts a future LLM must know to avoid repeating mistakes or asking redundant questions.
+Non-obvious facts a future LLM must know to avoid repeating mistakes or redundant questions.
 - Fact 1
-- Fact 2
 ```
 
 ## Writing Rules
 
-**Be factual, not narrative.** Write what happened, not a story about it. Avoid phrases like "we explored" or "the user wanted to" — just state what was done.
+**Factual, not narrative.** State what was done. Avoid "we explored" or "the user wanted to".
 
-**One fact per line.** Dense bullet points are easier for an LLM to parse than paragraphs.
+**One fact per line.** Bullet points are easier to parse than paragraphs.
 
-**Prefer specifics over generalities.** File paths, command names, and exact decisions are more useful than vague descriptions.
-- Good: `Skill name field must be lowercase letters, numbers, and hyphens matching the folder name`
-- Bad: `There were some naming constraints to be aware of`
+**Specific over general.** File paths, command names, and exact decisions over vague descriptions.
 
-**Current State is the most important section.** A future LLM needs to know exactly what exists now. List every file that was created, modified, or deleted.
+**Current State is the most important section.** List every file created, modified, or deleted.
 
-**Key Facts is for gotchas.** If something caused a mistake or required correction during the session, it belongs here so the next session does not repeat it.
+**Key Facts is for gotchas.** If something caused a mistake or correction, it belongs here.
 
-**Omit the obvious.** Do not summarize routine tool use, standard git operations, or information derivable from reading the files directly.
+**Omit the obvious.** Skip routine tool use, standard git operations, and anything derivable
+from reading the files directly.
 
-**Tone:** Use imperative or declarative statements, not questions or hedging. Aim for the minimum length that preserves full context — no padding. Readable in under 2 minutes by a human, parseable in one pass by an LLM.
+Aim for minimum length that preserves full context. Readable in under 2 minutes by a human,
+parseable in one pass by an LLM.

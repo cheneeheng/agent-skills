@@ -12,6 +12,4 @@ Tags follow semantic versioning: `v<major>.<minor>.<patch>`. Apply only to commi
 
 When in doubt, bump PATCH. Never lower a version.
 
-## Command Sequence
-
-See [workflows.md](workflows.md) → "Tag a release" for the full command sequence.
+For commands, see [workflows.md](workflows.md) → *Tag a release*.

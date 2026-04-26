@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADRs)
 
-Record every significant architectural decision. A decision is significant if it would be confusing to a future developer without the context behind it, or if reversing it would require a migration or broad refactor.
+Record every significant architectural decision — one that would confuse a future developer without context, or that reversing would require a migration or broad refactor.
 
 ## When to Write an ADR
 
@@ -37,6 +37,4 @@ What was not chosen and why.
 - `Accepted` — agreed upon and in force
 - `Superseded by ADR-NNN` — replaced; link to the superseding ADR
 
-Never delete ADRs. Mark as superseded and link forward. History is valuable.
-
-To change a decision: write a new ADR that references and supersedes the old one. Never silently diverge from an accepted ADR.
+Never delete ADRs — mark as superseded and link forward. To change a decision, write a new ADR that supersedes the old one. Never silently diverge from an accepted ADR.

@@ -55,7 +55,7 @@ class EventBase(BaseModel):
     model_config = ConfigDict(extra='forbid')
     event_type: str
     entity_id: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class ResourceCreatedEvent(EventBase):
     event_type: Literal['resource_created']
