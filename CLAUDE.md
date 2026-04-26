@@ -9,6 +9,8 @@ Each domain is a standalone plugin.
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 ceh-<plugin-name>/
 ├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here
+├── agents/                   # Optional — subagents for complex autonomous tasks
+├── scripts/                  # Optional — shell helpers (e.g. coverage, branch delete)
 └── skills/
     ├── <bundle-skill>/
     │   ├── SKILL.md               # Required — frontmatter + description + body
@@ -82,8 +84,9 @@ manually update the corresponding stub in the host plugin.
 ## Versioning
 
 PATCH bump for new or updated skills. Follow Conventional Commits.
+Bump versions only at commit time — not during iterative edits within a session.
 Both the affected `plugin.json` and `marketplace.json` must be bumped in the same commit.
-Current version: **2.0.0** (all plugins reset at split)
+Current version: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`.
 
 ## Key Files
 

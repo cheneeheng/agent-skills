@@ -5,154 +5,66 @@ Versions refer to the Marketplace versions.
 
 ---
 
-## [2.1.5] — 2026-04-26
+## [2.1.0] — 2026-04-26
 
-### Changed
+### Plugin versions
 
-- **`ceh-release-ops`** (v2.1.1):
-  - Fixed `skills/definition-of-done/SKILL.md`: domain services coverage target 90% → 95%.
-  - Synced `skills/python-backend/references/observability.md` stub with source — added log level table and Correlation IDs section.
-  - Trimmed `skills/release-ops/references/observability.md`: removed redundant bad-example block.
-  - Added `README.md` and `CHANGELOG.md`.
-
----
-
-## [2.1.4] — 2026-04-26
-
-### Changed
-
-- **`ceh-lessons-learned`** (v2.0.1):
-  - Trimmed `SKILL.md` description (9 lines → 4); consolidated "Do NOT capture" to one line; simplified file handling step 4 to single method.
-  - Added `README.md`.
-- **`ceh-summarize-chat`** (v2.0.1):
-  - Trimmed `SKILL.md` description (9 lines → 3); removed redundant good/bad example; tightened Writing Rules section.
-  - Added `README.md`.
-
----
-
-## [2.1.3] — 2026-04-26
-
-### Changed
-
-- **`ceh-python-backend`** (v2.1.1):
-  - Added `references/migrations.md`: Alembic setup, autogenerate, upgrade/downgrade, test DB management.
-  - Added `README.md`: plugin documentation with skills, agents, scripts, and reference index.
-  - Added `CHANGELOG.md` to the plugin root.
-  - Fixed `agents/python-system-tester.md`: removed non-standard `effort: high` frontmatter field.
-  - Fixed `references/security.md`: `uv run pip-audit` → `uvx pip-audit`.
-  - Trimmed `skills/python-backend/SKILL.md` description (12 lines → 4); added `migrations.md` row.
-  - Trimmed `references/coding-style.md`: removed deprecated `from typing import Optional`; removed sync handler anti-pattern block (~11 lines).
-
----
-
-## [2.1.2] — 2026-04-26
-
-### Fixed
-
-- **`ceh-dev-tools`** (v1.0.1):
-  - `repo-tree-mapper`: trimmed description ~50%; reduced `maxTurns` from 25 to 8.
-  - `walk-repo.sh`: replaced non-portable `$skip && continue` with `[[ $skip == true ]] && continue`.
-  - `README.md`: expanded with invoke syntax, output example, and install instructions.
-  - Added `CHANGELOG.md`.
-  - Registered in top-level `README.md` plugins table, Agents section, and install commands.
-  - Added to `CLAUDE.md` plugins table.
-
----
-
-## [2.1.1] — 2026-04-26
-
-### Changed
-
-- **`ceh-agent-coding-contract`** (v2.0.1):
-  - Merged `agent-role.md` into `core-rules.md`; deleted the standalone file.
-  - `SKILL.md`: trimmed description; updated body to instruct loading all references (full contract,
-    not selective).
-  - Added `README.md` to the plugin root.
-
----
-
-## [2.1.0] — 2026-04-25
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.0.1 |
+| `ceh-architecture-design` | v2.0.1 |
+| `ceh-dev-tools` | v1.0.1 |
+| `ceh-git-workflow` | v2.1.0 |
+| `ceh-lessons-learned` | v2.0.1 |
+| `ceh-python-backend` | v2.1.1 |
+| `ceh-release-ops` | v2.1.1 |
+| `ceh-summarize-chat` | v2.0.1 |
+| `ceh-typescript-frontend` | v2.1.1 |
 
 ### Added
 
-- **`ceh-dev-tools` plugin (new, v1.0.0)** — developer productivity agents with no prior home:
-  - `repo-tree-mapper` agent: walks a repo and produces an annotated, clickable `REPO_MAP.md`.
-  - `walk-repo.sh` script: git-aware directory walker used by the agent.
-  - `README.md`.
+- **`ceh-dev-tools` plugin (new, v1.0.1)** — developer productivity agents:
+  - `repo-tree-mapper` agent: walks a repo and produces an annotated `REPO_MAP.md`; trimmed description ~50%, `maxTurns` 25 → 8.
+  - `walk-repo.sh` script: git-aware directory walker (fixed non-portable `$skip && continue` → `[[ $skip == true ]] && continue`).
+  - Registered in top-level `README.md`, `CLAUDE.md`, and `marketplace.json`.
 
-### Fixed
-
-- **`ceh-python-backend`** (v2.1.0):
-  - `references/exceptions.md`: removed contradictory rule "route handlers convert domain exceptions
-    to HTTPException"; global exception handlers in `app/core/middleware.py` are now the stated
-    pattern, consistent with `fastapi.md`.
-  - `references/coding-style.md`: replaced deprecated `asyncio.get_event_loop()` with
-    `asyncio.get_running_loop()` (Python 3.10+).
-  - `references/testing.md`: added `system/` directory to the test structure tree.
-  - `run-unit-tests.sh`, `run-integration-tests.sh`, `run-system-tests.sh`: replaced bare `pytest`
-    calls with `uv run pytest`; replaced `pip install` error messages with `uv add --dev`.
-
-- **`ceh-typescript-frontend`** (v2.2.0):
-  - `references/error-handling.md`: component example now uses `onSuccess` callback instead of writing `sessionStore` directly, consistent with the SvelteKit convention.
-  - `scripts/setup-test-db.sh`: removed — Postgres setup script does not belong in a frontend plugin.
-
-### Changed
-
-- **`ceh-git-workflow` agents** (v2.1.0):
-  - `changelog-agent`: generates or updates `CHANGELOG.md` following Keep a Changelog + semver.
-  - `readme-updater`: applies surgical README edits after significant feature changes.
+- **`ceh-git-workflow`** (v2.1.0) — new agents and scripts:
+  - `changelog-agent`: generates or updates `CHANGELOG.md` (Keep a Changelog + semver).
+  - `readme-updater`: applies surgical README edits after feature changes.
   - `check-semver.py` script: validates all version headers in a changelog file.
 
-- **`ceh-python-backend` agents** (v2.1.0):
-  - `python-unit-tester`: writes isolated pytest unit tests with mocked dependencies.
-  - `python-integration-tester`: writes pytest integration tests against real internal components.
-  - `python-system-tester`: writes full-stack scenario tests with Docker Compose support.
-  - `run-unit-tests.sh`, `run-integration-tests.sh`, `run-system-tests.sh` scripts.
-  - Token optimizations: trimmed all three tester agents by 40–52% (removed redundant bash
-    find/cat commands, duplicate pytest marker-registration sections, verbose step narration);
-    hard rules and key process steps retained in full.
+- **`ceh-python-backend`** (v2.1.1) — new agents, scripts, and references:
+  - `python-unit-tester`, `python-integration-tester`, `python-system-tester` agents.
+  - `run-unit-tests.sh`, `run-integration-tests.sh`, `run-system-tests.sh` scripts (use `uv run pytest`).
+  - `references/migrations.md`: Alembic setup, autogenerate, upgrade/downgrade, test DB management.
 
-- **`ceh-typescript-frontend` agents** (v2.1.0):
-  - `ts-unit-tester`: writes isolated Vitest/Jest/Mocha unit tests.
-  - `ts-integration-tester`: writes in-process multi-module tests with supertest/testcontainers.
-  - `ts-system-tester`: writes Playwright/Cypress E2E tests with compose stack management.
-  - `detect-test-framework.sh`, `run-unit-tests.sh`, `run-integration-tests.sh`,
-    `check-coverage.sh`, `run-e2e.sh`, `setup-test-db.sh` scripts.
-  - `skills/linting/SKILL.md`: new micro-skill for ESLint/Prettier/svelte-check/tsc configuration.
+- **`ceh-typescript-frontend`** (v2.1.1) — new agents, scripts, and micro-skills:
+  - `ts-unit-tester`, `ts-integration-tester`, `ts-system-tester` agents.
+  - `detect-test-framework.sh`, `run-unit-tests.sh`, `run-integration-tests.sh`, `check-coverage.sh`, `run-e2e.sh` scripts.
+  - `skills/linting/SKILL.md`: new micro-skill for ESLint/Prettier/svelte-check/tsc.
   - `skills/coding-style/SKILL.md`: new micro-skill for TypeScript type conventions and naming.
   - `references/accessibility.md`: expanded with ARIA patterns, focus management, keyboard nav, form labelling, and color contrast rules.
 
-- **`ceh-release-ops` agents** (v2.1.0):
-  - `github-actions`: creates, reviews, and debugs GitHub Actions workflows.
-  - `gitlab-ci`: creates, reviews, and debugs GitLab CI pipelines.
+- **`ceh-release-ops`** (v2.1.1) — new agents, scripts, and micro-skills:
+  - `github-actions`, `gitlab-ci` agents for creating, reviewing, and debugging CI pipelines.
   - `gh-detect-stack.sh`, `gh-scaffold.sh`, `gh-validate.sh`, `gh-analyze-failure.sh` scripts.
   - `gl-detect-stack.sh`, `gl-scaffold.sh`, `gl-validate.sh`, `gl-analyze-failure.sh` scripts.
-  - `skills/versioning/SKILL.md`: new micro-skill — triggers on version bumps, release tagging, and change classification.
-  - `skills/rollback/SKILL.md`: new micro-skill — triggers on deployment health-check failures and post-deploy metric spikes.
+  - `skills/versioning/SKILL.md`: micro-skill for version bumps and release tagging.
+  - `skills/rollback/SKILL.md`: micro-skill for deployment health-check failures.
 
-### Fixed (2026-04-26)
+- **READMEs and CHANGELOGs** added to all plugins that were missing them (`ceh-agent-coding-contract`, `ceh-architecture-design`, `ceh-git-workflow`, `ceh-python-backend`, `ceh-release-ops`, `ceh-lessons-learned`, `ceh-summarize-chat`, `ceh-typescript-frontend`, `ceh-dev-tools`).
 
-- **`ceh-release-ops`**: `references/definition-of-done.md` — corrected core domain services coverage
-  target from 90% → 95%, matching `ceh-python-backend/references/testing.md` and
-  `ceh-git-workflow/references/ci.md`.
-- **`ceh-git-workflow`**: `references/workflows.md` — added `git push origin --delete <branch-name>`
-  to the "After PR is merged" sequence; `references/branching.md` states branches must be deleted
-  after merge but the workflow only deleted locally.
+### Fixed
 
-### Changed (2026-04-26)
+- **`ceh-agent-coding-contract`** (v2.0.1): merged `agent-role.md` into `core-rules.md`; updated `SKILL.md` to load all references (full contract, not selective).
+- **`ceh-python-backend`**: `references/exceptions.md` — removed contradictory rule about route handlers converting domain exceptions; `references/coding-style.md` — replaced deprecated `asyncio.get_event_loop()` with `asyncio.get_running_loop()`; `references/security.md` — `uv run pip-audit` → `uvx pip-audit`; `references/testing.md` — added `system/` to test structure tree.
+- **`ceh-typescript-frontend`**: `references/error-handling.md` — component example now uses `onSuccess` callback instead of writing `sessionStore` directly; removed `scripts/setup-test-db.sh` (Postgres setup does not belong in a frontend plugin).
+- **`ceh-release-ops`**: `references/definition-of-done.md` — corrected core domain services coverage target from 90% → 95%, matching `ceh-python-backend/references/testing.md` and `ceh-git-workflow/references/ci.md`; trimmed `references/observability.md` (removed redundant bad-example block); synced `skills/python-backend/references/observability.md` stub.
+- **`ceh-git-workflow`**: `references/workflows.md` — added `git push origin --delete <branch-name>` to the "After PR is merged" sequence.
 
-- Token optimizations across reference files (no content removed):
-  - `ceh-summarize-chat/SKILL.md`: removed redundant Purpose section (duplicated frontmatter),
-    merged Tone and Length into Writing Rules, removed `---` dividers.
-  - `ceh-lessons-learned/SKILL.md`: removed four `---` section dividers.
-  - `ceh-architecture-design/references/domain-modeling.md`: removed obvious docstring from
-    `generate_id` example; shortened StrEnum/const assertion comments.
-  - `ceh-architecture-design/references/postgresql.md`, `ceh-python-backend/references/database.md`,
-    `ceh-release-ops/references/observability.md`, `ceh-python-backend/references/coding-style.md`,
-    `ceh-python-backend/references/testing.md`: shortened verbose inline code example comments
-    (`# Good — parameterized, safe` → `# good`; `# Bad — ...` → `# bad — ...`).
-  - Both database stubs (`ceh-architecture-design/skills/python-backend/references/database.md`
-    and `ceh-python-backend`) updated in sync.
+### Changed
+
+- Token optimizations across reference files (no content removed): `ceh-summarize-chat/SKILL.md`, `ceh-lessons-learned/SKILL.md`, `ceh-architecture-design/references/domain-modeling.md`, `ceh-architecture-design/references/postgresql.md`, `ceh-python-backend/references/database.md`, `ceh-release-ops/references/observability.md`, `ceh-python-backend/references/coding-style.md`, `ceh-python-backend/references/testing.md`; both database stubs kept in sync.
 
 ---
 
