@@ -64,6 +64,30 @@ Versions refer to the Marketplace versions.
   - `skills/versioning/SKILL.md`: new micro-skill — triggers on version bumps, release tagging, and change classification.
   - `skills/rollback/SKILL.md`: new micro-skill — triggers on deployment health-check failures and post-deploy metric spikes.
 
+### Fixed (2026-04-26)
+
+- **`ceh-release-ops`**: `references/definition-of-done.md` — corrected core domain services coverage
+  target from 90% → 95%, matching `ceh-python-backend/references/testing.md` and
+  `ceh-git-workflow/references/ci.md`.
+- **`ceh-git-workflow`**: `references/workflows.md` — added `git push origin --delete <branch-name>`
+  to the "After PR is merged" sequence; `references/branching.md` states branches must be deleted
+  after merge but the workflow only deleted locally.
+
+### Changed (2026-04-26)
+
+- Token optimizations across reference files (no content removed):
+  - `ceh-summarize-chat/SKILL.md`: removed redundant Purpose section (duplicated frontmatter),
+    merged Tone and Length into Writing Rules, removed `---` dividers.
+  - `ceh-lessons-learned/SKILL.md`: removed four `---` section dividers.
+  - `ceh-architecture-design/references/domain-modeling.md`: removed obvious docstring from
+    `generate_id` example; shortened StrEnum/const assertion comments.
+  - `ceh-architecture-design/references/postgresql.md`, `ceh-python-backend/references/database.md`,
+    `ceh-release-ops/references/observability.md`, `ceh-python-backend/references/coding-style.md`,
+    `ceh-python-backend/references/testing.md`: shortened verbose inline code example comments
+    (`# Good — parameterized, safe` → `# good`; `# Bad — ...` → `# bad — ...`).
+  - Both database stubs (`ceh-architecture-design/skills/python-backend/references/database.md`
+    and `ceh-python-backend`) updated in sync.
+
 ---
 
 ## [2.0.0] — 2026-04-08 (all plugins)

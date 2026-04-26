@@ -15,12 +15,6 @@ Produces a structured markdown summary of the current session that a future LLM 
 on without re-reading the full conversation. Covers session goal, actions taken, decisions made,
 problems and solutions, current file state, pending work, and key facts for the next session.
 
-## Purpose
-
-Produce a summary that lets a future LLM session pick up exactly where this one left off — without re-reading the full conversation. The summary must be factual, structured, and optimized for machine reading, not narrative prose.
-
----
-
 ## Output Format
 
 Return the summary as a markdown document using this structure. Only include sections that are relevant — omit empty ones.
@@ -67,8 +61,6 @@ Non-obvious facts a future LLM must know to avoid repeating mistakes or asking r
 - Fact 2
 ```
 
----
-
 ## Writing Rules
 
 **Be factual, not narrative.** Write what happened, not a story about it. Avoid phrases like "we explored" or "the user wanted to" — just state what was done.
@@ -85,10 +77,4 @@ Non-obvious facts a future LLM must know to avoid repeating mistakes or asking r
 
 **Omit the obvious.** Do not summarize routine tool use, standard git operations, or information derivable from reading the files directly.
 
----
-
-## Tone and Length
-
-- Use imperative or declarative statements, not questions or hedging
-- Aim for the minimum length that preserves full context — no padding
-- The summary should be readable in under 2 minutes by a human, and parseable in one pass by an LLM
+**Tone:** Use imperative or declarative statements, not questions or hedging. Aim for the minimum length that preserves full context — no padding. Readable in under 2 minutes by a human, parseable in one pass by an LLM.

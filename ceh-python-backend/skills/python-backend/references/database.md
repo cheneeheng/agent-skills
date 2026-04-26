@@ -3,13 +3,13 @@
 Use **asyncpg** directly — no ORM. Write explicit SQL with parameterized queries.
 
 ```python
-# Good — parameterized, safe
+# good
 row = await conn.fetchrow(
     "SELECT session_id, topic FROM sessions WHERE session_id = $1",
     session_id
 )
 
-# Bad — string interpolation, SQL injection risk
+# bad — SQL injection risk
 row = await conn.fetchrow(
     f"SELECT * FROM sessions WHERE session_id = '{session_id}'"
 )

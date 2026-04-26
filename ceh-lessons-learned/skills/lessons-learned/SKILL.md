@@ -14,8 +14,6 @@ description: >
 Review the full conversation history, identify moments where something went wrong or required
 correction, and append structured lessons to `docs/claude_logs/LESSONS_LEARNED.md` in the current working directory.
 
----
-
 ## What counts as a lesson
 
 Scan the conversation for:
@@ -33,8 +31,6 @@ Do NOT capture:
 
 The target audience for each lesson is a future LLM reading it cold — write so the next session
 avoids repeating the same mistake, not as a narrative for the human.
-
----
 
 ## Output format
 
@@ -55,8 +51,6 @@ to avoid repeating this.
 - Keep each entry under 6 sentences total — dense and specific beats thorough and vague
 - Prefer file paths, command names, and exact decisions over abstract descriptions
 
----
-
 ## File handling
 
 1. Check whether `docs/claude_logs/LESSONS_LEARNED.md` exists in the current working directory
@@ -69,8 +63,6 @@ to avoid repeating this.
 3. Append new lessons at the very end of the file — after the last existing entry, not before it. Never insert between existing entries.
 4. Use the Write tool to rewrite the full file with the new lesson appended at the bottom, or use the Edit tool with the final line(s) of the file as the `old_string` anchor so the insertion lands at the true end.
 5. Separate each new lesson from the previous content with a blank line
-
----
 
 ## After writing
 

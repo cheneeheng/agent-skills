@@ -90,6 +90,7 @@ The PR title must follow Conventional Commits format — it becomes the squash c
 git checkout main
 git pull origin main
 git branch -d <branch-name>
+git push origin --delete <branch-name>
 ```
 
 ---
