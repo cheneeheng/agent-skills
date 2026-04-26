@@ -8,6 +8,9 @@ Must include:
 !.env.example
 __pycache__/
 *.pyc
+*.egg-info/
+.coverage
+.pytest_cache/
 .mypy_cache/
 .ruff_cache/
 node_modules/
@@ -15,4 +18,5 @@ node_modules/
 dist/
 build/
 *.db
+.DS_Store
 ```

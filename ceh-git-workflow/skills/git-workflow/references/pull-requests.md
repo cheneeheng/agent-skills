@@ -36,7 +36,7 @@ Must follow Conventional Commits format. This becomes the squash commit message.
 - [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
 - [ ] No secrets or credentials in code
 - [ ] Migrations (if any) are backward-compatible
-- [ ] ARCHITECTURE_DECISIONS.md updated (if a durable decision was made)
+- [ ] DECISIONS.md updated (if a durable decision was made)
 ```
 
 ## Author Self-Review Checklist

@@ -8,20 +8,18 @@ Every entity has an application-generated, prefixed, URL-safe identifier. Never 
 import secrets
 
 def generate_id(prefix: str) -> str:
-    """Generates a prefixed, URL-safe unique identifier."""
     return f"{prefix}_{secrets.token_urlsafe(12)}"
 
-# Usage
 session_id = generate_id("sess")   # sess_abc123...
 resource_id = generate_id("res")   # res_xyz456...
 ```
 
-## Status Enums — Bounded, Not Free-Form Strings
+## Bounded Status Enums
 
 Status values must come from an explicit, closed set. Never trust free-form strings from external callers for status fields.
 
 ```python
-# Python — use StrEnum for serialization compatibility
+# Python
 from enum import StrEnum
 
 class ResourceStatus(StrEnum):
@@ -31,7 +29,7 @@ class ResourceStatus(StrEnum):
 ```
 
 ```ts
-// TypeScript — const assertion, never TypeScript enum
+// TypeScript — const assertion, not enum
 const ResourceStatus = {
   Active: 'active',
   Archived: 'archived',

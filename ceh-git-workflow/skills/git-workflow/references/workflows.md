@@ -1,8 +1,5 @@
 # Git Workflows
 
-Step-by-step command sequences for common operations. Each sequence enforces the standards
-defined in the other reference files — branch naming, commit format, merge policy, etc.
-
 Use the Bash tool to execute these commands.
 
 ---
@@ -44,8 +41,10 @@ EOF
 ```bash
 git fetch origin
 git rebase origin/main
-# if conflicts arise, resolve them, then:
+# resolve conflicts, then:
 git rebase --continue
+# to abandon:
+git rebase --abort
 ```
 
 ---
@@ -75,6 +74,7 @@ gh pr create \
 - [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
 - [ ] No secrets or credentials in code
 - [ ] Migrations (if any) are backward-compatible
+- [ ] DECISIONS.md updated (if a durable decision was made)
 EOF
 )"
 ```
@@ -89,6 +89,7 @@ The PR title must follow Conventional Commits format — it becomes the squash c
 git checkout main
 git pull origin main
 git branch -d <branch-name>
+git push origin --delete <branch-name>
 ```
 
 ---
@@ -113,6 +114,7 @@ git checkout main && git pull origin main
 git tag v<X.Y.Z>
 git push origin v<X.Y.Z>
 git branch -d fix/critical-<description>
+git push origin --delete fix/critical-<description>
 ```
 
 ---

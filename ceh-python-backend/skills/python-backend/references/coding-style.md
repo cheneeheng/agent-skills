@@ -17,17 +17,17 @@ Missing docstrings on public modules, classes, functions, and methods are consid
 
 ```python
 def validate_event(event: ReasoningEvent, state: SessionState) -> ValidationResult:
-    """Validates a reasoning event against the current session state.
+    """Validates a reasoning event against current session state.
 
     Args:
-        event: The reasoning event proposed by the LLM.
-        state: The current canonical session state.
+        event: The proposed reasoning event.
+        state: Current canonical session state.
 
     Returns:
-        A ValidationResult indicating success or the specific failure reason.
+        ValidationResult with success or failure reason.
 
     Raises:
-        InvalidEventTypeError: If the event type is not in the allowed enum.
+        InvalidEventTypeError: If event type is not in the allowed enum.
     """
 ```
 
@@ -48,7 +48,7 @@ Use descriptive, intention-revealing names. Avoid abbreviations except well-know
 ```python
 # 1. Standard library
 import asyncio
-from typing import Optional
+from datetime import datetime
 
 # 2. Third-party
 import asyncpg
@@ -60,12 +60,12 @@ from app.models.session import SessionState
 from app.services.reasoning import ReasoningEngine
 ```
 
-Use `isort` (via ruff) to enforce this automatically. Never use wildcard imports (`from module import *`).
+Never use wildcard imports (`from module import *`).
 
 ## Data Models — Pydantic v2 for Everything Structured
 
 ```python
-# Good — typed, validated, documented
+# good
 class CreateSessionRequest(BaseModel):
     topic: str
 
@@ -74,7 +74,7 @@ class SessionResponse(BaseModel):
     topic: str
     created_at: datetime
 
-# Bad — untyped, unvalidated
+# bad — untyped, unvalidated
 session = {"session_id": "s_1", "topic": "foo"}
 ```
 
@@ -85,22 +85,15 @@ Use `BaseModel` for all API request/response types and domain entities. Reserve 
 All FastAPI route handlers must be `async def`. All I/O calls must use `await`. Never call blocking functions directly in async handlers.
 
 ```python
-# Good — non-blocking
 @router.post("/sessions/{session_id}/message")
 async def send_message(session_id: str, body: MessageRequest) -> MessageResponse:
     state = await state_manager.load(session_id)
-    ...
-
-# Bad — blocks the event loop
-@router.post("/sessions/{session_id}/message")
-def send_message(session_id: str, body: MessageRequest) -> MessageResponse:
-    state = state_manager.load_sync(session_id)
     ...
 ```
 
 If a blocking library must be used, delegate to a thread pool:
 ```python
-result = await asyncio.get_event_loop().run_in_executor(None, blocking_fn, arg)
+result = await asyncio.get_running_loop().run_in_executor(None, blocking_fn, arg)
 ```
 
 Do not use `time.sleep()` — use `await asyncio.sleep()`.

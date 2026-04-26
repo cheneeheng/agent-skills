@@ -15,5 +15,5 @@ and the health check endpoint contract (200 healthy / 503 degraded, must verify 
 
 Read both reference files and apply the conventions defined there:
 
-- [../python-backend/references/observability.md](../python-backend/references/observability.md) — structlog usage, log levels, correlation IDs, PII logging rules
-- [../release-ops/references/observability.md](../release-ops/references/observability.md) — correlation ID middleware, required metrics, health check contract
+- [../release-ops/references/observability.md](../release-ops/references/observability.md) — structlog levels, correlation ID middleware, required Prometheus metrics, health check contract
+- [../python-backend/references/observability.md](../python-backend/references/observability.md) — Python-specific log examples, PII never-log rules

@@ -11,7 +11,7 @@ description: >
 
 Completion checklists for bug fixes (failing test added, root cause documented), features (unit
 + integration tests, no any/@ts-ignore), and refactors (no behavioral change, no tests deleted).
-Covers coverage targets: 80% overall Python, 90% domain services, 70% TypeScript src/lib/.
+Covers coverage targets: 80% Python application package, 95% core business logic, 70% TypeScript src/lib/.
 mypy --strict and tsc --noEmit must pass with zero errors.
 
 Read [../release-ops/references/definition-of-done.md](../release-ops/references/definition-of-done.md)

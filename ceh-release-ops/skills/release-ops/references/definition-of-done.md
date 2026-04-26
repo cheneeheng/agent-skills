@@ -28,7 +28,7 @@
 | Area | Minimum |
 |------|---------|
 | Python application package | 80% |
-| Core business logic / domain services | 90% |
+| Core business logic / domain services | 95% |
 | TypeScript `src/lib/` | 70% |
 
 `mypy --strict` and `tsc --noEmit` must pass with zero errors. Do not reduce strictness to meet coverage targets — fix the types.

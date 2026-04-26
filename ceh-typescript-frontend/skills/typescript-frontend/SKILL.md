@@ -1,16 +1,10 @@
 ---
 name: "typescript-frontend"
 description: >
-  Load this skill when writing, reviewing, or debugging TypeScript and SvelteKit frontend code
-  using the Bun + SvelteKit + Vitest + Playwright stack. Covers the full development loop:
-  managing dependencies with Bun, enforcing TypeScript strict mode, using type vs interface and
-  const-assertion enum patterns, running all four required lint checks (ESLint, Prettier,
-  svelte-check, tsc), writing unit tests with Vitest, component tests with Testing Library,
-  mocking API calls with MSW (not direct fetch mocking), writing Playwright E2E tests, structuring
-  SvelteKit routes with server vs universal load functions, managing reactive state with Svelte
-  stores (updated only from API responses), organizing typed components with props and callbacks,
-  and centralizing all fetch calls through a typed API client. Use this skill any time you touch
-  frontend TypeScript — new components, store logic, routing, API integration, testing, or PR review.
+  Load this skill at the start of any session involving the Bun + SvelteKit + Vitest + Playwright
+  frontend stack. Covers package management, TypeScript configuration, linting, testing, SvelteKit
+  routing and stores, API client patterns, error handling, and accessibility. Use when writing,
+  reviewing, or debugging any frontend TypeScript code.
 ---
 
 # TypeScript Frontend

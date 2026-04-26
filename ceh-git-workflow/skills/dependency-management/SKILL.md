@@ -11,7 +11,7 @@ description: >
 
 Evaluation criteria for adding a new dependency (necessity, maintenance health, license, bundle
 size), pinning policy, security audit commands (pip-audit, bun audit), and the process for
-major version upgrades (ADR required, staged rollout). Not every problem needs a new package.
+major version upgrades (dedicated PR + ADR required). Not every problem needs a new package.
 
 Read [../git-workflow/references/dependencies.md](../git-workflow/references/dependencies.md)
 and apply the evaluation criteria and policies defined there.

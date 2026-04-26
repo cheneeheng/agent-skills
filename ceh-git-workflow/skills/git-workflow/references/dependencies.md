@@ -2,8 +2,6 @@
 
 ## Evaluation Criteria — Before Adding Any Package
 
-Ask all five questions:
-
 1. **Necessity** — can this be done with < 20 lines of code in-house?
 2. **Maintenance** — actively maintained? Last commit < 6 months?
 3. **Popularity and trust** — download volume, stars, known maintainers?
@@ -31,7 +29,7 @@ uv run pip-audit          # Python
 bun audit                 # TypeScript/JavaScript
 ```
 
-Address all high-severity findings before release. Document any accepted medium-severity exceptions in `docs/claude_logs/DECISION_LOG.md`.
+Address all high-severity findings before release. Document any accepted medium-severity exceptions in `docs/adr/DECISIONS.md`.
 
 ## Major Version Upgrades
 

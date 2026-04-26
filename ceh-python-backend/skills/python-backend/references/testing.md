@@ -15,6 +15,7 @@ backend/
 └── tests/
     ├── unit/         # Isolated — no I/O, mock all external dependencies
     ├── integration/  # Real database, mock only external APIs (LLM, payment)
+    ├── system/       # Full-stack E2E scenarios — real infra, real HTTP
     └── conftest.py   # Shared fixtures: test DB, async client, mock factories
 ```
 
@@ -46,7 +47,7 @@ class TestSessionsAPI:
         assert response.status_code == 200
         assert len(response.json()["reasoning_events"]) > 0
 
-        # Verify it actually landed in the database
+        # verify it landed in the database
         row = await test_db.fetchrow(
             "SELECT * FROM event_log WHERE session_id = $1", session_id
         )

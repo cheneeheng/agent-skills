@@ -64,8 +64,6 @@ export const openChallenges = derived(
 </script>
 ```
 
-Components receive data via props and communicate upward via callbacks or dispatched events. They do not write to stores directly.
-
 ## Centralized API Client
 
 All `fetch` calls go through a single typed client in `src/lib/api/client.ts`. Components and stores never call `fetch` directly.

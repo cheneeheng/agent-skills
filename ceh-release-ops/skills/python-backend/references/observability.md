@@ -1,4 +1,4 @@
-# Observability
+# Observability — Python Backend Specifics
 
 ## Structured Logging with structlog
 

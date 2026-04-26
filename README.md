@@ -22,6 +22,7 @@ Skills come in two types:
 | Release Ops | `ceh-release-ops` | Deployments, migrations, incident response, observability, security, definition of done |
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
+| Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation agents |
 
 ---
 
@@ -39,6 +40,16 @@ Load these explicitly at the start of a session or when you need the full domain
 | Release Ops | `ceh-release-ops` | `/ceh-release-ops:release-ops` | Session covering deployments, migrations, incident response, or observability |
 | Summarize Chat | `ceh-summarize-chat` | `/ceh-summarize-chat:summarize-chat` | Summarizing the current session for handoff to a future LLM session |
 | Lessons Learned | `ceh-lessons-learned` | `/ceh-lessons-learned:lessons-learned` | Extracting lessons learned from the current session into `LESSONS_LEARNED.md` |
+
+---
+
+## Agents
+
+Agents run autonomously for a defined task and hand results back to the parent session.
+
+| Agent | Plugin | Invoke as | When to use |
+|-------|--------|-----------|-------------|
+| Repo Tree Mapper | `ceh-dev-tools` | `/ceh-dev-tools:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
 
 ---
 
@@ -72,6 +83,8 @@ to the relevant reference content in its parent bundle — no duplication.
 | SvelteKit | `/ceh-typescript-frontend:sveltekit` | Working on routes, stores, components, or the API client |
 | Frontend Testing | `/ceh-typescript-frontend:frontend-testing` | Writing Vitest, Testing Library, MSW, or Playwright tests |
 | Accessibility | `/ceh-typescript-frontend:accessibility` | Writing Svelte component markup |
+| Coding Style | `/ceh-typescript-frontend:coding-style` | Applying TypeScript type conventions or import ordering |
+| Linting | `/ceh-typescript-frontend:linting` | Configuring or running ESLint, Prettier, or svelte-check |
 
 ### Operations (`ceh-release-ops`)
 
@@ -82,6 +95,8 @@ to the relevant reference content in its parent bundle — no duplication.
 | Incidents | `/ceh-release-ops:incidents` | Responding to a production incident or writing a post-mortem |
 | Definition of Done | `/ceh-release-ops:definition-of-done` | Preparing to open a pull request |
 | Security | `/ceh-release-ops:security` | Handling secrets, CORS, rate limiting, or input validation |
+| Versioning | `/ceh-release-ops:versioning` | Bumping a version, tagging a release, or classifying a change |
+| Rollback | `/ceh-release-ops:rollback` | Deciding to roll back a deployment or recovering from a failed migration |
 
 ### Git Workflow (`ceh-git-workflow`)
 
@@ -136,6 +151,7 @@ Install individual plugins for the domains you need:
 /plugin install ceh-agent-coding-contract@ceh-plugins --scope user
 /plugin install ceh-summarize-chat@ceh-plugins --scope user
 /plugin install ceh-lessons-learned@ceh-plugins --scope user
+/plugin install ceh-dev-tools@ceh-plugins --scope user
 ```
 
 Or install all at once using `--scope project` for project-specific installs.
@@ -170,7 +186,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/ceh-release-ops" },
     { "path": "~/agent-skills/ceh-agent-coding-contract" },
     { "path": "~/agent-skills/ceh-summarize-chat" },
-    { "path": "~/agent-skills/ceh-lessons-learned" }
+    { "path": "~/agent-skills/ceh-lessons-learned" },
+    { "path": "~/agent-skills/ceh-dev-tools" }
   ]
 }
 ```

@@ -1,16 +1,12 @@
 ---
 name: "architecture-design"
 description: >
-  Load this skill when making structural decisions, designing new APIs, defining domain models,
-  working on event-sourced state, designing or modifying database schemas, or wiring up an LLM
-  integration. Covers: ADR format and lifecycle for recording durable decisions, repository layer
-  boundaries and separation of concerns, domain modeling with immutable identifiers and bounded
-  status enums, event sourcing with append-only event log and atomic snapshot caching, REST API
-  URL conventions and HTTP status code usage, consistent error response shapes, API versioning
-  strategy, PostgreSQL schema patterns with JSONB and parameterized queries, and LLM integration
-  safety rules (stateless LLM as proposal engine, backend validates before any commit). Use this
-  skill whenever you are making design decisions, building new endpoints, touching the database
-  layer, or integrating an LLM into the application.
+  Load this skill when making structural decisions, designing APIs, defining domain models,
+  working on event-sourced state, designing database schemas, or integrating an LLM. Covers:
+  ADR format and lifecycle, repository layer boundaries, domain modeling with prefixed IDs and
+  bounded status enums, append-only event sourcing with atomic snapshots, REST API conventions
+  and versioning, PostgreSQL schema patterns, and LLM safety rules (LLM proposes, backend
+  validates).
 ---
 
 # Architecture Design

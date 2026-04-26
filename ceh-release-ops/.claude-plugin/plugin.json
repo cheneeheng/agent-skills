@@ -1,7 +1,7 @@
 {
   "name": "ceh-release-ops",
-  "version": "2.0.0",
-  "description": "CEH release ops: deployments, migrations, incident response, observability, security, and definition of done.",
+  "version": "2.1.1",
+  "description": "CEH release ops: deployments, migrations, incident response, observability, security, GitHub Actions, and GitLab CI agents.",
   "author": { "name": "Chen" },
   "repository": "https://github.com/cheneeheng/agent-skills",
   "license": "MIT",

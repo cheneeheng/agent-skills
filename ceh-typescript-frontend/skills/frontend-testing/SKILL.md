@@ -1,10 +1,9 @@
 ---
 name: "frontend-testing"
 description: >
-  Load this skill when writing frontend tests: unit tests for pure functions, component tests
-  with Testing Library, API mocking with MSW, or Playwright E2E tests. Auto-load whenever a
-  .test.ts or .spec.ts file is created or modified, an MSW handler is written, or a Playwright
-  test scenario is defined.
+  Load this skill when writing Vitest unit tests, Testing Library component tests, MSW mocks,
+  or Playwright E2E tests. Auto-load whenever a .test.ts or .spec.ts file is created or
+  modified, or MSW handlers are being written.
 ---
 
 # Frontend Testing

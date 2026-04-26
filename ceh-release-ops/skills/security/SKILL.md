@@ -17,5 +17,5 @@ pre-release vulnerability scanning with pip-audit and bun audit.
 
 Read both reference files and apply the baseline defined there:
 
-- [../python-backend/references/security.md](../python-backend/references/security.md) — Python secrets, validation, LLM output, session tokens, pip-audit
-- [../release-ops/references/security.md](../release-ops/references/security.md) — secrets management, CORS config with code, rate limiting, input validation
+- [../release-ops/references/security.md](../release-ops/references/security.md) — secrets management, CORS config with code, rate limiting, input validation, pip-audit
+- [../python-backend/references/security.md](../python-backend/references/security.md) — session token rules, LLM output validation before state mutation, per-session rate limit
