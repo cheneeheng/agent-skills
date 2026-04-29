@@ -6,6 +6,8 @@
 
 ## Required Checks Before Every PR
 
+Use the `Bash` tool to run these checks:
+
 ```bash
 uv run ruff check .           # Lint
 uv run ruff format --check .  # Format check (does not modify)

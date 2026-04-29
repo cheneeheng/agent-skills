@@ -70,6 +70,8 @@ Do **not** mock PostgreSQL in integration tests. PostgreSQL-specific behavior (J
 | Overall `app/` package | 80% |
 | Core business logic services | 95% |
 
+Use the `Bash` tool to run:
+
 ```bash
 uv run pytest --cov=app --cov-report=term-missing
 ```

@@ -6,6 +6,8 @@
 - Project manifest: `pyproject.toml`
 - Lockfile: `uv.lock` (authoritative — never edit manually)
 
+Use the `Bash` tool to execute all commands in this table.
+
 | Action | Command |
 |--------|---------|
 | Install all dependencies | `uv sync` |

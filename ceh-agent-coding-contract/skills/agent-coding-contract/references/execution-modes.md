@@ -4,7 +4,7 @@
 
 Applied when no mode is specified.
 
-- Ambiguity → **STOP → ask for clarification**
+- Ambiguity → **STOP → ask for clarification using the `AskUserQuestion` tool**
 - No assumptions without confirmation
 - No autonomous decisions
 

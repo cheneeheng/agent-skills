@@ -5,6 +5,40 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.2.1] — 2026-04-29
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.0.2 |
+| `ceh-architecture-design` | v2.0.1 |
+| `ceh-dev-tools` | v1.1.0 |
+| `ceh-git-workflow` | v2.2.1 |
+| `ceh-lessons-learned` | v2.0.1 |
+| `ceh-python-backend` | v2.1.2 |
+| `ceh-release-ops` | v2.1.2 |
+| `ceh-summarize-chat` | v2.0.1 |
+| `ceh-typescript-frontend` | v2.1.2 |
+
+### Changed
+
+- **`ceh-agent-coding-contract`** (v2.0.2): Added built-in tool guidance across reference files — `AskUserQuestion` in `core-rules.md` (ask-don't-guess rule), `execution-modes.md` (Interactive Mode stop), and `stop-conditions.md`; `TaskCreate`/`TaskUpdate` and `Agent` tool in `task-workflow.md` for subtask tracking and parallel execution.
+
+- **`ceh-git-workflow`** (v2.2.1): Added tool guidance — `Read`/`Grep`/`Bash` for code inspection in `code-review.md`; `Bash` with `git diff main...HEAD` in `pull-requests.md` author self-review checklist; `Bash` for audit commands in `dependencies.md`.
+
+- **`ceh-python-backend`** (v2.1.2): Added `Bash` tool notes to `environment.md` (command table), `linting.md` (pre-PR checks), `migrations.md` (alembic workflow), `testing.md` (coverage run), and `security.md` (`pip-audit`).
+
+- **`ceh-typescript-frontend`** (v2.1.2): Added `Bash` tool notes to `environment.md` (command table) and `linting.md` (pre-PR checks).
+
+- **`ceh-release-ops`** (v2.1.2): Added `Bash` tool notes to `migrations.md` (alembic commands), `versioning.md` (release checklist), `security.md` (audit commands), and `rollback.md` (rollback procedure).
+
+### Fixed
+
+- Removed stale `docs/claude_logs/LESSONS_LEARNED.md` session log.
+
+---
+
 ## [2.2.0] — 2026-04-26
 
 ### Plugin versions

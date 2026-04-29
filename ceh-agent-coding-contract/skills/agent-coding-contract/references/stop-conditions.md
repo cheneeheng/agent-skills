@@ -2,7 +2,7 @@
 
 ## Stop Conditions (All Modes)
 
-Stop and request clarification when:
+Stop and request clarification using the `AskUserQuestion` tool when:
 - Context files conflict and the authority hierarchy cannot resolve it
 - Repository state contradicts the instructions
 - A change risks data loss, security issues, or irreversible impact

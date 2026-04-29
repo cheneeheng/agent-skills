@@ -2,6 +2,8 @@
 
 Tool: **Alembic** (Python)
 
+Use the `Bash` tool to execute these commands:
+
 ```bash
 uv run alembic upgrade head     # Apply all pending migrations
 uv run alembic downgrade -1     # Roll back one step

@@ -1,6 +1,6 @@
 # Linting and Quality Checks
 
-All four checks must pass before a PR is opened:
+All four checks must pass before a PR is opened. Use the `Bash` tool to run them:
 
 ```bash
 bun run lint          # ESLint with typescript-eslint recommended-type-checked + svelte plugin

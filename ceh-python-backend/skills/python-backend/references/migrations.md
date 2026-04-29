@@ -22,6 +22,8 @@ config.set_main_option("sqlalchemy.url", sync_url)
 
 ## Workflow
 
+Use the `Bash` tool to execute these commands:
+
 ```bash
 uv run alembic revision --autogenerate -m "add users table"  # create migration
 uv run alembic upgrade head     # apply all pending migrations

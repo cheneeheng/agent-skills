@@ -7,7 +7,7 @@
 - **TypeScript:** SvelteKit `$env/static/private` for server-only secrets
 - Never commit `.env`; always maintain `.env.example` with placeholder values
 - Generate cryptographic secrets: `python -c "import secrets; print(secrets.token_hex(32))"`
-- Run `uv run pip-audit` (Python) and `bun audit` (TypeScript) before every release
+- Run `uv run pip-audit` (Python) and `bun audit` (TypeScript) via the `Bash` tool before every release
 
 ## CORS Configuration
 

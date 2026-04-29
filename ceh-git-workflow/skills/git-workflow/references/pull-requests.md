@@ -43,7 +43,7 @@ Must follow Conventional Commits format. This becomes the squash commit message.
 
 Before requesting review, the author must:
 
-- [ ] Read the diff top-to-bottom as if seeing it for the first time
+- [ ] Use `Bash` with `git diff main...HEAD` to read the full diff top-to-bottom as if seeing it for the first time
 - [ ] No commented-out code
 - [ ] No debug logs or `console.log` / `print()` left in
 - [ ] No `TODO` without a linked ticket

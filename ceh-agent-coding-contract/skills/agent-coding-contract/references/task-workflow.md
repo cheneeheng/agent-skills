@@ -16,9 +16,11 @@ Every task follows this order. No skipping.
 
 For large tasks:
 - Break into sequential subtasks
+- Track every subtask using the built-in Claude Code task tool (TaskCreate / TaskUpdate)
 - Complete and confirm each subtask before proceeding (Interactive Mode)
 - Document decomposition decisions in `docs/claude_logs/DECISION_LOG.md` (Autonomous Mode)
 - Never silently combine unrelated changes into a single subtask
+- When independent subtasks have no ordering dependency or shared state, spawn parallel subagents via the built-in `Agent` tool rather than executing sequentially
 
 ## Task Completion Output
 

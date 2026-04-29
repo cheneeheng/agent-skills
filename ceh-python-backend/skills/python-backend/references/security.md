@@ -9,4 +9,4 @@
 - Apply rate limiting per session on mutation endpoints (e.g. 10 req/min)
 - Configure CORS explicitly — no wildcard origins in production
 - Session tokens: randomly generated (`secrets.token_urlsafe(32)`), never logged, never in URLs
-- Run `uvx pip-audit` before every release to check for known vulnerabilities
+- Run `uvx pip-audit` via the `Bash` tool before every release to check for known vulnerabilities

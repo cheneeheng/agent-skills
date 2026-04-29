@@ -22,7 +22,7 @@ Never use `*` or `latest` as a version specifier in any environment.
 
 ## Security Audits
 
-Run before every release and as part of CI:
+Run before every release and as part of CI using the `Bash` tool:
 
 ```bash
 uv run pip-audit          # Python

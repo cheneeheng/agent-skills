@@ -16,7 +16,7 @@ Version is recorded in both `pyproject.toml` and `package.json`. Both must be up
 
 ## Release Checklist
 
-Complete every step in order. No skipping.
+Complete every step in order. No skipping. Use the `Bash` tool for steps that require running commands (tagging, pushing, smoke tests).
 
 1. All CI checks pass on `main`
 2. `CHANGELOG.md` updated with changes since last release

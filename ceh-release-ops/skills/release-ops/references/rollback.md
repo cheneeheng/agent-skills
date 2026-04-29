@@ -11,6 +11,8 @@ Roll back **immediately** — do not wait for root cause analysis — when any o
 
 ## Application Rollback Procedure
 
+Use the `Bash` tool for deploy commands and health checks below.
+
 1. Re-deploy the previous Docker image tag
 2. Verify `GET /health` returns `200`
 3. Confirm error rate and latency return to baseline within 2 minutes

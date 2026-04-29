@@ -27,6 +27,12 @@ Every comment must be clearly marked as **blocking** or **advisory**. Ambiguous 
 4. **Design** — is this the right abstraction? Does it fit existing patterns?
 5. **Style** — only flag if linting tools don't catch it
 
+## Tools for Review
+
+- Use `Bash` with `git diff` or `gh pr diff` to read the full changeset.
+- Use `Read` and `Grep` to inspect referenced code, surrounding context, and test files.
+- Do not review from memory — always verify against current file contents.
+
 Do not leave style comments that a linter would catch. Configure the linter instead.
 
 Review does not re-litigate resolved decisions in `docs/adr/DECISIONS.md` unless new risk is identified.
