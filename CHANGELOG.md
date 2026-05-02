@@ -5,6 +5,31 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.2.2] — 2026-05-02
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.1.0 |
+| `ceh-architecture-design` | v2.0.1 |
+| `ceh-dev-tools` | v1.1.0 |
+| `ceh-git-workflow` | v2.2.1 |
+| `ceh-lessons-learned` | v2.0.1 |
+| `ceh-python-backend` | v2.1.2 |
+| `ceh-release-ops` | v2.1.2 |
+| `ceh-summarize-chat` | v2.0.1 |
+| `ceh-typescript-frontend` | v2.1.2 |
+
+### Added
+
+- **`ceh-agent-coding-contract`** (v2.1.0): Two new bundle skills for plan-driven development:
+  - `implement-from-plan`: implements a SKELETON.md or ITER_NN.md planning document section by section, resolving iteration pointers and respecting scope boundaries.
+  - `review-against-plan`: audits the codebase against a planning document, categorizes findings as Gap / Deviation / Error, fixes them in-line, and produces a Plan Compliance Report.
+  - `plan-schema.md` reference: defines SKELETON and ITER frontmatter, section table (§01–§06), pointer rules, and resolution order.
+
+---
+
 ## [2.2.1] — 2026-04-29
 
 ### Plugin versions
