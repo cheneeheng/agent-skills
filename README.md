@@ -33,6 +33,8 @@ Load these explicitly at the start of a session or when you need the full domain
 | Skill | Plugin | Invoke as | When to load |
 |-------|--------|-----------|--------------|
 | Agent Coding Contract | `ceh-agent-coding-contract` | `/ceh-agent-coding-contract:agent-coding-contract` | Start of any coding session — defines interactive vs autonomous modes and the five-step task workflow |
+| Implement From Plan | `ceh-agent-coding-contract` | `/ceh-agent-coding-contract:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
+| Review Against Plan | `ceh-agent-coding-contract` | `/ceh-agent-coding-contract:review-against-plan` | Auditing implementation against a SKELETON.md or ITER_NN.md planning document |
 | Architecture Design | `ceh-architecture-design` | `/ceh-architecture-design:architecture-design` | Session covering API design, domain modeling, database schemas, or LLM integrations |
 | Python Backend | `ceh-python-backend` | `/ceh-python-backend:python-backend` | Session writing or reviewing FastAPI + asyncpg + uv Python code |
 | TypeScript Frontend | `ceh-typescript-frontend` | `/ceh-typescript-frontend:typescript-frontend` | Session writing or reviewing SvelteKit + Bun + Vitest TypeScript code |
