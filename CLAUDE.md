@@ -32,7 +32,7 @@ ceh-<plugin-name>/
 | `ceh-release-ops` | Deployments, migrations, incidents, observability, security |
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
-| `ceh-dev-tools` | Repository exploration and codebase orientation agents |
+| `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |
 
 ## Skill Types
 
@@ -42,6 +42,17 @@ Two kinds of skills exist in each plugin:
   a short title, summary paragraph, and a references table pointing to files in `references/`.
 - **Micro-skills** — narrow, auto-triggering. SKILL.md has a tight description (the trigger)
   and a single instruction to read the relevant reference file(s) from the parent bundle.
+
+## Adding an Agent
+
+1. Identify the correct plugin for the agent's domain.
+2. Create `ceh-<plugin>/agents/<name>.md` with frontmatter `name`, `description`, and `tools` fields.
+3. Update `README.md` agents tables:
+   - Add a row under the correct plugin group in the "Agents" section.
+   - If the plugin has no agents group yet, add a new `### <Plugin> (`ceh-<plugin>`)` subsection.
+4. Bump version in both:
+   - `ceh-<plugin>/.claude-plugin/plugin.json`
+   - `.claude-plugin/marketplace.json`
 
 ## Adding a Skill
 
@@ -68,8 +79,8 @@ find . -path '*skills/<name>/SKILL.md'
 # Verify every plugin is listed in marketplace.json
 grep '"name"' ceh-*/.claude-plugin/plugin.json .claude-plugin/marketplace.json
 
-# Check cross-bundle stubs are present
-find . -path '*/python-backend/references/*.md' | sort
+# Check cross-bundle stubs are present (example: python-backend stubs in release-ops and architecture-design)
+find . -path '*/skills/python-backend/references/*.md' | sort
 ```
 
 ## Cross-bundle Micro-skills
