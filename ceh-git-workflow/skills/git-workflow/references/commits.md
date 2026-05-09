@@ -36,6 +36,7 @@ chore(deps): upgrade fastapi to 0.115.0
 - Body: explain *why*, not *what* — the diff already shows what changed
 - Breaking changes: add `BREAKING CHANGE:` footer with migration notes
 - Reference issues: `Closes #123` or `Refs #456` in footer
+- Attribution: include any AI tooling attribution in the footer if available (format is defined in Claude Code config)
 
 **Good:**
 ```
