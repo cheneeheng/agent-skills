@@ -94,7 +94,10 @@ manually update the corresponding stub in the host plugin.
 
 ## Versioning
 
-PATCH bump for new or updated skills. Follow Conventional Commits.
+Follow Conventional Commits and semver:
+- **PATCH** — existing skill or agent updated (content/description change)
+- **MINOR** — new skill or agent added
+
 Bump versions only at commit time — not during iterative edits within a session.
 Both the affected `plugin.json` and `marketplace.json` must be bumped in the same commit.
 Current version: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`.
