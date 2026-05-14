@@ -4,8 +4,7 @@ description: >
   Load at the start of any coding-agent session. Defines the behavioral contract: Interactive
   (default) vs Autonomous mode, explicit authorization rules, ambiguity handling, five-step task
   workflow, stop conditions, and decision logging. Trigger when user says "proceed autonomously",
-  "don't stop to ask", "interactive mode", or before refactors, multi-file changes, or any work
-  where scope boundaries matter.
+  "don't stop to ask", "interactive mode", "agent contract", or "load the contract".
 ---
 
 # Agent Coding Contract

@@ -9,10 +9,16 @@ description: >
 
 # Branching
 
-Trunk-based development rules, branch naming conventions (prefix/short-description), and the
-command sequence for starting new work cleanly from main.
+Trunk-based development. `main` is always deployable. Branch from `main` only — never from
+another feature branch. Delete branches after merge.
 
 Read [../git-workflow/references/branching.md](../git-workflow/references/branching.md) for
-naming conventions, and
-[../git-workflow/references/workflows.md](../git-workflow/references/workflows.md) for the
-branch creation command sequence.
+naming conventions (`<type>/<short-description>`).
+
+## Start new work
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b <type>/<short-description>
+```

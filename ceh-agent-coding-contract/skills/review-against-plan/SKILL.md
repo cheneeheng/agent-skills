@@ -38,12 +38,10 @@ Compare the section spec against the actual codebase. Specifically verify:
 
 | Section | What to check |
 |---------|--------------|
-| §01 Concept | No direct code check. Verify the app name, purpose, and primary user flow are reflected in any READMEs, route names, or UI labels. |
 | §02 Architecture | All specified components exist. Data model entities and key fields are present. All listed routes exist with correct method and path. No undocumented routes or entities. |
-| §03 Tech Stack | Runtime/language matches. Specified frameworks and libraries are installed. Version pins match if specified. No unlisted major dependencies. |
-| §04 Backend | All specified modules and files exist. Each specified route/service is implemented (not just stubbed, unless the spec only calls for stubs). Env var names match. `how to run` command works. |
-| §05 Frontend | All specified pages/screens and routes exist. Top-level component tree matches. Placeholder data strategy is followed. `how to run` command works. |
-| §06 LLM/Prompts | Model and provider match. System prompt is implemented (not just a placeholder string unless spec says stub). Input/output shape matches. |
+| §04 Backend | All specified modules and files exist. Each route/service is implemented (not just stubbed unless spec says so). Env var names match. `how to run` works. |
+| §05 Frontend | All specified pages/routes exist. Component tree matches. Placeholder data strategy followed. `how to run` works. |
+| §06 LLM/Prompts | Model and provider match. System prompt implemented. Input/output shape matches. |
 
 ### Categorize Findings
 
