@@ -94,13 +94,21 @@ manually update the corresponding stub in the host plugin.
 
 ## Versioning
 
-Follow Conventional Commits and semver:
-- **PATCH** — existing skill or agent updated (content/description change)
-- **MINOR** — new skill or agent added
+This repo has two independent versioning layers:
 
-Bump versions only at commit time — not during iterative edits within a session.
-Both the affected `plugin.json` and `marketplace.json` must be bumped in the same commit.
-Current version: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`.
+**Per-plugin versions** (load-bearing for auto-update):
+- Live in `ceh-<plugin>/.claude-plugin/plugin.json` and mirrored in `.claude-plugin/marketplace.json`.
+- Follow semver: **PATCH** for content/description updates, **MINOR** for new skills or agents.
+- Bump only at commit time — not during iterative edits within a session.
+- Both `plugin.json` and `marketplace.json` must be bumped in the same commit.
+
+**Repo git tag** (mono-repo release snapshot):
+- A single tag (e.g. `v2.2.3`) marks a consistent state of all plugins together.
+- Tracks the highest plugin version bumped in that commit — it is not a sum or aggregate.
+- Purpose: deployment snapshot and changelog anchor. It does not drive auto-update.
+- Cut a new tag after bumping plugin versions: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+
+Current plugin versions: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`.
 
 ## Key Files
 
