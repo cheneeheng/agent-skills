@@ -5,6 +5,35 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.2.3] — 2026-05-14
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.1.2 |
+| `ceh-architecture-design` | v2.0.1 |
+| `ceh-dev-tools` | v1.1.0 |
+| `ceh-git-workflow` | v2.2.3 |
+| `ceh-lessons-learned` | v2.0.1 |
+| `ceh-python-backend` | v2.1.2 |
+| `ceh-release-ops` | v2.1.2 |
+| `ceh-summarize-chat` | v2.0.1 |
+| `ceh-typescript-frontend` | v2.1.2 |
+
+### Added
+
+- **`ceh-git-workflow`** (v2.2.3): Attribution footer guidance added to commit (`commits.md`) and PR (`pull-requests.md`) standards. Test-run delegation rule added to `task-workflow.md` — test execution should be handed off to background subagents (auto-triggered tester agents take precedence; `Agent(run_in_background=True)` as fallback).
+- **Repo**: `LICENSE.md` added.
+
+### Changed
+
+- **`ceh-git-workflow`** (v2.2.3): `branch` skill inlines start-new-work commands, dropping the `workflows.md` pointer (~135 lines/invocation saved).
+- **`ceh-agent-coding-contract`** (v2.1.2): `agent-coding-contract` skill trigger narrowed to explicit phrases only, removing broad auto-load on refactors and multi-file changes. `review-against-plan` skill drops §01/§03 audit rows and tightens wording (~10 lines/run saved).
+- **Repo**: `CLAUDE.md` updated — "Adding an Agent" section added parallel to "Adding a Skill"; `ceh-dev-tools` flagged as agents-only in the Plugins table; cross-bundle stub check command narrowed to `skills/python-backend` path; versioning rules clarified (PATCH for updates, MINOR for new skills/agents).
+
+---
+
 ## [2.2.2] — 2026-05-02
 
 ### Plugin versions
