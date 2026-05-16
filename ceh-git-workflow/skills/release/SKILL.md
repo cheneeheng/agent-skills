@@ -9,10 +9,25 @@ description: >
 
 # Release Tagging
 
-Semantic versioning rules (vX.Y.Z), the version bump + tag + push command sequence, and the
-constraint that tags must only be applied to commits that have passed all CI checks.
+Tags follow semver: `v<major>.<minor>.<patch>`. Apply only to commits on `main` after all CI passes.
 
-Read [../git-workflow/references/releases.md](../git-workflow/references/releases.md) for
-tagging rules, and
-[../git-workflow/references/workflows.md](../git-workflow/references/workflows.md) for the
-release command sequence.
+| Change type | Bump |
+|-------------|------|
+| Breaking change (`BREAKING CHANGE:` footer or `!` type) | MAJOR |
+| New backward-compatible feature | MINOR |
+| Fixes, chores, docs, refactors | PATCH |
+
+When in doubt, bump PATCH. Never lower a version.
+
+## Command Sequence
+
+```bash
+# 1. Bump version in pyproject.toml and package.json, commit
+git add pyproject.toml package.json
+git commit -m "chore: bump version to v<X.Y.Z>"
+
+# 2. Tag and push
+git tag v<X.Y.Z>
+git push origin main
+git push origin v<X.Y.Z>
+```

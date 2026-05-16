@@ -6,11 +6,46 @@ description: >
   created or modified, or when lint errors are being diagnosed or resolved.
 ---
 
-# Linting Conventions
+# Linting and Quality Checks
 
-Four checks required before every PR, ESLint configuration with typescript-eslint
-type-checked and the Svelte plugin, Prettier configuration for SvelteKit, and svelte-check
-for template errors that ESLint cannot catch.
+All four checks must pass before a PR is opened:
 
-Read [../typescript-frontend/references/linting.md](../typescript-frontend/references/linting.md)
-and apply the configuration shown there.
+```bash
+bun run lint          # ESLint with typescript-eslint recommended-type-checked + svelte plugin
+bun run format:check  # Prettier (does not modify files)
+bun run check         # svelte-check — catches .svelte template errors ESLint cannot see
+bun run typecheck     # tsc --noEmit
+```
+
+`svelte-check` is not optional — catches prop type mismatches, missing required props, and a11y warnings that ESLint cannot see.
+
+## ESLint Configuration
+
+```js
+// eslint.config.js
+import ts from '@typescript-eslint/eslint-plugin';
+import svelte from 'eslint-plugin-svelte';
+
+export default [
+  ...ts.configs['recommended-type-checked'],
+  ...svelte.configs['flat/recommended'],
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
+];
+```
+
+## Prettier Configuration
+
+```json
+{
+  "semi": true,
+  "singleQuote": true,
+  "printWidth": 100,
+  "trailingComma": "all",
+  "plugins": ["prettier-plugin-svelte"]
+}
+```

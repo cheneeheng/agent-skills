@@ -38,14 +38,8 @@ touching a real (test) database, services calling internal APIs.
 
 Place all DB and client fixtures in `tests/integration/conftest.py`.
 
-**asyncpg (required — no SQLAlchemy):**
+**asyncpg — rollback after each test (required — no SQLAlchemy):**
 ```python
-@pytest.fixture(scope="session")
-async def db_pool():
-    pool = await asyncpg.create_pool(os.environ["TEST_DATABASE_URL"])
-    yield pool
-    await pool.close()
-
 @pytest.fixture
 async def db_conn(db_pool):
     async with db_pool.acquire() as conn:
@@ -63,12 +57,7 @@ async def async_client(app):
         yield c
 ```
 
-**Mocking external services:**
-```python
-@pytest.fixture(autouse=True)
-def mock_stripe(mocker):
-    return mocker.patch("myapp.payments.stripe.charge", return_value={"id": "ch_test"})
-```
+Mock third-party services with `mocker.patch` at the point of use, not definition.
 
 ## Test Structure
 
@@ -85,8 +74,6 @@ class TestUserServiceIntegration:
         )
         assert row is not None
 
-    async def test_duplicate_email_returns_409(self, db_conn, async_client):
-        ...
 ```
 
 **Coverage targets:** happy path, failure propagation, data integrity, transaction/rollback

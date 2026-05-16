@@ -5,23 +5,17 @@ versioning, database migration safety, rollback procedures, incident response, o
 security baseline, definition of done, and CI/CD pipeline automation via GitHub Actions and
 GitLab CI agents.
 
-## Bundle Skills
+## Skills (Auto-Load)
 
-| Skill | Invoke | Description |
-|-------|--------|-------------|
-| `release-ops` | `/release-ops` | Full release and ops lifecycle — load when touching deployments, migrations, incidents, logging, metrics, or security config |
-
-## Micro-Skills (Auto-Load)
-
-| Skill | Triggers When |
-|-------|---------------|
-| `versioning` | Bumping a version in pyproject.toml or package.json, applying a git tag, classifying a change |
-| `database-migrations` | Creating or modifying an Alembic migration, planning a column drop or rename |
-| `rollback` | Deployment fails health check, error rates spike post-deploy, data integrity issue detected |
-| `incidents` | Responding to a production incident, classifying P1/P2/P3, writing a post-mortem, creating a hotfix branch |
-| `observability` | Writing structured log calls, adding Prometheus metrics, touching the /health endpoint |
-| `security` | Handling secrets, configuring CORS, writing rate limiting, reviewing input validation |
-| `definition-of-done` | Opening a pull request or marking a task complete — verifies bug fix/feature/refactor quality bar |
+| Skill | Phase | Triggers When |
+|-------|-------|---------------|
+| `observability` | implementation | Writing structured log calls, adding Prometheus metrics, touching the /health endpoint |
+| `database-migrations` | implementation | Creating or modifying an Alembic migration, planning a column drop or rename |
+| `definition-of-done` | implementation | Opening a pull request or marking a task complete — verifies bug fix/feature/refactor quality bar |
+| `security` | implementation | Handling secrets, configuring CORS, writing rate limiting, reviewing input validation |
+| `versioning` | release | Bumping a version in pyproject.toml or package.json, applying a git tag, classifying a change |
+| `incidents` | operational | Responding to a production incident, classifying P1/P2/P3, writing a post-mortem, creating a hotfix branch |
+| `rollback` | operational | Deployment fails health check, error rates spike post-deploy, data integrity issue detected |
 
 ## Agents
 
@@ -45,25 +39,3 @@ All scripts live in `scripts/`. Used by the CI agents — also callable directly
 | `gl-validate.sh <file>` | YAML lint + glab ci lint (if installed) |
 | `gl-analyze-failure.sh <logfile>` | Extract the first failure signal from a GitLab job log |
 
-## Reference Files
-
-All primary reference files live under `skills/release-ops/references/`:
-
-| File | Topic |
-|------|-------|
-| `versioning.md` | SemVer rules, 10-step release checklist, change classification |
-| `migrations.md` | Alembic commands, migration safety rules, two-step destructive changes |
-| `rollback.md` | Rollback triggers, application rollback procedure, database rollback considerations |
-| `hotfix.md` | Hotfix branch, minimal scope, CI requirements, abbreviated deploy steps |
-| `incidents.md` | P1/P2/P3 severity levels, five-step response, post-mortem format |
-| `observability.md` | structlog levels, correlation ID middleware, required Prometheus metrics, health check contract |
-| `security.md` | Secrets management, CORS config, rate limiting, input validation |
-| `definition-of-done.md` | Done criteria for bug fixes, features, refactors; coverage targets |
-
-Python-specific supplementary references live under `skills/python-backend/references/` (stubs
-synced from `ceh-python-backend`):
-
-| File | Topic |
-|------|-------|
-| `observability.md` | Python structlog examples, log level table, correlation ID, never-log rules |
-| `security.md` | Session token format, LLM output validation, per-session rate limit |

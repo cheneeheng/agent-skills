@@ -11,9 +11,8 @@ description: >
 
 # Review Against Plan
 
-You have been asked to audit the codebase against a planning document — either a SKELETON.md
-or an ITER_NN.md. Your job is to find gaps, deviations, and errors between what the plan
-specifies and what is actually implemented, then fix them.
+Audit the codebase against a SKELETON.md or ITER_NN.md — find gaps, deviations, and errors
+between what the plan specifies and what is implemented, then fix them.
 
 The planning document schema is defined in
 [../implement-from-plan/references/plan-schema.md](../implement-from-plan/references/plan-schema.md).
@@ -53,11 +52,10 @@ For each finding, assign a category:
 
 ### Fix
 
-Fix each finding immediately after categorizing it — do not batch all auditing before fixing.
-Fix in the same section pass so the user can review section by section.
+Fix each finding immediately after categorizing it — do not batch auditing before fixing.
 
 If a fix requires a decision (e.g. a route deviation where both the spec and the implementation
-could be considered correct), state the ambiguity and ask the user before changing anything.
+could be correct), state the ambiguity and ask before changing anything.
 
 ## Step 3 — Report
 
@@ -74,5 +72,4 @@ After all sections, produce a summary table:
 | §05 Frontend | 1 gap fixed (missing /profile page) | Fixed |
 ```
 
-List any items that were NOT fixed and why (e.g. user input needed, out of scope, spec
-ambiguity unresolved). Do not mark anything as fixed unless the fix was actually applied.
+List items NOT fixed and why. Do not mark anything as fixed unless the fix was applied.

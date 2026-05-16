@@ -1,19 +1,80 @@
 ---
 name: "observability"
 description: >
-  Load this skill when adding or modifying logging, metrics, health checks, or correlation ID
-  propagation: writing structured log calls, choosing log levels, adding Prometheus metrics,
-  defining the health check endpoint, or wiring up correlation ID middleware. Auto-load whenever
-  a log call is written, a metric is added, or the /health endpoint is touched.
+  Phase: implementation. Load this skill when adding or modifying logging, metrics, health checks,
+  or correlation ID propagation: writing structured log calls, choosing log levels, adding
+  Prometheus metrics, defining the health check endpoint, or wiring up correlation ID middleware.
+  Auto-load whenever a log call is written, a metric is added, or the /health endpoint is touched.
 ---
 
 # Observability
 
-Structured logging with structlog (log levels, what never to log), correlation ID generation
-and propagation through the full request lifecycle, required Prometheus metrics and their labels,
-and the health check endpoint contract (200 healthy / 503 degraded, must verify DB connectivity).
+All log output is structured JSON. Never use `print()` or unstructured interpolation.
 
-Read both reference files and apply the conventions defined there:
+```python
+import structlog
+log = structlog.get_logger()
 
-- [../release-ops/references/observability.md](../release-ops/references/observability.md) — structlog levels, correlation ID middleware, required Prometheus metrics, health check contract
-- [../python-backend/references/observability.md](../python-backend/references/observability.md) — Python-specific log examples, PII never-log rules
+log.info("request_completed", endpoint="/resources", status=200, duration_ms=42)
+log.warning("upstream_timeout", service="payment-api", attempt=2)
+log.error("database_connection_failed", host=settings.db_host, error=str(e))
+```
+
+| Level | Use for |
+|-------|---------|
+| `DEBUG` | Detailed diagnostics (disabled in production) |
+| `INFO` | Normal operations |
+| `WARNING` | Unexpected but recoverable |
+| `ERROR` | Failures requiring attention |
+
+Do not log at `INFO` on every request — use `DEBUG` for high-frequency events.
+
+**Never log:** secrets, tokens, passwords, PII, raw user-provided content, or full external API responses.
+
+## Correlation IDs
+
+Every request carries a `correlation_id`:
+- Generated at the API boundary if absent from request headers
+- Bound to every log entry via `structlog.contextvars`
+- Returned in the `X-Correlation-ID` response header
+- Included in API error response bodies
+
+```python
+@app.middleware("http")
+async def correlation_id_middleware(request: Request, call_next):
+    correlation_id = request.headers.get("X-Correlation-ID", generate_id("req"))
+    with structlog.contextvars.bound_contextvars(correlation_id=correlation_id):
+        response = await call_next(request)
+    response.headers["X-Correlation-ID"] = correlation_id
+    return response
+```
+
+## Required Metrics
+
+| Metric | Type | Labels |
+|--------|------|--------|
+| `requests_total` | Counter | `endpoint`, `method`, `status_code` |
+| `request_duration_ms` | Histogram | `endpoint`, `method` |
+| `errors_total` | Counter | `error_type`, `endpoint` |
+| `external_calls_total` | Counter | `service`, `status` |
+| `external_call_duration_ms` | Histogram | `service` |
+
+Use Prometheus-compatible instrumentation (`prometheus-fastapi-instrumentator` or equivalent).
+
+## Health Check Endpoint
+
+```
+GET /health
+```
+
+Returns `200` when healthy:
+```json
+{ "status": "ok", "database": "ok", "version": "1.4.2" }
+```
+
+Returns `503` when any critical dependency is unavailable:
+```json
+{ "status": "degraded", "database": "error", "version": "1.4.2" }
+```
+
+Must verify actual database connectivity — not just process liveness. Used by load balancers, deployment pipelines, and rollback automation.

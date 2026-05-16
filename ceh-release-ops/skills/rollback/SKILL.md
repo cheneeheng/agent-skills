@@ -1,21 +1,32 @@
 ---
 name: "rollback"
 description: >
-  Load this skill when deciding whether to roll back a deployment, executing an
-  application rollback, or planning recovery from a failed migration. Auto-load
-  whenever a deployment fails its health check, error rates spike post-deploy,
-  P95 latency triples within 10 minutes of a release, or any data integrity issue
-  is detected after deploying.
+  Phase: operational. Load this skill when deciding whether to roll back a deployment, executing
+  an application rollback, or planning recovery from a failed migration. Auto-load whenever a
+  deployment fails its health check, error rates spike post-deploy, P95 latency triples within
+  10 minutes of a release, or any data integrity issue is detected after deploying.
 ---
 
 # Rollback
 
-Rollback triggers (health check failure, error rate > 5× baseline, P95 latency >
-3× baseline, or data integrity issue — all within 10 minutes of deploy), the
-5-step application rollback procedure (redeploy previous image → verify /health →
-confirm metrics → open incident → document), and database rollback considerations:
-additive migrations are left in place; destructive migrations cannot be rolled back
-and require a forward-fix.
+## When to Roll Back
 
-Read [../release-ops/references/rollback.md](../release-ops/references/rollback.md)
-and apply the rollback criteria and procedure defined there.
+Roll back **immediately** (before root cause analysis) when any occur within 10 minutes of deploy:
+
+- `GET /health` returns anything other than `200`
+- Error rate > 5× the pre-deploy baseline
+- P95 latency > 3× the pre-deploy baseline
+- Any data integrity issue detected
+
+## Application Rollback Procedure
+
+1. Re-deploy the previous Docker image tag
+2. Verify `GET /health` returns `200`
+3. Confirm error rate and latency return to baseline within 2 minutes
+4. Open a P1/P2 incident if production was impacted
+5. Document the rollback in `docs/claude_logs/DECISION_LOG.md`
+
+## Database Rollback Considerations
+
+- **Additive migrations** (new columns, new tables): roll back the application; leave the schema change. The old application ignores unknown columns.
+- **Destructive migrations** (drops, renames): cannot be automatically rolled back. This is why the two-step process is mandatory. If a destructive migration was applied prematurely, a forward-fix is required — not a rollback.

@@ -1,16 +1,11 @@
 ---
 name: readme-updater
 description: |
-  Use proactively ONLY after a significant unit of work has been completed and the README is likely stale as a result. Significant means: a new feature shipped, a new command/script/endpoint added, install or setup steps changed, dependencies added or removed, environment variables introduced, public API surface changed, project renamed or restructured, or a new major subsystem/module added.
-
-  DO NOT invoke for: individual function edits, bug fixes that don't change usage, internal refactors, variable renames, formatting, test-only changes, typo fixes, single-file tweaks, or work-in-progress commits. If the user's change does not affect how someone would install, run, configure, or use the project, this agent should NOT run.
-
-  Explicit user phrases that should trigger: "update the readme", "refresh the docs", "document this feature", "I just shipped X — update docs".
-model: sonnet
+  Use proactively when the user ships a new feature, adds a command/script/endpoint, changes install or setup steps, adds or removes dependencies, introduces environment variables, or changes the public API surface. Also trigger on: "update the readme", "refresh the docs", "document this feature", "I just shipped X — update docs". Do NOT invoke for bug fixes, refactors, or any change that does not affect how someone installs, runs, or configures the project.
+model: haiku
 tools: Read, Glob, Grep, Edit, Write, Bash
 permissionMode: acceptEdits
 maxTurns: 15
-effort: medium
 background: true
 ---
 

@@ -22,11 +22,7 @@ output — as a real user or caller would.
 
 ## System Testing Philosophy
 
-Write fewer, high-value scenarios:
-- **Real everything** — real app process, real DB, real queue (local Docker if needed)
-- **Scenario-based** — complete flows ("user signs up → confirms email → logs in")
-- **Externally observable** — assert only on state visible to an outside caller
-- **Independent** — each scenario runnable in isolation
+Write fewer, high-value scenarios: complete flows against a real app, DB, and queue (Docker). Assert only on externally observable state. Each scenario runs in isolation.
 
 ## Process
 
@@ -48,18 +44,9 @@ def live_app():
         ["python", "-m", "uvicorn", "myapp.main:app", "--port", "8001"],
         env={**os.environ, "DATABASE_URL": os.environ["TEST_DATABASE_URL"]},
     )
-    for _ in range(20):
-        try:
-            requests.get("http://localhost:8001/health", timeout=1)
-            break
-        except requests.ConnectionError:
-            time.sleep(0.5)
-    else:
-        proc.terminate()
-        raise RuntimeError("App did not start within 10 seconds")
+    # poll GET /health up to 10 s; raise RuntimeError if app never responds
     yield "http://localhost:8001"
-    proc.terminate()
-    proc.wait()
+    proc.terminate(); proc.wait()
 ```
 
 **Docker Compose (v2) for full infra:**
@@ -71,13 +58,7 @@ def docker_services():
     subprocess.run(["docker", "compose", "-f", "docker-compose.test.yml", "down", "-v"], check=True)
 ```
 
-**Data cleanup between scenarios:**
-```python
-@pytest.fixture(autouse=True)
-def clean_db():
-    yield
-    subprocess.run(["python", "-m", "myapp.scripts.reset_test_db"], check=True)
-```
+Use an `autouse` fixture to reset DB state after each scenario (truncate tables or re-run migrations).
 
 ## Test Structure
 

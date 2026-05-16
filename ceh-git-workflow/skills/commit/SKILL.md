@@ -8,13 +8,61 @@ description: >
   before committing.
 ---
 
-# Commit Messages
+# Commit Messages — Conventional Commits
 
-Conventional Commits format, type table (feat/fix/refactor/test/docs/chore/perf), scope
-conventions, subject line rules (imperative mood, ≤ 72 chars, no period), and when to write
-a body (explain why, not what).
+```
+<type>(<scope>): <short summary>
 
-Read [../git-workflow/references/commits.md](../git-workflow/references/commits.md) for the
-format rules and examples, and
-[../git-workflow/references/workflows.md](../git-workflow/references/workflows.md) for the
-commit command sequence.
+[optional body — explain why, not what]
+
+[optional footer — breaking changes, issue refs]
+```
+
+## Types
+
+| Type | When to use |
+|------|-------------|
+| `feat` | New feature or behavior |
+| `fix` | Bug fix |
+| `refactor` | Code change with no behavior change |
+| `test` | Adding or changing tests |
+| `docs` | Documentation only |
+| `chore` | Build, tooling, dependency updates |
+| `perf` | Performance improvement |
+
+## Rules
+
+- Subject line: imperative mood, lowercase, no period, ≤ 72 characters
+- Body: explain *why*, not *what* — the diff already shows what changed
+- Breaking changes: `BREAKING CHANGE:` footer with migration notes
+- Reference issues: `Closes #123` or `Refs #456` in footer
+- Include AI tooling attribution in the footer if available
+
+Good example:
+```
+feat(orders): add bulk cancel endpoint
+
+Supports cancelling up to 100 orders per request. Single-cancel
+endpoint remains unchanged; no migration needed.
+
+Closes #342
+```
+
+## Commands
+
+```bash
+git add <files>
+git commit -m "<type>(<scope>): <short summary>"
+```
+
+Multi-line (body or footer needed):
+```bash
+git commit -m "$(cat <<'EOF'
+<type>(<scope>): <short summary>
+
+<body — explain why, not what>
+
+<footer — BREAKING CHANGE or Closes #NNN>
+EOF
+)"
+```

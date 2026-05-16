@@ -6,10 +6,25 @@ description: >
   .gitignore file is being created or modified.
 ---
 
-# .gitignore
+# .gitignore Requirements
 
-Required entries for Python and TypeScript projects: virtual environments, secrets, caches,
-build artefacts, and database files.
-
-Read [../git-workflow/references/gitignore.md](../git-workflow/references/gitignore.md) and
-verify all required entries are present.
+Must include:
+```
+.venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+*.egg-info/
+.coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+.svelte-kit/
+dist/
+build/
+*.db
+.DS_Store
+```

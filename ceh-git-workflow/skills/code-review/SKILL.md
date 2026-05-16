@@ -9,9 +9,29 @@ description: >
 
 # Code Review
 
-The [blocking]/[advisory]/[question] comment convention, review priority order (correctness →
-security → tests → style), and what constitutes a blocking vs non-blocking issue. Consistent
-comment tagging helps authors distinguish what must be fixed from what is a suggestion.
+Every comment must be clearly marked as **blocking** or **advisory**.
 
-Read [../git-workflow/references/code-review.md](../git-workflow/references/code-review.md)
-and apply the conventions defined there.
+| Prefix | Meaning | Author must |
+|--------|---------|-------------|
+| `[blocking]` | Must be resolved before merge | Fix or discuss with reviewer |
+| `[advisory]` | Suggestion, optional improvement | Address or explicitly acknowledge |
+| `[question]` | Seeking understanding, not a change request | Answer the question |
+
+Examples:
+```
+[blocking] This query is not parameterized — SQL injection risk on line 47.
+
+[advisory] This helper could be extracted to a utility function for reuse.
+
+[question] Why is this retry limit set to 3?
+```
+
+## Review Focus (Priority Order)
+
+1. **Correctness** — does it do what it claims? Are edge cases handled?
+2. **Security** — injection risks, secrets exposure, input validation gaps
+3. **Test coverage** — is new behavior tested? Are tests testing behavior?
+4. **Design** — right abstraction? Fits existing patterns?
+5. **Style** — only flag if linting tools don't catch it
+
+Do not comment on style a linter would catch. Do not re-litigate decisions in `docs/adr/DECISIONS.md` unless new risk is identified. Do not review from memory — verify against current file contents.

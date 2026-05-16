@@ -3,11 +3,6 @@
 A collection of Claude Code plugins providing engineering standards for AI coding agents. Skills cover
 the full development lifecycle, split into focused plugins — one per domain.
 
-Skills come in two types:
-
-- **Bundle skills** — load a full domain at the start of a session (explicit invocation)
-- **Micro-skills** — narrow skills that auto-trigger based on what you are working on
-
 ---
 
 ## Plugins
@@ -26,83 +21,88 @@ Skills come in two types:
 
 ---
 
-## Bundle Skills
+## Skills
 
-Load these explicitly at the start of a session or when you need the full domain context.
+### Agent Coding Contract (`ceh-agent-coding-contract`)
 
-| Skill | Plugin | Invoke as | When to load |
-|-------|--------|-----------|--------------|
-| Agent Coding Contract | `ceh-agent-coding-contract` | `/ceh-agent-coding-contract:agent-coding-contract` | Start of any coding session — defines interactive vs autonomous modes and the five-step task workflow |
-| Implement From Plan | `ceh-agent-coding-contract` | `/ceh-agent-coding-contract:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
-| Review Against Plan | `ceh-agent-coding-contract` | `/ceh-agent-coding-contract:review-against-plan` | Auditing implementation against a SKELETON.md or ITER_NN.md planning document |
-| Architecture Design | `ceh-architecture-design` | `/ceh-architecture-design:architecture-design` | Session covering API design, domain modeling, database schemas, or LLM integrations |
-| Python Backend | `ceh-python-backend` | `/ceh-python-backend:python-backend` | Session writing or reviewing FastAPI + asyncpg + uv Python code |
-| TypeScript Frontend | `ceh-typescript-frontend` | `/ceh-typescript-frontend:typescript-frontend` | Session writing or reviewing SvelteKit + Bun + Vitest TypeScript code |
-| Git Workflow | `ceh-git-workflow` | `/ceh-git-workflow:git-workflow` | Session involving commits, PRs, branching, or dependency management |
-| Release Ops | `ceh-release-ops` | `/ceh-release-ops:release-ops` | Session covering deployments, migrations, incident response, or observability |
-| Summarize Chat | `ceh-summarize-chat` | `/ceh-summarize-chat:summarize-chat` | Summarizing the current session for handoff to a future LLM session |
-| Lessons Learned | `ceh-lessons-learned` | `/ceh-lessons-learned:lessons-learned` | Extracting lessons learned from the current session into `LESSONS_LEARNED.md` |
-
----
-
-## Micro-Skills
-
-Narrow skills designed to auto-trigger based on what you are actively working on. Each points
-to the relevant reference content in its parent bundle — no duplication.
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
+| Agent Coding Contract | `/ceh-agent-coding-contract:agent-coding-contract` | Start of any coding session — core rules, five-step workflow, stop conditions, non-goals |
+| Execution Modes | `/ceh-agent-coding-contract:execution-modes` | Switch to Autonomous or Interactive mode; triggered by phrases or invoked directly |
+| Implement From Plan | `/ceh-agent-coding-contract:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
+| Review Against Plan | `/ceh-agent-coding-contract:review-against-plan` | Auditing implementation against a SKELETON.md or ITER_NN.md planning document |
 
 ### Architecture (`ceh-architecture-design`)
 
-| Skill | Invoke as | Auto-triggers when |
-|-------|-----------|-------------------|
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
 | ADR | `/ceh-architecture-design:adr` | Making a significant architectural decision |
 | Domain Modeling | `/ceh-architecture-design:domain-modeling` | Designing entities, IDs, or status fields |
 | Event Sourcing | `/ceh-architecture-design:event-sourcing` | Working with the event log or state snapshots |
 | REST API | `/ceh-architecture-design:rest-api` | Building endpoints, choosing HTTP codes, shaping error responses |
 | PostgreSQL | `/ceh-architecture-design:postgresql` | Writing SQL, designing schemas, or using asyncpg |
 | LLM Integration | `/ceh-architecture-design:llm-integration` | Integrating LLM calls or handling LLM output |
+| Repository Structure | `/ceh-architecture-design:repository-structure` | Creating new directories, adding modules, or deciding where code belongs |
 
 ### Python Backend (`ceh-python-backend`)
 
-| Skill | Invoke as | Auto-triggers when |
-|-------|-----------|-------------------|
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
 | FastAPI | `/ceh-python-backend:fastapi` | Writing route handlers, DI, middleware, or exception hierarchy |
 | Python Testing | `/ceh-python-backend:python-testing` | Writing Python unit or integration tests |
+| Python Environment | `/ceh-python-backend:python-environment` | Setting up uv/pyproject.toml, writing type hints, configuring ruff/mypy |
+| asyncpg | `/ceh-python-backend:asyncpg` | Writing database queries, transactions, or connection pool config |
+| Python Observability | `/ceh-python-backend:python-observability` | Adding structlog logging, correlation IDs, or choosing log levels |
+| Python Security | `/ceh-python-backend:python-security` | Secrets management, CORS, rate limiting, or session token generation |
+| Alembic | `/ceh-python-backend:alembic` | Creating or running database migrations |
 
 ### TypeScript Frontend (`ceh-typescript-frontend`)
 
-| Skill | Invoke as | Auto-triggers when |
-|-------|-----------|-------------------|
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
+| Environment | `/ceh-typescript-frontend:environment` | Setting up the project, running scripts, or managing Bun dependencies |
 | SvelteKit | `/ceh-typescript-frontend:sveltekit` | Working on routes, stores, components, or the API client |
 | Frontend Testing | `/ceh-typescript-frontend:frontend-testing` | Writing Vitest, Testing Library, MSW, or Playwright tests |
 | Accessibility | `/ceh-typescript-frontend:accessibility` | Writing Svelte component markup |
-| Coding Style | `/ceh-typescript-frontend:coding-style` | Applying TypeScript type conventions or import ordering |
+| Coding Style | `/ceh-typescript-frontend:coding-style` | Applying TypeScript type conventions, tsconfig, or import ordering |
 | Linting | `/ceh-typescript-frontend:linting` | Configuring or running ESLint, Prettier, or svelte-check |
-
-### Operations (`ceh-release-ops`)
-
-| Skill | Invoke as | Auto-triggers when |
-|-------|-----------|-------------------|
-| Observability | `/ceh-release-ops:observability` | Adding logging, metrics, or health check code |
-| Database Migrations | `/ceh-release-ops:database-migrations` | Writing or running Alembic migrations |
-| Incidents | `/ceh-release-ops:incidents` | Responding to a production incident or writing a post-mortem |
-| Definition of Done | `/ceh-release-ops:definition-of-done` | Preparing to open a pull request |
-| Security | `/ceh-release-ops:security` | Handling secrets, CORS, rate limiting, or input validation |
-| Versioning | `/ceh-release-ops:versioning` | Bumping a version, tagging a release, or classifying a change |
-| Rollback | `/ceh-release-ops:rollback` | Deciding to roll back a deployment or recovering from a failed migration |
 
 ### Git Workflow (`ceh-git-workflow`)
 
-| Skill | Invoke as | Auto-triggers when |
-|-------|-----------|-------------------|
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
 | Branch | `/ceh-git-workflow:branch` | Creating or naming a branch |
 | Commit | `/ceh-git-workflow:commit` | Writing a commit message or staging changes |
 | Open PR | `/ceh-git-workflow:open-pr` | Opening a pull request or writing a PR description |
-| Merge | `/ceh-git-workflow:merge` | Merging a branch or choosing a merge strategy |
 | Hotfix | `/ceh-git-workflow:hotfix` | Executing a critical production fix |
 | Release | `/ceh-git-workflow:release` | Tagging a release or bumping a version |
 | Gitignore | `/ceh-git-workflow:gitignore` | Creating or editing a `.gitignore` file |
 | Code Review | `/ceh-git-workflow:code-review` | Reviewing a PR or leaving review comments |
 | Dependency Management | `/ceh-git-workflow:dependency-management` | Adding or upgrading a package |
+
+### Operations (`ceh-release-ops`)
+
+| Skill | Phase | Invoke as | When to use |
+|-------|-------|-----------|-------------|
+| Observability | implementation | `/ceh-release-ops:observability` | Adding logging, metrics, or health check code |
+| Database Migrations | implementation | `/ceh-release-ops:database-migrations` | Writing or running Alembic migrations |
+| Definition of Done | implementation | `/ceh-release-ops:definition-of-done` | Preparing to open a pull request |
+| Security | implementation | `/ceh-release-ops:security` | Handling secrets, CORS, rate limiting, or input validation |
+| Versioning | release | `/ceh-release-ops:versioning` | Bumping a version, tagging a release, or classifying a change |
+| Incidents | operational | `/ceh-release-ops:incidents` | Responding to a production incident or writing a post-mortem |
+| Rollback | operational | `/ceh-release-ops:rollback` | Deciding to roll back a deployment or recovering from a failed migration |
+
+### Summarize Chat (`ceh-summarize-chat`)
+
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
+| Summarize Chat | `/ceh-summarize-chat:summarize-chat` | Summarizing the current session for handoff to a future LLM session |
+
+### Lessons Learned (`ceh-lessons-learned`)
+
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
+| Lessons Learned | `/ceh-lessons-learned:lessons-learned` | Extracting lessons learned from the current session into `LESSONS_LEARNED.md` |
 
 ---
 
@@ -148,21 +148,6 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 ---
 
-## Cross-Bundle Reference Stubs
-
-Three micro-skills reference content from two different plugins. To keep relative paths valid,
-the foreign reference file is duplicated as a read-only stub inside the host plugin.
-
-| Micro-skill | Host plugin | Stub file | Source |
-|-------------|-------------|-----------|--------|
-| `postgresql` | `ceh-architecture-design` | `skills/python-backend/references/database.md` | `ceh-python-backend` |
-| `observability` | `ceh-release-ops` | `skills/python-backend/references/observability.md` | `ceh-python-backend` |
-| `security` | `ceh-release-ops` | `skills/python-backend/references/security.md` | `ceh-python-backend` |
-
-When updating `ceh-python-backend/skills/python-backend/references/database.md`,
-`observability.md`, or `security.md`, also update the corresponding stub file in the host plugin.
-
----
 
 ## Installing in Claude Code
 

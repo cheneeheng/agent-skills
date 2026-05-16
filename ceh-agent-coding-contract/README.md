@@ -3,31 +3,39 @@
 Behavioral contract for coding agents. Establishes rules that govern how an agent operates during
 a coding session — what it may do, when it must stop, and how it logs decisions.
 
-## Skill
+## Skills
 
-| Skill | Type | Description |
-|-------|------|-------------|
-| `agent-coding-contract` | Bundle | Full behavioral contract — load at session start |
+| Skill | Description |
+|-------|-------------|
+| `agent-coding-contract` | Full behavioral contract — load at session start before any coding task |
+| `execution-modes` | Interactive vs Autonomous mode — triggered by phrases or `/execution-modes` |
 
-Invoke manually:
+### agent-coding-contract
+
+Loads automatically before any implementation, refactoring, or multi-file change. Also invoke
+manually:
 
 ```
 /agent-coding-contract
 ```
 
-Or load automatically when you say:
-- `"proceed autonomously"` / `"autonomous mode"`
-- `"don't stop to ask"`
+Or when you say:
+- `"load the contract"` / `"agent contract"` / `"coding contract"`
+
+### execution-modes
+
+Triggered by mode-switching phrases or invoked directly:
+
+```
+/execution-modes
+```
+
+Or when you say:
+- `"act autonomously"` / `"proceed autonomously"` / `"autonomous mode"`
+- `"don't stop to ask"` / `"just do it"`
 - `"interactive mode"`
 
 ## What the Contract Defines
-
-**Two execution modes:**
-
-| Mode | Default | Activation | Ambiguity handling |
-|------|---------|------------|--------------------|
-| Interactive | Yes | Implicit | Stop and ask |
-| Autonomous | No | Explicit phrase | Decide and document |
 
 **Five-step task workflow** (no skipping):
 1. Understand — clarify request, affected files, risks
@@ -42,18 +50,14 @@ Or load automatically when you say:
 - No implicit actions — never claim work was done without doing it
 - Explicit authorization — if unsure, assume not authorized
 
+**Two execution modes** (defined in `execution-modes` skill):
+
+| Mode | Default | Activation | Ambiguity handling |
+|------|---------|------------|--------------------|
+| Interactive | Yes | Implicit | Stop and ask |
+| Autonomous | No | Explicit phrase | Decide and document |
+
 ## Autonomous Mode Decision Log
 
 When operating in Autonomous Mode, decisions are appended to `docs/claude_logs/DECISION_LOG.md`.
-Format defined in `skills/agent-coding-contract/references/decision-log.md`.
-
-## Reference Files
-
-| File | Topic |
-|------|-------|
-| `references/execution-modes.md` | Interactive vs Autonomous, authority hierarchy |
-| `references/core-rules.md` | Agent role, rules, behavioral summary table |
-| `references/task-workflow.md` | Five-step workflow, task decomposition |
-| `references/stop-conditions.md` | When to stop, partial failures, multi-agent |
-| `references/decision-log.md` | Decision log format |
-| `references/non-goals.md` | Universal non-goals |
+Format defined in the `agent-coding-contract` skill.

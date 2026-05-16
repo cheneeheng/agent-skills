@@ -9,11 +9,85 @@ description: >
 
 # Opening a Pull Request
 
-PR size limits by type, the PR description template (What/Why/How/Testing/Checklist), the
-author self-review checklist, required approval counts by change type, and the push + gh pr
-create command sequence.
+## Size Guidelines
 
-Read [../git-workflow/references/pull-requests.md](../git-workflow/references/pull-requests.md)
-for the description template and size guidelines, and
-[../git-workflow/references/workflows.md](../git-workflow/references/workflows.md) for the
-push and PR creation command sequence.
+| PR type | Recommended | Max |
+|---------|-------------|-----|
+| Bug fix | ≤ 200 LOC | 300 LOC |
+| New feature | ≤ 400 LOC | 600 LOC |
+| Refactor | ≤ 500 LOC | 800 LOC |
+| DB migration | Migration file only; split app changes into a separate PR |
+
+If a PR exceeds the guideline, split it by layer (schema → service → API).
+
+## PR Title
+
+Must follow Conventional Commits format. This becomes the squash commit message.
+
+## PR Description Template
+
+```markdown
+## What
+<!-- One sentence: what does this change do? -->
+
+## Why
+<!-- Why is this change needed? Link to ticket/issue. -->
+
+## How
+<!-- Brief explanation of approach if non-obvious. -->
+
+## Testing
+<!-- What was tested? What test cases were added? -->
+
+## Checklist
+- [ ] All CI checks pass
+- [ ] Tests added or updated for new behavior
+- [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
+- [ ] No secrets or credentials in code
+- [ ] Migrations (if any) are backward-compatible
+- [ ] DECISIONS.md updated (if a durable decision was made)
+- [ ] Attribution included if AI tooling assisted
+```
+
+## Author Self-Review
+
+- [ ] Read full diff (`git diff main...HEAD`) before requesting review
+- [ ] No commented-out code or debug logs
+- [ ] No `TODO` without a linked ticket
+- [ ] Branch is rebased on latest `main`
+- [ ] PR is scoped to one concern
+
+## Required Approvals
+
+- Bug fixes and small features: 1 approval
+- New API surfaces, schema changes, security changes: 2 approvals
+- Hotfixes: 1 approval minimum (do not bypass CI)
+
+## Merge Strategy
+
+**Squash merge only** — `main` history is one commit per PR.
+
+- The squash commit message = the PR title (must be Conventional Commits format)
+- Never use merge commits on `main`
+
+## Command
+
+```bash
+git push -u origin <branch-name>
+gh pr create \
+  --title "<type>(<scope>): <short summary>" \
+  --body "$(cat <<'EOF'
+## What
+## Why
+## How
+## Testing
+## Checklist
+- [ ] All CI checks pass
+- [ ] Tests added or updated
+- [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
+- [ ] No secrets or credentials in code
+- [ ] Migrations (if any) are backward-compatible
+- [ ] DECISIONS.md updated (if a durable decision was made)
+EOF
+)"
+```

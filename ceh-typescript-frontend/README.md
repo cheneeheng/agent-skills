@@ -2,20 +2,15 @@
 
 Engineering standards for the **Bun + SvelteKit + Vitest + Playwright** stack.
 
-## Bundle Skill
-
-| Skill | Invoke | When to load |
-|-------|--------|--------------|
-| TypeScript Frontend | `/ceh-typescript-frontend:typescript-frontend` | Start of any SvelteKit session |
-
-## Micro-Skills (auto-trigger)
+## Skills (auto-trigger)
 
 | Skill | Invoke | Triggers when |
 |-------|--------|---------------|
+| Environment | `/ceh-typescript-frontend:environment` | Setting up the project, running scripts, or managing Bun dependencies |
 | SvelteKit | `/ceh-typescript-frontend:sveltekit` | Editing routes, stores, components, or the API client |
 | Frontend Testing | `/ceh-typescript-frontend:frontend-testing` | Writing `.test.ts` or `.spec.ts` files, or MSW handlers |
 | Accessibility | `/ceh-typescript-frontend:accessibility` | Writing Svelte component markup |
-| Coding Style | `/ceh-typescript-frontend:coding-style` | Applying TypeScript type conventions or import ordering |
+| Coding Style | `/ceh-typescript-frontend:coding-style` | Applying TypeScript type conventions, tsconfig, or import ordering |
 | Linting | `/ceh-typescript-frontend:linting` | Configuring or running ESLint, Prettier, or svelte-check |
 
 ## Agents

@@ -41,7 +41,7 @@ sections_unchanged: [01, 03, 04]  # sections using pointers (look in SKELETON or
 
 ## Pointers
 
-When a section appears in `sections_unchanged`, the ITER file contains a pointer (e.g. "See SKELETON §02" or "Unchanged from ITER_01 §03"). Do not treat this as content — look up the referenced document and section to get the actual spec.
+When a section appears in `sections_unchanged`, the ITER file contains a pointer (e.g. "See SKELETON §02"). Do not treat this as content — look up the referenced document and section to get the actual spec.
 
 ## Resolution Order
 

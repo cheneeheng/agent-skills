@@ -12,9 +12,8 @@ description: >
 
 # Implement From Plan
 
-You have been given a planning document — either a SKELETON.md (initial blueprint) or an
-ITER_NN.md (incremental iteration). Your job is to translate the plan into working code,
-section by section, without inventing scope beyond what is written.
+Translate a SKELETON.md or ITER_NN.md into working code, section by section, without
+inventing scope beyond what is written.
 
 Read [references/plan-schema.md](references/plan-schema.md) for the full schema before
 starting. The section table, pointer rules, and resolution order there are authoritative.
@@ -67,17 +66,16 @@ wiring, system prompt, and input/output handling as specified.
 
 ## Step 4 — Stay Within Scope
 
-- Do not implement sections not listed in `sections_changed` (ITER) or `sections` (SKELETON).
-- Do not add features, routes, components, or dependencies not mentioned in the spec.
-- If the spec is ambiguous on a detail, state your assumption and implement the simplest
-  reasonable interpretation. Do not silently guess.
-- If a section spec is missing or incomplete, stop and ask rather than inventing content.
+- Do not implement sections outside `sections_changed` (ITER) or `sections` (SKELETON).
+- Do not add features, routes, components, or dependencies not in the spec.
+- If ambiguous, state your assumption and use the simplest interpretation. Never guess silently.
+- If a section spec is missing or incomplete, stop and ask rather than inventing.
 
 ## Step 5 — Completion Summary
 
-After all sections are done:
+After all sections are done, report:
 
-- List each section implemented and the key artifacts created.
-- List any assumptions made.
-- List any sections skipped and why (e.g. §06 absent because no LLM integration).
-- Flag anything the user should verify manually (e.g. env vars that need real values).
+- Sections implemented and key artifacts created
+- Assumptions made
+- Sections skipped and why (e.g. §06 absent because no LLM integration)
+- Items the user should verify manually (e.g. env vars needing real values)

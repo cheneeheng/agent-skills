@@ -5,9 +5,9 @@ identifies mistakes and corrections, and appends structured lessons to `LESSONS_
 
 ## Skill
 
-| Skill | Type | Description |
-|-------|------|-------------|
-| `lessons-learned` | Bundle | Extract lessons from the current session and append to `docs/claude_logs/LESSONS_LEARNED.md` |
+| Skill | Description |
+|-------|-------------|
+| `lessons-learned` | Extract lessons from the current session and append to `docs/claude_logs/LESSONS_LEARNED.md` |
 
 Invoke manually:
 

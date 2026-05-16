@@ -8,10 +8,67 @@ description: >
 
 # Python Testing
 
-pytest with pytest-asyncio, unit vs integration test structure, real-database integration test
-rules (never mock PostgreSQL), LLM API mocking, test naming conventions, and coverage targets.
-Each test covers one logical behavior. Integration tests run in a transaction that rolls back
-after the test.
+Framework: **pytest** with **pytest-asyncio** (`asyncio_mode = "auto"` in `pyproject.toml`)
 
-Read [../python-backend/references/testing.md](../python-backend/references/testing.md)
-and apply the patterns and rules defined there.
+HTTP testing: `httpx.AsyncClient` (async, preferred) or FastAPI `TestClient` (sync)
+
+## Test Structure
+
+```
+backend/
+└── tests/
+    ├── unit/         # Isolated — no I/O, mock all external dependencies
+    ├── integration/  # Real database, mock only external APIs (LLM, payment)
+    ├── system/       # Full-stack E2E — real infra, real HTTP
+    └── conftest.py   # Shared fixtures: test DB, async client, mock factories
+```
+
+Test files mirror source structure. Naming: `test_<what>_<expected_behavior>.py`. One logical behavior per test.
+
+## Unit Tests — No I/O
+
+```python
+class TestReasoningEngine:
+    async def test_validate_rejects_unknown_event_type(self):
+        engine = ReasoningEngine()
+        event = ReasoningEvent(event_type="invented_type", ...)
+        result = await engine.validate(event, state)
+        assert result.is_invalid
+        assert "invalid event type" in result.reason
+```
+
+## Integration Tests — Real Database, Never Mocked
+
+```python
+class TestSessionsAPI:
+    async def test_post_message_creates_event(self, async_client: AsyncClient, test_db):
+        response = await async_client.post(
+            f"/sessions/{session_id}/message",
+            json={"content": "I think we should rewrite in Rust"}
+        )
+        assert response.status_code == 200
+        row = await test_db.fetchrow(
+            "SELECT * FROM event_log WHERE session_id = $1", session_id
+        )
+        assert row is not None
+```
+
+Each test that writes data must run in a transaction that rolls back after the test.
+
+## Mocking Rules
+
+- Mock the LLM API client in all tests (no real API calls)
+- Mock external HTTP services
+- Do **not** mock PostgreSQL in integration tests
+- Use `unittest.mock` or `pytest-mock`
+
+## Coverage Targets
+
+| Area | Minimum |
+|------|---------|
+| Overall `app/` package | 80% |
+| Core business logic services | 95% |
+
+```bash
+uv run pytest --cov=app --cov-report=term-missing
+```

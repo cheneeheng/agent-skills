@@ -1,18 +1,43 @@
 ---
 name: "definition-of-done"
 description: >
-  Load this skill when preparing to open a pull request or marking a task as complete: verifying
-  that a bug fix, feature, or refactor meets the quality bar before review. Auto-load whenever
-  a PR is about to be opened, a task is being closed, or a checklist of completion criteria
-  is needed.
+  Phase: implementation. Load this skill when preparing to open a pull request or marking a task
+  as complete: verifying that a bug fix, feature, or refactor meets the quality bar before review.
+  Auto-load whenever a PR is about to be opened, a task is being closed, or a checklist of
+  completion criteria is needed.
 ---
 
 # Definition of Done
 
-Completion checklists for bug fixes (failing test added, root cause documented), features (unit
-+ integration tests, no any/@ts-ignore), and refactors (no behavioral change, no tests deleted).
-Covers coverage targets: 80% Python application package, 95% core business logic, 70% TypeScript src/lib/.
-mypy --strict and tsc --noEmit must pass with zero errors.
+## Bug Fix
 
-Read [../release-ops/references/definition-of-done.md](../release-ops/references/definition-of-done.md)
-and verify all applicable items before opening the PR.
+- [ ] Root cause identified and documented in the PR description
+- [ ] Failing test added that reproduces the bug
+- [ ] Fix applied — the failing test now passes
+- [ ] No regressions — full test suite passes
+- [ ] Lint and type checks pass
+
+## Feature
+
+- [ ] Unit tests for new business logic
+- [ ] Integration tests for new API surface
+- [ ] Lint and type checks pass
+- [ ] PR description explains the feature and how it was tested
+- [ ] No `any`, `@ts-ignore`, or `# type: ignore` introduced
+
+## Refactor
+
+- [ ] No behavioral change — proven by existing tests passing unchanged
+- [ ] Coverage unchanged (no tests deleted to make the refactor pass)
+- [ ] Lint and type checks pass
+- [ ] PR description explains what structural problem was addressed
+
+## Coverage Targets
+
+| Area | Minimum |
+|------|---------|
+| Python application package | 80% |
+| Core business logic / domain services | 95% |
+| TypeScript `src/lib/` | 70% |
+
+`mypy --strict` and `tsc --noEmit` must pass with zero errors. Do not reduce strictness to meet coverage targets — fix the types.

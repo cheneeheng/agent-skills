@@ -10,11 +10,34 @@ description: >
 
 # Hotfix Workflow
 
-The complete hotfix sequence: branch from main with fix/critical- prefix, commit with minimal
-scope, open PR (1 approval minimum, all CI must pass), merge, tag PATCH release, clean up
-branch.
+For P1/P2 production issues that cannot wait for the next normal release.
 
-Read [../git-workflow/references/workflows.md](../git-workflow/references/workflows.md) (the
-Hotfix section) for the command sequence, and
-[../git-workflow/references/releases.md](../git-workflow/references/releases.md) for the
-tagging rules applied after merge.
+1. **Branch:** `fix/critical-<description>` from `main`
+2. **Scope:** Minimal fix only — no unrelated changes
+3. **Review:** 1 approval minimum, fast-tracked
+4. **CI:** All checks must pass — do **not** skip CI under pressure
+5. **Merge:** Squash merge to `main`
+6. **Tag:** Bump PATCH version, apply tag
+7. **Deploy:** Staging → production (abbreviated but both still required)
+
+## Commands
+
+```bash
+git checkout main && git pull origin main
+git checkout -b fix/critical-<description>
+
+# Fix and commit (minimal scope only)
+git add <files>
+git commit -m "fix(<scope>): <description>"
+
+# Push and open PR (1 approval minimum, all CI must pass)
+git push -u origin fix/critical-<description>
+gh pr create --title "fix(<scope>): <description>"
+
+# After merge — bump PATCH version, tag, clean up
+git checkout main && git pull origin main
+git tag v<X.Y.Z>
+git push origin v<X.Y.Z>
+git branch -d fix/critical-<description>
+git push origin --delete fix/critical-<description>
+```

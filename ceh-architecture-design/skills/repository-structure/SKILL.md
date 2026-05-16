@@ -6,11 +6,37 @@ description: >
   or top-level directory is introduced.
 ---
 
-# Repository Structure
+# Repository Structure and Layer Boundaries
 
-Project layout conventions and hard layer boundary rules. Covers directory organization by
-concern, frontend and backend layer separation, and the strict rules governing what each
-layer may and may not do.
+Organize by concern, not by file type. Each layer has one job.
 
-Read [../architecture-design/references/repository-structure.md](../architecture-design/references/repository-structure.md)
-and apply the layout and layer rules defined there.
+```
+project/
+├── backend/
+│   ├── app/
+│   │   ├── api/           # Thin route handlers — validate input, call service, return output
+│   │   ├── core/          # Config, dependencies, exceptions, middleware
+│   │   ├── models/        # Pydantic request/response + domain models
+│   │   ├── services/      # Business logic — no HTTP, no SQL
+│   │   └── db/            # Database queries — SQL only, no business logic
+│   └── tests/
+├── frontend/
+│   ├── src/
+│   │   ├── routes/        # SvelteKit pages and load functions
+│   │   └── lib/
+│   │       ├── components/ # UI components — receive props, emit events
+│   │       ├── stores/     # Reactive state — updated by API responses only
+│   │       ├── api/        # Centralized API client — all fetch calls go here
+│   │       └── types/      # Shared TypeScript types
+│   └── tests/
+└── migrations/            # Database migrations (Alembic)
+```
+
+## Hard Layer Rules
+
+- Route handlers contain no business logic — they call services
+- Services contain no SQL — they call the database layer
+- Database layer contains no business logic — it executes SQL
+- Components do not write to stores directly — they call callbacks or dispatch events
+- All `fetch` calls go through the centralized API client — components never call `fetch`
+- One mutation path per aggregate — if multiple services could write the same table, define a single state manager

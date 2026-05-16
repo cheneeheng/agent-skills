@@ -5,9 +5,9 @@ current conversation into a concise markdown document a future session can act o
 
 ## Skill
 
-| Skill | Type | Description |
-|-------|------|-------------|
-| `summarize-chat` | Bundle | Summarize the current session into a structured markdown handoff document |
+| Skill | Description |
+|-------|-------------|
+| `summarize-chat` | Summarize the current session into a structured markdown handoff document |
 
 Invoke manually:
 

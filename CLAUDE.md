@@ -12,12 +12,9 @@ ceh-<plugin-name>/
 ├── agents/                   # Optional — subagents for complex autonomous tasks
 ├── scripts/                  # Optional — shell helpers (e.g. coverage, branch delete)
 └── skills/
-    ├── <bundle-skill>/
-    │   ├── SKILL.md               # Required — frontmatter + description + body
-    │   └── references/            # Optional — topic-split reference files
-    │       └── <topic>.md
-    └── <micro-skill>/
-        └── SKILL.md               # Points to reference files in the sibling bundle skill
+    └── <skill-name>/
+        ├── SKILL.md               # Required — all content inline; frontmatter + full body
+        └── references/            # Sparingly — schemas and templates only (e.g. plan-schema.md)
 ```
 
 ## Plugins
@@ -34,14 +31,11 @@ ceh-<plugin-name>/
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |
 
-## Skill Types
+## Skills
 
-Two kinds of skills exist in each plugin:
-
-- **Bundle skills** — load a full domain. Explicit session-wide invocation. SKILL.md has
-  a short title, summary paragraph, and a references table pointing to files in `references/`.
-- **Micro-skills** — narrow, auto-triggering. SKILL.md has a tight description (the trigger)
-  and a single instruction to read the relevant reference file(s) from the parent bundle.
+Each skill is a self-contained SKILL.md file with frontmatter and inline content. The
+`references/` subdirectory is reserved for schemas and templates shared across multiple skills
+(e.g. `plan-schema.md` in `implement-from-plan`) — not for general reference material.
 
 ## Adding an Agent
 
@@ -58,12 +52,12 @@ Two kinds of skills exist in each plugin:
 
 1. Identify the correct plugin for the skill's domain.
 2. Create `ceh-<plugin>/skills/<name>/SKILL.md` with frontmatter `name` and `description` fields.
-3. For bundles: add topic files under `ceh-<plugin>/skills/<name>/references/`.
-4. For micro-skills: point to existing reference files in the sibling bundle skill using relative paths.
-5. Update `README.md` skills tables:
-   - Bundle skill → add a row to the "Bundle Skills" table
-   - Micro-skill → add a row under the correct group in the "Micro-Skills" section
-6. Bump version in both:
+3. Write all content inline in the SKILL.md body — no separate reference files unless it is a
+   schema or template shared across multiple skills (e.g. a plan document schema).
+4. Update `README.md` skills tables:
+   - Add a row under the correct plugin group in the "Skills" section of the root README.
+   - Add a row to the plugin's own README.md skills table.
+5. Bump version in both:
    - `ceh-<plugin>/.claude-plugin/plugin.json`
    - `.claude-plugin/marketplace.json`
 
@@ -78,19 +72,7 @@ find . -path '*skills/<name>/SKILL.md'
 
 # Verify every plugin is listed in marketplace.json
 grep '"name"' ceh-*/.claude-plugin/plugin.json .claude-plugin/marketplace.json
-
-# Check cross-bundle stubs are present (example: python-backend stubs in release-ops and architecture-design)
-find . -path '*/skills/python-backend/references/*.md' | sort
 ```
-
-## Cross-bundle Micro-skills
-
-Micro-skills that reference content from two different bundles (e.g. `postgresql`, `observability`,
-`security`) live in one host plugin. The foreign reference files are duplicated into the host plugin
-under a stub `skills/<foreign-bundle>/references/` directory so relative paths remain valid.
-
-**Important:** No tooling enforces stub sync. When editing a source file in `ceh-python-backend`,
-manually update the corresponding stub in the host plugin.
 
 ## Versioning
 
@@ -103,8 +85,8 @@ This repo has two independent versioning layers:
 - Both `plugin.json` and `marketplace.json` must be bumped in the same commit.
 
 **Repo git tag** (mono-repo release snapshot):
-- A single tag (e.g. `v2.2.3`) marks a consistent state of all plugins together.
-- Tracks the highest plugin version bumped in that commit — it is not a sum or aggregate.
+- A single tag (e.g. `v2.3.0`) marks a consistent state of all plugins together.
+- Increments sequentially from the previous repo tag — MINOR bump when any plugin adds skills or agents, PATCH bump for content-only changes. Independent of individual plugin versions.
 - Purpose: deployment snapshot and changelog anchor. It does not drive auto-update.
 - Cut a new tag after bumping plugin versions: `git tag vX.Y.Z && git push origin vX.Y.Z`.
 
@@ -116,4 +98,12 @@ Current plugin versions: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.cl
 |------|---------|
 | `ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version and metadata |
 | `.claude-plugin/marketplace.json` | Marketplace listing (all plugins) |
-| `README.md` | User-facing docs — bundle and micro-skill and agents tables live here |
+| `README.md` | User-facing docs — skill and agent tables live here |
+| `CROSS_REFERENCES.md` | Tracks content duplicated across skills; lists canonical source and all copies per block |
+
+## Cross-Reference Rule
+
+Before editing any skill, check `CROSS_REFERENCES.md`. If the section you are changing appears
+in that file, propagate the edit to every other listed file in the same session. Edit the
+canonical file first, then mirror the change to all copies. If you add new duplication, add an
+entry to `CROSS_REFERENCES.md`.
