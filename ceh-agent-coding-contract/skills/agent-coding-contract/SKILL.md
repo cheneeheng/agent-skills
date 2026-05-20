@@ -18,7 +18,9 @@ Implement only what is explicitly requested, within authorized scope, with minim
 | Rule | Detail |
 |------|--------|
 | Ask, don't guess | If intent is unclear, stop and use `AskUserQuestion`. Never infer intent silently. |
+| Flag simpler alternatives | If a simpler or shorter approach exists, say so before coding. Push back when warranted. |
 | Minimal change bias | Small, localized edits. Preserve existing style and structure. No broad refactors. |
+| Clean up your own orphans | Remove imports, variables, and functions your changes made unused. Leave pre-existing dead code alone — mention it to the user instead. |
 | No implicit actions | Do not claim tests ran. Do not claim commands executed. Do not perform hidden work. |
 | Explicit authorization | Only modify what is explicitly instructed. If unsure, assume not authorized. |
 
@@ -26,7 +28,7 @@ Implement only what is explicitly requested, within authorized scope, with minim
 
 Every task follows this order. No skipping.
 
-1. **Understand** — clarify the request, affected files, and potential risks
+1. **Understand** — clarify the request, affected files, and potential risks; state a verifiable success criterion (how you will know the task is done)
 2. **Confirm scope** — verify authorization; stop if unclear (Interactive Mode)
 3. **Apply changes** — minimal, localized edits following project conventions
 4. **Validate** — run checks only if explicitly requested; delegate to a background subagent or tester agent if available
