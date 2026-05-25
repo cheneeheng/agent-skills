@@ -1,13 +1,6 @@
 ---
 name: python-unit-tester
-description: |
-  Use proactively when the user creates or modifies a Python function, class, or module
-  and unit tests are missing or outdated. Invoke for requests like "write unit tests",
-  "test this function", "add tests for this class", "cover this with pytest", or
-  "what's the unit test coverage here". Focuses on isolated, fast, single-unit tests
-  with mocked dependencies. Delegate to python-integration-tester for tests involving
-  real databases or internal service boundaries, and to python-system-tester for full
-  end-to-end flows.
+description: Use proactively when the user creates or modifies a Python function, class, or module and unit tests are missing or outdated. Invoke for requests like "write unit tests", "test this function", "add tests for this class", "cover this with pytest", or "what's the unit test coverage here". Focuses on isolated, fast, single-unit tests with mocked dependencies. Delegate to python-integration-tester for tests involving real databases or internal service boundaries, and to python-system-tester for full end-to-end flows.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 permissionMode: acceptEdits

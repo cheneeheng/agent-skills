@@ -1,7 +1,6 @@
 ---
 name: readme-updater
-description: |
-  Use proactively when the user ships a new feature, adds a command/script/endpoint, changes install or setup steps, adds or removes dependencies, introduces environment variables, or changes the public API surface. Also trigger on: "update the readme", "refresh the docs", "document this feature", "I just shipped X — update docs". Do NOT invoke for bug fixes, refactors, or any change that does not affect how someone installs, runs, or configures the project.
+description: "Use proactively when the user ships a new feature, adds a command/script/endpoint, changes install or setup steps, adds or removes dependencies, introduces environment variables, or changes the public API surface. Also trigger on: \"update the readme\", \"refresh the docs\", \"document this feature\", \"I just shipped X — update docs\". Do NOT invoke for bug fixes, refactors, or any change that does not affect how someone installs, runs, or configures the project."
 model: haiku
 tools: Read, Glob, Grep, Edit, Write, Bash
 permissionMode: acceptEdits

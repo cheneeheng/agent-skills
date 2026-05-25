@@ -1,11 +1,6 @@
 ---
 name: changelog-agent
-description: |
-  Use proactively when the user asks to generate a changelog, update CHANGELOG.md,
-  document recent changes, write release notes, or summarize what changed between
-  versions or commits. Also invoke for phrases like "what changed", "create a release",
-  "bump the version", "document this release", or "update the changelog". Follows
-  semantic versioning (semver) and the Keep a Changelog format.
+description: "Use proactively when the user asks to generate a changelog, update CHANGELOG.md, document recent changes, write release notes, or summarize what changed between versions or commits. Also invoke for phrases like \"what changed\", \"create a release\", \"bump the version\", \"document this release\", or \"update the changelog\". Follows semantic versioning (semver) and the Keep a Changelog format."
 model: sonnet
 tools: Read, Glob, Grep, LS, Bash, Write, Edit, MultiEdit, TodoRead, TodoWrite
 permissionMode: acceptEdits

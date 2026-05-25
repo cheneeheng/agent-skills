@@ -1,12 +1,6 @@
 ---
 name: review-against-plan
-description: >
-  Load when the user wants to audit or verify that the current codebase matches a SKELETON.md
-  or ITER_NN.md planning document. For each in-scope section, checks the actual implementation
-  against the spec, identifies gaps, deviations, and errors, then fixes them. Trigger when the
-  user says "review against plan", "check implementation", "audit the spec", "verify the plan
-  is implemented", "did I implement everything", "plan compliance check", or points to a plan
-  file and asks to check, review, audit, or verify whether the implementation matches it.
+description: Load when the user wants to audit or verify that the current codebase matches a SKELETON.md or ITER_NN.md planning document. For each in-scope section, checks the actual implementation against the spec, identifies gaps, deviations, and errors, then fixes them. Trigger when the user says "review against plan", "check implementation", "audit the spec", "verify the plan is implemented", "did I implement everything", "plan compliance check", or points to a plan file and asks to check, review, audit, or verify whether the implementation matches it.
 ---
 
 # Review Against Plan

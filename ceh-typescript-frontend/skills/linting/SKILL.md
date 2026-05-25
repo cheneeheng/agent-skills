@@ -1,9 +1,6 @@
 ---
 name: "linting"
-description: >
-  Load this skill when configuring or running ESLint, Prettier, svelte-check, or tsc in a
-  SvelteKit project. Auto-load whenever eslint.config.js, .prettierrc, or tsconfig.json is
-  created or modified, or when lint errors are being diagnosed or resolved.
+description: Load this skill when configuring or running ESLint, Prettier, svelte-check, or tsc in a SvelteKit project. Auto-load whenever eslint.config.js, .prettierrc, or tsconfig.json is created or modified, or when lint errors are being diagnosed or resolved.
 ---
 
 # Linting and Quality Checks

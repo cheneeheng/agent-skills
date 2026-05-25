@@ -1,9 +1,6 @@
 ---
 name: "python-observability"
-description: >
-  Load this skill when adding logging or observability to Python backend code: structlog setup,
-  choosing log levels, adding correlation IDs, or deciding what not to log. Auto-load whenever
-  structlog is imported, a log statement is written, or a correlation ID is referenced.
+description: Load this skill when adding logging or observability to Python backend code: structlog setup, choosing log levels, adding correlation IDs, or deciding what not to log. Auto-load whenever structlog is imported, a log statement is written, or a correlation ID is referenced.
 ---
 
 # Python Observability

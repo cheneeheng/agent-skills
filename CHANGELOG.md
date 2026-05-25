@@ -5,6 +5,30 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.4.1] — 2026-05-25
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.2.3 |
+| `ceh-architecture-design` | v2.1.1 |
+| `ceh-blog` | v1.0.1 |
+| `ceh-dev-tools` | v1.1.1 |
+| `ceh-git-workflow` | v2.4.1 |
+| `ceh-lessons-learned` | v2.0.2 |
+| `ceh-python-backend` | v2.2.1 |
+| `ceh-release-ops` | v2.2.2 |
+| `ceh-summarize-chat` | v2.0.2 |
+| `ceh-typescript-frontend` | v2.2.1 |
+
+### Fixed
+
+- **All plugins** — collapsed multiline `description` block scalars (`>`, `|`) to single-line inline strings in skill and agent frontmatter (56 files across all 10 plugins).
+- **`ceh-blog`** — removed redundant `ceh-` prefix from skill `name` fields (`ceh-blog-editor` → `blog-editor`, etc.); the prefix is already carried by the plugin namespace.
+
+---
+
 ## [2.4.0] — 2026-05-25
 
 ### Plugin versions

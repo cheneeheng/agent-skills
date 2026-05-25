@@ -1,9 +1,6 @@
 ---
 name: "coding-style"
-description: >
-  Load this skill when writing TypeScript types, choosing between type and interface, defining
-  enums or const assertions, naming variables or components, organizing imports, or writing
-  JSDoc. Auto-load whenever TypeScript conventions are being applied in a SvelteKit codebase.
+description: Load this skill when writing TypeScript types, choosing between type and interface, defining enums or const assertions, naming variables or components, organizing imports, or writing JSDoc. Auto-load whenever TypeScript conventions are being applied in a SvelteKit codebase.
 ---
 
 # TypeScript Coding Style

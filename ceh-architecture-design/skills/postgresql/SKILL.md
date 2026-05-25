@@ -1,10 +1,6 @@
 ---
 name: "postgresql"
-description: >
-  Load this skill when writing SQL queries, designing or modifying database schemas, adding
-  indexes, working with JSONB columns, or writing asyncpg query code. Auto-load whenever a
-  SQL statement is written, a table or column is added, a query uses asyncpg fetchrow/execute,
-  or tenant isolation (owner_id filtering) is relevant.
+description: Load this skill when writing SQL queries, designing or modifying database schemas, adding indexes, working with JSONB columns, or writing asyncpg query code. Auto-load whenever a SQL statement is written, a table or column is added, a query uses asyncpg fetchrow/execute, or tenant isolation (owner_id filtering) is relevant.
 ---
 
 # PostgreSQL and asyncpg

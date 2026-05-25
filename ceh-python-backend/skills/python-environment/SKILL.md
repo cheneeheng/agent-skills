@@ -1,10 +1,6 @@
 ---
 name: "python-environment"
-description: >
-  Load this skill when setting up or configuring the Python environment: installing dependencies
-  with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions,
-  or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command is run,
-  or a question arises about code style, type annotations, or import ordering.
+description: Load this skill when setting up or configuring the Python environment: installing dependencies with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions, or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command is run, or a question arises about code style, type annotations, or import ordering.
 ---
 
 # Python Environment

@@ -1,10 +1,6 @@
 ---
 name: "execution-modes"
-description: >
-  Sets Interactive or Autonomous execution mode for the current session. Interactive Mode (default):
-  stop and ask on ambiguity. Autonomous Mode: decide, document, and continue. Load when user says
-  "act autonomously", "proceed autonomously", "autonomous mode", "don't stop to ask", "just do it",
-  "interactive mode", or uses /execution-modes.
+description: Sets Interactive or Autonomous execution mode for the current session. Interactive Mode (default): stop and ask on ambiguity. Autonomous Mode: decide, document, and continue. Load when user says "act autonomously", "proceed autonomously", "autonomous mode", "don't stop to ask", "just do it", "interactive mode", or uses /execution-modes.
 argument-hint: "[autonomous|interactive]"
 arguments: mode
 ---

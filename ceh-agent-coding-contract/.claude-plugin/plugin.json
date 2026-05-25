@@ -1,6 +1,6 @@
 {
   "name": "ceh-agent-coding-contract",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "CEH agent coding contract: interactive vs autonomous modes and the five-step task workflow.",
   "author": { "name": "Chen" },
   "repository": "https://github.com/cheneeheng/agent-skills",

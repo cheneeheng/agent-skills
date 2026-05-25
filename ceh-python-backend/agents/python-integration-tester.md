@@ -1,14 +1,6 @@
 ---
 name: python-integration-tester
-description: |
-  Use proactively when the user wants to test how multiple Python modules, services,
-  or components work together. Invoke for requests like "write integration tests",
-  "test the API endpoints", "test the database layer", "test this service boundary",
-  "test how these modules interact", or "add integration coverage". Covers real
-  component interactions — actual DB connections, real HTTP calls to internal services,
-  filesystem operations — with external third-party services still mocked.
-  Delegate to python-unit-tester for isolated function/class tests, and to
-  python-system-tester for full end-to-end user journeys.
+description: Use proactively when the user wants to test how multiple Python modules, services, or components work together. Invoke for requests like "write integration tests", "test the API endpoints", "test the database layer", "test this service boundary", "test how these modules interact", or "add integration coverage". Covers real component interactions — actual DB connections, real HTTP calls to internal services, filesystem operations — with external third-party services still mocked. Delegate to python-unit-tester for isolated function/class tests, and to python-system-tester for full end-to-end user journeys.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 permissionMode: acceptEdits

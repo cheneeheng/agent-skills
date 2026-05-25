@@ -1,14 +1,6 @@
 ---
-name: ceh-blog-editor
-description: >
-  Use this skill when the user already has a written blog post draft and wants it improved, polished, or
-  fixed before publishing. Trigger when the user shares prose they've already written and says things like
-  "edit this", "improve this draft", "clean this up", "this post feels off", "can you polish this",
-  "something is wrong with this post", "make this better", "review my draft", "this doesn't land right",
-  or any variation where a full draft (or near-complete draft) exists and the user wants editorial work —
-  not a fresh interview or a new post. Do NOT trigger when the user has only a topic, rough idea, or
-  bullet notes — use blog-interviewer or blog-writer instead. Do NOT trigger for Phase 4 refinement during
-  an active blog-interviewer or blog-writer session — that skill handles its own revisions.
+name: blog-editor
+description: 'Use this skill when the user already has a written blog post draft and wants it improved, polished, or fixed before publishing. Trigger when the user shares prose they''ve already written and says things like "edit this", "improve this draft", "clean this up", "this post feels off", "can you polish this", "something is wrong with this post", "make this better", "review my draft", "this doesn''t land right", or any variation where a full draft (or near-complete draft) exists and the user wants editorial work — not a fresh interview or a new post. Do NOT trigger when the user has only a topic, rough idea, or bullet notes — use blog-interviewer or blog-writer instead. Do NOT trigger for Phase 4 refinement during an active blog-interviewer or blog-writer session — that skill handles its own revisions.'
 ---
 
 # Blog Editor Skill

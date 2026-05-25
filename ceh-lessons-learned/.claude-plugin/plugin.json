@@ -1,6 +1,6 @@
 {
   "name": "ceh-lessons-learned",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "CEH lessons learned: extract and record session retrospectives into LESSONS_LEARNED.md.",
   "author": { "name": "Chen" },
   "repository": "https://github.com/cheneeheng/agent-skills",

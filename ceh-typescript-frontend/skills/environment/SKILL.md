@@ -1,9 +1,6 @@
 ---
 name: "environment"
-description: >
-  Load this skill when setting up the project, running scripts, or managing dependencies in a
-  Bun + SvelteKit project. Auto-load whenever bun install, bun add, bun run, or package.json
-  scripts are being used or referenced.
+description: Load this skill when setting up the project, running scripts, or managing dependencies in a Bun + SvelteKit project. Auto-load whenever bun install, bun add, bun run, or package.json scripts are being used or referenced.
 ---
 
 # Environment

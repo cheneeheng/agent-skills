@@ -1,10 +1,6 @@
 ---
 name: "rollback"
-description: >
-  Phase: operational. Load this skill when deciding whether to roll back a deployment, executing
-  an application rollback, or planning recovery from a failed migration. Auto-load whenever a
-  deployment fails its health check, error rates spike post-deploy, P95 latency triples within
-  10 minutes of a release, or any data integrity issue is detected after deploying.
+description: "Phase: operational. Load this skill when deciding whether to roll back a deployment, executing an application rollback, or planning recovery from a failed migration. Auto-load whenever a deployment fails its health check, error rates spike post-deploy, P95 latency triples within 10 minutes of a release, or any data integrity issue is detected after deploying."
 ---
 
 # Rollback

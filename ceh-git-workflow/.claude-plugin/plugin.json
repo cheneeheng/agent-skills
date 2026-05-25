@@ -1,6 +1,6 @@
 {
   "name": "ceh-git-workflow",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "CEH Git workflow: commits, branching, PRs, merging, releases, code review, dependency management, and changelog/README agents.",
   "author": { "name": "Chen" },
   "repository": "https://github.com/cheneeheng/agent-skills",

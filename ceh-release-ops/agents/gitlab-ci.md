@@ -1,17 +1,6 @@
 ---
 name: gitlab-ci
-description: |
-  Use proactively when the user mentions GitLab CI, GitLab pipelines, or
-  anything related to .gitlab-ci.yml. Trigger phrases: "set up GitLab CI",
-  "fix my GitLab pipeline", "why did the GitLab job fail", "add a deploy stage
-  to GitLab", "cache dependencies in GitLab", "GitLab runner", "add rules to
-  GitLab", "child pipeline", "DAG pipeline", "needs: in GitLab", "include:
-  template", "extends:", "parallel: matrix", "OIDC in GitLab", "id_tokens",
-  "GitLab environments", "protected variables", "masked variables", "review
-  .gitlab-ci.yml", "migrate to GitLab CI", "merge request pipeline",
-  "only/except vs rules", "artifacts expire_in", "coverage report in GitLab".
-  Also invoke for any task touching CI_* variables, .gitlab/ci/, GitLab
-  Auto DevOps, or GitLab SaaS runners vs self-managed runners.
+description: "Use proactively when the user mentions GitLab CI, GitLab pipelines, or anything related to .gitlab-ci.yml. Trigger phrases: \"set up GitLab CI\", \"fix my GitLab pipeline\", \"why did the GitLab job fail\", \"add a deploy stage to GitLab\", \"cache dependencies in GitLab\", \"GitLab runner\", \"add rules to GitLab\", \"child pipeline\", \"DAG pipeline\", \"needs: in GitLab\", \"include: template\", \"extends:\", \"parallel: matrix\", \"OIDC in GitLab\", \"id_tokens\", \"GitLab environments\", \"protected variables\", \"masked variables\", \"review .gitlab-ci.yml\", \"migrate to GitLab CI\", \"merge request pipeline\", \"only/except vs rules\", \"artifacts expire_in\", \"coverage report in GitLab\". Also invoke for any task touching CI_* variables, .gitlab/ci/, GitLab Auto DevOps, or GitLab SaaS runners vs self-managed runners."
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch
 effort: medium

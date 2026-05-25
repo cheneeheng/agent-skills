@@ -1,10 +1,6 @@
 ---
 name: "rest-api"
-description: >
-  Load this skill when designing or implementing REST API endpoints: defining URL paths, choosing
-  HTTP methods and status codes, shaping error responses, adding request or response models, or
-  deciding on API versioning strategy. Auto-load whenever a new route is added, an HTTP status
-  code is chosen, or an error response shape is defined.
+description: Load this skill when designing or implementing REST API endpoints: defining URL paths, choosing HTTP methods and status codes, shaping error responses, adding request or response models, or deciding on API versioning strategy. Auto-load whenever a new route is added, an HTTP status code is chosen, or an error response shape is defined.
 ---
 
 # REST API Design

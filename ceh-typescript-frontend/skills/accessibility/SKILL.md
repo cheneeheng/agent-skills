@@ -1,9 +1,6 @@
 ---
 name: "accessibility"
-description: >
-  Load this skill when writing Svelte component markup with interactive elements, images,
-  forms, or navigation. Auto-load whenever a .svelte file is created or modified and HTML
-  structure is being written or reviewed.
+description: Load this skill when writing Svelte component markup with interactive elements, images, forms, or navigation. Auto-load whenever a .svelte file is created or modified and HTML structure is being written or reviewed.
 ---
 
 # Accessibility

@@ -1,10 +1,6 @@
 ---
 name: "event-sourcing"
-description: >
-  Load this skill when working with the event log or state snapshots: appending events, reading
-  or replaying the event log, updating snapshots, designing new event types, or modifying the
-  transaction that writes events and snapshots atomically. Auto-load whenever event_log or
-  state_snapshot tables are touched, or a new event type is introduced.
+description: Load this skill when working with the event log or state snapshots: appending events, reading or replaying the event log, updating snapshots, designing new event types, or modifying the transaction that writes events and snapshots atomically. Auto-load whenever event_log or state_snapshot tables are touched, or a new event type is introduced.
 ---
 
 # Event Sourcing

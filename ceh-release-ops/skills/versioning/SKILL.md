@@ -1,10 +1,6 @@
 ---
 name: "versioning"
-description: >
-  Phase: release. Load this skill when bumping a version, tagging a release, writing a release
-  checklist, or classifying a change as patch/minor/major. Auto-load whenever a version is being
-  incremented in pyproject.toml or package.json, a git tag is being applied, or a change must be
-  classified as internal, user-visible, or breaking.
+description: "Phase: release. Load this skill when bumping a version, tagging a release, writing a release checklist, or classifying a change as patch/minor/major. Auto-load whenever a version is being incremented in pyproject.toml or package.json, a git tag is being applied, or a change must be classified as internal, user-visible, or breaking."
 ---
 
 # Versioning and Release Checklist

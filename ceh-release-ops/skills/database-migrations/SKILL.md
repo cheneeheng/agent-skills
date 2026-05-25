@@ -1,11 +1,6 @@
 ---
 name: "database-migrations"
-description: >
-  Phase: implementation. Load this skill when writing, reviewing, or running database migrations:
-  creating a new Alembic migration, modifying an existing one, dropping or renaming columns, or
-  planning a schema change that affects a running application. Auto-load whenever an Alembic
-  migration file is created or modified, or a destructive schema change (column drop, rename,
-  table removal) is planned.
+description: "Phase: implementation. Load this skill when writing, reviewing, or running database migrations: creating a new Alembic migration, modifying an existing one, dropping or renaming columns, or planning a schema change that affects a running application. Auto-load whenever an Alembic migration file is created or modified, or a destructive schema change (column drop, rename, table removal) is planned."
 ---
 
 # Database Migrations

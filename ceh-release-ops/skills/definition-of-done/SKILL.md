@@ -1,10 +1,6 @@
 ---
 name: "definition-of-done"
-description: >
-  Phase: implementation. Load this skill when preparing to open a pull request or marking a task
-  as complete: verifying that a bug fix, feature, or refactor meets the quality bar before review.
-  Auto-load whenever a PR is about to be opened, a task is being closed, or a checklist of
-  completion criteria is needed.
+description: "Phase: implementation. Load this skill when preparing to open a pull request or marking a task as complete: verifying that a bug fix, feature, or refactor meets the quality bar before review. Auto-load whenever a PR is about to be opened, a task is being closed, or a checklist of completion criteria is needed."
 ---
 
 # Definition of Done

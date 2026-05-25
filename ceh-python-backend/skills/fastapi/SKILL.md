@@ -1,10 +1,6 @@
 ---
 name: "fastapi"
-description: >
-  Load this skill when writing FastAPI route handlers, services, or middleware: adding a new
-  endpoint, wiring up dependency injection, configuring lifespan startup/shutdown, registering
-  exception handlers, or defining the custom exception hierarchy. Auto-load whenever a route
-  handler is written, a FastAPI dependency is defined, or a domain exception is added.
+description: Load this skill when writing FastAPI route handlers, services, or middleware: adding a new endpoint, wiring up dependency injection, configuring lifespan startup/shutdown, registering exception handlers, or defining the custom exception hierarchy. Auto-load whenever a route handler is written, a FastAPI dependency is defined, or a domain exception is added.
 ---
 
 # FastAPI Conventions

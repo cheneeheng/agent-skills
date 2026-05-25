@@ -1,10 +1,6 @@
 ---
 name: "llm-integration"
-description: >
-  Load this skill when integrating LLM calls into the application: constructing prompts, defining
-  LLM output schemas, validating LLM responses, applying proposed events from LLM output, or
-  handling LLM API errors. Auto-load whenever an LLM API call is written, an output model is
-  defined, or proposed events from an LLM response are being applied to state.
+description: Load this skill when integrating LLM calls into the application: constructing prompts, defining LLM output schemas, validating LLM responses, applying proposed events from LLM output, or handling LLM API errors. Auto-load whenever an LLM API call is written, an output model is defined, or proposed events from an LLM response are being applied to state.
 ---
 
 # LLM Integration Safety

@@ -1,7 +1,6 @@
 ---
-name: ceh-blog-interviewer
-description: >
-  Use this skill whenever the user wants to write a blog post but needs help figuring out what to say, how to frame it, or what angle to take. Trigger when the user says things like "help me write a blog post", "I want to blog about X", "interview me for a post", "I have an idea for an article", "help me turn this into a blog", "I want to write about my experience with X", "can you help me draft a blog", "I need content for a post", or any variation where they have a rough topic but haven't fully shaped it yet. Also trigger when a user shares a project repo, GitHub link, README, or code and wants to write about it — even if they just say "write a blog post about this repo" or "document this project". Also trigger when a user shares a project, experience, lesson learned, or opinion and seems to want to turn it into written content.
+name: blog-interviewer
+description: 'Use this skill whenever the user wants to write a blog post but needs help figuring out what to say, how to frame it, or what angle to take. Trigger when the user says things like "help me write a blog post", "I want to blog about X", "interview me for a post", "I have an idea for an article", "help me turn this into a blog", "I want to write about my experience with X", "can you help me draft a blog", "I need content for a post", or any variation where they have a rough topic but haven''t fully shaped it yet. Also trigger when a user shares a project repo, GitHub link, README, or code and wants to write about it — even if they just say "write a blog post about this repo" or "document this project". Also trigger when a user shares a project, experience, lesson learned, or opinion and seems to want to turn it into written content.'
 ---
 
 # Blog Interviewer Skill

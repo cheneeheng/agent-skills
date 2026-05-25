@@ -1,11 +1,6 @@
 ---
 name: "security"
-description: >
-  Phase: implementation. Load this skill when handling secrets, configuring CORS, applying rate
-  limiting, validating external input, or reviewing code for security issues: adding environment
-  variable loading, configuring allowed origins, protecting mutation endpoints, or setting up
-  input validation with Pydantic. Auto-load whenever secrets management, CORS config, rate
-  limiting, or authentication/authorization code is written or reviewed.
+description: "Phase: implementation. Load this skill when handling secrets, configuring CORS, applying rate limiting, validating external input, or reviewing code for security issues: adding environment variable loading, configuring allowed origins, protecting mutation endpoints, or setting up input validation with Pydantic. Auto-load whenever secrets management, CORS config, rate limiting, or authentication/authorization code is written or reviewed."
 ---
 
 # Security

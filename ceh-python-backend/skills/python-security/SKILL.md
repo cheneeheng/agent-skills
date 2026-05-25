@@ -1,9 +1,6 @@
 ---
 name: "python-security"
-description: >
-  Load this skill for Python backend security baseline: secrets management, input validation,
-  parameterized SQL, CORS, rate limiting, and session token generation. Auto-load whenever
-  security-sensitive code is written — auth, secrets, CORS config, or user input handling.
+description: Load this skill for Python backend security baseline: secrets management, input validation, parameterized SQL, CORS, rate limiting, and session token generation. Auto-load whenever security-sensitive code is written — auth, secrets, CORS config, or user input handling.
 ---
 
 # Python Security Baseline

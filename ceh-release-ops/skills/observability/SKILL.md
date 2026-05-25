@@ -1,10 +1,6 @@
 ---
 name: "observability"
-description: >
-  Phase: implementation. Load this skill when adding or modifying logging, metrics, health checks,
-  or correlation ID propagation: writing structured log calls, choosing log levels, adding
-  Prometheus metrics, defining the health check endpoint, or wiring up correlation ID middleware.
-  Auto-load whenever a log call is written, a metric is added, or the /health endpoint is touched.
+description: "Phase: implementation. Load this skill when adding or modifying logging, metrics, health checks, or correlation ID propagation: writing structured log calls, choosing log levels, adding Prometheus metrics, defining the health check endpoint, or wiring up correlation ID middleware. Auto-load whenever a log call is written, a metric is added, or the /health endpoint is touched."
 ---
 
 # Observability

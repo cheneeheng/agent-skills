@@ -1,9 +1,6 @@
 ---
 name: "repository-structure"
-description: >
-  Load this skill when creating new directories, adding a new service or module, deciding where
-  a file belongs, or restructuring the project layout. Auto-load whenever a new package, layer,
-  or top-level directory is introduced.
+description: Load this skill when creating new directories, adding a new service or module, deciding where a file belongs, or restructuring the project layout. Auto-load whenever a new package, layer, or top-level directory is introduced.
 ---
 
 # Repository Structure and Layer Boundaries

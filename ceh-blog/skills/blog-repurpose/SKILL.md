@@ -1,12 +1,6 @@
 ---
-name: ceh-blog-repurpose
-description: >
-  Use this skill when the user has a finished or near-finished blog post and wants to adapt it for
-  other distribution channels. Trigger when the user says things like "turn this into a thread",
-  "make a LinkedIn post from this", "repurpose this post", "create social content from this",
-  "write a TL;DR for this", "make a newsletter blurb", "adapt this for Twitter", "I want to share
-  this on LinkedIn", "summarise this post in a few sentences", "create a teaser for my newsletter",
-  or any variation where they have an existing post and want one or more alternative formats.
+name: blog-repurpose
+description: 'Use this skill when the user has a finished or near-finished blog post and wants to adapt it for other distribution channels. Trigger when the user says things like "turn this into a thread", "make a LinkedIn post from this", "repurpose this post", "create social content from this", "write a TL;DR for this", "make a newsletter blurb", "adapt this for Twitter", "I want to share this on LinkedIn", "summarise this post in a few sentences", "create a teaser for my newsletter", or any variation where they have an existing post and want one or more alternative formats.'
 ---
 
 # Blog Repurpose Skill
