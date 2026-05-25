@@ -18,6 +18,7 @@ the full development lifecycle, split into focused plugins — one per domain.
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
 | Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation agents |
+| Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
 
 ---
 
@@ -104,6 +105,15 @@ the full development lifecycle, split into focused plugins — one per domain.
 |-------|-----------|-------------|
 | Lessons Learned | `/ceh-lessons-learned:lessons-learned` | Extracting lessons learned from the current session into `LESSONS_LEARNED.md` |
 
+### Blog (`ceh-blog`)
+
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
+| Blog Interviewer | `/ceh-blog:blog-interviewer` | Turn a rough idea, project, or experience into a compelling, publishable blog post |
+| Blog Writer | `/ceh-blog:blog-writer` | Draft straight from existing notes, bullets, or outline — no interview |
+| Blog Editor | `/ceh-blog:blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
+| Blog Repurpose | `/ceh-blog:blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
+
 ---
 
 ## Agents
@@ -171,6 +181,7 @@ Install individual plugins for the domains you need:
 /plugin install ceh-summarize-chat@ceh-plugins --scope user
 /plugin install ceh-lessons-learned@ceh-plugins --scope user
 /plugin install ceh-dev-tools@ceh-plugins --scope user
+/plugin install ceh-blog@ceh-plugins --scope user
 ```
 
 Or install all at once using `--scope project` for project-specific installs.
@@ -206,7 +217,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/ceh-agent-coding-contract" },
     { "path": "~/agent-skills/ceh-summarize-chat" },
     { "path": "~/agent-skills/ceh-lessons-learned" },
-    { "path": "~/agent-skills/ceh-dev-tools" }
+    { "path": "~/agent-skills/ceh-dev-tools" },
+    { "path": "~/agent-skills/ceh-blog" }
   ]
 }
 ```

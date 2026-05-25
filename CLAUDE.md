@@ -30,6 +30,7 @@ ceh-<plugin-name>/
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |
+| `ceh-blog` | Interview-driven blog post writing |
 
 ## Skills
 

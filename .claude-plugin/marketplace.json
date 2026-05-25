@@ -96,6 +96,16 @@
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
       "keywords": ["agent", "dev-tools", "repo-map", "codebase", "exploration"]
+    },
+    {
+      "name": "ceh-blog",
+      "source": "./ceh-blog",
+      "description": "CEH blog: interview-driven blog post writing — from rough idea to publication-ready draft; repurpose finished posts for Twitter/X, LinkedIn, TL;DR, and newsletters.",
+      "version": "1.3.2",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "blog", "writing", "interviewer", "content", "repurpose", "social"]
     }
   ]
 }
