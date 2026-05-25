@@ -5,6 +5,37 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.4.0] — 2026-05-25
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.2.2 |
+| `ceh-architecture-design` | v2.1.0 |
+| `ceh-blog` | v1.0.0 |
+| `ceh-dev-tools` | v1.1.0 |
+| `ceh-git-workflow` | v2.4.0 |
+| `ceh-lessons-learned` | v2.0.1 |
+| `ceh-python-backend` | v2.2.0 |
+| `ceh-release-ops` | v2.2.1 |
+| `ceh-summarize-chat` | v2.0.1 |
+| `ceh-typescript-frontend` | v2.2.0 |
+
+### Added
+
+- **`ceh-blog` plugin (new, v1.0.0)** — interview-driven blog writing end-to-end:
+  - `blog-interviewer`: structured interview skill to extract ideas, audience, and key points from the user.
+  - `blog-writer`: drafts a full publication-ready blog post from interview output.
+  - `blog-editor`: iterative editing pass — tone, clarity, and structure review.
+  - `blog-repurpose`: repurposes a finished post for Twitter/X, LinkedIn, TL;DR, and newsletter formats.
+
+### Changed
+
+- **`ceh-agent-coding-contract`** (v2.2.2): Karpathy-derived rules added to the coding contract — opinionated heuristics on scope discipline, implementation order, and change minimalism.
+
+---
+
 ## [2.3.0] — 2026-05-16
 
 ### Plugin versions
