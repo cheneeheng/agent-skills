@@ -1,6 +1,6 @@
 ---
 name: blog-editor
-description: Trigger when the user has a written draft and wants editorial work — improvement, polish, or structural fixes. The starting point is prose already written (sentences and paragraphs), not notes or a topic. Trigger when user says "edit this draft", "improve this post", "clean this up", "this doesn't land right", "polish my writing", "review my draft", "make this better", or shares a written draft and asks for feedback or revision. Do NOT trigger when the user has only notes, bullets, or a topic — use blog-interviewer or blog-writer instead. Do NOT trigger during an active blog-interviewer or blog-writer session — those skills handle their own revision phases.
+description: Diagnose and revise an existing blog draft — polish, tighten, or fix structure while preserving the author's voice. Trigger when the starting point is prose already written (sentences and paragraphs). Signals: "edit this draft", "improve this post", "clean this up", "this doesn't land right", "review my draft", "make this better". Not for notes, bullets, or a bare topic (use blog-writer or blog-interviewer); not during an active interviewer/writer session — those handle their own revisions.
 ---
 
 # Blog Editor Skill

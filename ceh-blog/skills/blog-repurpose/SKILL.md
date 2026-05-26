@@ -1,6 +1,6 @@
 ---
 name: blog-repurpose
-description: Trigger when the user has a finished or near-finished blog post and wants to adapt it for other channels — Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb. Trigger when user says "turn this into a thread", "make a LinkedIn post from this", "repurpose this post", "create social content from this", "write a TL;DR for this", "make a newsletter blurb", "adapt this for Twitter", "share this on LinkedIn", "summarise this post", or has a complete post and wants a different format. Do NOT trigger when the user doesn't have a complete draft yet — suggest blog-interviewer, blog-writer, or blog-editor first.
+description: Adapt a finished blog post into other formats — Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb. Trigger when the user has a complete post and wants it reshaped for a different channel. Signals: "turn this into a thread", "make a LinkedIn post from this", "write a TL;DR", "repurpose this post", "adapt this for Twitter", "make a newsletter blurb". Not when there is no complete draft yet — use blog-interviewer, blog-writer, or blog-editor first.
 ---
 
 # Blog Repurpose Skill

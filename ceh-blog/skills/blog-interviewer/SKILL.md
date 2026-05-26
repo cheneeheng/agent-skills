@@ -1,6 +1,6 @@
 ---
 name: blog-interviewer
-description: Trigger when the user wants to write a blog post but hasn't shaped the content yet — the starting point is a topic, project, repo, or experience, not notes or prose. Trigger when user says "help me write a blog post", "interview me for a post", "I want to blog about X", "write a post about this repo", "I want to write about my experience with X", "I have an idea for an article", or provides a GitHub link/repo/README and wants a post written. Do NOT trigger when the user has structured notes or an outline ready — use blog-writer. Do NOT trigger when the user has a written draft to improve — use blog-editor.
+description: Interview the user to shape a blog post, then draft it. Trigger when the starting point is only a topic, idea, project, repo, or experience — nothing written yet. Signals: "help me write a blog post", "interview me for a post", "I want to blog about X", "write a post about this repo", "I have an idea for an article", or a GitHub link/repo/README to turn into a post. Not for ready-made notes or an outline (use blog-writer); not for an existing draft to improve (use blog-editor).
 ---
 
 # Blog Interviewer Skill

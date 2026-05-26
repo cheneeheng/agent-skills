@@ -1,6 +1,6 @@
 ---
 name: blog-writer
-description: Trigger when the user has raw material — notes, bullets, an outline, or fragments — and wants to go straight to a draft without an interview. Trigger when user says "turn these notes into a blog post", "write a post from this outline", "draft from these bullets", "I've got my notes, just write it", "here's my outline, write the post", or provides non-prose material and asks to draft or write. Do NOT trigger when the user only has a topic but no material — use blog-interviewer. Do NOT trigger when the user provides a repo or code artefact — use blog-interviewer Phase 0. Do NOT trigger when the user has written prose to improve — use blog-editor.
+description: Draft a complete blog post from raw material — notes, bullets, an outline, or fragments — with no interview. Trigger when the user has non-prose material ready and wants to go straight to a draft. Signals: "turn these notes into a post", "write a post from this outline", "draft from these bullets", "I've got my notes, just write it". Not for a bare topic with no material or a repo/code artefact (use blog-interviewer); not for written prose to improve (use blog-editor).
 ---
 
 # Blog Writer Skill
