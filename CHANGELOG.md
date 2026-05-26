@@ -5,6 +5,29 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.4.2] — 2026-05-26
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.2.3 |
+| `ceh-architecture-design` | v2.1.1 |
+| `ceh-blog` | v1.0.2 |
+| `ceh-dev-tools` | v1.1.1 |
+| `ceh-git-workflow` | v2.4.1 |
+| `ceh-lessons-learned` | v2.0.2 |
+| `ceh-python-backend` | v2.2.1 |
+| `ceh-release-ops` | v2.2.2 |
+| `ceh-summarize-chat` | v2.0.2 |
+| `ceh-typescript-frontend` | v2.2.1 |
+
+### Changed
+
+- **`ceh-blog`** (v1.0.2) — rewrote all four skill `description` fields to use the directive "Trigger when…" pattern with explicit trigger phrases and "Do NOT trigger" exclusions; matches the `ceh-agent-coding-contract` style for unambiguous skill dispatch.
+
+---
+
 ## [2.4.1] — 2026-05-25
 
 ### Plugin versions
