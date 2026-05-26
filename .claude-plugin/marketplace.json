@@ -101,7 +101,7 @@
       "name": "ceh-blog",
       "source": "./ceh-blog",
       "description": "CEH blog: interview-driven blog post writing — from rough idea to publication-ready draft; repurpose finished posts for Twitter/X, LinkedIn, TL;DR, and newsletters.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": { "name": "cheneeheng" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
