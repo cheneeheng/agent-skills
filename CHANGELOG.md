@@ -5,6 +5,33 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.5.0] — 2026-05-29
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.3.0 |
+| `ceh-architecture-design` | v2.1.1 |
+| `ceh-blog` | v1.0.3 |
+| `ceh-dev-tools` | v1.1.1 |
+| `ceh-git-workflow` | v2.4.1 |
+| `ceh-lessons-learned` | v2.0.2 |
+| `ceh-python-backend` | v2.2.1 |
+| `ceh-release-ops` | v2.2.2 |
+| `ceh-summarize-chat` | v2.0.2 |
+| `ceh-typescript-frontend` | v2.2.1 |
+
+### Removed
+
+- **`ceh-agent-coding-contract`** (v2.3.0) — deleted the `execution-modes` skill. Sessions are always autonomous in practice, making the separate interactive/autonomous mode switch redundant.
+
+### Changed
+
+- **`ceh-agent-coding-contract`** (v2.3.0) — folded autonomous-by-default behavior and the authority hierarchy into the `agent-coding-contract` skill: new Execution Mode section, "Ask, don't guess" reframed as "Decide, don't guess silently", and the Interactive/Autonomous parentheticals removed from the task workflow and decomposition rules. READMEs and plugin description updated accordingly.
+
+---
+
 ## [2.4.3] — 2026-05-26
 
 ### Plugin versions
