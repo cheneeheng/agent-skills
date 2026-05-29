@@ -29,7 +29,6 @@ the full development lifecycle, split into focused plugins — one per domain.
 | Skill | Invoke as | When to use |
 |-------|-----------|-------------|
 | Agent Coding Contract | `/ceh-agent-coding-contract:agent-coding-contract` | Start of any coding session — core rules, five-step workflow, stop conditions, non-goals |
-| Execution Modes | `/ceh-agent-coding-contract:execution-modes` | Switch to Autonomous or Interactive mode; triggered by phrases or invoked directly |
 | Implement From Plan | `/ceh-agent-coding-contract:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
 | Review Against Plan | `/ceh-agent-coding-contract:review-against-plan` | Auditing implementation against a SKELETON.md or ITER_NN.md planning document |
 

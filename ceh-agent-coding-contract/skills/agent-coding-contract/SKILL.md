@@ -9,11 +9,23 @@ description: Core behavioral contract for all coding sessions. Load proactively 
 
 Implement only what is explicitly requested, within authorized scope, with minimal diffs.
 
+## Execution Mode
+
+Sessions run in **Autonomous Mode**. On ambiguity: **decide → document → continue**, choosing the conservative, reasonable option and logging it per the Decision Log section. Do not stop to ask for routine ambiguity. Still stop for the hard cases listed under Stop Conditions (conflicts the authority hierarchy can't resolve, repo state contradicting instructions, risk of data loss or irreversible impact, inconsistent partial failure).
+
+### Authority Hierarchy (When Context Files Conflict)
+
+1. This behavioral contract
+2. Domain-specific standards (environment, testing, coding style)
+3. Workflow and process files
+
+If conflict cannot be resolved by this hierarchy, stop and ask via `AskUserQuestion`.
+
 ## Core Rules
 
 | Rule | Detail |
 |------|--------|
-| Ask, don't guess | If intent is unclear, stop and use `AskUserQuestion`. Never infer intent silently. |
+| Decide, don't guess silently | If intent is unclear, decide the conservative option and document it (see Decision Log). Never infer intent silently and leave it unrecorded. Stop and use `AskUserQuestion` only for the Stop Conditions. |
 | Flag simpler alternatives | If a simpler or shorter approach exists, say so before coding. Push back when warranted. |
 | Minimal change bias | Small, localized edits. Preserve existing style and structure. No broad refactors. |
 | Clean up your own orphans | Remove imports, variables, and functions your changes made unused. Leave pre-existing dead code alone — mention it to the user instead. |
@@ -25,7 +37,7 @@ Implement only what is explicitly requested, within authorized scope, with minim
 Every task follows this order. No skipping.
 
 1. **Understand** — clarify the request, affected files, and potential risks; state a verifiable success criterion (how you will know the task is done)
-2. **Confirm scope** — verify authorization; stop if unclear (Interactive Mode)
+2. **Confirm scope** — verify authorization; if unclear, decide conservatively and document
 3. **Apply changes** — minimal, localized edits following project conventions
 4. **Validate** — run checks only if explicitly requested; delegate to a background subagent or tester agent if available
 5. **Summarize** — what changed, why, any assumptions made, any decisions logged, and follow-up actions for the user
@@ -37,8 +49,8 @@ Every task follows this order. No skipping.
 For large tasks:
 - Break into sequential subtasks
 - Track every subtask using the built-in Claude Code task tool (TaskCreate / TaskUpdate)
-- Complete and confirm each subtask before proceeding (Interactive Mode)
-- Log non-obvious decomposition choices in `docs/claude_logs/DECISION_LOG.md` (Autonomous Mode, only when the split itself was ambiguous)
+- Complete each subtask before proceeding
+- Log non-obvious decomposition choices in `docs/claude_logs/DECISION_LOG.md` (only when the split itself was ambiguous)
 - Never silently combine unrelated changes into a single subtask
 - When independent subtasks have no ordering dependency or shared state, spawn parallel subagents via the built-in `Agent` tool rather than executing sequentially
 
