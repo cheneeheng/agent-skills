@@ -5,6 +5,31 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.5.1] — 2026-05-30
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.3.0 |
+| `ceh-architecture-design` | v2.1.1 |
+| `ceh-blog` | v1.0.3 |
+| `ceh-dev-tools` | v1.1.1 |
+| `ceh-git-workflow` | v2.4.1 |
+| `ceh-lessons-learned` | v2.0.2 |
+| `ceh-python-backend` | v2.2.2 |
+| `ceh-release-ops` | v2.2.2 |
+| `ceh-summarize-chat` | v2.0.2 |
+| `ceh-typescript-frontend` | v2.2.2 |
+
+### Changed
+
+- **`ceh-python-backend`** (v2.2.2) — wired the `python-testing` skill into all three tester agents via `skills:` frontmatter, and sharpened their descriptions to clarify when to delegate to an agent (many tests / broad coverage / isolated run) versus handle one or two tests inline. Dropped the duplicated Test Structure block from `python-unit-tester` now that the skill carries it.
+- **`ceh-typescript-frontend`** (v2.2.2) — wired the `frontend-testing` skill into all three tester agents via `skills:` frontmatter and sharpened their delegation descriptions to match. Added a Vitest/Jest/Mocha runner-detection note to the `frontend-testing` skill.
+- **Repo docs** — documented the plugin-agent frontmatter limitation (`permissionMode`, `hooks`, `mcpServers` ignored on plugin subagents) in `CLAUDE.md` and `README.md`, and re-synced `CROSS_REFERENCES.md` for definition-of-done checklist and coverage-target label drift.
+
+---
+
 ## [2.5.0] — 2026-05-29
 
 ### Plugin versions
