@@ -117,14 +117,13 @@ this map exists so edits don't get lost.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-release-ops/skills/definition-of-done/SKILL.md` | Bug Fix / Feature / Refactor sections | canonical — per-category requirements |
-| `ceh-git-workflow/skills/open-pr/SKILL.md` | "Checklist" block in PR template | subset — simplified list embedded in PR description |
+| `ceh-git-workflow/skills/open-pr/SKILL.md` | two "Checklist" blocks — the rendered template (after the body) and the `gh pr create` heredoc | canonical — only holder; the six items appear twice in this one file |
 
-**What is shared:** six checklist items word-for-word: "All CI checks pass", "Tests added or updated", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "DECISIONS.md updated (if a durable decision was made)".
+**What is shared:** six checklist items, repeated word-for-word in both "Checklist" blocks inside `open-pr`: "All CI checks pass", "Tests added or updated", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "DECISIONS.md updated (if a durable decision was made)".
 
 **What diverges:**
-- `definition-of-done` organises items by category (Bug Fix / Feature / Refactor) and includes a Coverage Targets section.
-- `open-pr` embeds the checklist in the PR description template as a flat list; no coverage targets.
+- The two `open-pr` blocks are not identical: the first (rendered template) reads "Tests added or updated **for new behavior**" and adds an "Attribution included if AI tooling assisted" item; the second (heredoc) reads plain "Tests added or updated" and omits the attribution item. Keep the six shared items in sync across both blocks when editing.
+- `ceh-release-ops/skills/definition-of-done/SKILL.md` **no longer carries these six items.** It was rewritten into Bug Fix / Feature / Refactor sections with category-specific criteria that do not overlap word-for-word with this list, so it is no longer part of this block.
 
 ---
 
@@ -135,13 +134,16 @@ this map exists so edits don't get lost.
 | File | Section | Scope |
 |------|---------|-------|
 | `ceh-release-ops/skills/definition-of-done/SKILL.md` | "Coverage Targets" section | canonical |
-| `ceh-python-backend/skills/python-testing/SKILL.md` | coverage section | near-identical table; adds pytest command |
+| `ceh-python-backend/skills/python-testing/SKILL.md` | coverage section | same two thresholds, but row labels have drifted out of sync (see below) |
 
-**What is shared:** two matching rows — `Overall app/ package → 80%`, `Core business logic services → 95%`.
+**What is shared (same thresholds, wording now DIVERGED):** two rows mapping the same areas to the same percentages — application package → 80%, core business logic → 95%. The labels are no longer word-for-word identical:
+- `definition-of-done`: `Python application package | 80%`, `Core business logic / domain services | 95%`.
+- `python-testing`: `Overall \`app/\` package | 80%`, `Core business logic services | 95%`.
 
 **What diverges:**
-- `definition-of-done` has three rows (adds `TypeScript src/lib/ → 70%`) and no pytest command.
+- `definition-of-done` has three rows (adds `TypeScript \`src/lib/\` | 70%`), a `mypy --strict` / `tsc --noEmit` note, and no pytest command.
 - `python-testing` has two rows (omits the TypeScript row) and adds the pytest command to run coverage checks.
+- Label drift: `definition-of-done` was reworded ("Python application package", "Core business logic / domain services") but `python-testing` still uses the older labels. Re-sync the two row labels, or treat this entry as intentionally divergent.
 
 ---
 

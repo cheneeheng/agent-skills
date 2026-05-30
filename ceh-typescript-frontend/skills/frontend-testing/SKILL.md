@@ -7,6 +7,8 @@ description: Load this skill when writing Vitest unit tests, Testing Library com
 
 Frameworks: **Vitest** (unit + component), **@testing-library/svelte**, **MSW** (API mocking), **Playwright** (E2E)
 
+> The examples below use Vitest APIs. If the project already uses Jest or Mocha instead, adapt the equivalent calls and match the runner in the repo — the `ts-unit-tester` agent detects which one applies.
+
 | Folder | Contents |
 |--------|---------|
 | `tests/unit/` | Pure function tests — no DOM, no fetch |

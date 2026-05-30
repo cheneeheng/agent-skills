@@ -49,6 +49,15 @@ Each skill is a self-contained SKILL.md file with frontmatter and inline content
    - `ceh-<plugin>/.claude-plugin/plugin.json`
    - `.claude-plugin/marketplace.json`
 
+> **Plugin-agent frontmatter gotcha:** Claude Code ignores `permissionMode`, `hooks`, and
+> `mcpServers` on plugin subagents (security restriction — see the
+> [subagents docs](https://code.claude.com/docs/en/sub-agents#choose-the-subagent-scope)).
+> Every agent in this repo is a plugin agent, so `permissionMode: acceptEdits` is a no-op —
+> do not rely on it. To grant edit/write permissions, use session `permissions.allow` in
+> `settings.json`. Required fields are only `name` and `description`; `model` defaults to
+> `inherit`. Auto-delegation is driven by the `description` field — include "use proactively"
+> to encourage it.
+
 ## Adding a Skill
 
 1. Identify the correct plugin for the skill's domain.

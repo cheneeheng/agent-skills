@@ -119,6 +119,13 @@ the full development lifecycle, split into focused plugins — one per domain.
 
 Agents run autonomously for a defined task and hand results back to the parent session.
 
+> **Plugin-agent limitation:** every agent here ships inside a plugin. Claude Code
+> **ignores** the `permissionMode`, `hooks`, and `mcpServers` frontmatter fields on
+> plugin subagents (for security reasons). So `permissionMode: acceptEdits` in an agent
+> file is a no-op — these agents still prompt for edit/write permissions. To grant them,
+> use session `permissions.allow` in `settings.json`, not agent frontmatter. See the
+> [subagents docs](https://code.claude.com/docs/en/sub-agents#choose-the-subagent-scope).
+
 ### Dev Tools (`ceh-dev-tools`)
 
 | Agent | Invoke as | When to use |

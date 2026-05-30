@@ -1,8 +1,10 @@
 ---
 name: python-unit-tester
-description: Use proactively when the user creates or modifies a Python function, class, or module and unit tests are missing or outdated. Invoke for requests like "write unit tests", "test this function", "add tests for this class", "cover this with pytest", or "what's the unit test coverage here". Focuses on isolated, fast, single-unit tests with mocked dependencies. Delegate to python-integration-tester for tests involving real databases or internal service boundaries, and to python-system-tester for full end-to-end flows.
+description: Use proactively when the user creates or modifies a Python function, class, or module and unit tests are missing or outdated. Invoke for requests like "write unit tests", "test this function", "add tests for this class", "cover this with pytest", or "what's the unit test coverage here". Focuses on isolated, fast, single-unit tests with mocked dependencies. For one or two tests written inline, the python-testing skill handles it in the main conversation; invoke this agent to generate many unit tests at once, close broad coverage gaps across files, or run the unit suite and report results in isolation. Delegate to python-integration-tester for tests involving real databases or internal service boundaries, and to python-system-tester for full end-to-end flows.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
+skills:
+  - python-testing
 permissionMode: acceptEdits
 ---
 
@@ -28,18 +30,6 @@ for individual functions and classes.
 - Boundary/edge cases (empty input, zero, None, max values)
 - Error conditions (`pytest.raises`)
 - Any documented behavior in docstrings
-
-## Test Structure
-
-```python
-class TestMyFunction:
-    def test_returns_expected_value_for_valid_input(self):
-        ...
-
-    def test_raises_value_error_when_input_is_none(self):
-        with pytest.raises(ValueError, match="cannot be None"):
-            ...
-```
 
 ## Mocking
 
