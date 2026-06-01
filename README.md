@@ -19,6 +19,7 @@ the full development lifecycle, split into focused plugins — one per domain.
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
 | Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation agents |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
+| Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README agents |
 
 ---
 
@@ -113,6 +114,12 @@ the full development lifecycle, split into focused plugins — one per domain.
 | Blog Editor | `/ceh-blog:blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
 | Blog Repurpose | `/ceh-blog:blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
 
+### Documentation (`ceh-documentation`)
+
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
+| User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
+
 ---
 
 ## Agents
@@ -132,12 +139,12 @@ Agents run autonomously for a defined task and hand results back to the parent s
 |-------|-----------|-------------|
 | Repo Tree Mapper | `/ceh-dev-tools:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
 
-### Git Workflow (`ceh-git-workflow`)
+### Documentation (`ceh-documentation`)
 
 | Agent | Invoke as | When to use |
 |-------|-----------|-------------|
-| Changelog Agent | `/ceh-git-workflow:changelog-agent` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
-| README Updater | `/ceh-git-workflow:readme-updater` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
+| Changelog Agent | `/ceh-documentation:changelog-agent` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
+| README Updater | `/ceh-documentation:readme-updater` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
 
 ### Python Backend (`ceh-python-backend`)
 
@@ -188,6 +195,7 @@ Install individual plugins for the domains you need:
 /plugin install ceh-lessons-learned@ceh-plugins --scope user
 /plugin install ceh-dev-tools@ceh-plugins --scope user
 /plugin install ceh-blog@ceh-plugins --scope user
+/plugin install ceh-documentation@ceh-plugins --scope user
 ```
 
 Or install all at once using `--scope project` for project-specific installs.
@@ -224,7 +232,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/ceh-summarize-chat" },
     { "path": "~/agent-skills/ceh-lessons-learned" },
     { "path": "~/agent-skills/ceh-dev-tools" },
-    { "path": "~/agent-skills/ceh-blog" }
+    { "path": "~/agent-skills/ceh-blog" },
+    { "path": "~/agent-skills/ceh-documentation" }
   ]
 }
 ```

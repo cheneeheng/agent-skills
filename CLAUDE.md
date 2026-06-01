@@ -31,6 +31,7 @@ ceh-<plugin-name>/
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |
 | `ceh-blog` | Interview-driven blog post writing |
+| `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; changelog & README agents |
 
 ## Skills
 

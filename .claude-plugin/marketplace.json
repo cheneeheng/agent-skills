@@ -50,7 +50,7 @@
     {
       "name": "ceh-git-workflow",
       "source": "./ceh-git-workflow",
-      "description": "CEH Git workflow: commits, branching, PRs, merging, releases, code review, dependency management, and changelog/README agents.",
+      "description": "CEH Git workflow: commits, branching, PRs, merging, releases, code review, and dependency management.",
       "version": "2.4.1",
       "author": { "name": "cheneeheng" },
       "repository": "https://github.com/cheneeheng/agent-skills",
@@ -106,6 +106,16 @@
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
       "keywords": ["agent", "blog", "writing", "interviewer", "content", "repurpose", "social"]
+    },
+    {
+      "name": "ceh-documentation",
+      "source": "./ceh-documentation",
+      "description": "CEH documentation: write end-user and operator-facing documentation — user guides, getting-started guides, how-to manuals, operator runbooks, installation/configuration guides, administration manuals, and troubleshooting references; plus changelog and README maintenance agents.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "documentation", "user-guide", "operator-guide", "manual", "runbook", "technical-writing"]
     }
   ]
 }
