@@ -5,6 +5,34 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.6.0] — 2026-06-01
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.3.0 |
+| `ceh-architecture-design` | v2.1.1 |
+| `ceh-blog` | v1.0.3 |
+| `ceh-dev-tools` | v1.1.1 |
+| `ceh-documentation` | v1.0.0 |
+| `ceh-git-workflow` | v2.5.0 |
+| `ceh-lessons-learned` | v2.0.2 |
+| `ceh-python-backend` | v2.2.2 |
+| `ceh-release-ops` | v2.2.2 |
+| `ceh-summarize-chat` | v2.0.2 |
+| `ceh-typescript-frontend` | v2.2.2 |
+
+### Added
+
+- **`ceh-documentation`** (v1.0.0) — new plugin for end-user and operator-facing documentation. Ships the `user-operator-guide` skill: task-oriented user guides and operator runbooks with strict audience separation, a no-invention/`[VERIFY]` rule, document-type selection, and single- or multi-file output rooted at `docs/guide/` with `index.md` as the entry point.
+
+### Changed
+
+- **`ceh-git-workflow`** (v2.5.0) — moved the `changelog-agent` and `readme-updater` agents (and the `check-semver.py` helper) into the new `ceh-documentation` plugin. Their invoke paths change from `/ceh-git-workflow:*` to `/ceh-documentation:*`.
+
+---
+
 ## [2.5.1] — 2026-05-30
 
 ### Plugin versions
