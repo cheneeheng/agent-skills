@@ -5,6 +5,39 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.8.0] — 2026-06-04
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.4.2 |
+| `ceh-architecture-design` | v2.2.2 |
+| `ceh-blog` | v1.0.4 |
+| `ceh-dev-tools` | v1.1.2 |
+| `ceh-documentation` | v1.0.1 |
+| `ceh-git-workflow` | v2.5.3 |
+| `ceh-lessons-learned` | v2.0.3 |
+| `ceh-python-backend` | v2.3.1 |
+| `ceh-release-ops` | v2.2.5 |
+| `ceh-summarize-chat` | v2.0.3 |
+| `ceh-typescript-frontend` | v2.3.0 |
+
+### Added
+
+- **`ceh-architecture-design`**, **`ceh-python-backend`**, **`ceh-typescript-frontend`** (MINOR) — each ships a `SessionStart` invariants hook that injects always-on domain invariants (the rules that under-trigger as auto-load skills because they fire on implicit mid-turn decisions). Skills remain the on-demand depth reference, routed via `<plugin>:<skill>` tags. Process plugins (release-ops, git-workflow) intentionally keep discrete-event skills with no hook.
+
+### Changed
+
+- **`ceh-architecture-design`** (MINOR) — scoped to backend: removed the asyncpg transaction/pool code (now sole-owned by `ceh-python-backend:asyncpg`) and the frontend structure (now in `ceh-typescript-frontend:sveltekit`); added an `adr` storage convention; standardized PostgreSQL on `entity_*` vocabulary.
+- **`ceh-typescript-frontend`** (MINOR) — modernized all skill examples to Svelte 5 runes (`$props`, `$state`, `$derived`, `onclick`); `bun.lockb` → `bun.lock`.
+- **`ceh-agent-coding-contract`** (PATCH) — clarified the authority hierarchy (an in-session user instruction overrides the contract) and the authorization rule; made the Decision Log path overridable; added the `compact` hook event.
+- **`ceh-python-backend`** (PATCH) — fastapi error handler now includes `correlation_id`; lifespan pool uses the standard sizing; synced the pip-audit command and coverage labels to the release-ops canonical.
+- **`ceh-release-ops`** (PATCH) — rollback Decision Log path made overridable.
+- **`ceh-git-workflow`** (PATCH) — synced open-pr's two checklist blocks and standardized the `docs/adr/DECISIONS.md` path.
+
+---
+
 ## [2.7.2] — 2026-06-04
 
 ### Plugin versions
