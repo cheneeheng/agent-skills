@@ -130,13 +130,13 @@ this map exists so edits don't get lost.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-git-workflow/skills/open-pr/SKILL.md` | two "Checklist" blocks — the rendered template (after the body) and the `gh pr create` heredoc | canonical — only holder; the six items appear twice in this one file |
+| `ceh-git-workflow/skills/open-pr/SKILL.md` | two "Checklist" blocks — the rendered template (after the body) and the `gh pr create` heredoc | canonical — only holder; the seven items appear twice in this one file |
 
-**What is shared:** six checklist items, repeated word-for-word in both "Checklist" blocks inside `open-pr`: "All CI checks pass", "Tests added or updated", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "DECISIONS.md updated (if a durable decision was made)".
+**What is shared:** seven checklist items, now repeated word-for-word in both "Checklist" blocks inside `open-pr`: "All CI checks pass", "Tests added or updated for new behavior", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "docs/adr/DECISIONS.md updated (if a durable decision was made)", "Attribution included if AI tooling assisted".
 
 **What diverges:**
-- The two `open-pr` blocks are not identical: the first (rendered template) reads "Tests added or updated **for new behavior**" and adds an "Attribution included if AI tooling assisted" item; the second (heredoc) reads plain "Tests added or updated" and omits the attribution item. Keep the six shared items in sync across both blocks when editing.
-- `ceh-release-ops/skills/definition-of-done/SKILL.md` **no longer carries these six items.** It was rewritten into Bug Fix / Feature / Refactor sections with category-specific criteria that do not overlap word-for-word with this list, so it is no longer part of this block.
+- The two `open-pr` blocks are now identical — keep them in sync when editing.
+- `ceh-release-ops/skills/definition-of-done/SKILL.md` **no longer carries these items.** It was rewritten into Bug Fix / Feature / Refactor sections with category-specific criteria that do not overlap word-for-word with this list, so it is no longer part of this block.
 
 ---
 

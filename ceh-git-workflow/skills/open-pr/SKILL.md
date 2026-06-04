@@ -41,7 +41,7 @@ Must follow Conventional Commits format. It titles the PR and seeds the merge co
 - [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
 - [ ] No secrets or credentials in code
 - [ ] Migrations (if any) are backward-compatible
-- [ ] DECISIONS.md updated (if a durable decision was made)
+- [ ] docs/adr/DECISIONS.md updated (if a durable decision was made)
 - [ ] Attribution included if AI tooling assisted
 ```
 
@@ -83,11 +83,12 @@ gh pr create \
 ## Testing
 ## Checklist
 - [ ] All CI checks pass
-- [ ] Tests added or updated
+- [ ] Tests added or updated for new behavior
 - [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
 - [ ] No secrets or credentials in code
 - [ ] Migrations (if any) are backward-compatible
-- [ ] DECISIONS.md updated (if a durable decision was made)
+- [ ] docs/adr/DECISIONS.md updated (if a durable decision was made)
+- [ ] Attribution included if AI tooling assisted
 EOF
 )"
 ```
