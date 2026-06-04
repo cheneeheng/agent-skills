@@ -34,7 +34,7 @@ this map exists so edits don't get lost.
 **What is shared:** never hard-code secrets, `pydantic-settings` for Python, `.env` not committed, pip-audit before release, CORS no wildcard in production, rate limiting on mutation endpoints, parameterized SQL, `ConfigDict(extra='forbid')` on external-input models.
 
 **What diverges:**
-- `python-backend` adds `Apply rate limiting per session (e.g. 10 req/min)` and `secrets.token_urlsafe(32)` detail; has no CORS code example; uses `uvx pip-audit` (vs `uv run pip-audit` in canonical).
+- `python-backend` adds `Apply rate limiting per session (e.g. 10 req/min)` and `secrets.token_urlsafe(32)` detail; has no CORS code example. Both now use `uv run pip-audit` (audits the project venv; `uvx pip-audit` would run isolated from it).
 - `security` micro-skill is the superset: both Python and TypeScript, session tokens, `secrets.token_hex(32)` generation command, rate-limiting detail.
 
 ---
@@ -147,16 +147,13 @@ this map exists so edits don't get lost.
 | File | Section | Scope |
 |------|---------|-------|
 | `ceh-release-ops/skills/definition-of-done/SKILL.md` | "Coverage Targets" section | canonical |
-| `ceh-python-backend/skills/python-testing/SKILL.md` | coverage section | same two thresholds, but row labels have drifted out of sync (see below) |
+| `ceh-python-backend/skills/python-testing/SKILL.md` | coverage section | same two Python thresholds with identical row labels |
 
-**What is shared (same thresholds, wording now DIVERGED):** two rows mapping the same areas to the same percentages — application package → 80%, core business logic → 95%. The labels are no longer word-for-word identical:
-- `definition-of-done`: `Python application package | 80%`, `Core business logic / domain services | 95%`.
-- `python-testing`: `Overall \`app/\` package | 80%`, `Core business logic services | 95%`.
+**What is shared (identical labels and thresholds):** two rows mapping the same areas to the same percentages, word-for-word — `Python application package | 80%`, `Core business logic / domain services | 95%`.
 
 **What diverges:**
 - `definition-of-done` has three rows (adds `TypeScript \`src/lib/\` | 70%`), a `mypy --strict` / `tsc --noEmit` note, and no pytest command.
-- `python-testing` has two rows (omits the TypeScript row) and adds the pytest command to run coverage checks.
-- Label drift: `definition-of-done` was reworded ("Python application package", "Core business logic / domain services") but `python-testing` still uses the older labels. Re-sync the two row labels, or treat this entry as intentionally divergent.
+- `python-testing` has two rows (omits the TypeScript row — it is a Python plugin) and adds the pytest command to run coverage checks.
 
 ---
 
