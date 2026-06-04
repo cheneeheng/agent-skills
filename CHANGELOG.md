@@ -5,6 +5,30 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.7.0] — 2026-06-04
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.4.0 |
+| `ceh-architecture-design` | v2.1.1 |
+| `ceh-blog` | v1.0.3 |
+| `ceh-dev-tools` | v1.1.1 |
+| `ceh-documentation` | v1.0.0 |
+| `ceh-git-workflow` | v2.5.0 |
+| `ceh-lessons-learned` | v2.0.2 |
+| `ceh-python-backend` | v2.2.2 |
+| `ceh-release-ops` | v2.2.2 |
+| `ceh-summarize-chat` | v2.0.2 |
+| `ceh-typescript-frontend` | v2.2.2 |
+
+### Added
+
+- **`ceh-agent-coding-contract`** (v2.4.0) — the plugin now ships its own `SessionStart` hook (`hooks/hooks.json` → `hooks/load-contract.js`) that injects the mandatory directive to load the `agent-coding-contract` skill on the `startup` and `clear` events. Previously this lived in the user's global `~/.claude/settings.json`; bundling it makes contract auto-loading opt-in per project by simply enabling the plugin — no global hook configuration required.
+
+---
+
 ## [2.6.0] — 2026-06-01
 
 ### Plugin versions

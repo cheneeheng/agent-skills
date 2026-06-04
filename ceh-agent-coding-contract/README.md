@@ -21,6 +21,13 @@ manually:
 Or when you say:
 - `"load the contract"` / `"agent contract"` / `"coding contract"`
 
+## Hooks
+
+This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-contract.js`) that
+injects a mandatory directive to load the `agent-coding-contract` skill before any other action.
+It fires on the `startup` and `clear` events and activates automatically when the plugin is
+enabled — no global `settings.json` configuration required.
+
 ## What the Contract Defines
 
 **Five-step task workflow** (no skipping):
