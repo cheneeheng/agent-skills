@@ -5,6 +5,30 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.7.2] — 2026-06-04
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.4.1 |
+| `ceh-architecture-design` | v2.1.2 |
+| `ceh-blog` | v1.0.4 |
+| `ceh-dev-tools` | v1.1.2 |
+| `ceh-documentation` | v1.0.1 |
+| `ceh-git-workflow` | v2.5.2 |
+| `ceh-lessons-learned` | v2.0.3 |
+| `ceh-python-backend` | v2.2.3 |
+| `ceh-release-ops` | v2.2.4 |
+| `ceh-summarize-chat` | v2.0.3 |
+| `ceh-typescript-frontend` | v2.2.3 |
+
+### Changed
+
+- **All plugins** (PATCH) — standardized author metadata across every `plugin.json` and the marketplace manifest. Author is now `{ "name": "cheneeheng", "email": "eeheng.chen@gmail.com" }` (six manifests previously read `"Chen"` with no email); the marketplace `owner` gained the same email.
+
+---
+
 ## [2.7.1] — 2026-06-04
 
 ### Plugin versions
