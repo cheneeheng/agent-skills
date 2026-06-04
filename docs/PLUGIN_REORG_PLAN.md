@@ -58,26 +58,39 @@ Three tiers on a single coherent axis. Plugin names declare their scope, which r
 Tier 1 — cross-cutting (load most sessions)
   ceh-agent-coding-contract     contract + plan implement/review
   ceh-git-workflow              branch, commit, open-pr, code-review, release, hotfix,
-                                dependency-management, gitignore
+                                dependency-management
 
 Tier 2 — use-case workflow (load per activity)
   ceh-blog                      (unchanged — the reference design)
   ceh-documentation             user/operator guides + changelog/readme agents
   ceh-ops                       (rename of release-ops) incidents, rollback, deploy + CI agents
-  ceh-session-utils             (optional merge) summarize-chat + lessons-learned
+  ceh-summarize-chat            (unchanged) session summary — kept separate, used by other automation
+  ceh-lessons-learned           (unchanged) session retrospectives — kept separate
 
 Tier 3 — stack/build (load per project type)
   ceh-python-service            (rename of python-backend) FastAPI/asyncpg/migrations/web service
   ceh-python-library            (NEW) packaging, public API, semver, no web deps
-  ceh-web-frontend              (rename of typescript-frontend) SvelteKit/a11y/Vitest
+  ceh-web-frontend              (rename of typescript-frontend) Svelte AND React (Vite);
+                                shared a11y/TS-style/testing/tooling
   ceh-architecture              (rename of architecture-design) stack-agnostic design moments
+  ceh-scaffolding               (NEW) per-project-type setup: directory layout + initial config
 
-Optional / niche
-  ceh-llm-event-backend         event-sourcing + llm-integration (extracted) — or delete
-  ceh-dev-tools                 (unchanged) repo-tree-mapper agent
+Unchanged
+  ceh-dev-tools                 repo-tree-mapper agent
+
+Deleted
+  event-sourcing, llm-integration   removed (app-specific, not reusable; no niche plugin)
+  gitignore                         removed (entries fold into per-type ceh-scaffolding skills)
 ```
 
-Net: 11 plugins → ~9 (+1 optional). ~46 skills → ~30 after merges/deletes.
+Net: 11 plugins → 13 (+ ceh-python-library, + ceh-scaffolding; no plugins removed, two renamed).
+~46 skills → ~30 after merges/deletes.
+
+**Svelte vs React are NOT split into separate plugins.** Framework skills trigger on file type
+(`sveltekit` on `.svelte`, `react-vite` on `.tsx`), so they coexist in one plugin without
+mis-firing, while the shared frontend standards (a11y, TS style, testing, tooling) stay
+single-sourced. Splitting would duplicate those shared standards — the drift problem this reorg
+removes. Apply the "split only when too big" rule later if the framework skills bloat the plugin.
 
 ---
 
@@ -104,18 +117,18 @@ execution.
 | release | moment | KEEP — git tagging mechanics only; dedupe semver table vs `versioning` ✓ | unchanged |
 | hotfix | moment | KEEP — git mechanics; `incidents` references it ✓ | unchanged |
 | dependency-management | moment | KEEP (desc) | unchanged |
-| gitignore | file-edit | KEEP — small but complete, triggers reliably ✓ | unchanged (or MOVE to stack env skills) |
+| gitignore | file-edit | **DELETE** — required-entries list folds into per-type `ceh-scaffolding` skills ✓ | removed |
 
 ### ceh-architecture-design → ceh-architecture (T3)
 | Skill | Trigger | Verdict | Target |
 |---|---|---|---|
-| adr | moment | KEEP (desc) | ceh-architecture (or ceh-documentation — it's a doc artifact) |
+| adr | moment | KEEP in ceh-architecture (decision-making is closer to the use case than docs) ✓decided | ceh-architecture |
 | domain-modeling | moment | TRIM, keep ID-format/status-enum opinions (desc) | ceh-architecture |
-| repository-structure | rare moment | TRIM; split python bits → service, frontend bits → web (desc) | ceh-architecture |
+| repository-structure | rare moment | MOVE + reframe: merge into per-type `ceh-scaffolding` skills, not a standalone "structure" skill (desc) | ceh-scaffolding |
 | rest-api | moment | MOVE + co-locate with fastapi (kills cross-plugin ref) ✓ | ceh-python-service |
 | postgresql | topic | TRIM + MERGE into data moments (`domain-modeling` + migrations) (desc) | ceh-python-service |
-| event-sourcing | — | EXTRACT to ceh-llm-event-backend, or DELETE ✓ | niche / removed |
-| llm-integration | — | EXTRACT to ceh-llm-event-backend, or DELETE (overlaps built-in `claude-api`) ✓ | niche / removed |
+| event-sourcing | — | **DELETE** — app-specific, not reusable ✓decided | removed |
+| llm-integration | — | **DELETE** — app-specific; overlaps built-in `claude-api` ✓decided | removed |
 
 ### ceh-python-backend → ceh-python-service (T3)
 | Skill | Trigger | Verdict | Target |
@@ -135,18 +148,39 @@ execution.
 | python-testing | duplicate |
 | NEW: public API surface, semver discipline, packaging/publishing (build backend, wheels), no-web-deps rule | author fresh |
 
-### ceh-typescript-frontend → ceh-web-frontend (T3)
+### ceh-typescript-frontend → ceh-web-frontend (T3) — now Svelte + React
 | Skill | Trigger | Verdict | Target |
 |---|---|---|---|
-| sveltekit | file-edit | TRIM (desc) | ceh-web-frontend |
-| accessibility | file-edit | KEEP — real opinionated value (desc) | ceh-web-frontend |
-| frontend-testing | file-edit | TRIM (desc) | ceh-web-frontend |
-| environment | moment | KEEP — consolidation target (mirror python-environment's all-in-one shape) ✓ | ceh-web-frontend |
-| coding-style | topic | KEEP content (real delta), MOMENTIZE — MERGE into `environment`/`sveltekit` so it fires on file edits ✓ | ceh-web-frontend |
+| sveltekit | file-edit (`.svelte`) | TRIM (desc) | ceh-web-frontend |
+| react-vite | file-edit (`.tsx`) | **NEW** — React + Vite framework conventions (routing, hooks, state, Vite config) | ceh-web-frontend |
+| accessibility | file-edit | KEEP + generalize trigger to `.svelte` AND `.tsx` (a11y is framework-agnostic) ✓ | ceh-web-frontend |
+| frontend-testing | file-edit | TRIM; framework-agnostic (Vitest/Testing Library/Playwright/MSW serve both) (desc) | ceh-web-frontend |
+| environment | moment | KEEP — consolidation target; cover Bun + Vite for both frameworks ✓ | ceh-web-frontend |
+| coding-style | topic | KEEP content (real delta), MOMENTIZE — MERGE into `environment` so it fires on file edits ✓ | ceh-web-frontend |
 | linting | topic | MERGE into `environment` (mostly a quality gate + config) ✓ | ceh-web-frontend |
 
 > Normalization note: Python folds env+style+linting into one `python-environment`; TS splits the
 > same into three. Consolidate TS to match — fewer, file-triggered skills.
+>
+> Framework-agnostic skills (`accessibility`, `frontend-testing`, `environment`/style) are
+> single-sourced and serve Svelte and React both. Only `sveltekit` and `react-vite` are
+> framework-specific, and they trigger on disjoint file types.
+
+### ceh-scaffolding (NEW, T3)
+Per-project-type project setup. There is **no generic "structure" skill** — directory layout,
+initial config, and the required `.gitignore` entries are merged into the scaffolding skill for
+each project type, so "scaffold a Python library" produces the right layout + config + ignore file
+in one moment-triggered skill.
+
+| Skill | Trigger | Source |
+|---|---|---|
+| scaffold-python-library | "start/scaffold a Python library" | repository-structure (python bits) + gitignore (python entries) + packaging layout |
+| scaffold-python-service | "start/scaffold a FastAPI service" | repository-structure (API/services/db layers) + gitignore (python entries) |
+| scaffold-web-frontend | "start/scaffold a Svelte or React app" | repository-structure (frontend bits) + gitignore (node entries) |
+| scaffold-fullstack-web | "start/scaffold a fullstack web app" | composition of service + frontend layouts |
+
+> The per-type duplication of small shared bits (e.g. `.gitignore` entries) is governed by the
+> §4 duplication policy — register them in `CROSS_REFERENCES.md`.
 
 ### ceh-release-ops → ceh-ops (T2)
 | Skill | Trigger | Verdict | Target |
@@ -203,27 +237,37 @@ updates per touched plugin (per CLAUDE.md process).
 1. **Dedupe release-ops (highest value, no renames).** Merge security/observability/migrations
    into python-backend; move definition-of-done into open-pr; split versioning into git-workflow
    (tagging) + a `deploy` skill. Delete the emptied skills. Rename `release-ops` → `ceh-ops`.
-2. **Pull the app leaks.** Extract `event-sourcing` + `llm-integration` into `ceh-llm-event-backend`,
-   or delete if unused. Strip remaining `event_log` references from migrations.
+2. **Delete the app leaks.** Remove `event-sourcing` + `llm-integration` outright (no niche
+   plugin). Strip remaining `event_log` references from migrations.
 3. **Rename + retarget stack plugins.** `python-backend` → `ceh-python-service` (absorb rest-api,
-   postgresql); `typescript-frontend` → `ceh-web-frontend` (consolidate env/style/linting);
-   `architecture-design` → `ceh-architecture` (trim to design moments).
+   postgresql); `typescript-frontend` → `ceh-web-frontend` (consolidate env/style/linting, add
+   `react-vite`, generalize a11y/testing); `architecture-design` → `ceh-architecture` (trim to
+   `adr` + `domain-modeling`).
 4. **Create ceh-python-library.** Duplicate-and-trim environment + testing; author packaging/API/
    semver skills.
-5. **Description pass (Problem A).** Rewrite every surviving skill's description to the blog-plugin
+5. **Create ceh-scaffolding.** Move `repository-structure` here, split into per-project-type
+   scaffold skills; fold the deleted `gitignore` entries into each. Then delete the standalone
+   `gitignore` skill from git-workflow.
+6. **Description pass (Problem A).** Rewrite every surviving skill's description to the blog-plugin
    standard: action verbs, explicit trigger signals, explicit "not for…" boundaries. Drop the
    `Phase:` prefixes.
-6. **Optional:** merge summarize-chat + lessons-learned → `ceh-session-utils`.
 
-Renames are breaking for users who reference plugin names — bundle each rename with a README note
-and a repo-tag MINOR bump.
+`ceh-summarize-chat` and `ceh-lessons-learned` stay separate plugins (used by other automation
+workflows — do not merge).
+
+Renames are breaking for users who reference plugin names — this is **accepted**, no alias shims.
+Bundle each rename with a README note and a repo-tag MINOR bump.
 
 ---
 
-## 6. Open questions
+## 6. Resolved decisions
 
-- `adr`: keep in `ceh-architecture` or move to `ceh-documentation` (it produces a doc artifact)?
-- `ceh-llm-event-backend`: extract as a real niche plugin, or delete outright? Depends on whether
-  any downstream project still uses that pattern.
-- `ceh-session-utils` merge: worth it, or leave the two tiny plugins as-is?
-- Plugin renames break existing user references — acceptable, or provide alias shims?
+- **`adr` placement** → keep in `ceh-architecture`. Making the decision is closer to the use case
+  than filing a doc; it does not move to `ceh-documentation`.
+- **`event-sourcing` / `llm-integration`** → delete outright. No niche plugin.
+- **Session plugins** → keep `ceh-summarize-chat` and `ceh-lessons-learned` separate. They are
+  used by other automation workflows; do not merge into a `ceh-session-utils`.
+- **Plugin renames** → breaking changes are acceptable. No alias shims; document in README +
+  repo-tag MINOR bump.
+- **Svelte vs React** → one `ceh-web-frontend` plugin, not split (see §2 rationale).
+- **`gitignore` skill** → deleted; entries fold into per-project-type `ceh-scaffolding` skills.
