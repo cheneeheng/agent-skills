@@ -51,8 +51,11 @@ export const openChallenges = derived(
 
 ```svelte
 <script lang="ts">
-  export let challenges: Challenge[];
-  export let onChallengeClick: (id: string) => void;  // callback, not direct store write
+  type Props = {
+    challenges: Challenge[];
+    onChallengeClick: (id: string) => void;  // callback, not direct store write
+  };
+  let { challenges, onChallengeClick }: Props = $props();
 </script>
 ```
 
@@ -99,8 +102,8 @@ class ApiRequestError extends Error {
 Component pattern:
 ```svelte
 <script lang="ts">
-  let error: string | null = null;
-  let loading = false;
+  let error = $state<string | null>(null);
+  let loading = $state(false);
 
   async function handleSend() {
     error = null; loading = true;
@@ -126,9 +129,9 @@ Component pattern:
 
 ```svelte
 <script lang="ts">
-  export let challenges: Challenge[];
-  $: openCount = challenges.filter(c => c.status === 'open').length;
+  let { challenges }: { challenges: Challenge[] } = $props();
+  const openCount = $derived(challenges.filter((c) => c.status === 'open').length);
 </script>
 ```
 
-Do not put complex logic in `$:` blocks — extract it to a named function.
+Do not put complex logic in a `$derived` expression — use `$derived.by(() => { ... })` or extract a named function.
