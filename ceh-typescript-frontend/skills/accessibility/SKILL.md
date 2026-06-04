@@ -22,10 +22,10 @@ description: Load this skill when writing Svelte component markup with interacti
 Use native HTML semantics first. Add ARIA only when no native element fits:
 
 ```svelte
-<button on:click={handleAction}>Submit</button>
-<button aria-label="Close dialog" on:click={close}>✕</button>
+<button onclick={handleAction}>Submit</button>
+<button aria-label="Close dialog" onclick={close}>✕</button>
 <p aria-live="polite" aria-atomic="true">{statusMessage}</p>
-<button aria-expanded={open} on:click={toggle}>Details</button>
+<button aria-expanded={open} onclick={toggle}>Details</button>
 ```
 
 Do not add `role="button"` to a `<div>` — use `<button>`. Never use `aria-hidden="true"` on a focusable element.

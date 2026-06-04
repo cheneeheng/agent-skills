@@ -63,8 +63,8 @@ Each test that writes data must run in a transaction that rolls back after the t
 
 | Area | Minimum |
 |------|---------|
-| Overall `app/` package | 80% |
-| Core business logic services | 95% |
+| Python application package | 80% |
+| Core business logic / domain services | 95% |
 
 ```bash
 uv run pytest --cov=app --cov-report=term-missing

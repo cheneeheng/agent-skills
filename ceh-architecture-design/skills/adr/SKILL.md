@@ -35,6 +35,11 @@ Implications, trade-offs, limitations, follow-up considerations.
 What was not chosen and why.
 ```
 
+## Storage
+
+Store ADRs in `docs/adr/`, one file per decision named `NNN-short-title.md` (e.g.
+`docs/adr/004-postgres-over-mongo.md`). Number sequentially; never reuse or renumber an ID.
+
 ## Lifecycle
 
 - `Proposed` — written, pending team review

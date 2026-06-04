@@ -34,29 +34,42 @@ this map exists so edits don't get lost.
 **What is shared:** never hard-code secrets, `pydantic-settings` for Python, `.env` not committed, pip-audit before release, CORS no wildcard in production, rate limiting on mutation endpoints, parameterized SQL, `ConfigDict(extra='forbid')` on external-input models.
 
 **What diverges:**
-- `python-backend` adds `Apply rate limiting per session (e.g. 10 req/min)` and `secrets.token_urlsafe(32)` detail; has no CORS code example; uses `uvx pip-audit` (vs `uv run pip-audit` in canonical).
+- `python-backend` adds `Apply rate limiting per session (e.g. 10 req/min)` and `secrets.token_urlsafe(32)` detail; has no CORS code example. Both now use `uv run pip-audit` (audits the project venv; `uvx pip-audit` would run isolated from it).
 - `security` micro-skill is the superset: both Python and TypeScript, session tokens, `secrets.token_hex(32)` generation command, rate-limiting detail.
 
 ---
 
-## Database / asyncpg patterns (transactions, connection pool, migrations)
+## Database migration safety rules
 
 **Files:**
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-architecture-design/skills/postgresql/SKILL.md` | entire file | canonical — schema design + tenant isolation + full asyncpg patterns |
-| `ceh-python-backend/skills/asyncpg/SKILL.md` | entire file | identical transaction and pool code |
-| `ceh-python-backend/skills/alembic/SKILL.md` | entire file | adds full Alembic CLI and `env.py` config |
-| `ceh-release-ops/skills/database-migrations/SKILL.md` | "Safety Rules" + "Two-Step Destructive Changes" sections | superset of migration rules — adds blue-green safe, testing against prod copy, SQL examples |
+| `ceh-release-ops/skills/database-migrations/SKILL.md` | "Safety Rules" + "Two-Step Destructive Changes" sections | canonical — superset: blue-green safe, testing against prod copy, SQL examples |
+| `ceh-architecture-design/skills/postgresql/SKILL.md` | "Migrations" section | design-level policy statement |
+| `ceh-python-backend/skills/alembic/SKILL.md` | rules section | same rules + full Alembic CLI and `env.py` config |
 
-**What is shared (word-for-word identical):** atomic transaction code block (`pool.acquire` + `conn.transaction()` with `executemany` + `execute`), connection pool creation call (`min_size=5, max_size=20, command_timeout=30`), migration safety rules (backward-compatible, two-step destructive, never simultaneous deploy).
+**What is shared:** migration safety rules — backward-compatible (old app version still works after migration), destructive changes are two-step (stop using, then drop), never run a migration and a code deploy simultaneously.
 
 **What diverges:**
-- `postgresql` adds schema design template, `TIMESTAMPTZ` / `JSONB` rules, tenant isolation pattern, index examples.
-- `asyncpg` adds "Create the pool in the FastAPI lifespan function and expose it via `app.state.db_pool`" guidance.
-- `alembic` adds full Alembic CLI commands, `alembic/env.py` `sync_url` workaround, "apply before integration tests" command.
-- `database-migrations` is the most comprehensive on migration rules: blue-green deploy safety, test against production data copy, concrete SQL for two-step pattern.
+- `database-migrations` is the most comprehensive: blue-green deploy safety, test against production data copy, concrete SQL for the two-step pattern.
+- `postgresql` states the policy at schema-design level (Alembic-managed, backward-compatible, two-step).
+- `alembic` adds full Alembic CLI commands, `alembic/env.py` `sync_url` workaround, "apply before integration tests".
+
+---
+
+## asyncpg connection pool + transaction code
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-python-backend/skills/asyncpg/SKILL.md` | "Atomic Transactions" + "Connection Pool" | canonical — full transaction and pool code |
+| `ceh-python-backend/skills/fastapi/SKILL.md` | lifespan / pool setup | same `asyncpg.create_pool(...)` call |
+
+**What is shared:** `asyncpg.create_pool(min_size=5, max_size=20, command_timeout=30)` call; the atomic transaction pattern (`pool.acquire` + `conn.transaction()`).
+
+**Note:** this code formerly lived in `ceh-architecture-design/skills/postgresql` as well. It was consolidated into `asyncpg` (2026-06-04) to keep `architecture-design` language-agnostic (design, not Python data-access code); `postgresql` now points to `asyncpg` instead of duplicating it. The event-sourcing atomicity *principle* (event + snapshot in one transaction) is stated separately in `ceh-architecture-design/skills/event-sourcing`.
 
 ---
 
@@ -86,11 +99,11 @@ this map exists so edits don't get lost.
 | `ceh-architecture-design/skills/rest-api/SKILL.md` | "Error Response Shape" section | canonical — full JSON structure with field docs |
 | `ceh-python-backend/skills/fastapi/SKILL.md` | "Global Exception Handlers" section | implementation — maps exceptions to `JSONResponse` using the same shape |
 
-**What is shared:** `code` and `message` fields in the error response body; same JSON shape consumed by both spec and implementation.
+**What is shared:** `code`, `message`, and `correlation_id` fields in the error response body; same JSON shape consumed by both spec and implementation.
 
 **What diverges:**
-- `rest-api` documents the full JSON contract including `correlation_id` field and an example payload.
-- `fastapi` shows only the Python handler code returning `code`/`message`; does not include `correlation_id` in the handler or repeat the full field documentation.
+- `rest-api` documents the full JSON contract with field docs and an example payload; it is the canonical contract.
+- `fastapi` shows the Python handler code producing the same `code` / `message` / `correlation_id` body (pulling `correlation_id` from `request.state`), without repeating the full field documentation.
 
 ---
 
@@ -117,13 +130,13 @@ this map exists so edits don't get lost.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-git-workflow/skills/open-pr/SKILL.md` | two "Checklist" blocks — the rendered template (after the body) and the `gh pr create` heredoc | canonical — only holder; the six items appear twice in this one file |
+| `ceh-git-workflow/skills/open-pr/SKILL.md` | two "Checklist" blocks — the rendered template (after the body) and the `gh pr create` heredoc | canonical — only holder; the seven items appear twice in this one file |
 
-**What is shared:** six checklist items, repeated word-for-word in both "Checklist" blocks inside `open-pr`: "All CI checks pass", "Tests added or updated", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "DECISIONS.md updated (if a durable decision was made)".
+**What is shared:** seven checklist items, now repeated word-for-word in both "Checklist" blocks inside `open-pr`: "All CI checks pass", "Tests added or updated for new behavior", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "docs/adr/DECISIONS.md updated (if a durable decision was made)", "Attribution included if AI tooling assisted".
 
 **What diverges:**
-- The two `open-pr` blocks are not identical: the first (rendered template) reads "Tests added or updated **for new behavior**" and adds an "Attribution included if AI tooling assisted" item; the second (heredoc) reads plain "Tests added or updated" and omits the attribution item. Keep the six shared items in sync across both blocks when editing.
-- `ceh-release-ops/skills/definition-of-done/SKILL.md` **no longer carries these six items.** It was rewritten into Bug Fix / Feature / Refactor sections with category-specific criteria that do not overlap word-for-word with this list, so it is no longer part of this block.
+- The two `open-pr` blocks are now identical — keep them in sync when editing.
+- `ceh-release-ops/skills/definition-of-done/SKILL.md` **no longer carries these items.** It was rewritten into Bug Fix / Feature / Refactor sections with category-specific criteria that do not overlap word-for-word with this list, so it is no longer part of this block.
 
 ---
 
@@ -134,16 +147,13 @@ this map exists so edits don't get lost.
 | File | Section | Scope |
 |------|---------|-------|
 | `ceh-release-ops/skills/definition-of-done/SKILL.md` | "Coverage Targets" section | canonical |
-| `ceh-python-backend/skills/python-testing/SKILL.md` | coverage section | same two thresholds, but row labels have drifted out of sync (see below) |
+| `ceh-python-backend/skills/python-testing/SKILL.md` | coverage section | same two Python thresholds with identical row labels |
 
-**What is shared (same thresholds, wording now DIVERGED):** two rows mapping the same areas to the same percentages — application package → 80%, core business logic → 95%. The labels are no longer word-for-word identical:
-- `definition-of-done`: `Python application package | 80%`, `Core business logic / domain services | 95%`.
-- `python-testing`: `Overall \`app/\` package | 80%`, `Core business logic services | 95%`.
+**What is shared (identical labels and thresholds):** two rows mapping the same areas to the same percentages, word-for-word — `Python application package | 80%`, `Core business logic / domain services | 95%`.
 
 **What diverges:**
 - `definition-of-done` has three rows (adds `TypeScript \`src/lib/\` | 70%`), a `mypy --strict` / `tsc --noEmit` note, and no pytest command.
-- `python-testing` has two rows (omits the TypeScript row) and adds the pytest command to run coverage checks.
-- Label drift: `definition-of-done` was reworded ("Python application package", "Core business logic / domain services") but `python-testing` still uses the older labels. Re-sync the two row labels, or treat this entry as intentionally divergent.
+- `python-testing` has two rows (omits the TypeScript row — it is a Python plugin) and adds the pytest command to run coverage checks.
 
 ---
 

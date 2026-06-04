@@ -14,6 +14,23 @@ Python backend engineering standards for the FastAPI + uv + asyncpg stack.
 | `python-security` | Secrets management, CORS, rate limiting, or session token generation |
 | `alembic` | Creating or running database migrations |
 
+## Hooks
+
+This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-invariants.js`) that
+injects the **Python backend invariants** as always-on context. It fires on the `startup`, `clear`,
+and `compact` events and activates automatically when the plugin is enabled.
+
+**Why a hook and not just skills:** the load-bearing rules here (type hints, no `Any`/`# type:
+ignore` without comment, parameterized SQL, secrets via `pydantic-settings`, the never-log list,
+correlation-ID propagation) are *invariants* — they must hold on every relevant change. But skill
+auto-loading is evaluated against the user's prompt at the start of a turn, so the invariant skills
+(`python-security`, `python-observability`, the style half of `python-environment`) reliably
+under-fire — nothing in "add a search endpoint" signals "this is security/logging sensitive." The
+action skills (`fastapi`, `python-testing`, `alembic`, `asyncpg`) trigger fine and stay on-demand.
+The hook injects a compact version of the invariants every session so they always apply; each rule
+is tagged with the skill (e.g. `[python-security]`) that documents it in depth, loadable as
+`ceh-python-backend:<name>`.
+
 ## Agents
 
 | Agent | When to Use |

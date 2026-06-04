@@ -14,4 +14,4 @@ description: Load this skill for Python backend security baseline: secrets manag
 - Apply rate limiting per session on mutation endpoints (e.g. 10 req/min)
 - Configure CORS explicitly — no wildcard origins in production
 - Session tokens: `secrets.token_urlsafe(32)`, never logged, never in URLs
-- Run `uvx pip-audit` before every release
+- Run `uv run pip-audit` before every release

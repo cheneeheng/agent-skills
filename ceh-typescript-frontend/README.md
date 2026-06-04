@@ -13,6 +13,23 @@ Engineering standards for the **Bun + SvelteKit + Vitest + Playwright** stack.
 | Coding Style | `/ceh-typescript-frontend:coding-style` | Applying TypeScript type conventions, tsconfig, or import ordering |
 | Linting | `/ceh-typescript-frontend:linting` | Configuring or running ESLint, Prettier, or svelte-check |
 
+## Hooks
+
+This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-invariants.js`) that
+injects the **frontend invariants** as always-on context. It fires on the `startup`, `clear`, and
+`compact` events and activates automatically when the plugin is enabled.
+
+**Why a hook and not just skills:** the load-bearing rules here (no `any`, `type`-default, the
+data-flow rules — shared state updated only from API responses, components never call `fetch` or
+mutate stores directly — and the accessibility baseline) are *invariants* that must hold on every
+relevant change. But skill auto-loading is evaluated against the user's prompt at the start of a
+turn, so the invariant skills (`coding-style`, `accessibility`, and the data-flow half of
+`sveltekit`) reliably under-fire — nothing in "add a panel component" signals "this is
+accessibility/data-flow sensitive." The action skills (`environment`, `frontend-testing`,
+`linting`) trigger fine and stay on-demand. The hook injects a compact version of the invariants
+every session; each rule is tagged with the skill (e.g. `[accessibility]`) that documents it in
+depth, loadable as `ceh-typescript-frontend:<name>`. Stack: Svelte 5 (runes).
+
 ## Agents
 
 | Agent | Use when |

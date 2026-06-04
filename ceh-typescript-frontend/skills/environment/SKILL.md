@@ -6,7 +6,7 @@ description: Load this skill when setting up the project, running scripts, or ma
 # Environment
 
 - Runtime and package manager: **Bun** | Framework: **SvelteKit**
-- Lockfile: `bun.lockb` — authoritative, never edit manually
+- Lockfile: `bun.lock` — authoritative, never edit manually
 - Never commit `.env`
 
 ## Commands
