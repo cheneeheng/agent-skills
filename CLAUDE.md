@@ -118,3 +118,18 @@ Before editing any skill, check `CROSS_REFERENCES.md`. If the section you are ch
 in that file, propagate the edit to every other listed file in the same session. Edit the
 canonical file first, then mirror the change to all copies. If you add new duplication, add an
 entry to `CROSS_REFERENCES.md`.
+
+## Shared-Standards Duplication Policy
+
+Plugins are organized around **use cases**, and each use-case plugin must be self-contained so a
+user loads exactly one plugin per use case. When a foundational standard is needed by more than
+one use-case plugin, **duplicate the delta into each plugin** rather than extracting a shared base
+plugin.
+
+Canonical case: the Python foundation (uv/pyproject/ruff/mypy environment + pytest testing) is
+duplicated into both `ceh-python-service` and `ceh-python-library`. The library copy drops
+web-only dependencies (`fastapi`, `uvicorn`, `asyncpg`) and the uvicorn dev-server command.
+
+Cost of this choice is drift between copies; the required mitigation is to register every
+duplicated block in `CROSS_REFERENCES.md` and propagate edits in the same session (see the
+Cross-Reference Rule above).
