@@ -1,7 +1,7 @@
 # ceh-git-workflow
 
 Claude Code plugin delivering git workflow standards as skills. Covers trunk-based
-branching, Conventional Commits, squash merge policy, PR guidelines, code review conventions,
+branching, Conventional Commits, merge commit policy, PR guidelines, code review conventions,
 CI requirements, release tagging, and dependency management.
 
 ## Skills

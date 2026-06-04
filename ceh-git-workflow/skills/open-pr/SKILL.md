@@ -18,7 +18,7 @@ If a PR exceeds the guideline, split it by layer (schema → service → API).
 
 ## PR Title
 
-Must follow Conventional Commits format. This becomes the squash commit message.
+Must follow Conventional Commits format. It titles the PR and seeds the merge commit subject.
 
 ## PR Description Template
 
@@ -61,10 +61,14 @@ Must follow Conventional Commits format. This becomes the squash commit message.
 
 ## Merge Strategy
 
-**Squash merge only** — `main` history is one commit per PR.
+**Merge commit only** — preserve every commit on `main`. The full per-PR history is retained
+on purpose: it is the source material for write-ups and blog posts.
 
-- The squash commit message = the PR title (must be Conventional Commits format)
-- Never use merge commits on `main`
+- Use a true merge commit (`gh pr merge <number> --merge`) — never squash, never rebase-merge
+- Every commit must already be Conventional Commits format; nothing collapses them now, so they
+  land on `main` as written
+- Clean the branch before merging: rebase on `main`, drop fixup/WIP/debug commits so the
+  preserved history reads cleanly
 
 ## Command
 

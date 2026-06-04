@@ -1,6 +1,6 @@
 {
   "name": "ceh-release-ops",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "CEH release ops: deployments, migrations, incident response, observability, security, GitHub Actions, and GitLab CI agents.",
   "author": { "name": "Chen" },
   "repository": "https://github.com/cheneeheng/agent-skills",

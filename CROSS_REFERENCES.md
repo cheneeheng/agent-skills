@@ -103,7 +103,7 @@ this map exists so edits don't get lost.
 | `ceh-git-workflow/skills/hotfix/SKILL.md` | entire file | canonical — full guide with bash commands |
 | `ceh-release-ops/skills/incidents/SKILL.md` | "Hotfix Process" section | subset — same 7 steps, no bash commands |
 
-**What is shared:** 7-step process: branch `fix/critical-<description>` from `main`, minimal scope, 1-approval review, CI must pass, squash merge to `main`, bump PATCH + tag, staging → production deploy.
+**What is shared:** 7-step process: branch `fix/critical-<description>` from `main`, minimal scope, 1-approval review, CI must pass, merge commit to `main`, bump PATCH + tag, staging → production deploy.
 
 **What diverges:**
 - `hotfix` is standalone with full bash command examples for each step.

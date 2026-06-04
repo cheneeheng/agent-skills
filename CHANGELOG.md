@@ -5,6 +5,31 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [2.7.1] — 2026-06-04
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.4.0 |
+| `ceh-architecture-design` | v2.1.1 |
+| `ceh-blog` | v1.0.3 |
+| `ceh-dev-tools` | v1.1.1 |
+| `ceh-documentation` | v1.0.0 |
+| `ceh-git-workflow` | v2.5.1 |
+| `ceh-lessons-learned` | v2.0.2 |
+| `ceh-python-backend` | v2.2.2 |
+| `ceh-release-ops` | v2.2.3 |
+| `ceh-summarize-chat` | v2.0.2 |
+| `ceh-typescript-frontend` | v2.2.2 |
+
+### Changed
+
+- **`ceh-git-workflow`** (v2.5.1) — switched the PR merge policy from squash-merge to merge-commit. `main` now preserves every commit per PR (intentionally, as source material for write-ups/blog posts) via `gh pr merge --merge`; squash and rebase-merge are prohibited. Updated `open-pr` (Merge Strategy + PR-title note), `hotfix`, and the plugin README accordingly. Conventional Commits now applies per-commit, with a pre-merge branch-cleanup note.
+- **`ceh-release-ops`** (v2.2.3) — mirrored the hotfix merge step in `incidents` (squash → merge commit) to stay consistent with the cross-referenced `ceh-git-workflow/hotfix` skill.
+
+---
+
 ## [2.7.0] — 2026-06-04
 
 ### Plugin versions
