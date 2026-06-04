@@ -41,7 +41,10 @@ async def get_session_service(
 ```python
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.db_pool = await asyncpg.create_pool(settings.database_url)
+    # Pool sizing per the asyncpg skill (min_size=5, max_size=20, command_timeout=30)
+    app.state.db_pool = await asyncpg.create_pool(
+        settings.database_url, min_size=5, max_size=20, command_timeout=30
+    )
     yield
     await app.state.db_pool.close()
 
