@@ -1,53 +1,50 @@
 # ceh-agent-coding-contract
 
-Behavioral contract for coding agents. Establishes rules that govern how an agent operates during
-a coding session — what it may do, when it must stop, and how it logs decisions.
+A behavioral contract for coding agents: the rules that govern how an agent operates during a
+session — what it may change, when it must stop, and how it logs decisions. The plugin loads the
+contract automatically at session start, then provides two plan-driven workflow skills on top of it.
 
 ## Skills
 
-| Skill | Description |
-|-------|-------------|
-| `agent-coding-contract` | Full behavioral contract — load at session start before any coding task |
+| Skill | When it loads | What it does |
+|-------|---------------|--------------|
+| `agent-coding-contract` | Every coding session (auto, via hook) | The full behavioral contract — role, core rules, five-step workflow, stop conditions, decision logging. |
+| `implement-from-plan` | You point at a plan and ask to build it | Implements a `SKELETON.md` / `ITER_NN.md` section by section in scope order (§01–§06), resolving iteration pointers to the authoritative spec. |
+| `review-against-plan` | You ask to audit a plan against the code | Checks each in-scope section against the spec, finds gaps/deviations/errors, then fixes them. |
 
-### agent-coding-contract
+**Manual triggers**
 
-Loads automatically before any implementation, refactoring, or multi-file change. Also invoke
-manually:
+- `agent-coding-contract` — `/agent-coding-contract`, or say `"load the contract"` / `"agent contract"` / `"coding contract"`.
+- `implement-from-plan` — `"implement from plan"`, `"build from the plan"`, or point at a `SKELETON.md` / `ITER_NN.md` and ask to build it.
+- `review-against-plan` — `"review against plan"`, `"verify the plan is implemented"`, or point at a plan file and ask to audit it.
 
-```
-/agent-coding-contract
-```
+## How the contract auto-loads
 
-Or when you say:
-- `"load the contract"` / `"agent contract"` / `"coding contract"`
+The plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-contract.js`) that injects
+a mandatory directive to load the `agent-coding-contract` skill before any other action. It
+activates automatically when the plugin is enabled — no global `settings.json` change required.
 
-## Hooks
+It fires on three events:
 
-This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-contract.js`) that
-injects a mandatory directive to load the `agent-coding-contract` skill before any other action.
-It fires on the `startup` and `clear` events and activates automatically when the plugin is
-enabled — no global `settings.json` configuration required.
+- `startup` / `clear` — a fresh or reset session has no contract loaded.
+- `compact` — re-injects the contract in case context compaction dropped it.
 
-## What the Contract Defines
+`resume` is intentionally omitted: a resumed session inherits the contract already loaded before the
+resume.
 
-**Five-step task workflow** (no skipping):
-1. Understand — clarify request, affected files, risks
-2. Confirm scope — verify authorization
-3. Apply changes — minimal, localized edits
-4. Validate — only if explicitly requested
-5. Summarize — what changed, assumptions, decisions logged
+## What the contract enforces
 
-**Core rules:**
-- Decide, don't guess silently
-- Minimal change bias — no unsolicited refactors
-- No implicit actions — never claim work was done without doing it
-- Explicit authorization — if unsure, assume not authorized
+The `agent-coding-contract` skill is the single source of truth. In short, it requires the agent to:
 
-**Execution mode:** Autonomous. On ambiguity, decide the conservative option, document it, and
-continue; stop only for the hard cases in Stop Conditions. The authority hierarchy for resolving
-conflicting context files is defined in the `agent-coding-contract` skill.
+- **Run Autonomous Mode** — on routine ambiguity, decide the conservative option, log it, and
+  continue; stop only for the hard cases (unresolvable conflicts, repo state contradicting
+  instructions, risk of data loss, inconsistent partial failure).
+- **Follow the five-step workflow** — Understand → Confirm scope → Apply changes → Validate →
+  Summarize. Validation, testing, and command execution happen only when explicitly requested.
+- **Make minimal, authorized changes** — localized diffs, no unsolicited refactors, touch only what
+  is in scope, never claim work was done that wasn't.
+- **Log decisions made under ambiguity** to `docs/claude_logs/DECISION_LOG.md` (default path;
+  override it via your project `CLAUDE.md`). See the skill for the entry format and when to log.
 
-## Decision Log
-
-Decisions made under ambiguity are appended to `docs/claude_logs/DECISION_LOG.md`.
-Format defined in the `agent-coding-contract` skill.
+Refer to the skill for the authoritative wording — this section is a summary and is not the contract
+itself.

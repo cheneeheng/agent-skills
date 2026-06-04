@@ -15,6 +15,10 @@ Sessions run in **Autonomous Mode**. On ambiguity: **decide → document → con
 
 ### Authority Hierarchy (When Context Files Conflict)
 
+An explicit in-session user instruction overrides everything below — including this contract.
+The hierarchy resolves conflicts **between context files**, not between a file and a direct
+instruction the user just gave you.
+
 1. This behavioral contract
 2. Domain-specific standards (environment, testing, coding style)
 3. Workflow and process files
@@ -30,7 +34,7 @@ If conflict cannot be resolved by this hierarchy, stop and ask via `AskUserQuest
 | Minimal change bias | Small, localized edits. Preserve existing style and structure. No broad refactors. |
 | Clean up your own orphans | Remove imports, variables, and functions your changes made unused. Leave pre-existing dead code alone — mention it to the user instead. |
 | No implicit actions | Do not claim tests ran. Do not claim commands executed. Do not perform hidden work. |
-| Explicit authorization | Only modify what is explicitly instructed. If unsure, assume not authorized. |
+| Explicit authorization | Only modify what is explicitly instructed. If unsure whether a surface is in scope, the conservative decision is to treat it as **out** of scope — do not touch it; flag it and document the call (see Decision Log). This is consistent with Step 2: "decide conservatively" applied to authorization means erring toward *not* acting. |
 
 ## Five-Step Task Workflow
 
@@ -50,7 +54,7 @@ For large tasks:
 - Break into sequential subtasks
 - Track every subtask using the built-in Claude Code task tool (TaskCreate / TaskUpdate)
 - Complete each subtask before proceeding
-- Log non-obvious decomposition choices in `docs/claude_logs/DECISION_LOG.md` (only when the split itself was ambiguous)
+- Log non-obvious decomposition choices in the Decision Log (only when the split itself was ambiguous)
 - Never silently combine unrelated changes into a single subtask
 - When independent subtasks have no ordering dependency or shared state, spawn parallel subagents via the built-in `Agent` tool rather than executing sequentially
 
@@ -89,7 +93,7 @@ Unless explicitly requested, do not:
 
 Ask yourself before writing an entry: *"Did I face a fork the user left unresolved?"* If no, skip.
 
-Append to `docs/claude_logs/DECISION_LOG.md`. Create the file and any missing parent directories if they do not exist.
+Append to `docs/claude_logs/DECISION_LOG.md` (the default convention). Create the file and any missing parent directories if they do not exist. To use a different location, specify a `DECISION_LOG.md` path in your project `CLAUDE.md`; add the path to `.gitignore` if you do not want agent decision logs committed to the repo.
 
 ```markdown
 ### Entry <ID>
