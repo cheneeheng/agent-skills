@@ -70,8 +70,18 @@ Register domain-to-HTTP mappings once in `app/core/middleware.py`:
 ```python
 @app.exception_handler(SessionNotFoundError)
 async def handler(request: Request, exc: SessionNotFoundError):
-    return JSONResponse(status_code=404, content={"code": "session_not_found", "message": str(exc)})
+    return JSONResponse(
+        status_code=404,
+        content={
+            "code": "session_not_found",
+            "message": str(exc),
+            "correlation_id": getattr(request.state, "correlation_id", None),
+        },
+    )
 ```
+
+The `correlation_id` comes from the correlation-ID middleware (registered outermost). Include it so
+the body matches the error contract in the `rest-api` skill (`code` / `message` / `correlation_id`).
 
 ## Exception Hierarchy
 

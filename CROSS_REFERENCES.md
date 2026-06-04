@@ -99,11 +99,11 @@ this map exists so edits don't get lost.
 | `ceh-architecture-design/skills/rest-api/SKILL.md` | "Error Response Shape" section | canonical — full JSON structure with field docs |
 | `ceh-python-backend/skills/fastapi/SKILL.md` | "Global Exception Handlers" section | implementation — maps exceptions to `JSONResponse` using the same shape |
 
-**What is shared:** `code` and `message` fields in the error response body; same JSON shape consumed by both spec and implementation.
+**What is shared:** `code`, `message`, and `correlation_id` fields in the error response body; same JSON shape consumed by both spec and implementation.
 
 **What diverges:**
-- `rest-api` documents the full JSON contract including `correlation_id` field and an example payload.
-- `fastapi` shows only the Python handler code returning `code`/`message`; does not include `correlation_id` in the handler or repeat the full field documentation.
+- `rest-api` documents the full JSON contract with field docs and an example payload; it is the canonical contract.
+- `fastapi` shows the Python handler code producing the same `code` / `message` / `correlation_id` body (pulling `correlation_id` from `request.state`), without repeating the full field documentation.
 
 ---
 
