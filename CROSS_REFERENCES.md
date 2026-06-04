@@ -46,13 +46,14 @@ this map exists so edits don't get lost.
 | File | Section | Scope |
 |------|---------|-------|
 | `ceh-architecture-design/skills/postgresql/SKILL.md` | entire file | canonical — schema design + tenant isolation + full asyncpg patterns |
-| `ceh-python-backend/skills/asyncpg/SKILL.md` | entire file | identical transaction and pool code |
+| `ceh-python-backend/skills/asyncpg/SKILL.md` | entire file | identical pool code; transaction block is structurally identical but uses `session_*` identifiers (postgresql uses `entity_*`) |
 | `ceh-python-backend/skills/alembic/SKILL.md` | entire file | adds full Alembic CLI and `env.py` config |
 | `ceh-release-ops/skills/database-migrations/SKILL.md` | "Safety Rules" + "Two-Step Destructive Changes" sections | superset of migration rules — adds blue-green safe, testing against prod copy, SQL examples |
 
-**What is shared (word-for-word identical):** atomic transaction code block (`pool.acquire` + `conn.transaction()` with `executemany` + `execute`), connection pool creation call (`min_size=5, max_size=20, command_timeout=30`), migration safety rules (backward-compatible, two-step destructive, never simultaneous deploy).
+**What is shared:** atomic transaction code block (`pool.acquire` + `conn.transaction()` with `executemany` + `execute`) — structurally identical, but the table/column identifiers diverge (see below); connection pool creation call (`min_size=5, max_size=20, command_timeout=30`) — word-for-word identical; migration safety rules (backward-compatible, two-step destructive, never simultaneous deploy) — word-for-word identical.
 
 **What diverges:**
+- Transaction block identifiers: `postgresql` uses `entity_id` / `entities` (matching its schema-design section and the `event-sourcing` skill in the same plugin); `asyncpg` uses `session_id` / `sessions` (consistent with its own Queries example). Intentional — keep each plugin internally consistent; do not re-sync the identifiers.
 - `postgresql` adds schema design template, `TIMESTAMPTZ` / `JSONB` rules, tenant isolation pattern, index examples.
 - `asyncpg` adds "Create the pool in the FastAPI lifespan function and expose it via `app.state.db_pool`" guidance.
 - `alembic` adds full Alembic CLI commands, `alembic/env.py` `sync_url` workaround, "apply before integration tests" command.

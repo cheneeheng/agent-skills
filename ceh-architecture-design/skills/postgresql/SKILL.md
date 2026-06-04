@@ -53,12 +53,12 @@ await conn.fetchrow(
 async with pool.acquire() as conn:
     async with conn.transaction():
         await conn.executemany(
-            "INSERT INTO event_log (session_id, event_type, payload) VALUES ($1, $2, $3)",
-            [(session_id, e.type, e.model_dump_json()) for e in events]
+            "INSERT INTO event_log (entity_id, event_type, payload) VALUES ($1, $2, $3)",
+            [(entity_id, e.type, e.model_dump_json()) for e in events]
         )
         await conn.execute(
-            "UPDATE sessions SET state_snapshot = $1, updated_at = NOW() WHERE session_id = $2",
-            new_state.model_dump_json(), session_id
+            "UPDATE entities SET state_snapshot = $1, updated_at = NOW() WHERE entity_id = $2",
+            new_state.model_dump_json(), entity_id
         )
 ```
 
