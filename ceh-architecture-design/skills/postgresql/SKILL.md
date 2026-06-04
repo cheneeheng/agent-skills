@@ -1,9 +1,9 @@
 ---
 name: "postgresql"
-description: Load this skill when writing SQL queries, designing or modifying database schemas, adding indexes, working with JSONB columns, or writing asyncpg query code. Auto-load whenever a SQL statement is written, a table or column is added, a query uses asyncpg fetchrow/execute, or tenant isolation (owner_id filtering) is relevant.
+description: Load this skill when designing or modifying a PostgreSQL schema: defining tables and columns, choosing column types (TIMESTAMPTZ, JSONB), adding indexes, enforcing tenant isolation (owner_id filtering), or applying parameterized-query and migration policy. Auto-load whenever a table or column is added, a schema is designed, or SQL-safety / tenant-isolation rules are relevant. For asyncpg query, transaction, and connection-pool code, use the asyncpg skill instead.
 ---
 
-# PostgreSQL and asyncpg
+# PostgreSQL Schema and Access Design
 
 ## Schema Design
 
@@ -47,33 +47,13 @@ await conn.fetchrow(
 )
 ```
 
-## Atomic Transactions for Multi-Step Writes
+## asyncpg Code Lives in the asyncpg Skill
 
-```python
-async with pool.acquire() as conn:
-    async with conn.transaction():
-        await conn.executemany(
-            "INSERT INTO event_log (entity_id, event_type, payload) VALUES ($1, $2, $3)",
-            [(entity_id, e.type, e.model_dump_json()) for e in events]
-        )
-        await conn.execute(
-            "UPDATE entities SET state_snapshot = $1, updated_at = NOW() WHERE entity_id = $2",
-            new_state.model_dump_json(), entity_id
-        )
-```
-
-## Connection Pool Configuration
-
-```python
-pool = await asyncpg.create_pool(
-    dsn=settings.database_url,
-    min_size=5,
-    max_size=20,
-    command_timeout=30,
-)
-```
-
-Configure via environment variables, never hard-coded.
+This skill owns schema and access *design*. The concrete asyncpg code — multi-step atomic
+transactions, connection-pool configuration, and query execution — lives in the `asyncpg` skill
+(`ceh-python-backend:asyncpg`). The event-sourcing atomicity *principle* (event and snapshot written
+in one transaction) is in the `event-sourcing` skill. Keep schema design here; keep Python
+data-access code there.
 
 ## Migrations
 

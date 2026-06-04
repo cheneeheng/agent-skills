@@ -39,25 +39,37 @@ this map exists so edits don't get lost.
 
 ---
 
-## Database / asyncpg patterns (transactions, connection pool, migrations)
+## Database migration safety rules
 
 **Files:**
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-architecture-design/skills/postgresql/SKILL.md` | entire file | canonical — schema design + tenant isolation + full asyncpg patterns |
-| `ceh-python-backend/skills/asyncpg/SKILL.md` | entire file | identical pool code; transaction block is structurally identical but uses `session_*` identifiers (postgresql uses `entity_*`) |
-| `ceh-python-backend/skills/alembic/SKILL.md` | entire file | adds full Alembic CLI and `env.py` config |
-| `ceh-release-ops/skills/database-migrations/SKILL.md` | "Safety Rules" + "Two-Step Destructive Changes" sections | superset of migration rules — adds blue-green safe, testing against prod copy, SQL examples |
+| `ceh-release-ops/skills/database-migrations/SKILL.md` | "Safety Rules" + "Two-Step Destructive Changes" sections | canonical — superset: blue-green safe, testing against prod copy, SQL examples |
+| `ceh-architecture-design/skills/postgresql/SKILL.md` | "Migrations" section | design-level policy statement |
+| `ceh-python-backend/skills/alembic/SKILL.md` | rules section | same rules + full Alembic CLI and `env.py` config |
 
-**What is shared:** atomic transaction code block (`pool.acquire` + `conn.transaction()` with `executemany` + `execute`) — structurally identical, but the table/column identifiers diverge (see below); connection pool creation call (`min_size=5, max_size=20, command_timeout=30`) — word-for-word identical; migration safety rules (backward-compatible, two-step destructive, never simultaneous deploy) — word-for-word identical.
+**What is shared:** migration safety rules — backward-compatible (old app version still works after migration), destructive changes are two-step (stop using, then drop), never run a migration and a code deploy simultaneously.
 
 **What diverges:**
-- Transaction block identifiers: `postgresql` uses `entity_id` / `entities` (matching its schema-design section and the `event-sourcing` skill in the same plugin); `asyncpg` uses `session_id` / `sessions` (consistent with its own Queries example). Intentional — keep each plugin internally consistent; do not re-sync the identifiers.
-- `postgresql` adds schema design template, `TIMESTAMPTZ` / `JSONB` rules, tenant isolation pattern, index examples.
-- `asyncpg` adds "Create the pool in the FastAPI lifespan function and expose it via `app.state.db_pool`" guidance.
-- `alembic` adds full Alembic CLI commands, `alembic/env.py` `sync_url` workaround, "apply before integration tests" command.
-- `database-migrations` is the most comprehensive on migration rules: blue-green deploy safety, test against production data copy, concrete SQL for two-step pattern.
+- `database-migrations` is the most comprehensive: blue-green deploy safety, test against production data copy, concrete SQL for the two-step pattern.
+- `postgresql` states the policy at schema-design level (Alembic-managed, backward-compatible, two-step).
+- `alembic` adds full Alembic CLI commands, `alembic/env.py` `sync_url` workaround, "apply before integration tests".
+
+---
+
+## asyncpg connection pool + transaction code
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-python-backend/skills/asyncpg/SKILL.md` | "Atomic Transactions" + "Connection Pool" | canonical — full transaction and pool code |
+| `ceh-python-backend/skills/fastapi/SKILL.md` | lifespan / pool setup | same `asyncpg.create_pool(...)` call |
+
+**What is shared:** `asyncpg.create_pool(min_size=5, max_size=20, command_timeout=30)` call; the atomic transaction pattern (`pool.acquire` + `conn.transaction()`).
+
+**Note:** this code formerly lived in `ceh-architecture-design/skills/postgresql` as well. It was consolidated into `asyncpg` (2026-06-04) to keep `architecture-design` language-agnostic (design, not Python data-access code); `postgresql` now points to `asyncpg` instead of duplicating it. The event-sourcing atomicity *principle* (event + snapshot in one transaction) is stated separately in `ceh-architecture-design/skills/event-sourcing`.
 
 ---
 
