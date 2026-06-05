@@ -5,6 +5,34 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.1.0] — 2026-06-05
+
+SessionStart hook audit: added one missing invariants hook and fixed two that were silently failing.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-architecture` | v3.0.1 |
+| `ceh-python-library` | v1.1.0 |
+| `ceh-web-frontend` | v3.0.1 |
+
+### Added
+
+- **`ceh-python-library`** — SessionStart invariants hook (`hooks/hooks.json` → `hooks/load-invariants.js`)
+  injecting the passive `python-environment` style/type and minimal-dependency rules, mirroring
+  `ceh-python-service`. Closes a shared-standards gap: the library carried the same invariant skill
+  but no hook to enforce it. Added a parallel `## Hooks` section to the plugin README.
+
+### Fixed
+
+- **`ceh-architecture`**, **`ceh-web-frontend`** — the SessionStart hook scripts had an escaped
+  closing backtick (`\``) that left the template literal unterminated, so `node` threw a
+  `SyntaxError` and the hook injected nothing. Both invariants blocks were silently never reaching
+  sessions. Both now emit valid JSON.
+
+---
+
 ## [3.0.0] — 2026-06-05
 
 Use-case-based plugin reorganization (see `docs/PLUGIN_REORG_PLAN.md`). **Breaking:** four plugins

@@ -14,6 +14,22 @@ Load this plugin for library/SDK projects; use `ceh-python-service` for FastAPI 
 | `packaging` | Configuring the build backend, src layout, building wheels, or publishing to PyPI |
 | `public-api` | Editing `__init__.py`/`__all__`, changing a public signature, or classifying a semver bump |
 
+## Hooks
+
+This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-invariants.js`) that
+injects the **Python library invariants** as always-on context. It fires on the `startup`, `clear`,
+and `compact` events and activates automatically when the plugin is enabled.
+
+**Why a hook and not just skills:** the load-bearing rules here (type hints, no `Any`/`# type:
+ignore` without comment, docstrings on public symbols, a minimal dependency set) are *invariants* —
+they must hold on every relevant change. But skill auto-loading is evaluated against the user's
+prompt at the start of a turn, so the style half of `python-environment` reliably under-fires —
+nothing in "add a parser function" signals "watch the type hints and dependency footprint." The
+action skills (`packaging`, `public-api`, `python-testing`) trigger fine and stay on-demand. The
+hook injects a compact version of the invariants every session so they always apply; each rule is
+tagged with the skill (e.g. `[python-environment]`) that documents it in depth, loadable as
+`ceh-python-library:<name>`.
+
 ## Shared Standards
 
 `python-environment` and `python-testing` are duplicated from `ceh-python-service` per the

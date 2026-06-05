@@ -145,3 +145,17 @@ outside the repo to prevent recurrence.
 **Impact / Risk:** Commit SHAs were rewritten. Safe — the branch existed only locally at the time;
 later pushed to origin fresh.
 **Outcome:** `msg.txt` absent from all commits and all objects (`git rev-list --all` = 0 matches).
+
+---
+
+### Entry 9
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-05
+**Task:** Audit every plugin for a missing SessionStart invariants hook; add one where a skill is invariant (passive).
+
+**Context:** Two ambiguities. (1) Which plugins need a hook: the criterion is "a skill is invariant" — a rule that must always hold but fires on implicit mid-turn decisions with no prompt signal, so skill auto-load under-fires. (2) The repo versioning rule (`CLAUDE.md`) covers PATCH (content/description) and MINOR (new skill/agent), but is silent on adding a hook.
+**Decision:** Of the nine hookless plugins, only `ceh-python-library` qualifies: its `python-environment` skill carries the same passive style/type invariants (type hints, no `Any`/`# type: ignore`, strict mypy, ruff naming, minimal deps) that `ceh-python-service` — its registered shared-standards twin in `CROSS_REFERENCES.md` — already injects via a SessionStart hook. The other eight are moment/activity-triggered only (git verbs, deploy/incident, scaffold, blog/doc authoring, summarize, retrospective) or have no skills (`ceh-dev-tools`), so no hook. Added `hooks/hooks.json` + `hooks/load-invariants.js` mirroring the service plugin, scoped to the style & types + dependencies invariants (dropped the service's web-only security/observability and the Pydantic/asyncio lines). Bumped the version MINOR (1.0.0 → 1.1.0): a SessionStart hook is a new always-on functional component, comparable in impact to a new skill/agent, not a content/description tweak — so MINOR fits better than PATCH despite the rule not naming hooks.
+**Impact / Risk:** Low. The hook only injects always-on context; the duplicated style block is now noted in the `CROSS_REFERENCES.md` python-environment entry so edits propagate. README gained a parallel `## Hooks` section.
+**Outcome:** Hook smoke-tested (valid JSON, 1286 bytes). Files written; not yet committed.

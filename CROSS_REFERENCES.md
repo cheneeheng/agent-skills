@@ -92,8 +92,8 @@ this map exists so edits don't get lost.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-python-service/skills/python-environment/SKILL.md` | entire file | service copy — web-service deps + uvicorn dev server |
-| `ceh-python-library/skills/python-environment/SKILL.md` | entire file | library copy — no web deps, no uvicorn dev server |
+| `ceh-python-service/skills/python-environment/SKILL.md` | entire file | service copy — web-service deps + uvicorn dev server (style half also injected by the service SessionStart hook) |
+| `ceh-python-library/skills/python-environment/SKILL.md` | entire file | library copy — no web deps, no uvicorn dev server (style half also injected by the library SessionStart hook) |
 
 **What is shared:** Python 3.12 + uv + `pyproject.toml`/`uv.lock` workflow, the uv command table, the ruff (line-length 88, `select = [E,F,I,UP,N,B]`) + mypy (`strict = true`) + pytest (`asyncio_mode = "auto"`) config, the coding-style rules (type hints, built-in generics, no `Any` without comment), naming table, three-group imports, and the "ruff only / no `# type: ignore` without comment" linting rules.
 

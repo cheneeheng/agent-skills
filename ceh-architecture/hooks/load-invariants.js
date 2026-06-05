@@ -18,7 +18,7 @@ Identifiers & entities [domain-modeling]:
 Layer boundaries [domain-modeling]:
 - Route handlers contain no business logic — they call services.
 - Services contain no SQL — they call the db layer. The db layer contains no business logic.
-- One mutation path per aggregate.\`;
+- One mutation path per aggregate.`;
 
 const payload = {
   hookSpecificOutput: {

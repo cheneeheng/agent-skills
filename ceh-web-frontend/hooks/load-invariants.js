@@ -27,7 +27,7 @@ Accessibility [accessibility]:
 - Text contrast >= 4.5:1 (3:1 for large text). Never convey meaning by color alone. Fix all a11y warnings before opening a PR.
 
 Environment [environment]:
-- Bun is the runtime and package manager; never edit the lockfile manually. Never commit \`.env\`.\`;
+- Bun is the runtime and package manager; never edit the lockfile manually. Never commit \`.env\`.`;
 
 const payload = {
   hookSpecificOutput: {
