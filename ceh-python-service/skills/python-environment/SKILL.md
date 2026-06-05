@@ -60,16 +60,16 @@ asyncio_mode = "auto"
 
 **Docstrings** (Google style, required on all public symbols):
 ```python
-def validate_event(event: ReasoningEvent, state: SessionState) -> ValidationResult:
-    """Validates event against session state.
+def reserve_stock(order: Order, qty: int) -> ReservationResult:
+    """Reserves stock for an order.
 
     Args:
-        event: Proposed reasoning event.
-        state: Current session state.
+        order: The order requesting stock.
+        qty: Units to reserve.
     Returns:
-        ValidationResult with success or failure reason.
+        ReservationResult with success or failure reason.
     Raises:
-        InvalidEventTypeError: If event type not in allowed enum.
+        InsufficientStockError: If qty exceeds available stock.
     """
 ```
 

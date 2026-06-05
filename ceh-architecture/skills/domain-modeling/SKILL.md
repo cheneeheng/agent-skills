@@ -1,6 +1,6 @@
 ---
 name: "domain-modeling"
-description: Load this skill when designing or modifying domain entities: defining new entity IDs, choosing identifier formats, creating or extending status fields, designing state transition rules, or modelling ownership and relationships between entities. Auto-load whenever a new entity type is introduced, a status enum is added or changed, or an ID field is defined.
+description: Load this skill when designing or modifying domain entities and their boundaries: defining new entity IDs, choosing identifier formats, creating or extending status fields, designing state transition rules, modelling ownership and relationships, or setting layer boundaries between route handlers, services, and the database layer. Auto-load whenever a new entity type is introduced, a status enum is added or changed, an ID field is defined, or a service/route/db responsibility split is decided.
 ---
 
 # Domain Modeling
@@ -47,3 +47,12 @@ type ResourceStatus = typeof ResourceStatus[keyof typeof ResourceStatus];
 - `created_at` timestamps are set once, never updated
 - Status transitions must be validated — not all transitions are legal
 - Document all legal and illegal transitions explicitly
+
+## Layer Boundaries
+
+Model the flow of control so each layer has one job. The boundaries are part of the domain design,
+even though the concrete directory layout lives in `ceh-scaffolding`.
+
+- Route handlers contain no business logic — they call services.
+- Services contain no SQL — they call the database layer. The database layer contains no business logic.
+- One mutation path per aggregate — if multiple services could write the same entity, route them through a single state manager.
