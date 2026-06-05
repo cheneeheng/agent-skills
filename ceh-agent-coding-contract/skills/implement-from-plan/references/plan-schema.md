@@ -2,6 +2,33 @@
 
 Planning documents come in two artifact types: **SKELETON** and **ITER_NN**.
 
+## File Naming and Version Variants
+
+The base filenames are `SKELETON.md` and `ITER_NN.md`. A planning set may carry an optional
+**version tag** — e.g. `v2`, `v3` — when more than one version of the app is planned in the same
+location. The tag attaches as a prefix or suffix, bound by a `_`, `-`, or `.` separator:
+
+- `SKELETON_v2.md`, `v2_SKELETON.md`, `SKELETON-v2.md`
+- `ITER_03_v2.md`, `v2_ITER_03.md`, `ITER_03-v3.md`
+
+Match plan files as the base name `SKELETON` or `ITER_NN` (`NN` = two digits) with an optional
+separator-bound tag on either side, plus the `.md` extension. Untagged files (`SKELETON.md`,
+`ITER_NN.md`) belong to the **default (untagged) family**.
+
+Files that share a version tag form one **plan family**. The `NN` iteration counter restarts
+within each family — `ITER_01_v2.md` is the first iteration of the `v2` family, independent of
+`ITER_01.md`.
+
+### Cross-version dependencies
+
+Versions are linked, not isolated. A later version builds on an earlier one through the standard
+`depends_on` frontmatter field (see Frontmatter) — a `v2` file lists the `v1` artifacts it builds
+on and inherits every section it does not re-specify. Because `depends_on` names artifacts by
+**stem** (filename without `.md`, which carries the version tag), one mechanism covers both
+same-sequence iteration chaining (`[SKELETON, ITER_01]`) and cross-version inheritance
+(`[SKELETON_v1, ITER_03_v1]`). A version's SKELETON is optional — a version may be ITER files
+alone that depend on the previous version's SKELETON.
+
 ## Frontmatter
 
 **SKELETON.md:**
@@ -12,21 +39,44 @@ status: ready
 created: YYYY-MM-DD
 app: <one-line app name>
 stack: <comma-separated key technologies>
-sections: [01, 02, 03, 04, 05]   # sections present
+sections: [01, 02, 03, 04, 05]   # sections present in this file
+mvp_target: <one-line description of the MVP this sequence reaches>
 ---
 ```
+
+The SKELETON body also carries a `## Out of MVP scope` block — a bulleted list of the features and
+concerns consciously deferred from this MVP. Treat it as scope boundary, not as work to implement.
 
 **ITER_NN.md:**
 ```yaml
 ---
-artifact: ITER_01          # NN increments per iteration
+artifact: ITER_01          # NN increments per iteration; stem = filename without .md
 status: ready
 created: YYYY-MM-DD
 scope: <what this iteration adds or changes>
-sections_changed: [02, 05] # sections with content in this file
-sections_unchanged: [01, 03, 04]  # sections using pointers (look in SKELETON or prior ITER)
+sections_changed: [02, 05] # sections with substantive content in this file
+sections_unchanged: [01, 03, 04]  # sections using pointers (resolve via depends_on)
+depends_on: [SKELETON]     # artifacts this iteration builds on; e.g. [SKELETON, ITER_01]
+mvp: false                 # true exactly once, on the FINAL iteration (MVP terminator)
 ---
 ```
+
+**Key field rules:**
+- `depends_on` (ITER only) — prior artifacts this iteration relies on, named by stem. Within a
+  family it is the same-sequence chain (e.g. `[SKELETON_v2, ITER_01_v2]`); the first iteration of
+  an iterations-only new version points back into the prior family (e.g. `[SKELETON, ITER_03]`),
+  whereas a version with its own `SKELETON_vN` depends on that instead. Points only backward —
+  never to a later iteration or version. Resolution traces this field.
+- Skeletons carry no `depends_on` — a skeleton is fresh scaffolding, and a versioned skeleton is
+  assumed to build on the prior family.
+- `mvp` (ITER) — `true` exactly once, on the final iteration. It marks where the plan stops;
+  nothing is planned past it.
+- `mvp_target` (SKELETON) — one line stating the MVP the iteration sequence terminates at.
+
+> **`mvp` and `mvp_target` are optional and may be absent.** Not every plan declares an MVP
+> terminator. When no iteration carries `mvp: true` (and no `mvp_target` is set), do not infer one
+> — treat the highest-numbered ITER reachable through the `depends_on` chain as the end of the
+> sequence, and otherwise rely on `depends_on` order alone.
 
 ## Sections
 
@@ -45,6 +95,12 @@ When a section appears in `sections_unchanged`, the ITER file contains a pointer
 
 ## Resolution Order
 
+Resolution follows the `depends_on` chain backward — never a forward reference.
+
 To find the authoritative spec for a given section:
-1. Find the most recent ITER_NN.md whose `sections_changed` includes that section number.
-2. If none, fall back to SKELETON.md.
+1. If a pointer names a specific artifact, honor it directly.
+2. Walk the `depends_on` chain backward from the target. The authoritative spec lives in the
+   nearest artifact (closest to the target) whose `sections_changed` (ITER) or `sections`
+   (SKELETON) lists that section number.
+3. For a version variant the chain crosses into the base version's artifacts. It never moves
+   forward to a later iteration or version; the trace ends at a SKELETON.
