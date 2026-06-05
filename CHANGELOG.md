@@ -5,6 +5,26 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.1.2] — 2026-06-06
+
+Plan skills now auto-trigger on version-tagged phrasing.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.4.5 |
+
+### Changed
+
+- **`ceh-agent-coding-contract`** — `implement-from-plan` and `review-against-plan` handled
+  version-tagged plans in their bodies (v3.1.1) but their `description` frontmatter carried no
+  version phrasing, so prompts like "implement v2 iter plans" never auto-triggered. Added
+  version-tagged trigger phrases and noted `SKELETON_v2.md` / `v2_ITER_03.md` variants and
+  `depends_on`-chain resolution in both descriptions. No body changes.
+
+---
+
 ## [3.1.1] — 2026-06-05
 
 Plan skills support version-tagged plan files and `depends_on`-based resolution.
