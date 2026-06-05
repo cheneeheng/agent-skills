@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+// SessionStart hook — injects the architecture invariants as always-on context.
+// These are the must-always-hold rules that under-trigger as auto-load skills because
+// they fire on implicit mid-turn decisions with no signal in the user's prompt. The
+// detailed patterns and code stay in the skills (load on demand for depth); this block
+// is the compact enforcement layer. Cross-platform (Node), wired via hooks/hooks.json.
+
+const invariants = `ARCHITECTURE INVARIANTS (ceh-architecture) — apply to all work in this project.
+These are non-negotiable defaults. For the full patterns and code behind any rule, load the matching
+skill via the Skill tool as \`ceh-architecture:<name>\`, where \`<name>\` is the tag shown in
+brackets below (e.g. \`ceh-architecture:domain-modeling\`).
+
+Identifiers & entities [domain-modeling]:
+- Public IDs are application-generated, prefixed, URL-safe: \`{prefix}_{secrets.token_urlsafe(12)}\`. Never expose DB auto-increment as a public ID.
+- Status fields come from a closed set (Python StrEnum / TS \`as const\`). Never accept free-form status strings from external callers.
+- IDs and \`created_at\` are set once and never changed. Status transitions must be validated — not all are legal.
+
+Layer boundaries [domain-modeling]:
+- Route handlers contain no business logic — they call services.
+- Services contain no SQL — they call the db layer. The db layer contains no business logic.
+- One mutation path per aggregate.\`;
+
+const payload = {
+  hookSpecificOutput: {
+    hookEventName: "SessionStart",
+    additionalContext: invariants
+  }
+};
+
+process.stdout.write(JSON.stringify(payload));

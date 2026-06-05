@@ -93,6 +93,11 @@ Unless explicitly requested, do not:
 
 Ask yourself before writing an entry: *"Did I face a fork the user left unresolved?"* If no, skip.
 
+**A commit message, PR, or chat summary does not substitute for a Decision Log entry** — those serve
+one change's reviewers; the log is the durable cross-session record. Write the entry when you make
+the decision, not reconstructed at the end. Explaining a judgment call in a commit body is the signal
+it also belongs here.
+
 Append to `docs/claude_logs/DECISION_LOG.md` (the default convention). Create the file and any missing parent directories if they do not exist. To use a different location, specify a `DECISION_LOG.md` path in your project `CLAUDE.md`; add the path to `.gitignore` if you do not want agent decision logs committed to the repo.
 
 ```markdown
