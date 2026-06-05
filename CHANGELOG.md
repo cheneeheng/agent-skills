@@ -14,7 +14,7 @@ were renamed; there are no alias shims. Net 11 → 13 plugins.
 
 | Plugin | Version |
 |--------|---------|
-| `ceh-agent-coding-contract` | v2.4.2 |
+| `ceh-agent-coding-contract` | v2.4.3 |
 | `ceh-architecture` | v3.0.0 |
 | `ceh-blog` | v1.0.4 |
 | `ceh-dev-tools` | v1.1.2 |
@@ -52,6 +52,8 @@ were renamed; there are no alias shims. Net 11 → 13 plugins.
   `accessibility`/`frontend-testing` to `.svelte` and `.tsx`.
 - **`ceh-architecture`** — trimmed to `adr` + `domain-modeling`; hook invariants trimmed accordingly.
 - **`ceh-git-workflow`** — `open-pr` absorbed the definition-of-done quality gate.
+- **`ceh-agent-coding-contract`** (PATCH) — Decision Log section now states the log is the required
+  channel and is not satisfied by a commit message/PR/summary; log at the moment of the decision.
 
 ### Removed
 
