@@ -1,6 +1,6 @@
 ---
 name: "frontend-testing"
-description: Load this skill when writing Vitest unit tests, Testing Library component tests, MSW mocks, or Playwright E2E tests. Auto-load whenever a .test.ts or .spec.ts file is created or modified, or MSW handlers are being written.
+description: Load this skill when writing Vitest unit tests, Testing Library component tests, MSW mocks, or Playwright E2E tests for any web frontend. Auto-load whenever a .test.ts, .test.tsx, or .spec.ts file is created or modified, or MSW handlers are being written. Framework-agnostic — Vitest, Testing Library, MSW, and Playwright serve SvelteKit and React alike.
 ---
 
 # Frontend Testing
@@ -34,7 +34,7 @@ describe('deriveGraphFromState', () => {
 
 ## Component Tests — Test What the User Sees
 
-Use `@testing-library/svelte`. Do not test implementation details. No snapshot tests — explicit assertions only.
+Use `@testing-library/svelte` (SvelteKit) or `@testing-library/react` (React). Do not test implementation details. No snapshot tests — explicit assertions only.
 
 ```ts
 import { render, screen } from '@testing-library/svelte';

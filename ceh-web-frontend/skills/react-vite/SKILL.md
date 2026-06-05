@@ -1,0 +1,121 @@
+---
+name: "react-vite"
+description: Load this skill when adding or modifying React components, hooks, routing, or data fetching in a Vite project: building a component, writing a custom hook, wiring React Router, managing state, or configuring Vite env vars. Auto-load whenever a .tsx file or vite.config.ts is created or modified. For SvelteKit projects use the sveltekit skill instead.
+---
+
+# React + Vite Conventions
+
+## Components — Presentational by Default
+
+Components render props and call callbacks. Side effects and data fetching live in hooks, not in render.
+
+```tsx
+type Props = {
+  items: Item[];
+  onItemClick: (id: string) => void;  // callback, not a direct store write
+};
+
+export function ItemPanel({ items, onItemClick }: Props) {
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.id}>
+          <button onClick={() => onItemClick(item.id)}>{item.label}</button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+- One component per file; filename `PascalCase.tsx` matching the component name.
+- No business logic in components — extract it into hooks or `$lib`/`src/lib` modules.
+- Always type props explicitly; never use `any` (see the environment skill).
+
+## Hooks
+
+- Follow the Rules of Hooks: call hooks at the top level only, never conditionally.
+- Custom hooks are named `use*` and own one concern (data fetching, subscription, derived state).
+- Specify exhaustive `useEffect` dependency arrays — do not silence the lint rule.
+- Prefer derived values computed during render over `useState` + `useEffect` mirrors.
+
+```tsx
+export function useSession(sessionId: string) {
+  const [state, setState] = useState<SessionState | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    apiClient.getSession(sessionId)
+      .then((s) => active && setState(s))
+      .catch((e) => active && setError(toMessage(e)));
+    return () => { active = false; };
+  }, [sessionId]);
+
+  return { state, error };
+}
+```
+
+## State Management
+
+- Local UI state: `useState` / `useReducer`.
+- Shared server state: a data-fetching library (TanStack Query) or a small store — not prop drilling through many layers.
+- Do not reach for a global store until state is genuinely shared across distant components.
+
+## Routing
+
+Use **React Router**. Define routes in one place; keep route components thin (they compose hooks + presentational components).
+
+```tsx
+const router = createBrowserRouter([
+  { path: '/', element: <Home /> },
+  { path: '/sessions/:sessionId', element: <SessionPage /> },
+]);
+```
+
+- Read route params with `useParams`, navigate with `useNavigate` — never mutate `window.location`.
+
+## Centralized API Client
+
+All `fetch` calls go through `src/lib/api/client.ts`. Components and hooks never call `fetch` directly.
+
+```ts
+export const apiClient = {
+  async sendMessage(sessionId: string, content: string): Promise<MessageResponse> {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/sessions/${sessionId}/message`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content }),
+    });
+    if (!response.ok) {
+      const err = await response.json();
+      throw new ApiRequestError(response.status, err.error);
+    }
+    return response.json();
+  },
+};
+```
+
+## Environment Variables
+
+```ts
+const apiBase = import.meta.env.VITE_API_BASE_URL;  // exposed to the browser — VITE_ prefix required
+```
+
+- Only `VITE_`-prefixed vars are exposed to client code. Never put secrets in them.
+- Server-only secrets belong in a backend, never in a Vite frontend bundle.
+
+## Error Handling
+
+```tsx
+class ApiRequestError extends Error {
+  constructor(public readonly status: number, public readonly error: ApiError) {
+    super(error.message);
+  }
+}
+```
+
+- Never expose internal error codes or stack traces to users.
+- Map `error.code` values to user-friendly messages in a centralized map.
+- Always surface the `correlation_id` so users can report it.
+- Wrap route subtrees in an error boundary so one failure does not blank the app.

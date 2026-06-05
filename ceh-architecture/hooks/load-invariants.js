@@ -5,26 +5,20 @@
 // detailed patterns and code stay in the skills (load on demand for depth); this block
 // is the compact enforcement layer. Cross-platform (Node), wired via hooks/hooks.json.
 
-const invariants = `ARCHITECTURE INVARIANTS (ceh-architecture-design) — apply to all work in this project.
+const invariants = `ARCHITECTURE INVARIANTS (ceh-architecture) — apply to all work in this project.
 These are non-negotiable defaults. For the full patterns and code behind any rule, load the matching
-skill via the Skill tool as \`ceh-architecture-design:<name>\`, where \`<name>\` is the tag shown in
-brackets below (e.g. \`ceh-architecture-design:postgresql\`).
+skill via the Skill tool as \`ceh-architecture:<name>\`, where \`<name>\` is the tag shown in
+brackets below (e.g. \`ceh-architecture:domain-modeling\`).
 
 Identifiers & entities [domain-modeling]:
 - Public IDs are application-generated, prefixed, URL-safe: \`{prefix}_{secrets.token_urlsafe(12)}\`. Never expose DB auto-increment as a public ID.
 - Status fields come from a closed set (Python StrEnum / TS \`as const\`). Never accept free-form status strings from external callers.
 - IDs and \`created_at\` are set once and never changed. Status transitions must be validated — not all are legal.
 
-Layer boundaries [repository-structure]:
+Layer boundaries [domain-modeling]:
 - Route handlers contain no business logic — they call services.
 - Services contain no SQL — they call the db layer. The db layer contains no business logic.
-- One mutation path per aggregate.
-
-PostgreSQL [postgresql]:
-- Parameterized queries only (\`$1\`, \`$2\`). Never interpolate values into SQL.
-- Tenant isolation: every query on user-owned data filters by \`owner_id\`. One user's data is never reachable by another.
-- \`TIMESTAMPTZ\` storing UTC; \`JSONB\` for evolving data, typed columns for anything filtered or sorted.
-- Migrations via Alembic, backward-compatible; destructive changes are two-step (stop using, then drop).\`;
+- One mutation path per aggregate.\`;
 
 const payload = {
   hookSpecificOutput: {

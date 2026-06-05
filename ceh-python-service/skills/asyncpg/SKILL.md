@@ -16,6 +16,17 @@ row = await conn.fetchrow(
 )
 ```
 
+## Tenant Isolation
+
+Every query on user-owned data must filter by the owning user's ID. One user's data must never be reachable by another.
+
+```python
+await conn.fetchrow(
+    "SELECT * FROM resources WHERE resource_id = $1 AND owner_id = $2",
+    resource_id, current_user_id
+)
+```
+
 ## Atomic Transactions
 
 Use transactions for all multi-step writes:

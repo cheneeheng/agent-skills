@@ -1,6 +1,6 @@
 ---
 name: "accessibility"
-description: Load this skill when writing Svelte component markup with interactive elements, images, forms, or navigation. Auto-load whenever a .svelte file is created or modified and HTML structure is being written or reviewed.
+description: Load this skill when writing component markup with interactive elements, images, forms, or navigation in any web frontend. Auto-load whenever a .svelte or .tsx file is created or modified and HTML structure is being written or reviewed. Accessibility rules are framework-agnostic — they apply to SvelteKit and React alike.
 ---
 
 # Accessibility

@@ -19,34 +19,34 @@
       "keywords": ["agent", "coding-contract", "workflow"]
     },
     {
-      "name": "ceh-architecture-design",
-      "source": "./ceh-architecture-design",
-      "description": "CEH architecture design: API design, domain modeling, event sourcing, LLM integration, PostgreSQL, and REST API standards.",
-      "version": "2.2.2",
+      "name": "ceh-architecture",
+      "source": "./ceh-architecture",
+      "description": "CEH architecture: stack-agnostic design moments — architecture decision records (ADRs) and domain modeling.",
+      "version": "3.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
-      "keywords": ["agent", "architecture", "domain-modeling", "event-sourcing", "postgresql", "rest-api", "llm"]
+      "keywords": ["agent", "architecture", "adr", "domain-modeling", "design"]
     },
     {
-      "name": "ceh-python-backend",
-      "source": "./ceh-python-backend",
-      "description": "CEH Python backend: FastAPI, asyncpg, uv, testing (unit/integration/system), observability, and security standards.",
-      "version": "2.3.1",
+      "name": "ceh-python-service",
+      "source": "./ceh-python-service",
+      "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, testing (unit/integration/system), observability, and security standards for web services.",
+      "version": "3.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
-      "keywords": ["agent", "python", "fastapi", "asyncpg", "testing"]
+      "keywords": ["agent", "python", "fastapi", "asyncpg", "postgresql", "service", "testing"]
     },
     {
-      "name": "ceh-typescript-frontend",
-      "source": "./ceh-typescript-frontend",
-      "description": "CEH TypeScript frontend: SvelteKit, Bun, Vitest, Playwright, accessibility, and testing agents (unit/integration/system).",
-      "version": "2.3.0",
+      "name": "ceh-web-frontend",
+      "source": "./ceh-web-frontend",
+      "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, and testing agents (unit/integration/system).",
+      "version": "3.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
-      "keywords": ["agent", "typescript", "sveltekit", "frontend", "testing", "accessibility"]
+      "keywords": ["agent", "typescript", "sveltekit", "react", "vite", "frontend", "testing", "accessibility"]
     },
     {
       "name": "ceh-git-workflow",
