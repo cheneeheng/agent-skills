@@ -175,3 +175,17 @@ later pushed to origin fresh.
 **Outcome:** Edited `plan-schema.md` (File Naming + cross-version `depends_on` subsection + fall-through Resolution Order) and Step 1 of both SKILL.md files.
 
 **Follow-up (same session):** User supplied the canonical section-spec doc that generates the plans. Aligned the schema to it: `depends_on` references artifact **stems** (`[SKELETON, ITER_01]`), not `.md` filenames; added `mvp_target` (SKELETON) and `mvp` (ITER, `true` once on the final iteration = sequence terminator); noted the SKELETON body's `## Out of MVP scope` block. Reframed `depends_on` as the standard per-iteration dependency field (stems carry the version tag, so one mechanism covers both same-sequence chaining and cross-version inheritance) and rewrote Resolution Order to walk that chain backward (nearest artifact whose `sections_changed`/`sections` lists the section; never forward). Both skills' Step 1 now key on `depends_on` order and the `mvp: true` terminator.
+
+---
+
+### Entry 11
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-05
+**Task:** Cut a release for the plan-version-variants change (changelog + tag + GitHub release).
+
+**Context:** Two version layers per repo rules: the plugin already bumped 2.4.3 → 2.4.4 in the merged PR; the repo git tag needed selecting. The last repo tag is `v3.1.0`. The rule: MINOR when any plugin adds skills/agents, PATCH for content-only.
+**Decision:** Chose repo tag `v3.1.1` (PATCH). The merged change added no skills or agents — it edited existing skill bodies and the shared `plan-schema.md` and bumped one plugin a PATCH — so it is content-only by the repo-tag rule. Changelog entry filed under `[3.1.1]` with a single-plugin version table (`ceh-agent-coding-contract` v2.4.4) and a `Changed` section (no `Added`, since nothing new was introduced).
+**Impact / Risk:** Low. Tag is a deployment snapshot, not load-bearing for auto-update.
+**Outcome:** Changelog updated; tag `v3.1.1` created and pushed; GitHub release published.

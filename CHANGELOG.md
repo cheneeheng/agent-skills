@@ -5,6 +5,31 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.1.1] — 2026-06-05
+
+Plan skills support version-tagged plan files and `depends_on`-based resolution.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.4.4 |
+
+### Changed
+
+- **`ceh-agent-coding-contract`** — `implement-from-plan` and `review-against-plan` were hardcoded
+  to `SKELETON.md` / `ITER_NN.md`. Generalized discovery to match optional version tags (prefix or
+  suffix, e.g. `SKELETON_v2.md`, `v2_ITER_03.md`) and grouped files into plan families. Resolution
+  now follows the `depends_on` chain backward (never forward), crossing into a base version where a
+  later version builds on it.
+- **`plan-schema.md`** — aligned to the canonical section spec: added `mvp_target` (SKELETON) and
+  the `mvp` terminator + `depends_on` (ITER, artifact stems); documented the SKELETON
+  `## Out of MVP scope` block. Clarified that `mvp` / `mvp_target` are optional (no terminator
+  inferred when absent), that skeletons carry no `depends_on`, and the same-sequence vs
+  cross-version `depends_on` chain forms.
+
+---
+
 ## [3.1.0] — 2026-06-05
 
 SessionStart hook audit: added one missing invariants hook and fixed two that were silently failing.
