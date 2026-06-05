@@ -39,6 +39,16 @@
       "keywords": ["agent", "python", "fastapi", "asyncpg", "postgresql", "service", "testing"]
     },
     {
+      "name": "ceh-python-library",
+      "source": "./ceh-python-library",
+      "description": "CEH Python library: packaging and publishing, public API surface discipline, semantic versioning, uv environment, and pytest testing standards for distributable libraries (no web dependencies).",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "python", "library", "packaging", "semver", "public-api", "testing"]
+    },
+    {
       "name": "ceh-web-frontend",
       "source": "./ceh-web-frontend",
       "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, and testing agents (unit/integration/system).",
