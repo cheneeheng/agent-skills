@@ -6,6 +6,23 @@ this map exists so edits don't get lost.
 
 ---
 
+## Layer boundaries (route → service → db)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-architecture/skills/domain-modeling/SKILL.md` | "Layer Boundaries" section | canonical — the always-on invariant (also injected by the architecture SessionStart hook) |
+| `ceh-scaffolding/skills/scaffold-python-service/SKILL.md` | "Hard Layer Rules" section | restates the same rules at scaffold time |
+
+**What is shared:** route handlers contain no business logic (call services); services contain no SQL (call the db layer); the db layer contains no business logic; one mutation path per aggregate.
+
+**What diverges:**
+- `domain-modeling` frames it as a design-time invariant and notes the concrete directory layout lives in `ceh-scaffolding`.
+- `scaffold-python-service` lists the rules alongside the initial backend directory tree.
+
+---
+
 ## asyncpg connection pool + transaction code
 
 **Files:**

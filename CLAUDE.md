@@ -1,7 +1,43 @@
 # Agent Skills Repo
 
 Plugin repo for the `ceh-*` Claude Code plugins — engineering standards delivered as skills.
-Each domain is a standalone plugin.
+Each plugin is a standalone, self-contained **use case** (see Organizing Principle below).
+
+## Organizing Principle
+
+Plugins are split on a single axis: **use case** — load exactly the plugins that match what you are
+building. This replaced an earlier mixed axis (tech-domain + lifecycle-phase) that baked in a
+fullstack-web assumption and forced the same standard into multiple plugins where copies drifted.
+The full rationale and migration record live in `docs/PLUGIN_REORG_PLAN.md`.
+
+Two consequences drive how skills are written and where they live:
+
+- **Skills trigger on moments, not topics.** A skill fires on a verb/moment ("I'm opening a PR",
+  "I'm writing a migration"), not a noun/topic ("PostgreSQL"). Topic-named skills either never
+  auto-trigger or restate what the model already knows, so each skill is cut to the
+  repo-opinionated delta and framed as a moment.
+- **Plugin names declare their scope.** `ceh-python-service` vs `ceh-python-library`,
+  `ceh-web-frontend`, etc. — the name states the use case, which removes the silent
+  "fullstack-web-only" assumption and makes gaps obvious.
+
+Plugins fall into three tiers:
+
+| Tier | Loaded | Plugins |
+|------|--------|---------|
+| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
+| **Use-case workflow** | per activity | `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding` |
+| **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
+
+`ceh-dev-tools` is a standalone tooling plugin (agents only). Categorization rules of thumb:
+
+- **Framework variants do not split into separate plugins** when their skills trigger on disjoint
+  file types (e.g. `sveltekit` on `.svelte`, `react-vite` on `.tsx` both live in `ceh-web-frontend`).
+  Splitting would duplicate the shared standards (a11y, TS style, testing) and reintroduce drift.
+  Apply the "split only when too big" rule later if a framework's skills bloat the plugin.
+- **A foundational standard needed by more than one use-case plugin is duplicated into each**, not
+  extracted into a shared base plugin — see the Shared-Standards Duplication Policy below.
+- **App-specific patterns are not standards.** Anything bound to one application's schema or design
+  is removed rather than kept as a niche plugin.
 
 ## Structure
 
