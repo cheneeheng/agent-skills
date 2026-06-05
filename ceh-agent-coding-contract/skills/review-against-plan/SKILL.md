@@ -14,13 +14,22 @@ Read it before starting. The section table and pointer resolution rules are auth
 
 ## Step 1 — Locate and Parse Plan Docs
 
-1. Find the target plan file. If the user didn't specify, look for `SKELETON.md` and any
-   `ITER_NN.md` files in the project root or a `docs/` directory.
-2. Read the frontmatter to determine scope:
+1. Find the target plan files. If the user didn't specify, look for `SKELETON` and `ITER_NN`
+   files (`.md`) in the project root or a `docs/` directory. Filenames may carry a version tag
+   as a prefix or suffix — e.g. `SKELETON_v2.md`, `v2_ITER_03.md`. See "File Naming and Version
+   Variants" in [../implement-from-plan/references/plan-schema.md](../implement-from-plan/references/plan-schema.md)
+   for the matching rules.
+2. Group the discovered files by version tag into plan families (untagged files are the default
+   family). If more than one family exists, confirm with the user which version to review; the
+   iteration with `mvp: true` is that version's terminator. Read each target artifact's
+   `depends_on` and resolve inherited (`sections_unchanged`) sections through that chain for
+   context. Audit only each artifact's own `sections_changed`; treat inherited sections as
+   context, not audit scope.
+3. Read the frontmatter to determine scope:
    - ITER: audit only `sections_changed` (resolve pointers for `sections_unchanged` to use
      as context, but do not audit them — they were covered in a prior review cycle).
    - SKELETON: audit all sections listed in `sections`.
-3. If multiple ITER files exist and the user didn't specify, confirm which one to review.
+4. If multiple ITER files exist within the target family and the user didn't specify, confirm which one to review.
 
 ## Step 2 — Audit Section by Section
 

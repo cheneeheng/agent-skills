@@ -13,13 +13,23 @@ starting. The section table, pointer rules, and resolution order there are autho
 
 ## Step 1 — Locate and Parse Plan Docs
 
-1. Find the target plan file. If the user didn't specify, look for `SKELETON.md` and any
-   `ITER_NN.md` files in the project root or a `docs/` directory.
-2. Read the YAML frontmatter to determine:
+1. Find the target plan files. If the user didn't specify, look for `SKELETON` and `ITER_NN`
+   files (`.md`) in the project root or a `docs/` directory. Filenames may carry a version tag
+   as a prefix or suffix — e.g. `SKELETON_v2.md`, `v2_ITER_03.md`. See "File Naming and Version
+   Variants" in [references/plan-schema.md](references/plan-schema.md) for the matching rules.
+2. Group the discovered files by version tag into plan families (untagged files are the default
+   family). If more than one family exists, confirm with the user which version is the target.
+   Within a version, the iteration whose frontmatter has `mvp: true` is the sequence terminator —
+   the plan runs SKELETON → ITER_01 → … → that terminator.
+3. Read the YAML frontmatter to determine:
    - `artifact` — is this SKELETON or ITER?
-   - For ITER: `sections_changed` (implement these), `sections_unchanged` (resolve via pointer)
+   - For ITER: `sections_changed` (implement these), `sections_unchanged` (resolve via pointer),
+     `depends_on` (the prior artifacts whose content this iteration relies on — its dependency chain)
    - For SKELETON: `sections` (implement all listed sections)
-3. If multiple ITER files exist, confirm with the user which one is the target.
+4. By default the target is the whole sequence up to and including the `mvp: true` iteration:
+   implement the SKELETON, then each ITER_NN in `depends_on` order. Never implement past the mvp
+   terminator. If the user named a single iteration, target only that one and use its `depends_on`
+   chain to resolve unchanged sections for context.
 
 ## Step 2 — Resolve Pointers Before Starting
 
