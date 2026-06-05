@@ -22,11 +22,13 @@ ceh-<plugin-name>/
 | Plugin directory | Domain |
 |-----------------|--------|
 | `ceh-agent-coding-contract` | Behavioral contract for coding agents |
-| `ceh-architecture-design` | API design, domain modeling, event sourcing, LLM, PostgreSQL, REST |
-| `ceh-python-backend` | FastAPI, asyncpg, uv, testing |
-| `ceh-typescript-frontend` | SvelteKit, Bun, Vitest, Playwright, accessibility |
+| `ceh-architecture` | Stack-agnostic design: ADRs, domain modeling |
+| `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
+| `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
+| `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility |
+| `ceh-scaffolding` | Per-project-type setup: directory layout + config + .gitignore |
 | `ceh-git-workflow` | Commits, branching, PRs, merging, releases, code review |
-| `ceh-release-ops` | Deployments, migrations, incidents, observability, security |
+| `ceh-ops` | Deploy pipeline, incidents, rollback; CI agents |
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |

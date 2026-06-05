@@ -1,6 +1,6 @@
 # Plugin Reorganization Migration Plan
 
-Status: proposed (not yet executed)
+Status: executed (refactor/plugin-reorg, 2026-06-05)
 Author: reorg triage session, 2026-06-04
 Scope: all `ceh-*` plugins and skills in this repo
 

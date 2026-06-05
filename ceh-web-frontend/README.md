@@ -1,17 +1,22 @@
-# ceh-typescript-frontend
+# ceh-web-frontend
 
-Engineering standards for the **Bun + SvelteKit + Vitest + Playwright** stack.
+Engineering standards for the **Bun + Vite** web stack — **SvelteKit and React** in one plugin.
+Framework skills trigger on file type (`sveltekit` on `.svelte`, `react-vite` on `.tsx`), so they
+coexist without mis-firing, while shared standards (TypeScript style, accessibility, testing, tooling)
+stay single-sourced.
 
 ## Skills (auto-trigger)
 
 | Skill | Invoke | Triggers when |
 |-------|--------|---------------|
-| Environment | `/ceh-typescript-frontend:environment` | Setting up the project, running scripts, or managing Bun dependencies |
-| SvelteKit | `/ceh-typescript-frontend:sveltekit` | Editing routes, stores, components, or the API client |
-| Frontend Testing | `/ceh-typescript-frontend:frontend-testing` | Writing `.test.ts` or `.spec.ts` files, or MSW handlers |
-| Accessibility | `/ceh-typescript-frontend:accessibility` | Writing Svelte component markup |
-| Coding Style | `/ceh-typescript-frontend:coding-style` | Applying TypeScript type conventions, tsconfig, or import ordering |
-| Linting | `/ceh-typescript-frontend:linting` | Configuring or running ESLint, Prettier, or svelte-check |
+| Environment | `/ceh-web-frontend:environment` | Bun/Vite setup, scripts, deps, TypeScript style, ESLint/Prettier, type config |
+| SvelteKit | `/ceh-web-frontend:sveltekit` | Editing Svelte routes, stores, components, or the API client |
+| React + Vite | `/ceh-web-frontend:react-vite` | Editing React components, hooks, routing, or `vite.config.ts` |
+| Frontend Testing | `/ceh-web-frontend:frontend-testing` | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers |
+| Accessibility | `/ceh-web-frontend:accessibility` | Writing component markup (Svelte or React) |
+
+> `environment` consolidates the former `coding-style` and `linting` skills so TypeScript style and
+> quality gates fire on file edits, matching the Python plugin's single `python-environment`.
 
 ## Hooks
 
@@ -21,14 +26,13 @@ injects the **frontend invariants** as always-on context. It fires on the `start
 
 **Why a hook and not just skills:** the load-bearing rules here (no `any`, `type`-default, the
 data-flow rules — shared state updated only from API responses, components never call `fetch` or
-mutate stores directly — and the accessibility baseline) are *invariants* that must hold on every
-relevant change. But skill auto-loading is evaluated against the user's prompt at the start of a
-turn, so the invariant skills (`coding-style`, `accessibility`, and the data-flow half of
-`sveltekit`) reliably under-fire — nothing in "add a panel component" signals "this is
-accessibility/data-flow sensitive." The action skills (`environment`, `frontend-testing`,
-`linting`) trigger fine and stay on-demand. The hook injects a compact version of the invariants
-every session; each rule is tagged with the skill (e.g. `[accessibility]`) that documents it in
-depth, loadable as `ceh-typescript-frontend:<name>`. Stack: Svelte 5 (runes).
+mutate shared state directly — and the accessibility baseline) are *invariants* that must hold on
+every relevant change. But skill auto-loading is evaluated against the user's prompt at the start of
+a turn, so the invariant rules reliably under-fire — nothing in "add a panel component" signals "this
+is accessibility/data-flow sensitive." The action skills (`environment`, `frontend-testing`,
+`sveltekit`, `react-vite`) trigger fine and stay on-demand. The hook injects a compact version of the
+invariants every session; each rule is tagged with the skill (e.g. `[accessibility]`) that documents
+it in depth, loadable as `ceh-web-frontend:<name>`.
 
 ## Agents
 

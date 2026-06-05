@@ -1,6 +1,6 @@
 ---
 name: "incidents"
-description: "Phase: operational. Load this skill when responding to a production incident, writing a post-mortem, executing a hotfix, or classifying incident severity. Auto-load whenever a production issue is reported, a P1/P2/P3 classification is needed, a hotfix branch is being created, or a post-mortem document is being written."
+description: "Load this skill when responding to a production incident, writing a post-mortem, executing a hotfix, or classifying incident severity. Auto-load whenever a production issue is reported, a P1/P2/P3 classification is needed, a hotfix branch is being created, or a post-mortem document is being written. Not for routine deploys (see deploy) or git tagging (see ceh-git-workflow)."
 ---
 
 # Incident Response

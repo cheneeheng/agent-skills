@@ -5,6 +5,63 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.0.0] — 2026-06-05
+
+Use-case-based plugin reorganization (see `docs/PLUGIN_REORG_PLAN.md`). **Breaking:** four plugins
+were renamed; there are no alias shims. Net 11 → 13 plugins.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.4.2 |
+| `ceh-architecture` | v3.0.0 |
+| `ceh-blog` | v1.0.4 |
+| `ceh-dev-tools` | v1.1.2 |
+| `ceh-documentation` | v1.0.1 |
+| `ceh-git-workflow` | v3.0.0 |
+| `ceh-lessons-learned` | v2.0.3 |
+| `ceh-ops` | v3.0.0 |
+| `ceh-python-library` | v1.0.0 |
+| `ceh-python-service` | v3.0.0 |
+| `ceh-scaffolding` | v1.0.0 |
+| `ceh-summarize-chat` | v2.0.3 |
+| `ceh-web-frontend` | v3.0.0 |
+
+### Renamed (breaking)
+
+- `ceh-release-ops` → **`ceh-ops`**; `ceh-python-backend` → **`ceh-python-service`**;
+  `ceh-typescript-frontend` → **`ceh-web-frontend`**; `ceh-architecture-design` → **`ceh-architecture`**.
+
+### Added
+
+- **`ceh-python-library`** (NEW) — packaging/publishing, public-API surface, semver, plus uv environment
+  and pytest testing duplicated-and-trimmed from `ceh-python-service` (no web deps).
+- **`ceh-scaffolding`** (NEW) — per-project-type setup (service, library, web frontend, fullstack); folds
+  in the former `gitignore` skill's entries.
+- **`ceh-web-frontend`** — new `react-vite` skill; now covers Svelte and React in one plugin.
+
+### Changed
+
+- **`ceh-ops`** — deduped: security/observability/database-migrations merged into `ceh-python-service`,
+  definition-of-done merged into `ceh-git-workflow:open-pr`, versioning split (semver → git-workflow,
+  deploy pipeline → new `deploy` skill). Keeps incidents, rollback, deploy + CI agents.
+- **`ceh-python-service`** — `fastapi` absorbs rest-api design; `asyncpg` absorbs postgresql driver rules;
+  `postgresql` moved in (schema design); observability/security adopt the richer ops content.
+- **`ceh-web-frontend`** — consolidated `coding-style` + `linting` into `environment`; generalized
+  `accessibility`/`frontend-testing` to `.svelte` and `.tsx`.
+- **`ceh-architecture`** — trimmed to `adr` + `domain-modeling`; hook invariants trimmed accordingly.
+- **`ceh-git-workflow`** — `open-pr` absorbed the definition-of-done quality gate.
+
+### Removed
+
+- `event-sourcing` and `llm-integration` skills (app-specific, not reusable standards).
+- standalone `rest-api`, `postgresql` (moved), `repository-structure` (folded into scaffolding),
+  and `gitignore` (folded into scaffolding) skills.
+- dead `scripts/sync-stubs.ps1`.
+
+---
+
 ## [2.8.0] — 2026-06-04
 
 ### Plugin versions

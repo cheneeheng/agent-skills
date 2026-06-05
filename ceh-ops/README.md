@@ -1,21 +1,18 @@
-# ceh-release-ops
+# ceh-ops
 
-Release and operations engineering standards for the full deployment lifecycle. Covers semantic
-versioning, database migration safety, rollback procedures, incident response, observability,
-security baseline, definition of done, and CI/CD pipeline automation via GitHub Actions and
-GitLab CI agents.
+Operations standards for running a deployed service: deploy pipeline, incident response, and
+rollback — plus CI/CD pipeline automation via GitHub Actions and GitLab CI agents.
+
+Security, observability, and database-migration standards now live in `ceh-python-service`; semantic
+versioning and git tagging live in `ceh-git-workflow:release`.
 
 ## Skills (Auto-Load)
 
-| Skill | Phase | Triggers When |
-|-------|-------|---------------|
-| `observability` | implementation | Writing structured log calls, adding Prometheus metrics, touching the /health endpoint |
-| `database-migrations` | implementation | Creating or modifying an Alembic migration, planning a column drop or rename |
-| `definition-of-done` | implementation | Opening a pull request or marking a task complete — verifies bug fix/feature/refactor quality bar |
-| `security` | implementation | Handling secrets, configuring CORS, writing rate limiting, reviewing input validation |
-| `versioning` | release | Bumping a version in pyproject.toml or package.json, applying a git tag, classifying a change |
-| `incidents` | operational | Responding to a production incident, classifying P1/P2/P3, writing a post-mortem, creating a hotfix branch |
-| `rollback` | operational | Deployment fails health check, error rates spike post-deploy, data integrity issue detected |
+| Skill | Triggers When |
+|-------|---------------|
+| `deploy` | Building/tagging images, promoting staging→prod, post-deploy health/metric checks, classifying a change |
+| `incidents` | Responding to a production incident, classifying P1/P2/P3, writing a post-mortem, creating a hotfix branch |
+| `rollback` | Deployment fails health check, error rates spike post-deploy, data integrity issue detected |
 
 ## Agents
 
@@ -38,4 +35,3 @@ All scripts live in `scripts/`. Used by the CI agents — also callable directly
 | `gl-scaffold.sh <stack>` | Emit a starter `.gitlab-ci.yml` for common stacks |
 | `gl-validate.sh <file>` | YAML lint + glab ci lint (if installed) |
 | `gl-analyze-failure.sh <logfile>` | Extract the first failure signal from a GitLab job log |
-

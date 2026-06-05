@@ -1,18 +1,21 @@
-# ceh-python-backend
+# ceh-python-service
 
-Python backend engineering standards for the FastAPI + uv + asyncpg stack.
+Python web-service engineering standards for the FastAPI + uv + asyncpg + PostgreSQL stack.
+
+For distributable libraries (packaging, public API, semver, no web deps) use `ceh-python-library`.
 
 ## Skills (Auto-Load)
 
 | Skill | Triggers When |
 |-------|---------------|
-| `fastapi` | Writing route handlers, dependencies, lifespan, or exception handlers |
-| `python-testing` | Creating or modifying test files, fixtures, or mocks |
+| `fastapi` | Writing route handlers, dependencies, lifespan, exception handlers, or REST API design |
+| `asyncpg` | Writing database queries, transactions, tenant isolation, or connection pool config |
+| `postgresql` | Designing a schema, choosing column types, or adding indexes |
+| `alembic` | Creating or running database migrations; migration deploy safety |
 | `python-environment` | Editing pyproject.toml, uv commands, type hints, or ruff/mypy config |
-| `asyncpg` | Writing database queries, transactions, or connection pool config |
-| `python-observability` | Adding structlog logging, correlation IDs, or choosing log levels |
-| `python-security` | Secrets management, CORS, rate limiting, or session token generation |
-| `alembic` | Creating or running database migrations |
+| `python-testing` | Creating or modifying test files, fixtures, or mocks |
+| `python-observability` | Adding structlog logging, metrics, health checks, or correlation IDs |
+| `python-security` | Secrets management, CORS, rate limiting, or input validation |
 
 ## Hooks
 
@@ -29,7 +32,7 @@ under-fire — nothing in "add a search endpoint" signals "this is security/logg
 action skills (`fastapi`, `python-testing`, `alembic`, `asyncpg`) trigger fine and stay on-demand.
 The hook injects a compact version of the invariants every session so they always apply; each rule
 is tagged with the skill (e.g. `[python-security]`) that documents it in depth, loadable as
-`ceh-python-backend:<name>`.
+`ceh-python-service:<name>`.
 
 ## Agents
 

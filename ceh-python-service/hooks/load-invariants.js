@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-// SessionStart hook — injects the Python backend invariants as always-on context.
+// SessionStart hook — injects the Python service invariants as always-on context.
 // These under-trigger as auto-load skills because they fire on implicit mid-turn decisions
 // (naming a variable, adding a log line, writing a query) with no signal in the user's prompt.
 // The detailed patterns and code stay in the skills (load on demand for depth); this block is
 // the compact enforcement layer. Self-sufficient: works when this plugin is enabled alone.
 // Cross-platform (Node), wired via hooks/hooks.json.
 
-const invariants = `PYTHON BACKEND INVARIANTS (ceh-python-backend) — apply to all Python work in this project.
+const invariants = `PYTHON SERVICE INVARIANTS (ceh-python-service) — apply to all Python work in this project.
 These are non-negotiable defaults. For full patterns and code behind any rule, load the matching
-skill via the Skill tool as \`ceh-python-backend:<name>\`, where \`<name>\` is the tag shown in
-brackets below (e.g. \`ceh-python-backend:python-security\`).
+skill via the Skill tool as \`ceh-python-service:<name>\`, where \`<name>\` is the tag shown in
+brackets below (e.g. \`ceh-python-service:python-security\`).
 
 Style & types [python-environment]:
 - Type hints on every function signature and class attribute. Use 3.12 built-in generics (\`list[str]\`, not \`List[str]\`).
