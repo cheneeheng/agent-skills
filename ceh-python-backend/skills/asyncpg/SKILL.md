@@ -24,12 +24,12 @@ Use transactions for all multi-step writes:
 async with pool.acquire() as conn:
     async with conn.transaction():
         await conn.executemany(
-            "INSERT INTO event_log (session_id, event_type, payload) VALUES ($1, $2, $3)",
-            [(session_id, e.type, e.model_dump_json()) for e in events]
+            "INSERT INTO order_items (order_id, sku, qty) VALUES ($1, $2, $3)",
+            [(order_id, i.sku, i.qty) for i in items]
         )
         await conn.execute(
-            "UPDATE sessions SET state_snapshot = $1, updated_at = NOW() WHERE session_id = $2",
-            new_state.model_dump_json(), session_id
+            "UPDATE orders SET total = $1, updated_at = NOW() WHERE order_id = $2",
+            new_total, order_id
         )
 ```
 

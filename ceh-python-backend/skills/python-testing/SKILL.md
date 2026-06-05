@@ -45,7 +45,7 @@ class TestSessionsAPI:
         )
         assert response.status_code == 200
         row = await test_db.fetchrow(
-            "SELECT * FROM event_log WHERE session_id = $1", session_id
+            "SELECT * FROM orders WHERE order_id = $1", order_id
         )
         assert row is not None
 ```

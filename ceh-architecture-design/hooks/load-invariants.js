@@ -24,17 +24,7 @@ PostgreSQL [postgresql]:
 - Parameterized queries only (\`$1\`, \`$2\`). Never interpolate values into SQL.
 - Tenant isolation: every query on user-owned data filters by \`owner_id\`. One user's data is never reachable by another.
 - \`TIMESTAMPTZ\` storing UTC; \`JSONB\` for evolving data, typed columns for anything filtered or sorted.
-- Migrations via Alembic, backward-compatible; destructive changes are two-step (stop using, then drop).
-
-Event sourcing [event-sourcing]:
-- The event log is append-only — \`UPDATE\`/\`DELETE\` on event rows are forbidden.
-- Every event append and its snapshot update happen in a single transaction.
-- Event types are a closed, application-controlled enum. Unknown types are rejected.
-
-LLM integration [llm-integration]:
-- LLM proposes, backend validates and commits. Validate all proposed events against domain invariants before any state mutation.
-- \`extra='forbid'\` on all LLM output models. Reject unknown event types — no authority escalation.
-- All-or-nothing: any single invalid event rejects the whole batch. Never log full LLM responses at INFO.`;
+- Migrations via Alembic, backward-compatible; destructive changes are two-step (stop using, then drop).\`;
 
 const payload = {
   hookSpecificOutput: {
