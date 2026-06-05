@@ -62,12 +62,21 @@ mvp: false                 # true exactly once, on the FINAL iteration (MVP term
 ```
 
 **Key field rules:**
-- `depends_on` (ITER) — the prior artifacts this iteration relies on, named by stem. Must
-  reference only SKELETON or earlier iterations — never a later one. Resolution traces this field;
-  it is also what catches forward references.
+- `depends_on` (ITER only) — prior artifacts this iteration relies on, named by stem. Within a
+  family it is the same-sequence chain (e.g. `[SKELETON_v2, ITER_01_v2]`); the first iteration of
+  an iterations-only new version points back into the prior family (e.g. `[SKELETON, ITER_03]`),
+  whereas a version with its own `SKELETON_vN` depends on that instead. Points only backward —
+  never to a later iteration or version. Resolution traces this field.
+- Skeletons carry no `depends_on` — a skeleton is fresh scaffolding, and a versioned skeleton is
+  assumed to build on the prior family.
 - `mvp` (ITER) — `true` exactly once, on the final iteration. It marks where the plan stops;
   nothing is planned past it.
 - `mvp_target` (SKELETON) — one line stating the MVP the iteration sequence terminates at.
+
+> **`mvp` and `mvp_target` are optional and may be absent.** Not every plan declares an MVP
+> terminator. When no iteration carries `mvp: true` (and no `mvp_target` is set), do not infer one
+> — treat the highest-numbered ITER reachable through the `depends_on` chain as the end of the
+> sequence, and otherwise rely on `depends_on` order alone.
 
 ## Sections
 
