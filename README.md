@@ -23,7 +23,20 @@ organized around **use cases** — load the ones that match what you are buildin
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
 | Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README agents |
 
-How the plugins are categorized is described in [`CLAUDE.md`](CLAUDE.md#organizing-principle).
+### Categorization
+
+Plugins split on a single axis — **use case** — so you load exactly what your work needs. They fall
+into three tiers:
+
+| Tier | Loaded | Plugins |
+|------|--------|---------|
+| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
+| **Use-case workflow** | per activity | `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding` |
+| **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
+
+`ceh-dev-tools` is a standalone tooling plugin (agents only). Each plugin is self-contained: a
+foundational standard needed by more than one plugin is duplicated into each rather than extracted
+into a shared base, so one plugin per use case is all you load.
 
 ---
 
