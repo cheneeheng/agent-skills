@@ -4,6 +4,7 @@
 // wired via hooks/hooks.json.
 
 const payload = {
+  systemMessage: "ceh-agent-coding-contract: loading the coding contract for this session.",
   hookSpecificOutput: {
     hookEventName: "SessionStart",
     additionalContext: [

@@ -21,6 +21,7 @@ Layer boundaries [domain-modeling]:
 - One mutation path per aggregate.`;
 
 const payload = {
+  systemMessage: "ceh-architecture: loading architecture invariants for this session.",
   hookSpecificOutput: {
     hookEventName: "SessionStart",
     additionalContext: invariants

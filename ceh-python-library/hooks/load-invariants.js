@@ -22,6 +22,7 @@ Dependencies [python-environment]:
 - Never add web-service deps (\`fastapi\`, \`uvicorn\`, \`asyncpg\`) to a library. Never edit \`uv.lock\` manually; never commit \`.env\`.`;
 
 const payload = {
+  systemMessage: "ceh-python-library: loading Python library invariants for this session.",
   hookSpecificOutput: {
     hookEventName: "SessionStart",
     additionalContext: invariants

@@ -30,6 +30,7 @@ Environment [environment]:
 - Bun is the runtime and package manager; never edit the lockfile manually. Never commit \`.env\`.`;
 
 const payload = {
+  systemMessage: "ceh-web-frontend: loading frontend invariants for this session.",
   hookSpecificOutput: {
     hookEventName: "SessionStart",
     additionalContext: invariants

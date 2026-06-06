@@ -30,6 +30,7 @@ Logging [python-observability]:
 - Do not log at INFO on every request — use DEBUG for high-frequency events.`;
 
 const payload = {
+  systemMessage: "ceh-python-service: loading Python service invariants for this session.",
   hookSpecificOutput: {
     hookEventName: "SessionStart",
     additionalContext: invariants

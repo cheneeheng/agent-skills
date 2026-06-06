@@ -5,6 +5,32 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.1.3] — 2026-06-06
+
+SessionStart hooks now surface a user-visible note when they fire.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.4.6 |
+| `ceh-architecture` | v3.0.2 |
+| `ceh-python-service` | v3.0.1 |
+| `ceh-python-library` | v1.1.1 |
+| `ceh-web-frontend` | v3.0.2 |
+
+### Changed
+
+- **`ceh-agent-coding-contract`, `ceh-architecture`, `ceh-python-service`, `ceh-python-library`,
+  `ceh-web-frontend`** — each plugin's SessionStart hook injected its directive/invariants only via
+  `additionalContext`, which reaches Claude but is never shown to the user, so there was no signal
+  in the conversation UI that the hook had fired. Added a `systemMessage` field to each hook so the
+  user sees a short note (e.g. "ceh-python-service: loading Python service invariants for this
+  session.") on session start, `/clear`, and compaction. The `additionalContext` payloads are
+  unchanged.
+
+---
+
 ## [3.1.2] — 2026-06-06
 
 Plan skills now auto-trigger on version-tagged phrasing.
