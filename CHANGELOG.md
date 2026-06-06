@@ -5,6 +5,28 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.1.4] — 2026-06-06
+
+The `release` skill triggers more reliably and is no longer stack-specific.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.0.1 |
+
+### Changed
+
+- **`ceh-git-workflow`** — the `release` skill under-triggered: its description named only
+  `pyproject.toml`/`package.json` for version bumps (missing `plugin.json`/`marketplace.json` and
+  other ecosystems), carried no literal user-phrasings, and stopped at the git tag without covering
+  GitHub releases. Rewrote the description with quoted trigger phrases ("cut a release", "create a
+  release", "bump the version(s)", etc.) and a manifest-agnostic file list (examples, not a closed
+  set). Updated the command sequence to use an annotated tag (`git tag -a -m`, avoiding the "no tag
+  message" failure on repos that enforce it) and to include the optional `gh release create` step.
+
+---
+
 ## [3.1.3] — 2026-06-06
 
 SessionStart hooks now surface a user-visible note when they fire.
