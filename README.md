@@ -73,6 +73,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-git-workflow` | Branch | `/ceh-git-workflow:branch` | Creating or naming a branch |
 | `ceh-git-workflow` | Commit | `/ceh-git-workflow:commit` | Writing a commit message or staging changes |
 | `ceh-git-workflow` | Open PR | `/ceh-git-workflow:open-pr` | Opening a pull request, writing a PR description, or checking the definition of done |
+| `ceh-git-workflow` | Merge | `/ceh-git-workflow:merge` | Merging a PR and deleting the branch afterward |
 | `ceh-git-workflow` | Hotfix | `/ceh-git-workflow:hotfix` | Executing a critical production fix |
 | `ceh-git-workflow` | Release | `/ceh-git-workflow:release` | Tagging a release or bumping a version |
 | `ceh-git-workflow` | Code Review | `/ceh-git-workflow:code-review` | Reviewing a PR or leaving review comments |

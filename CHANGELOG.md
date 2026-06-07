@@ -5,6 +5,35 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.2.0] — 2026-06-07
+
+New `merge` skill, and the `open-pr` skill triggers more reliably.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.1.0 |
+
+### Added
+
+- **`ceh-git-workflow`** — new `merge` skill owning the merge-and-cleanup moment: pre-merge gate
+  (CI green, approvals, rebased, clean history), merge-commit strategy (no squash/rebase-merge),
+  and post-merge cleanup (delete remote + local branch, return to `main`, prune). Triggers on
+  "merge it", "merge and delete the branch", "clean up the branch", and the merge half of compound
+  requests like "create a PR, merge it, delete the branch".
+
+### Changed
+
+- **`ceh-git-workflow`** — the `open-pr` skill under-triggered on compound requests (e.g. "create
+  pr, merge and delete branch") because its description named only "opening a pull request".
+  Rewrote it to match any phrasing (create/open/raise/make/submit/send a PR, pull request, or merge
+  request) and to scope the PR-creation half of compound requests, deferring merge/cleanup to the
+  new `merge` skill. Moved the merge-commit policy out of `open-pr` (now a one-line pointer) so the
+  `merge` skill owns it with no duplication.
+
+---
+
 ## [3.1.4] — 2026-06-06
 
 The `release` skill triggers more reliably and is no longer stack-specific.

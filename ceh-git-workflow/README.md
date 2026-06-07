@@ -13,6 +13,7 @@ Auto-trigger on context; each loads only the relevant content.
 | `branch` | Creating or naming a branch |
 | `commit` | Writing or reviewing a commit message |
 | `open-pr` | Opening a pull request; includes the definition-of-done quality gate |
+| `merge` | Merging a PR and cleaning up the branch afterward |
 | `hotfix` | Executing a critical production fix |
 | `release` | Tagging a release or bumping a version |
 | `code-review` | Writing PR review comments |

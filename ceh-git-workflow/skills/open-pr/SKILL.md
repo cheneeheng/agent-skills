@@ -1,6 +1,6 @@
 ---
 name: "open-pr"
-description: "Load this skill when opening a pull request: writing the PR title, filling in the description template (What/Why/How/Testing/Checklist), checking PR size limits, or running the author self-review checklist. Auto-load whenever a pull request is being created, a PR description is being written, or a branch is being pushed to open a PR."
+description: "Load when creating or opening a pull request, any phrasing — create/open/raise/make/submit/send a PR, pull request, or merge request, or pushing a branch for review. Handles the PR-creation half of compound requests like 'create a PR, merge it, delete the branch' (merge/cleanup is the merge skill). Covers the PR title, the What/Why/How/Testing/Checklist template, size limits, and the author self-review checklist."
 ---
 
 # Opening a Pull Request
@@ -95,14 +95,9 @@ Before opening the PR, verify the change meets the bar for its type.
 
 ## Merge Strategy
 
-**Merge commit only** — preserve every commit on `main`. The full per-PR history is retained
-on purpose: it is the source material for write-ups and blog posts.
-
-- Use a true merge commit (`gh pr merge <number> --merge`) — never squash, never rebase-merge
-- Every commit must already be Conventional Commits format; nothing collapses them now, so they
-  land on `main` as written
-- Clean the branch before merging: rebase on `main`, drop fixup/WIP/debug commits so the
-  preserved history reads cleanly
+**Merge commit only** — never squash, never rebase-merge; every commit lands on `main` as written.
+Because commits are not collapsed at merge time, keep them Conventional Commits format and clean the
+branch as you go. Full merge mechanics and post-merge cleanup live in the `merge` skill.
 
 ## Command
 
