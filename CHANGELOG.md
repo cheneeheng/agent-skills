@@ -5,6 +5,52 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.3.0] — 2026-06-09
+
+New `ceh-plan-build-review` plugin: the full plan-driven development loop (plan → implement →
+review) in one plugin; the implement/review skills moved out of `ceh-agent-coding-contract`.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-plan-build-review` | v1.0.0 |
+| `ceh-agent-coding-contract` | v2.5.0 |
+
+### Added
+
+- **`ceh-plan-build-review`** (v1.0.0) — new use-case plugin bundling four skills:
+  - `plan-fullstack-app-iteratively` (new) — plans one release at a time; each session produces a
+    single `SKELETON.md` / `ITER_NN.md` artifact scoped to the next build.
+  - `plan-fullstack-app-to-mvp` (new) — plans the complete build to a working MVP in one session;
+    a complexity gate hands off to the iterative planner when upfront planning is unsafe.
+  - `implement-from-plan` (moved from `ceh-agent-coding-contract`) — implements a plan
+    document section by section, including the `plan-schema.md` reference.
+  - `review-against-plan` (moved from `ceh-agent-coding-contract`) — audits the
+    codebase against a plan document and fixes gaps/deviations/errors.
+- **`CROSS_REFERENCES.md`** — new "Plan document schema" entry registering the duplication between
+  the consumer-side `plan-schema.md` copies and the two planners' `section-specs.md` (producer
+  side). The duplication is intentional — the skills are also used standalone outside the plugin —
+  and is the repo's only sanctioned exception to the no-duplicated-references rule.
+
+### Changed
+
+- **`ceh-plan-build-review`** — `plan-schema.md` reconciled to the planner skills' schema (the
+  golden standard): `mvp: true` and `mvp_target` live on the terminator iteration only, non-terminal
+  iterations omit the `mvp` key, and the SKELETON carries no MVP fields; the `## Out of MVP scope`
+  block moved from the SKELETON to the terminator. `review-against-plan` now carries its own copy
+  of `plan-schema.md` instead of reaching into `implement-from-plan/` by relative path, so every
+  skill folder is self-contained for standalone use.
+
+### Removed
+
+- **`ceh-agent-coding-contract`** (v2.5.0, MINOR per the v2.3.0 skill-removal precedent) —
+  `implement-from-plan` and `review-against-plan` moved to `ceh-plan-build-review`. The contract
+  plugin is now contract-only (skill + SessionStart hook); README updated with a pointer to the
+  new plugin.
+
+---
+
 ## [3.2.0] — 2026-06-07
 
 New `merge` skill, and the `open-pr` skill triggers more reliably.

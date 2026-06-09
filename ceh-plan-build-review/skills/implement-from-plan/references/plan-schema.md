@@ -40,12 +40,8 @@ created: YYYY-MM-DD
 app: <one-line app name>
 stack: <comma-separated key technologies>
 sections: [01, 02, 03, 04, 05]   # sections present in this file
-mvp_target: <one-line description of the MVP this sequence reaches>
 ---
 ```
-
-The SKELETON body also carries a `## Out of MVP scope` block — a bulleted list of the features and
-concerns consciously deferred from this MVP. Treat it as scope boundary, not as work to implement.
 
 **ITER_NN.md:**
 ```yaml
@@ -57,9 +53,14 @@ scope: <what this iteration adds or changes>
 sections_changed: [02, 05] # sections with substantive content in this file
 sections_unchanged: [01, 03, 04]  # sections using pointers (resolve via depends_on)
 depends_on: [SKELETON]     # artifacts this iteration builds on; e.g. [SKELETON, ITER_01]
-mvp: false                 # true exactly once, on the FINAL iteration (MVP terminator)
 ---
 ```
+
+The **terminator** — the final iteration that reaches the MVP — carries two extra frontmatter
+fields that no other artifact has (`mvp: true` and `mvp_target`), plus a `## Out of MVP scope`
+body block listing the features and concerns consciously deferred from this MVP. Treat that
+block as scope boundary, not as work to implement. Every non-terminal iteration **omits** the
+`mvp` key entirely (absence means false).
 
 **Key field rules:**
 - `depends_on` (ITER only) — prior artifacts this iteration relies on, named by stem. Within a
@@ -69,12 +70,13 @@ mvp: false                 # true exactly once, on the FINAL iteration (MVP term
   never to a later iteration or version. Resolution traces this field.
 - Skeletons carry no `depends_on` — a skeleton is fresh scaffolding, and a versioned skeleton is
   assumed to build on the prior family.
-- `mvp` (ITER) — `true` exactly once, on the final iteration. It marks where the plan stops;
-  nothing is planned past it.
-- `mvp_target` (SKELETON) — one line stating the MVP the iteration sequence terminates at.
+- `mvp` (terminator ITER only) — present and `true` exactly once per family, on the final
+  iteration. It marks where the plan stops; nothing is planned past it. All other iterations
+  omit the key.
+- `mvp_target` (terminator ITER only) — one line stating the MVP this family reaches.
 
-> **`mvp` and `mvp_target` are optional and may be absent.** Not every plan declares an MVP
-> terminator. When no iteration carries `mvp: true` (and no `mvp_target` is set), do not infer one
+> **The MVP terminator may be absent.** Not every plan declares one — iteratively-planned
+> families often have no terminator yet. When no iteration carries `mvp: true`, do not infer one
 > — treat the highest-numbered ITER reachable through the `depends_on` chain as the end of the
 > sequence, and otherwise rely on `depends_on` order alone.
 

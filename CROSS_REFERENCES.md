@@ -137,6 +137,29 @@ this map exists so edits don't get lost.
 
 ---
 
+## Plan document schema (SKELETON / ITER frontmatter, file naming, version families)
+
+**Files:**
+
+> This duplication is **intentional and sanctioned** (the only such exception in the repo): the
+> skills are also used standalone outside the plugin, so each skill folder carries its own copy.
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "File Naming" + "Output Frontmatter" + terminator block | **golden standard** — producer copy; emits the whole set incl. the MVP terminator |
+| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | "File Naming" + "Output Frontmatter" | producer copy — emits one artifact per session |
+| `ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | entire file | consumer copy — schema plus pointer rules and resolution order |
+| `ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy |
+
+**What is shared:** file naming and version-tag rules (`SKELETON.md` / `ITER_NN.md`, `NN` two digits; canonical `_vN` suffix, `vN_` prefix also read; tag-sharing files form a plan family with a per-family `NN` counter); SKELETON frontmatter (`artifact`, `status`, `created`, `app`, `stack`, `sections`, no `depends_on`, no MVP fields); ITER frontmatter (`artifact`, `status`, `created`, `scope`, `sections_changed`, `sections_unchanged`, `depends_on` by stem, backward-only, covering both same-family chaining and cross-version inheritance); the MVP terminator convention (`mvp: true` + `mvp_target` + `## Out of MVP scope` body block on the final iteration only; non-terminal iterations omit `mvp` entirely).
+
+**What diverges:**
+- the producer copies omit the consumer-only material (pointer formats, resolution order, the absent-terminator fallback).
+- the iterative producer copy does not describe the terminator block (one-artifact-at-a-time sessions don't emit it).
+- the two `plan-schema.md` consumer copies are word-for-word identical — keep them in lockstep.
+
+---
+
 ## Update Protocol
 
 When changing a shared block:

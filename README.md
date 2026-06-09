@@ -10,6 +10,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
 | Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents |
+| Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | ADRs and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | Python Library | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
@@ -31,7 +32,7 @@ into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity | `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin (agents only). Each plugin is self-contained: a
@@ -45,8 +46,10 @@ into a shared base, so one plugin per use case is all you load.
 | Plugin | Skill | Invoke as | When to use |
 |--------|-------|-----------|-------------|
 | `ceh-agent-coding-contract` | Agent Coding Contract | `/ceh-agent-coding-contract:agent-coding-contract` | Start of any coding session — core rules, five-step workflow, stop conditions, non-goals |
-| `ceh-agent-coding-contract` | Implement From Plan | `/ceh-agent-coding-contract:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
-| `ceh-agent-coding-contract` | Review Against Plan | `/ceh-agent-coding-contract:review-against-plan` | Auditing implementation against a SKELETON.md or ITER_NN.md planning document |
+| `ceh-plan-build-review` | Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning one release at a time — a greenfield skeleton or the next iteration |
+| `ceh-plan-build-review` | Plan Fullstack App to MVP | `/ceh-plan-build-review:plan-fullstack-app-to-mvp` | Planning the complete build to a working MVP in one session |
+| `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
+| `ceh-plan-build-review` | Review Against Plan | `/ceh-plan-build-review:review-against-plan` | Auditing implementation against a SKELETON.md or ITER_NN.md planning document |
 | `ceh-architecture` | ADR | `/ceh-architecture:adr` | Making a significant architectural decision |
 | `ceh-architecture` | Domain Modeling | `/ceh-architecture:domain-modeling` | Designing entities, IDs, status fields, or layer boundaries |
 | `ceh-python-service` | FastAPI | `/ceh-python-service:fastapi` | Writing route handlers, DI, middleware, exception hierarchy, or REST API design |
@@ -133,6 +136,7 @@ Install individual plugins for the use cases you need:
 
 ```
 /plugin install ceh-agent-coding-contract@ceh-plugins --scope user
+/plugin install ceh-plan-build-review@ceh-plugins --scope user
 /plugin install ceh-git-workflow@ceh-plugins --scope user
 /plugin install ceh-architecture@ceh-plugins --scope user
 /plugin install ceh-python-service@ceh-plugins --scope user
@@ -173,6 +177,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 {
   "plugins": [
     { "path": "~/agent-skills/ceh-agent-coding-contract" },
+    { "path": "~/agent-skills/ceh-plan-build-review" },
     { "path": "~/agent-skills/ceh-git-workflow" },
     { "path": "~/agent-skills/ceh-architecture" },
     { "path": "~/agent-skills/ceh-python-service" },

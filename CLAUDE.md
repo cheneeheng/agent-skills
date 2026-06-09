@@ -25,7 +25,7 @@ Plugins fall into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity | `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin (agents only). Categorization rules of thumb:
@@ -58,6 +58,7 @@ ceh-<plugin-name>/
 | Plugin directory | Domain |
 |-----------------|--------|
 | `ceh-agent-coding-contract` | Behavioral contract for coding agents |
+| `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app (iteratively or to MVP), implement from the plan, review against it |
 | `ceh-architecture` | Stack-agnostic design: ADRs, domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
