@@ -42,4 +42,4 @@ producer side.
 > carries its own copy of the shared material instead of pointing at a common file. This is the
 > **only** sanctioned exception to the repo's normal rule against duplicating reference material;
 > the copies are registered in the root `CROSS_REFERENCES.md` ("Plan document schema" entry) and
-> must be kept in sync, with the planner skills' `section-specs.md` as the golden standard.
+> must be kept in sync.
