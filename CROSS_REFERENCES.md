@@ -137,6 +137,26 @@ this map exists so edits don't get lost.
 
 ---
 
+## Plan document schema (SKELETON / ITER frontmatter, file naming, version families)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | entire file | canonical — consumer-side schema with pointer rules and resolution order (also read by `review-against-plan`) |
+| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | "File Naming" + "Output Frontmatter" | producer copy — emits one artifact per session |
+| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "File Naming" + "Output Frontmatter" | producer copy — emits the whole set; adds the MVP terminator block |
+
+**What is shared:** file naming and version-tag rules (`SKELETON.md` / `ITER_NN.md`, `NN` two digits; canonical `_vN` suffix, `vN_` prefix also read; tag-sharing files form a plan family with a per-family `NN` counter); SKELETON frontmatter (`artifact`, `status`, `created`, `app`, `stack`, `sections`, no `depends_on`); ITER frontmatter (`artifact`, `status`, `created`, `scope`, `sections_changed`, `sections_unchanged`, `depends_on` by stem, backward-only, covering both same-family chaining and cross-version inheritance).
+
+**What diverges:**
+- `plan-schema.md` places `mvp_target` on the SKELETON and shows `mvp: false` on non-terminal iterations; both fields are declared optional.
+- to-mvp `section-specs.md` places `mvp: true` **and** `mvp_target` on the terminator iteration only, and omits `mvp` on non-terminal iterations.
+- iterative `section-specs.md` carries no `mvp` fields at all.
+- the producer copies omit the consumer-only material (pointer formats, resolution order).
+
+---
+
 ## Update Protocol
 
 When changing a shared block:

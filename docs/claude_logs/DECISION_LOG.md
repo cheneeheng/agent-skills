@@ -189,3 +189,17 @@ later pushed to origin fresh.
 **Decision:** Chose repo tag `v3.1.1` (PATCH). The merged change added no skills or agents — it edited existing skill bodies and the shared `plan-schema.md` and bumped one plugin a PATCH — so it is content-only by the repo-tag rule. Changelog entry filed under `[3.1.1]` with a single-plugin version table (`ceh-agent-coding-contract` v2.4.4) and a `Changed` section (no `Added`, since nothing new was introduced).
 **Impact / Risk:** Low. Tag is a deployment snapshot, not load-bearing for auto-update.
 **Outcome:** Changelog updated; tag `v3.1.1` created and pushed; GitHub release published.
+
+---
+
+### Entry 12
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-09
+**Task:** Create the `ceh-plan-build-review` plugin; move `implement-from-plan` and `review-against-plan` into it from `ceh-agent-coding-contract`.
+
+**Context:** Three forks left open by the request: (1) the user offered to rename the plugin "if needed"; (2) the semver bump for removing two skills from `ceh-agent-coding-contract` (the repo rule only names PATCH for content and MINOR for additions); (3) the moved `plan-schema.md` and the user-authored planners' `section-specs.md` describe the same artifact format but diverge on `mvp`/`mvp_target` placement (schema: `mvp_target` on SKELETON, `mvp: false` shown on iterations; to-mvp planner: both fields on the terminator iteration only; iterative planner: neither field).
+**Decision:** (1) Kept `ceh-plan-build-review` — it names the use case (plan → build → review loop) per the repo's naming convention. (2) Bumped the contract plugin MINOR (2.4.6 → 2.5.0), following the v2.3.0 precedent where deleting the `execution-modes` skill was a MINOR bump. (3) Did not reconcile the schema divergence — `plan-schema.md` declares `mvp`/`mvp_target` optional so the artifacts stay compatible; registered the duplication and divergence as a new `CROSS_REFERENCES.md` entry instead and flagged it to the user. Placed the plugin in the "Use-case workflow" tier.
+**Impact / Risk:** Skill invocation paths change (`/ceh-agent-coding-contract:implement-from-plan` → `/ceh-plan-build-review:implement-from-plan`); users must install the new plugin to keep the implement/review skills. The `mvp_target` placement divergence remains and may need reconciling in a follow-up.
+**Outcome:** Plugin created with four skills (two new planners restructured under `skills/`, two moved); manifests, READMEs, CLAUDE.md, CROSS_REFERENCES.md, and CHANGELOG updated; committed on `feat/plan-build-review-plugin`.

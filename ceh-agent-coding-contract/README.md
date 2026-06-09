@@ -2,21 +2,20 @@
 
 A behavioral contract for coding agents: the rules that govern how an agent operates during a
 session — what it may change, when it must stop, and how it logs decisions. The plugin loads the
-contract automatically at session start, then provides two plan-driven workflow skills on top of it.
+contract automatically at session start.
+
+> The plan-driven workflow skills (`implement-from-plan`, `review-against-plan`) moved to the
+> `ceh-plan-build-review` plugin, which bundles them with the planning skills.
 
 ## Skills
 
 | Skill | When it loads | What it does |
 |-------|---------------|--------------|
 | `agent-coding-contract` | Every coding session (auto, via hook) | The full behavioral contract — role, core rules, five-step workflow, stop conditions, decision logging. |
-| `implement-from-plan` | You point at a plan and ask to build it | Implements a `SKELETON.md` / `ITER_NN.md` section by section in scope order (§01–§06), resolving iteration pointers to the authoritative spec. |
-| `review-against-plan` | You ask to audit a plan against the code | Checks each in-scope section against the spec, finds gaps/deviations/errors, then fixes them. |
 
 **Manual triggers**
 
 - `agent-coding-contract` — `/agent-coding-contract`, or say `"load the contract"` / `"agent contract"` / `"coding contract"`.
-- `implement-from-plan` — `"implement from plan"`, `"build from the plan"`, or point at a `SKELETON.md` / `ITER_NN.md` and ask to build it.
-- `review-against-plan` — `"review against plan"`, `"verify the plan is implemented"`, or point at a plan file and ask to audit it.
 
 ## How the contract auto-loads
 
