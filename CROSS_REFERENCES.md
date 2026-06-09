@@ -141,19 +141,22 @@ this map exists so edits don't get lost.
 
 **Files:**
 
+> This duplication is **intentional and sanctioned** (the only such exception in the repo): the
+> skills are also used standalone outside the plugin, so each skill folder carries its own copy.
+
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | entire file | canonical — consumer-side schema with pointer rules and resolution order (also read by `review-against-plan`) |
+| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "File Naming" + "Output Frontmatter" + terminator block | **golden standard** — producer copy; emits the whole set incl. the MVP terminator |
 | `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | "File Naming" + "Output Frontmatter" | producer copy — emits one artifact per session |
-| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "File Naming" + "Output Frontmatter" | producer copy — emits the whole set; adds the MVP terminator block |
+| `ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | entire file | consumer copy — schema plus pointer rules and resolution order |
+| `ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy |
 
-**What is shared:** file naming and version-tag rules (`SKELETON.md` / `ITER_NN.md`, `NN` two digits; canonical `_vN` suffix, `vN_` prefix also read; tag-sharing files form a plan family with a per-family `NN` counter); SKELETON frontmatter (`artifact`, `status`, `created`, `app`, `stack`, `sections`, no `depends_on`); ITER frontmatter (`artifact`, `status`, `created`, `scope`, `sections_changed`, `sections_unchanged`, `depends_on` by stem, backward-only, covering both same-family chaining and cross-version inheritance).
+**What is shared:** file naming and version-tag rules (`SKELETON.md` / `ITER_NN.md`, `NN` two digits; canonical `_vN` suffix, `vN_` prefix also read; tag-sharing files form a plan family with a per-family `NN` counter); SKELETON frontmatter (`artifact`, `status`, `created`, `app`, `stack`, `sections`, no `depends_on`, no MVP fields); ITER frontmatter (`artifact`, `status`, `created`, `scope`, `sections_changed`, `sections_unchanged`, `depends_on` by stem, backward-only, covering both same-family chaining and cross-version inheritance); the MVP terminator convention (`mvp: true` + `mvp_target` + `## Out of MVP scope` body block on the final iteration only; non-terminal iterations omit `mvp` entirely).
 
 **What diverges:**
-- `plan-schema.md` places `mvp_target` on the SKELETON and shows `mvp: false` on non-terminal iterations; both fields are declared optional.
-- to-mvp `section-specs.md` places `mvp: true` **and** `mvp_target` on the terminator iteration only, and omits `mvp` on non-terminal iterations.
-- iterative `section-specs.md` carries no `mvp` fields at all.
-- the producer copies omit the consumer-only material (pointer formats, resolution order).
+- the producer copies omit the consumer-only material (pointer formats, resolution order, the absent-terminator fallback).
+- the iterative producer copy does not describe the terminator block (one-artifact-at-a-time sessions don't emit it).
+- the two `plan-schema.md` consumer copies are word-for-word identical — keep them in lockstep.
 
 ---
 

@@ -24,13 +24,23 @@ review) in one plugin; the implement/review skills moved out of `ceh-agent-codin
     single `SKELETON.md` / `ITER_NN.md` artifact scoped to the next build.
   - `plan-fullstack-app-to-mvp` (new) — plans the complete build to a working MVP in one session;
     a complexity gate hands off to the iterative planner when upfront planning is unsafe.
-  - `implement-from-plan` (moved from `ceh-agent-coding-contract`, unchanged) — implements a plan
+  - `implement-from-plan` (moved from `ceh-agent-coding-contract`) — implements a plan
     document section by section, including the `plan-schema.md` reference.
-  - `review-against-plan` (moved from `ceh-agent-coding-contract`, unchanged) — audits the
+  - `review-against-plan` (moved from `ceh-agent-coding-contract`) — audits the
     codebase against a plan document and fixes gaps/deviations/errors.
 - **`CROSS_REFERENCES.md`** — new "Plan document schema" entry registering the duplication between
-  `plan-schema.md` (consumer side) and the two planners' `section-specs.md` (producer side),
-  including the `mvp`/`mvp_target` placement divergence.
+  the consumer-side `plan-schema.md` copies and the two planners' `section-specs.md` (producer
+  side). The duplication is intentional — the skills are also used standalone outside the plugin —
+  and is the repo's only sanctioned exception to the no-duplicated-references rule.
+
+### Changed
+
+- **`ceh-plan-build-review`** — `plan-schema.md` reconciled to the planner skills' schema (the
+  golden standard): `mvp: true` and `mvp_target` live on the terminator iteration only, non-terminal
+  iterations omit the `mvp` key, and the SKELETON carries no MVP fields; the `## Out of MVP scope`
+  block moved from the SKELETON to the terminator. `review-against-plan` now carries its own copy
+  of `plan-schema.md` instead of reaching into `implement-from-plan/` by relative path, so every
+  skill folder is self-contained for standalone use.
 
 ### Removed
 

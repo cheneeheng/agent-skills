@@ -9,7 +9,7 @@ Audit the codebase against a SKELETON.md or ITER_NN.md — find gaps, deviations
 between what the plan specifies and what is implemented, then fix them.
 
 The planning document schema is defined in
-[../implement-from-plan/references/plan-schema.md](../implement-from-plan/references/plan-schema.md).
+[references/plan-schema.md](references/plan-schema.md).
 Read it before starting. The section table and pointer resolution rules are authoritative.
 
 ## Step 1 — Locate and Parse Plan Docs
@@ -17,7 +17,7 @@ Read it before starting. The section table and pointer resolution rules are auth
 1. Find the target plan files. If the user didn't specify, look for `SKELETON` and `ITER_NN`
    files (`.md`) in the project root or a `docs/` directory. Filenames may carry a version tag
    as a prefix or suffix — e.g. `SKELETON_v2.md`, `v2_ITER_03.md`. See "File Naming and Version
-   Variants" in [../implement-from-plan/references/plan-schema.md](../implement-from-plan/references/plan-schema.md)
+   Variants" in [references/plan-schema.md](references/plan-schema.md)
    for the matching rules.
 2. Group the discovered files by version tag into plan families (untagged files are the default
    family). If more than one family exists, confirm with the user which version to review; the
