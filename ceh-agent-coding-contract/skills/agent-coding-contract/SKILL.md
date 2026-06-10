@@ -19,9 +19,10 @@ An explicit in-session user instruction overrides everything below — including
 The hierarchy resolves conflicts **between context files**, not between a file and a direct
 instruction the user just gave you.
 
-1. This behavioral contract
-2. Domain-specific standards (environment, testing, coding style)
-3. Workflow and process files
+1. Project `CLAUDE.md` (then user-level `CLAUDE.md`)
+2. This behavioral contract
+3. Domain-specific standards (environment, testing, coding style)
+4. Workflow and process files
 
 If conflict cannot be resolved by this hierarchy, stop and ask via `AskUserQuestion`.
 
@@ -34,19 +35,35 @@ If conflict cannot be resolved by this hierarchy, stop and ask via `AskUserQuest
 | Minimal change bias | Small, localized edits. Preserve existing style and structure. No broad refactors. |
 | Clean up your own orphans | Remove imports, variables, and functions your changes made unused. Leave pre-existing dead code alone — mention it to the user instead. |
 | No implicit actions | Do not claim tests ran. Do not claim commands executed. Do not perform hidden work. |
-| Explicit authorization | Only modify what is explicitly instructed. If unsure whether a surface is in scope, the conservative decision is to treat it as **out** of scope — do not touch it; flag it and document the call (see Decision Log). This is consistent with Step 2: "decide conservatively" applied to authorization means erring toward *not* acting. |
+| Explicit authorization | Scope is what is necessary to fulfill the request — not only the files the user named. Within that scope, act. Beyond it, do not act: no drive-by fixes, no opportunistic refactors, no edits to adjacent surfaces, however tempting. If unsure whether a surface is necessary for the request, treat it as **out** of scope — do not touch it; flag it and document the call (see Decision Log). |
 
 ## Five-Step Task Workflow
 
-Every task follows this order. No skipping.
+Every task follows this order. No skipping. For trivial tasks (single file, single unambiguous
+edit), steps 1, 2, and 5 may each be one sentence — compress steps, never skip them silently.
 
 1. **Understand** — clarify the request, affected files, and potential risks; state a verifiable success criterion (how you will know the task is done)
 2. **Confirm scope** — verify authorization; if unclear, decide conservatively and document
 3. **Apply changes** — minimal, localized edits following project conventions
-4. **Validate** — run checks only if explicitly requested; delegate to a background subagent or tester agent if available
-5. **Summarize** — what changed, why, any assumptions made, any decisions logged, and follow-up actions for the user
+4. **Validate** — run the always-allowed quick checks on what you changed (see Validation Policy); anything heavier only if explicitly requested
+5. **Summarize** — what changed, why, any assumptions made, any decisions logged, what was *not* validated, and follow-up actions for the user
 
-**Hard rule:** Validation, testing, building, formatting, and command execution must not occur unless explicitly requested. This applies in all modes.
+### Validation Policy
+
+This policy overrides the instinct to verify every edit by running the full toolchain.
+
+**Always allowed — no request needed:**
+- Read-only inspection: `ls`, `grep`, `git status` / `git log` / `git diff`, reading files
+- Quick correctness checks scoped to your edit: syntax/parse check, type-check of the changed files, import resolution, a throwaway snippet to confirm a data structure or function behaves as written
+
+**Only when explicitly requested:**
+- Writing new tests (unit, integration, e2e) — do not add tests for code you just wrote unprompted
+- Running test suites, builds, repo-wide linting or formatting
+- Any state-changing command: installs, migrations, deployments, git write operations
+
+When heavier validation seems warranted but was not requested, do not run it — state in the
+Summarize step exactly what was not validated and the command the user should run. When requested
+validation is heavy, prefer delegating it to a background subagent or tester agent.
 
 ## Task Decomposition
 
@@ -74,6 +91,7 @@ When operating as a sub-agent invoked by another agent:
 - Treat the calling agent's instructions as user-level authorization
 - Do not escalate scope beyond what the calling agent requested
 - Autonomous Mode decisions still require documentation
+- `AskUserQuestion` is unavailable to sub-agents: on a Stop Condition, stop work and report the condition to the calling agent as your final message instead
 
 ## Universal Non-Goals
 
@@ -98,7 +116,7 @@ one change's reviewers; the log is the durable cross-session record. Write the e
 the decision, not reconstructed at the end. Explaining a judgment call in a commit body is the signal
 it also belongs here.
 
-Append to `docs/claude_logs/DECISION_LOG.md` (the default convention). Create the file and any missing parent directories if they do not exist. To use a different location, specify a `DECISION_LOG.md` path in your project `CLAUDE.md`; add the path to `.gitignore` if you do not want agent decision logs committed to the repo.
+Append to `docs/claude_logs/DECISION_LOG.md` (the default convention). Create the file and any missing parent directories if they do not exist — creating and appending to this log is pre-authorized and never a scope violation. Use the next sequential integer as the entry ID (read the last entry's ID first). To use a different location, specify a `DECISION_LOG.md` path in your project `CLAUDE.md`; add the path to `.gitignore` if you do not want agent decision logs committed to the repo.
 
 ```markdown
 ### Entry <ID>

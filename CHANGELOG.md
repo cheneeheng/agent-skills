@@ -5,6 +5,40 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.3.2] — 2026-06-10
+
+`ceh-agent-coding-contract` contract clarified after a cross-model evaluation (Haiku 4.5,
+Sonnet 4.6, Opus 4.8, Fable 5): the blanket no-command-execution rule is replaced by a tiered
+Validation Policy, and scope, authority, and sub-agent rules are tightened.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.5.1 |
+
+### Changed
+
+- **`ceh-agent-coding-contract`** (v2.5.1) —
+  - **Validation Policy** (replaces the "no validation/command execution unless requested" hard
+    rule): read-only inspection (`ls`, `grep`, `git status`/`log`/`diff`) and quick correctness
+    checks scoped to the edit (syntax, type-check of changed files, import resolution, throwaway
+    sanity snippets) are always allowed; writing tests, running test suites, builds, repo-wide
+    lint/format, and any state-changing command require an explicit request. Unrequested heavier
+    validation is reported in the summary with the exact command instead of run; delegation to a
+    tester sub-agent now applies only to *requested* validation (closes a loophole).
+  - **Scope** redefined as what is necessary to fulfill the request — not only files the user
+    named; beyond that, no drive-by fixes or opportunistic refactors; unsure remains out-of-scope.
+  - **Authority hierarchy**: project `CLAUDE.md` (then user-level) now ranks above the contract.
+  - **Five-step workflow**: trivial tasks may compress steps 1, 2, and 5 to one sentence each;
+    step 5 summaries must state what was *not* validated.
+  - **Sub-agents**: on a Stop Condition, report to the calling agent (`AskUserQuestion` is
+    unavailable to sub-agents).
+  - **Decision Log**: entry IDs are sequential integers; creating/appending the log is
+    pre-authorized. Fixed a duplicate "Entry 3" heading in this repo's log (now Entry 13).
+
+---
+
 ## [3.3.1] — 2026-06-10
 
 `ceh-blog` rewritten for a personal, non-influencer voice with series continuity; all four
