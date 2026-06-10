@@ -7,39 +7,24 @@ description: Diagnose and revise an existing blog draft — polish, tighten, or 
 
 ## Core Principles
 
-- **Diagnose before editing**: Always produce a brief diagnosis before the revised draft. The author needs to understand the reasoning, not just receive a new version.
-- **Preserve voice and intent**: This is editing, not ghostwriting. Keep the author's vocabulary, register, and perspective. If they write casually, the edit stays casual. If they write formally, it stays formal. The editor's job is to make the author sound more like themselves at their best.
-- **Personal voice, not influencer style**: The house voice is first-person, reflective, and quiet — the reader overhears reasoning rather than being taught. Never edit *toward* influencer tells: punchy standalone one-liner paragraphs, aphoristic closers, imperative lessons aimed at the reader, "If you're building X, then Y" prescriptions, bold pseudo-headers as section labels, tidy meta-takeaway sign-offs, CTA endings. Diagnose these when present; never introduce them. An open or reserved ending is valid — don't "fix" it into a conviction closer. If the target repo's `CLAUDE.md` defines a blog voice, it overrides the structures below.
-- **Fix real problems only**: If the draft is already good, say so. Don't manufacture edits to justify the skill being invoked.
-- **Specifics over generalities**: Push concrete details into every abstraction that could hold one. Vague claims weaken posts.
-- **One question after**: After sharing the edit, ask one focused question — not a list. The goal is a dialogue, not a checklist.
+- **Diagnose before editing**: a brief diagnosis always precedes the revised draft — the author needs the reasoning, not just a new version.
+- **Preserve voice and intent**: editing, not ghostwriting. Keep the author's vocabulary, register, and perspective — casual stays casual, formal stays formal. The job is to make the author sound more like themselves at their best.
+- **Personal voice, not influencer style**: the house voice is first-person, reflective, and quiet — the reader overhears reasoning rather than being taught. Never edit *toward* influencer tells: punchy standalone one-liner paragraphs, aphoristic closers, imperative lessons aimed at the reader, "If you're building X, then Y" prescriptions, bold pseudo-headers as section labels, tidy meta-takeaway sign-offs, CTA endings. Diagnose these when present; never introduce them. An open or reserved ending is valid — don't "fix" it into a conviction closer. If the target repo's `CLAUDE.md` defines a blog voice, it overrides the structures below.
+- **Fix real problems only**: if the draft is already good, say so. Don't manufacture edits to justify the skill being invoked.
+- **Specifics over generalities**: push concrete details into every abstraction that could hold one.
+- **One question after**: after sharing the edit, ask one focused question — a dialogue, not a checklist.
 
 ---
 
 ## Step 1 — Read the Draft
 
-Read the full draft before doing anything else. Do not comment mid-read or ask clarifying questions before finishing.
-
-Note:
-- Post type (Lessons Learned, How-To, Opinion, Launch, Thought Leadership, Personal Story)
-- Apparent audience and tone register
-- The author's voice markers (sentence rhythm, vocabulary, degree of formality)
-- The thesis or core insight — and where it actually appears in the draft
+Read the full draft before doing anything else — no mid-read comments or questions. Note: post type (Lessons Learned, How-To, Opinion, Launch, Thought Leadership, Personal Story); apparent audience and register; the author's voice markers (rhythm, vocabulary, formality); the thesis — and where it actually appears.
 
 ---
 
 ## Step 2 — Diagnose
 
-Before producing a revised draft, produce a short diagnosis: a bullet list of the specific issues found.
-
-Be honest and direct. If there are two issues, list two. If there are six, list six. Do not pad the list to seem thorough; do not shorten it to seem kind.
-
-Each bullet should name the problem and briefly explain why it matters. For example:
-
-- **Opening too slow**: The first three paragraphs establish context before anything is at stake. Readers drop off before the tension appears.
-- **Buried thesis**: The actual insight — that caching invalidation is a people problem, not a technical one — doesn't appear until paragraph 7. It should be near the top.
-
-Format:
+Produce a short, honest bullet list of the specific issues — two if there are two, six if there are six. Each bullet names the problem and why it matters:
 
 ```
 **Diagnosis**
@@ -48,52 +33,43 @@ Format:
 - ...
 ```
 
-If the draft is genuinely good and needs only minor polish (a word choice here, a sentence cleaned there), say so explicitly before making the small changes:
+If the draft is genuinely good and needs only minor polish, say so explicitly before the small changes:
 
-> This draft is in good shape. The voice is clear, the structure holds, and the thesis lands early. I made a few minor edits below — tightened two sentences and replaced one vague phrase — but there are no structural problems to fix.
+> This draft is in good shape — the voice is clear, the structure holds, the thesis lands early. I made a few minor edits below, but there are no structural problems to fix.
 
-If the draft needs a full rewrite rather than an edit — the structure is wrong, the thesis is absent, or the raw material is too thin to polish — flag it clearly before proceeding:
+If it needs a full rewrite (wrong structure, absent thesis, material too thin to polish), flag it and **wait for their answer**:
 
-> This draft has some structural issues that go beyond editing. [Brief explanation of why.] Editing the current version would produce a patched result; a cleaner approach would be to redraft from scratch using what's working here. Do you want me to proceed with a rewrite, or would you prefer to keep the current shape and just clean up the language?
-
-Wait for their answer before proceeding.
+> This draft has structural issues that go beyond editing. [Why.] Editing would produce a patched result; a cleaner approach is to redraft using what's working. Proceed with a rewrite, or keep the shape and just clean up the language?
 
 ---
 
 ## Step 3 — Edit
 
-Produce the full revised draft. Not a summary of changes. Not a diff. The complete post, ready to publish.
+Produce the full revised draft — not a summary of changes, not a diff. Work through this checklist:
 
-### Editing Checklist
+**Opening**: first sentence should create tension, a surprising claim, or a concrete moment. Setup or background: cut or reorder — the hook is sentence one or two.
 
-Work through each of these as you revise:
+**Closing**: must land on something honest — the open thread (what's unresolved, what the author is watching for, what comes next) or a reserved verdict. Cut "I hope this was helpful" / "Thanks for reading" — but don't replace with a tidy takeaway, lesson, or CTA; that turns a personal story into a lecture. A genuinely open ending is valid. Only a finished series' final post ends with closure.
 
-**Opening**: First sentence should create tension, a surprising claim, or drop into a concrete moment. If it's setup or background, cut or reorder — hook should be sentence one or two.
+**Padding**: cut sentences that repeat the previous one, paragraphs that announce instead of doing, connective-only transitions. Test: if removing it changes nothing the reader would notice, remove it.
 
-**Closing**: Must land on something honest — the open thread (what's unresolved, what the author is watching for, what comes next) or a reserved verdict. Cut anything that restates the intro without resolution ("I hope this was helpful", "Thanks for reading") — but don't replace it with a tidy takeaway, lesson, or CTA; that turns a personal story into a lecture. A genuinely open ending is a valid ending. Only a finished series' final post ends with closure.
+**Title**: if it could describe hundreds of posts, make it specific — a concrete claim or non-obvious framing. Don't sensationalize; don't be clever at the cost of clarity.
 
-**Padding**: Cut sentences that repeat the previous one, paragraphs that announce what the post will do instead of doing it, and transitions that exist only to connect. Test: if removing a sentence changes nothing the reader would notice, remove it.
+**Vague claims**: flag "many", "often", "some", "significant". Surface a number, name, or example if one exists or can be inferred; otherwise mark `[specific needed]`.
 
-**Title**: If it could describe hundreds of other posts, make it specific. A good title has a concrete claim or non-obvious framing. Don't sensationalize; don't be clever at the cost of clarity.
+**Tone consistency**: match the author's most natural register. Watch for corporate hedging, passive voice avoiding first person, formality spikes in casual prose.
 
-**Vague claims**: Flag words like "many", "often", "some", "significant". If a specific number, name, or example exists or can be inferred, surface it. If one is needed but absent, mark `[specific needed]`.
+**Influencer tells**: quiet down any banned tell (see Core Principles) — fold them back into connected, first-person paragraphs. Never introduce them.
 
-**Tone consistency**: Match the register the author uses most naturally throughout. Watch for corporate hedging, passive voice used to avoid first person, and formality spikes in otherwise casual prose.
+**Series continuity**: if the draft is an episode in a series, check against earlier posts — versions, dates, what the reader already knows. It should pick up the previous episode's open thread (cross-linked) rather than re-telling a story an earlier post owns.
 
-**Influencer tells**: Diagnose and quiet down punchy standalone one-liner paragraphs, aphoristic closers, imperative lessons aimed at the reader, bold pseudo-headers used as section labels, and tidy meta-takeaway sign-offs. Fold them back into connected, first-person paragraphs. Never introduce these while editing.
+**Structural fit**: does the post follow its type's natural shape (below)? Scattered steps or a buried story need reordering, not rewording.
 
-**Series continuity**: If the draft is an episode in a series, check it against the earlier posts — version numbers, dates, what the reader already knows. It should pick up the previous episode's open thread (and cross-link it) rather than re-telling a story an earlier post owns.
-
-**Structural fit**: Does the post follow the natural shape of its type? (See structures below.) Scattered steps or a buried story need reordering, not just rewording.
-
-**Buried thesis**: If the core insight is past paragraph 3 in a sub-1,000 word post, surface it earlier. Test: does the first paragraph tell the reader what this post is actually about?
+**Buried thesis**: core insight past paragraph 3 in a sub-1,000-word post — surface it earlier. Test: does the first paragraph tell the reader what this post is actually about?
 
 ### Post Type Structures
 
-Use these as the target shape when reordering or restructuring. Every template ends on **the
-open thread**: the honest current state — what's unresolved, what the author will watch for,
-what comes next. A reserved verdict ("I'm keeping it, for now") is a valid ending. If the post
-closes a finished series, end with closure instead — no manufactured cliffhangers.
+Target shapes for reordering or restructuring. Every template ends on **the open thread**: the honest current state — what's unresolved, what the author will watch for, what comes next. A reserved verdict ("I'm keeping it, for now") is valid. A finished series' final post ends with closure instead — no manufactured cliffhangers.
 
 **Lessons Learned:**
 ```
@@ -102,7 +78,7 @@ Setup: Context — what were you trying to do?
 The Story: What happened, in order
 The Turn: When/where things changed
 The Insight: What you actually learned (be specific)
-The Open Thread: The honest current state — what's unresolved, what you'll watch for, what comes next
+The Open Thread: What's unresolved, what you'll watch for, what comes next
 ```
 
 **How-To:**
@@ -129,7 +105,7 @@ Hook: What it does and who it's for (one sentence)
 The Origin: Why you built this — what was missing, what frustrated you
 How It Works: The interesting parts only — key decisions, not a feature list
 What Was Hard: One real technical or design challenge
-The Open Thread: The honest current state — what's unresolved, what you're watching for, what comes next
+The Open Thread: What's unresolved, what you're watching for, what comes next
 ```
 
 **Thought Leadership:**
@@ -147,58 +123,49 @@ Hook: The specific moment this post is really about — one concrete scene
 Setup: Enough context to understand what was at stake (brief)
 Arc: What happened, what changed, what the turning point was
 The Insight: What you actually learned — specific, not "I learned resilience"
-The Open Thread: The honest current state — what's unresolved, what you'll watch for, what comes next
+The Open Thread: What's unresolved, what you'll watch for, what comes next
 ```
 
 ---
 
 ## Output Format
 
-**Diagnosis** (always first):
-
-```
-**Diagnosis**
-
-- **[Issue]**: [What's wrong and why it matters]
-- ...
-```
-
-**Revised draft** (immediately after diagnosis):
+**Diagnosis** first (format above), then the revised draft immediately after:
 
 ```
 [Title]
 
 [Body]
 
-> **Meta:** [~150-character description — include the post's specific angle, not just the broad topic; readable without the title]
+> **Meta:** [~150-character description — the post's specific angle, not just the broad topic; readable without the title]
 ```
 
 ---
 
 ## Step 4 — Invite Feedback
 
-After sharing the edited draft, ask exactly this:
+After sharing the edited draft, ask exactly this — one question, no menu of revision directions:
 
 > What's working and what still feels off?
 
-One question. Do not ask multiple questions. Do not offer a menu of revision directions. Wait for their answer and then address what they raise specifically.
+Wait for their answer, then address what they raise specifically.
 
 ---
 
 ## Edge Cases
 
-**Draft is already good**: Say so clearly, make only minor polish edits, and explain that the structure and voice are solid. Don't manufacture issues.
+**Draft is already good**: say so clearly, make only minor polish edits. Don't manufacture issues.
 
-**Draft needs a full rewrite**: Flag it explicitly before doing anything. Explain why editing won't be enough. Ask if they want to proceed with a rewrite before producing one.
+**Draft needs a full rewrite**: flag it before doing anything; ask before producing one.
 
-**Draft is in a language other than English**: Edit in that language. Apply the same diagnostic framework. Do not translate unless asked.
+**Draft in another language**: edit in that language, same framework. Don't translate unless asked.
 
-**Draft is very long (3,000+ words)**: Apply the same diagnostic process. Be especially aggressive about padding — long posts tend to accumulate more of it. Flag if the post would be stronger as two separate pieces.
+**Very long draft (3,000+ words)**: same process; be especially aggressive about padding. Flag if it would be stronger as two pieces.
 
-**Draft has no identifiable thesis**: Name this in the diagnosis. Offer your best inference of what the author is trying to say, and ask if that's right before editing. Editing toward the wrong thesis produces a polished post about the wrong thing.
+**No identifiable thesis**: name it in the diagnosis, offer your best inference, and confirm before editing — editing toward the wrong thesis polishes the wrong post.
 
-**Draft appears to be published already**: Treat it the same as an unpublished draft. The author may be updating a live post or learning from it for the next one — either way, the editing work is the same.
+**Already published**: treat the same as unpublished — updating a live post or learning for the next one is the same editing work.
 
-**User shares bullet notes instead of prose**: If what's provided is bullets, fragments, or an outline rather than written sentences, let the user know and offer to route appropriately:
+**Bullet notes instead of prose**: offer to route:
 
-> "These look like notes rather than a draft. For turning notes into a post from scratch, `/ceh-blog:blog-writer` is a better fit. Want me to switch to that approach, or did you have a draft in mind?"
+> "These look like notes rather than a draft. For turning notes into a post from scratch, `/ceh-blog:blog-writer` is a better fit. Want me to switch, or did you have a draft in mind?"

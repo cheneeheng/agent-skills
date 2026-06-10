@@ -170,11 +170,11 @@ this map exists so edits don't get lost.
 | `ceh-blog/skills/blog-interviewer/SKILL.md` | "Voice" section (top of file) | word-for-word copy |
 | `ceh-blog/skills/blog-editor/SKILL.md` | "Personal voice, not influencer style" bullet (Core Principles) + "Influencer tells" checklist item | condensed restatement — same banned-tells list, framed for diagnosis |
 
-**What is shared:** personal voice, not influencer style; the reader overhears reasoning rather than being taught; the `CLAUDE.md` blog-voice override; the prefer list (first person, connected paragraphs, doubt kept in, open inside a moment); the banned tells (one-liner paragraphs, aphoristic closers, imperative lessons, "If you're building X, then Y", bold pseudo-headers, meta-takeaway sign-offs, CTA endings); never invent scenes/feelings/chronology — flag the gap instead; series-as-serials framing; tutorial pitfalls narrated as cost to the author.
+**What is shared:** personal voice, not influencer style; the reader overhears the reasoning, not a lecture; the `CLAUDE.md` blog-voice override; the prefer list (first person, connected paragraphs, doubt kept in, open inside a moment); the banned tells (one-liner paragraphs, aphoristic closers, imperative lessons, "If you're building X, then Y", bold pseudo-headers, meta-takeaway sign-offs, CTA endings); never invent scenes/feelings/chronology — flag the gap instead; the open-thread endings definition (honest current state; reserved verdict valid; closure only for a finished series' final post); series-as-serials framing; tutorial pitfalls narrated as cost to the author.
 
 **What diverges:**
 - writer and interviewer copies are word-for-word identical — keep them in lockstep.
-- editor restates the banned tells as diagnostic targets ("never edit toward, never introduce") rather than drafting rules, and omits the prefer/series/tutorial paragraphs.
+- editor restates the banned tells as diagnostic targets ("never edit toward, never introduce") rather than drafting rules, and omits the prefer/series/tutorial paragraphs; it carries the open-thread definition in its "Closing" checklist item and template preamble instead (it has no Voice section).
 
 ---
 
@@ -188,9 +188,10 @@ this map exists so edits don't get lost.
 | `ceh-blog/skills/blog-interviewer/SKILL.md` | "Structure by Post Type" (Phase 3) | near-identical; Launch "Origin" line adds "(this IS the problem)" |
 | `ceh-blog/skills/blog-editor/SKILL.md` | "Post Type Structures" (Step 3) | abridged middles (shorter Origin/Argument lines); identical endings |
 
-**What is shared:** the six post-type templates (Lessons Learned, How-To, Opinion/Take, Project/Launch, Thought Leadership, Personal Story); the open-thread ending preamble ("the honest current state — what's unresolved, what you'll watch for, what comes next; a reserved verdict is a valid ending; a finished series' final post ends with closure"); every template's "The Open Thread:" closing line; the How-To Pitfalls line ("what they cost you — narrated as your experience, not warnings issued to the reader").
+**What is shared:** the six post-type templates (Lessons Learned, How-To, Opinion/Take, Project/Launch, Thought Leadership, Personal Story); every template's "The Open Thread:" closing line (word-for-word identical across all three files); the How-To Hook ("The moment this became a problem for you / what it cost you") and Pitfalls line ("what they cost you — narrated as your experience, not warnings issued to the reader").
 
 **What diverges:**
+- writer and interviewer preambles point to the Voice section ("Every template ends on **the open thread** (defined in Voice)."); editor's preamble carries the full open-thread definition since it has no Voice section.
 - interviewer's Launch template keeps the "(this IS the problem)" suffix on the Origin line.
 - editor's middles are abridged (it targets reordering, not drafting) — but its ending lines match the canonical wording exactly.
 
