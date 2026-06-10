@@ -2,6 +2,15 @@
 
 Claude Code plugin for writing compelling, publishable blog posts — whether you're starting from a half-formed idea or already have raw material ready to shape.
 
+## Voice
+
+Posts come out in a **personal**, first-person voice — not influencer style. No CTA endings, no
+tidy takeaway sign-offs, no aphoristic one-liners; posts end on the honest open thread (what's
+unresolved, what comes next), and a reserved verdict is a valid ending. The blog is treated as
+**serials**: each project is a series, each post an episode that picks up the previous episode's
+thread, keeps continuity facts straight, and leaves a thread of its own. If the target repo's
+`CLAUDE.md` defines a blog voice, it overrides the built-in templates.
+
 ## Skills
 
 | Skill | Description |

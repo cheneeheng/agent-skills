@@ -9,6 +9,7 @@ description: Diagnose and revise an existing blog draft — polish, tighten, or 
 
 - **Diagnose before editing**: Always produce a brief diagnosis before the revised draft. The author needs to understand the reasoning, not just receive a new version.
 - **Preserve voice and intent**: This is editing, not ghostwriting. Keep the author's vocabulary, register, and perspective. If they write casually, the edit stays casual. If they write formally, it stays formal. The editor's job is to make the author sound more like themselves at their best.
+- **Personal voice, not influencer style**: The house voice is first-person, reflective, and quiet — the reader overhears reasoning rather than being taught. Never edit *toward* influencer tells: punchy standalone one-liner paragraphs, aphoristic closers, imperative lessons aimed at the reader, "If you're building X, then Y" prescriptions, bold pseudo-headers as section labels, tidy meta-takeaway sign-offs, CTA endings. Diagnose these when present; never introduce them. An open or reserved ending is valid — don't "fix" it into a conviction closer. If the target repo's `CLAUDE.md` defines a blog voice, it overrides the structures below.
 - **Fix real problems only**: If the draft is already good, say so. Don't manufacture edits to justify the skill being invoked.
 - **Specifics over generalities**: Push concrete details into every abstraction that could hold one. Vague claims weaken posts.
 - **One question after**: After sharing the edit, ask one focused question — not a list. The goal is a dialogue, not a checklist.
@@ -69,7 +70,7 @@ Work through each of these as you revise:
 
 **Opening**: First sentence should create tension, a surprising claim, or drop into a concrete moment. If it's setup or background, cut or reorder — hook should be sentence one or two.
 
-**Closing**: Must land with conviction or a clear next step. Cut anything that restates the intro without resolution ("I hope this was helpful", "Thanks for reading"). Replace with a forward-looking takeaway or the line that captures the post's whole point.
+**Closing**: Must land on something honest — the open thread (what's unresolved, what the author is watching for, what comes next) or a reserved verdict. Cut anything that restates the intro without resolution ("I hope this was helpful", "Thanks for reading") — but don't replace it with a tidy takeaway, lesson, or CTA; that turns a personal story into a lecture. A genuinely open ending is a valid ending. Only a finished series' final post ends with closure.
 
 **Padding**: Cut sentences that repeat the previous one, paragraphs that announce what the post will do instead of doing it, and transitions that exist only to connect. Test: if removing a sentence changes nothing the reader would notice, remove it.
 
@@ -79,13 +80,20 @@ Work through each of these as you revise:
 
 **Tone consistency**: Match the register the author uses most naturally throughout. Watch for corporate hedging, passive voice used to avoid first person, and formality spikes in otherwise casual prose.
 
+**Influencer tells**: Diagnose and quiet down punchy standalone one-liner paragraphs, aphoristic closers, imperative lessons aimed at the reader, bold pseudo-headers used as section labels, and tidy meta-takeaway sign-offs. Fold them back into connected, first-person paragraphs. Never introduce these while editing.
+
+**Series continuity**: If the draft is an episode in a series, check it against the earlier posts — version numbers, dates, what the reader already knows. It should pick up the previous episode's open thread (and cross-link it) rather than re-telling a story an earlier post owns.
+
 **Structural fit**: Does the post follow the natural shape of its type? (See structures below.) Scattered steps or a buried story need reordering, not just rewording.
 
 **Buried thesis**: If the core insight is past paragraph 3 in a sub-1,000 word post, surface it earlier. Test: does the first paragraph tell the reader what this post is actually about?
 
 ### Post Type Structures
 
-Use these as the target shape when reordering or restructuring:
+Use these as the target shape when reordering or restructuring. Every template ends on **the
+open thread**: the honest current state — what's unresolved, what the author will watch for,
+what comes next. A reserved verdict ("I'm keeping it, for now") is a valid ending. If the post
+closes a finished series, end with closure instead — no manufactured cliffhangers.
 
 **Lessons Learned:**
 ```
@@ -94,16 +102,16 @@ Setup: Context — what were you trying to do?
 The Story: What happened, in order
 The Turn: When/where things changed
 The Insight: What you actually learned (be specific)
-The Takeaway: What the reader should do differently
+The Open Thread: The honest current state — what's unresolved, what you'll watch for, what comes next
 ```
 
 **How-To:**
 ```
-Hook: Why this matters / common failure mode
+Hook: The moment this became a problem for you / what it cost you
 Overview: What we're doing and why this approach
 Steps: Numbered, concrete, with real examples
-Pitfalls: The things people get wrong
-Wrap-up: What success looks like
+Pitfalls: What they cost you — narrated as your experience, not warnings issued to the reader
+The Open Thread: Where this leaves you — what's still rough, what you're watching for
 ```
 
 **Opinion / Take:**
@@ -112,7 +120,7 @@ Hook: State the controversial or non-obvious thesis upfront
 Argument 1: [strongest point]
 Argument 2: [second point]
 Counter-argument: What the other side would say — and why you're still right
-Conclusion: Restate the thesis with conviction
+The Open Thread: Where you actually land — a reserved verdict is valid; what would change your mind
 ```
 
 **Project / Launch:**
@@ -121,8 +129,7 @@ Hook: What it does and who it's for (one sentence)
 The Origin: Why you built this — what was missing, what frustrated you
 How It Works: The interesting parts only — key decisions, not a feature list
 What Was Hard: One real technical or design challenge
-What's Next: Where this is going
-CTA: Try it / read the docs / follow for updates
+The Open Thread: The honest current state — what's unresolved, what you're watching for, what comes next
 ```
 
 **Thought Leadership:**
@@ -130,8 +137,8 @@ CTA: Try it / read the docs / follow for updates
 Hook: State the non-obvious claim or question upfront
 Argument: Build through specific examples, not abstract assertions
 Counter-argument: The strongest objection — acknowledge it, then explain why the thesis holds
-Implication: What changes if the reader accepts this view?
-Close: A challenge, a question, or a line that reframes how the reader sees the topic
+Implication: What changes if this view holds?
+The Open Thread: What's still unresolved in your own thinking — what you'll watch for next
 ```
 
 **Personal Story:**
@@ -140,7 +147,7 @@ Hook: The specific moment this post is really about — one concrete scene
 Setup: Enough context to understand what was at stake (brief)
 Arc: What happened, what changed, what the turning point was
 The Insight: What you actually learned — specific, not "I learned resilience"
-Takeaway: What the reader should do or notice as a result
+The Open Thread: The honest current state — what's unresolved, what you'll watch for, what comes next
 ```
 
 ---

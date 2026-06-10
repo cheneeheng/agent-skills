@@ -5,13 +5,54 @@ description: Interview the user to shape a blog post, then draft it. Trigger whe
 
 # Blog Interviewer Skill
 
+## Voice
+
+Write posts in a **personal** voice, not influencer style. The reader is overhearing the
+reasoning, not being taught. If the target repo's `CLAUDE.md` defines a blog voice, it overrides
+every structure template below.
+
+**Prefer:**
+
+- First person, grounded in what actually happened and what was actually thought.
+- Connected paragraphs that carry the narrative — reflective, not prescriptive.
+- Doubt and self-report kept in ("I shipped it anyway, because I was tired of this bug").
+  Quieter is better.
+- Open inside a moment or a thought — an annoyance, a realization, a scene — never a product
+  pitch or background.
+
+**Banned tells:**
+
+- Punchy standalone one-liner paragraphs.
+- Aphoristic closers ("The boring choice is the correct one").
+- Imperative lessons aimed at the reader ("Don't design your own. Surface theirs.").
+- "If you're building X, then Y" prescriptions.
+- Bold pseudo-headers as section labels ("**What it does**", "**The lesson:**").
+- "The lesson:" lines and tidy meta-takeaway sign-offs that turn a personal story into a lecture.
+- CTA endings.
+
+**Never invent scenes, feelings, or chronology.** Every beat must come from the material — repo
+artefacts (changelogs, specs, commits) or the author's own words. The author's phrasing *is* the
+voice: quote it nearly verbatim rather than paraphrasing into generic prose. If the human beat is
+missing, flag the gap instead of fabricating it.
+
+**Series awareness:** the blog is organized as serials — each project is a series, each post an
+episode the reader follows in order (see the Series Awareness step below). An **ongoing** series
+ends each episode on the genuinely open thread; a **finished** series' final post ends with
+closure — no manufactured cliffhangers.
+
+**Tutorials** (how-to posts) keep their full utility — real code, steps, pitfalls — but pitfalls
+are narrated as what they cost the author, not as warnings issued to the reader.
+
+---
+
 ## Core Principles
 
 - **Infer first, ask second**: Extract as much as possible from what the user has already said. Only ask what you genuinely can't infer.
 - **One question at a time**: Never dump a list of questions. Ask the single most important thing you don't yet know.
 - **Shape as you listen**: As answers come in, you're already forming the structure. Don't wait until the end to think about framing.
 - **Concrete over abstract**: Push for specifics — real numbers, actual events, named people, exact moments. Generalities make weak posts.
-- **No fluff drafts**: The final output should be punchy, well-structured, and worth publishing — not a padded word count.
+- **Capture quotes verbatim**: The user's phrasing *is* the voice. When an answer has a usable line ("first impression is a lot cleaner and smooth"), store it word-for-word and put it in the draft nearly verbatim — don't paraphrase it into generic prose.
+- **No fluff drafts**: The final output should be specific, well-structured, and worth publishing — not a padded word count.
 
 ---
 
@@ -30,6 +71,23 @@ From the repo, infer as much as possible without asking:
 - **Who it's for** — from README, docs, example usage
 - **Tech stack and key design decisions** — from file structure, dependencies, architecture patterns
 - **Current state** — is it a finished tool, an experiment, a WIP?
+
+### Step 1.5: Read the blog, not just the repo (Series Awareness)
+
+If the post is going into an existing blog, read the previous posts before asking anything —
+especially the most recent episode in the same series. Then:
+
+- **Pick up the thread**: If the last post ended on a live thread ("the last post ended on X"),
+  ask: *"Is this the post that answers it?"* If yes, that thread is the new post's opening.
+- **Pin chronology**: Ask *"When did this happen, relative to the last post?"* — one timestamp
+  question prevents continuity bugs (wrong version numbers, events out of order).
+- **Check continuity facts** against the earlier episodes: versions, dates, what the reader
+  already knows. Don't re-tell a story a previous episode owns — call back in a sentence and link.
+- **Leave a thread**: An ongoing series ends on the genuinely open thread; plan what this episode
+  leaves open. A finished series' final post ends with closure instead.
+
+This step also applies when there is no repo (Phase 1 flow) — if the user has an existing blog,
+read it before interviewing.
 
 ### Step 2: Identify viable post angles
 
@@ -109,6 +167,18 @@ Work through these angles, but **only ask what you haven't already inferred**. A
 - What's the most surprising, counterintuitive, or non-obvious thing about this topic?
 - Is there a specific moment, decision, or event this post is really about?
 
+### The Four Story Beats (required for story-voice posts)
+
+For posts written in the personal voice (Lessons Learned, Personal Story, and most Launch and
+Opinion posts), facts are not enough — the post needs narrative beats. Interview for these four,
+one at a time, skipping only what the user has already given you:
+
+1. **The turn** — what happened between not-knowing and knowing? (How did the realization
+   actually arrive?)
+2. **The moment** — what was your reaction when it happened?
+3. **The verdict** — the honest current state. It is allowed to be unresolved or reserved.
+4. **The thread** — what question is still open? (This becomes the post's ending.)
+
 **For Lessons Learned / Story posts:**
 - Walk me through what actually happened, in order.
 - What was the mistake, turning point, or key decision?
@@ -146,9 +216,12 @@ Match your question tone to the subject matter.
 
 1. Ask **one question per turn**. Wait for the answer before asking the next.
 2. Follow up when an answer is vague or too abstract: *"Can you give me a specific example?"* or *"What actually happened when that went wrong?"*
-3. **If the user's first message already contains strong specifics** (real numbers, named events, clear arc, concrete outcome), you may draft immediately after one confirming question — don't manufacture more exchanges just to follow a process. The goal is a great post, not a thorough interview.
-4. When you have enough raw material (typically 2–5 exchanges for a sparse prompt, sometimes 1 for a rich one), say so and move to drafting.
-5. If the user goes off on a tangent that's actually more interesting than the stated topic, note it: *"This angle — [X] — might actually be more compelling than [original topic]. Want to explore that instead?"*
+3. **Offer hypothesis options when you can form plausible guesses.** Instead of *"How did you figure it out?"*, try *"Did Claude critique it, did you read something, or did it crystallize on its own?"* Correcting a concrete guess is easier than composing an answer from scratch — and gets a sharper reply. Use open questions when you have no good hypotheses.
+4. **Handle answer drift**: If the user answers a different question than the one asked, keep the answer — it's real material. Then decide whether the original beat is still needed; if it is, re-ask **once at most**, rephrased. Don't interrogate.
+5. **Store quotable phrasing verbatim** as it arrives. Mark the lines you intend to use nearly word-for-word in the draft.
+6. **If the user's first message already contains strong specifics** (real numbers, named events, clear arc, concrete outcome), you may draft immediately after one confirming question — don't manufacture more exchanges just to follow a process. The goal is a great post, not a thorough interview.
+7. When you have enough raw material (typically 2–5 exchanges for a sparse prompt, sometimes 1 for a rich one), say so and move to drafting. For story-voice posts, "enough" includes the four story beats (turn, moment, verdict, thread) — or an explicit note that a beat is missing, never an invented one.
+8. If the user goes off on a tangent that's actually more interesting than the stated topic, note it: *"This angle — [X] — might actually be more compelling than [original topic]. Want to explore that instead?"*
 
 ---
 
@@ -159,15 +232,20 @@ Once you have enough material, produce a complete draft — not an outline, not 
 ### Draft Standards
 
 - **Title**: Sharp, specific, and honest. Avoid clickbait. Avoid vague ("My Thoughts on X"). Aim for: *specific claim + implicit promise to reader*.
-- **Opening**: Hook in the first 2 sentences. Start with the tension, the surprise, or the concrete moment — not background.
-- **Body**: Match structure to post type (see below). Use the user's own words and specifics wherever possible.
-- **Closing**: End with the insight, the call to action, or the honest takeaway. Don't fizzle out into "I hope this was helpful."
+- **Opening**: Open inside a moment or a thought — an annoyance, a realization, a scene — in the first 2 sentences. Not background, not a product pitch.
+- **Body**: Match structure to post type (see below). Use the user's own words and specifics wherever possible — quotable interview lines go in nearly verbatim.
+- **Closing**: End on the open thread — the honest current state: what's unresolved, what you'll watch for, what comes next. A reserved verdict is a valid ending. Don't fizzle into "I hope this was helpful" — and don't manufacture a tidy takeaway, lesson, or CTA either.
 - **Length**: Match what the content needs — don't pad, don't cut substance. Per-type guidance:
   - Opinion / Personal Story / Thought Leadership: 400–800 words. Tight is better.
   - Lessons Learned / Launch: 600–1,000 words. Enough to tell the story properly.
   - How-To / Tutorial: 800–1,800 words, driven by the number of steps and code samples needed. Don't impose a ceiling if the content genuinely requires more.
 
 ### Structure by Post Type
+
+Every template ends on **the open thread**: the honest current state — what's unresolved, what
+you'll watch for, what comes next. A reserved verdict ("I'm keeping it, for now") is a valid
+ending. If the post closes a finished series, end with closure instead — no manufactured
+cliffhangers.
 
 **Lessons Learned:**
 ```
@@ -176,16 +254,16 @@ Setup: Context — what were you trying to do?
 The Story: What happened, in order
 The Turn: When/where things changed
 The Insight: What you actually learned (be specific)
-The Takeaway: What the reader should do differently
+The Open Thread: The honest current state — what's unresolved, what you'll watch for, what comes next
 ```
 
 **How-To:**
 ```
-Hook: Why this matters / common failure mode
+Hook: The moment this became a problem for you / what it cost you
 Overview: What we're doing and why this approach
 Steps: Numbered, concrete, with real examples
-Pitfalls: The things people get wrong
-Wrap-up: What success looks like
+Pitfalls: What they cost you — narrated as your experience, not warnings issued to the reader
+The Open Thread: Where this leaves you — what's still rough, what you're watching for
 ```
 
 **Opinion / Take:**
@@ -194,7 +272,7 @@ Hook: State the controversial or non-obvious thesis upfront
 Argument 1: [strongest point]
 Argument 2: [second point]
 Counter-argument: What the other side would say — and why you're still right
-Conclusion: Restate the thesis with conviction
+The Open Thread: Where you actually land — a reserved verdict is valid; what would change your mind
 ```
 
 **Project / Launch:**
@@ -203,8 +281,7 @@ Hook: What it does and who it's for (one sentence)
 The Origin: Why you built this — what was missing, what frustrated you, why existing tools didn't cut it (this IS the problem)
 How It Works: The interesting parts only — architecture, key decisions, not a feature list
 What Was Hard: Be honest — one real technical or design challenge
-What's Next: Where this is going
-CTA: Try it / read the docs / follow for updates
+The Open Thread: The honest current state — what's unresolved, what you're watching for, what comes next
 ```
 
 **Thought Leadership:**
@@ -212,8 +289,8 @@ CTA: Try it / read the docs / follow for updates
 Hook: State the non-obvious claim or question upfront — don't bury the thesis
 Argument: Build through specific examples, not abstract assertions (name real products, companies, events)
 Counter-argument: The strongest objection — acknowledge it directly, then explain why the thesis holds
-Implication: What changes if the reader accepts this view? (concrete, not vague)
-Close: A challenge, a question, or a line that reframes how the reader sees the topic
+Implication: What changes if this view holds? (concrete, not vague)
+The Open Thread: What's still unresolved in your own thinking — what you'll watch for next
 ```
 
 **Personal Story:**
@@ -222,7 +299,7 @@ Hook: The specific moment this post is really about — one concrete scene, not 
 Setup: Enough context to understand what was at stake (brief)
 Arc: What happened, what changed, what the turning point was
 The Insight: What you actually learned — specific, not "I learned resilience"
-Takeaway: What the reader should do or notice as a result — make it actionable
+The Open Thread: The honest current state — what's unresolved, what you'll watch for, what comes next
 ```
 
 ---
@@ -238,7 +315,10 @@ Also offer **one proactive observation** — something you'd fix even if they're
 - **Opening too slow**: First paragraph is setup, not tension — flag it and offer an alternative opening.
 - **Missing the specific**: Draft uses generalizations where interview material has real numbers, names, or moments — insert them.
 - **Wrong angle**: Post reads for practitioners but audience is beginners (or vice versa) — raise it.
-- **Conclusion fizzles**: Ending restates intro or trails off — replace with a sharper close.
+- **Conclusion fizzles or lectures**: Ending restates the intro, trails off, or lands on a tidy takeaway/CTA — replace with the genuinely open thread or a reserved verdict.
+- **Influencer tells**: Draft contains banned tells (one-liner paragraphs, aphoristic closers, imperative lessons, bold pseudo-headers) — rewrite quieter, per the Voice section.
+- **Continuity slip**: A version number, date, or fact contradicts an earlier episode — fix it against the previous posts.
+- **Paraphrased voice**: A quotable interview line got smoothed into generic prose — restore the user's phrasing.
 - **Generic title**: Title could describe dozens of posts — push for a specific claim or hook.
 - **Tone mismatch**: User speaks casually but draft is formal (or vice versa) — ask if they want the voice adjusted.
 

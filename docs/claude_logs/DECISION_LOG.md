@@ -205,3 +205,17 @@ later pushed to origin fresh.
 **Outcome:** Plugin created with four skills (two new planners restructured under `skills/`, two moved); manifests, READMEs, CLAUDE.md, CROSS_REFERENCES.md, and CHANGELOG updated; committed on `feat/plan-build-review-plugin`.
 
 **Follow-up (same branch):** User declared the planner skills' `section-specs.md` the golden standard and the reference duplication intentional (skills are used standalone outside the plugin — the repo's only sanctioned exception). Reconciled `plan-schema.md` to the terminator convention (`mvp: true` + `mvp_target` + `## Out of MVP scope` on the final iteration only; SKELETON carries no MVP fields; non-terminal iterations omit `mvp`). Judgment call: extended the self-containment rationale to `review-against-plan`, giving it its own `references/plan-schema.md` copy and rewriting its two relative links into `implement-from-plan/` — the user asked only for the README note, but a cross-skill path contradicts the stated standalone-use requirement. CROSS_REFERENCES entry now lists four files with the to-mvp producer copy as golden standard. Versions unchanged — v1.0.0 / [3.3.0] are still unreleased on this branch.
+
+---
+
+### Entry 3
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-10
+**Task:** Update ceh-blog skills for personal (non-influencer) voice and series continuity, per tmp.md.
+
+**Context:** tmp.md explicitly audits only `blog-writer` and `blog-interviewer`. But `blog-editor` duplicates the same six post-type structure templates and its "Closing" checklist mandates "land with conviction or a clear next step" — left unchanged, the editor would diagnose the new open-thread/reserved-verdict endings as fizzling and edit them back into conviction closers, defeating the goal. `blog-repurpose` also carries CTA language (thread closing tweet, LinkedIn closing question).
+**Decision:** Extended the edits to `blog-editor` (template endings mirrored, Closing checklist rewritten, banned-tells and series-continuity checklist items added) and registered both duplicated blocks (Voice section, Structure by Post Type) in `CROSS_REFERENCES.md` per the Cross-Reference Rule. Left `blog-repurpose` untouched: its CTA conventions are platform-native to social formats (Twitter/LinkedIn), not the blog voice tmp.md targets.
+**Impact / Risk:** Low. blog-editor scope extension is the conservative reading of the propagation rule; repurposed social posts will still sound like social posts, which may contrast with the quieter blog voice — flagged for the user rather than changed.
+**Outcome:** Three SKILL.md files updated on branch `feat/blog-personal-voice`; ceh-blog bumped 1.0.4 -> 1.0.5.

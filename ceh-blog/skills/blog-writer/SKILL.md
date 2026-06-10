@@ -5,13 +5,53 @@ description: Draft a complete blog post from raw material — notes, bullets, an
 
 # Blog Writer Skill
 
+## Voice
+
+Write posts in a **personal** voice, not influencer style. The reader is overhearing the
+reasoning, not being taught. If the target repo's `CLAUDE.md` defines a blog voice, it overrides
+every structure template below.
+
+**Prefer:**
+
+- First person, grounded in what actually happened and what was actually thought.
+- Connected paragraphs that carry the narrative — reflective, not prescriptive.
+- Doubt and self-report kept in ("I shipped it anyway, because I was tired of this bug").
+  Quieter is better.
+- Open inside a moment or a thought — an annoyance, a realization, a scene — never a product
+  pitch or background.
+
+**Banned tells:**
+
+- Punchy standalone one-liner paragraphs.
+- Aphoristic closers ("The boring choice is the correct one").
+- Imperative lessons aimed at the reader ("Don't design your own. Surface theirs.").
+- "If you're building X, then Y" prescriptions.
+- Bold pseudo-headers as section labels ("**What it does**", "**The lesson:**").
+- "The lesson:" lines and tidy meta-takeaway sign-offs that turn a personal story into a lecture.
+- CTA endings.
+
+**Never invent scenes, feelings, or chronology.** Every beat must come from the material — repo
+artefacts (changelogs, specs, commits) or the author's own words. The author's phrasing *is* the
+voice: quote it nearly verbatim rather than paraphrasing into generic prose. If the human beat is
+missing, flag the gap instead of fabricating it.
+
+**Series awareness:** the blog is organized as serials — each project is a series, each post an
+episode the reader follows in order (see the Series Awareness step below). An **ongoing** series
+ends each episode on the genuinely open thread; a **finished** series' final post ends with
+closure — no manufactured cliffhangers.
+
+**Tutorials** (how-to posts) keep their full utility — real code, steps, pitfalls — but pitfalls
+are narrated as what they cost the author, not as warnings issued to the reader.
+
+---
+
 ## Core Principles
 
 - **Read everything before writing anything**: Don't skim and draft. Read the full material, identify the angle, then produce a single complete draft.
 - **One question maximum**: If something critical is genuinely missing, ask exactly one question. Do not run an interview. If the material is sparse but workable, make a reasonable call and note it in the refinement offer.
 - **Pick the strongest thread**: If the material is sprawling or multi-directional, choose the sharpest angle rather than trying to cover everything. Tell the user which thread you picked and why.
 - **Use the user's words**: Pull real phrases, specifics, and examples from the material rather than paraphrasing into generic prose. The material is the source of truth for voice and substance.
-- **No fluff drafts**: The output should be punchy, well-structured, and worth publishing — not a padded word count that mirrors the input length.
+- **No fluff drafts**: The output should be specific, well-structured, and worth publishing — not a padded word count that mirrors the input length.
 
 ---
 
@@ -39,6 +79,18 @@ Before drafting, judge whether the material is sufficient:
 - **Rich material**: Multiple specifics, a clear arc or argument, enough texture to write from. Draft immediately.
 - **Workable but sparse**: The angle is clear but some detail is thin. Draft with what's there; flag the gaps in the refinement offer rather than asking upfront.
 - **Genuinely incomplete**: The material names a topic but has no substance — no story, no steps, no argument, just keywords. This is the one case where a single question is warranted before drafting.
+
+### Series Awareness
+
+Read the existing posts in the target blog before drafting. If the new post continues a project:
+
+- Open by picking up the live thread the previous episode left ("Last time I said…"), and
+  cross-link it.
+- End by leaving a live thread of your own — unless the series is finished, in which case the
+  final post ends with closure.
+- Check continuity facts against the earlier episodes before drafting: version numbers, dates,
+  what the reader already knows.
+- Don't re-tell a story a previous episode owns — call back to it in a sentence and link.
 
 ---
 
@@ -85,15 +137,20 @@ Produce a complete draft — not an outline, not a bullet summary.
 ### Draft Standards
 
 - **Title**: Sharp, specific, and honest. Avoid clickbait. Avoid vague ("My Thoughts on X"). Aim for: *specific claim + implicit promise to reader*.
-- **Opening**: Hook in the first 2 sentences. Start with the tension, the surprise, or the concrete moment — not background.
+- **Opening**: Open inside a moment or a thought — an annoyance, a realization, a scene — in the first 2 sentences. Not background, not a product pitch.
 - **Body**: Match structure to post type (see below). Use the user's own words and specifics wherever possible — don't paraphrase real details into abstractions.
-- **Closing**: End with the insight, the call to action, or the honest takeaway. Don't fizzle out into "I hope this was helpful."
+- **Closing**: End on the open thread — the honest current state: what's unresolved, what you'll watch for, what comes next. A reserved verdict is a valid ending. Don't fizzle into "I hope this was helpful" — and don't manufacture a tidy takeaway, lesson, or CTA either.
 - **Length**: Match what the content needs — don't pad, don't cut substance. Per-type guidance:
   - Opinion / Personal Story / Thought Leadership: 400–800 words. Tight is better.
   - Lessons Learned / Launch: 600–1,000 words. Enough to tell the story properly.
   - How-To / Tutorial: 800–1,800 words, driven by the number of steps and examples needed. Don't impose a ceiling if the content genuinely requires more.
 
 ### Structure by Post Type
+
+Every template ends on **the open thread**: the honest current state — what's unresolved, what
+you'll watch for, what comes next. A reserved verdict ("I'm keeping it, for now") is a valid
+ending. If the post closes a finished series, end with closure instead — no manufactured
+cliffhangers.
 
 **Lessons Learned:**
 ```
@@ -102,16 +159,16 @@ Setup: Context — what were you trying to do?
 The Story: What happened, in order
 The Turn: When/where things changed
 The Insight: What you actually learned (be specific)
-The Takeaway: What the reader should do differently
+The Open Thread: The honest current state — what's unresolved, what you'll watch for, what comes next
 ```
 
 **How-To:**
 ```
-Hook: Why this matters / common failure mode
+Hook: The moment this became a problem for you / what it cost you
 Overview: What we're doing and why this approach
 Steps: Numbered, concrete, with real examples
-Pitfalls: The things people get wrong
-Wrap-up: What success looks like
+Pitfalls: What they cost you — narrated as your experience, not warnings issued to the reader
+The Open Thread: Where this leaves you — what's still rough, what you're watching for
 ```
 
 **Opinion / Take:**
@@ -120,7 +177,7 @@ Hook: State the controversial or non-obvious thesis upfront
 Argument 1: [strongest point]
 Argument 2: [second point]
 Counter-argument: What the other side would say — and why you're still right
-Conclusion: Restate the thesis with conviction
+The Open Thread: Where you actually land — a reserved verdict is valid; what would change your mind
 ```
 
 **Project / Launch:**
@@ -129,8 +186,7 @@ Hook: What it does and who it's for (one sentence)
 The Origin: Why you built this — what was missing, what frustrated you, why existing tools didn't cut it
 How It Works: The interesting parts only — architecture, key decisions, not a feature list
 What Was Hard: Be honest — one real technical or design challenge
-What's Next: Where this is going
-CTA: Try it / read the docs / follow for updates
+The Open Thread: The honest current state — what's unresolved, what you're watching for, what comes next
 ```
 
 **Thought Leadership:**
@@ -138,8 +194,8 @@ CTA: Try it / read the docs / follow for updates
 Hook: State the non-obvious claim or question upfront — don't bury the thesis
 Argument: Build through specific examples, not abstract assertions (name real products, companies, events)
 Counter-argument: The strongest objection — acknowledge it directly, then explain why the thesis holds
-Implication: What changes if the reader accepts this view? (concrete, not vague)
-Close: A challenge, a question, or a line that reframes how the reader sees the topic
+Implication: What changes if this view holds? (concrete, not vague)
+The Open Thread: What's still unresolved in your own thinking — what you'll watch for next
 ```
 
 **Personal Story:**
@@ -148,7 +204,7 @@ Hook: The specific moment this post is really about — one concrete scene, not 
 Setup: Enough context to understand what was at stake (brief)
 Arc: What happened, what changed, what the turning point was
 The Insight: What you actually learned — specific, not "I learned resilience"
-Takeaway: What the reader should do or notice as a result — make it actionable
+The Open Thread: The honest current state — what's unresolved, what you'll watch for, what comes next
 ```
 
 ---
@@ -164,7 +220,9 @@ Also offer **one proactive observation** — something you'd fix even if they're
 - **Opening too slow**: First paragraph is setup, not tension — flag and offer an alternative opening.
 - **Missing the specific**: Draft generalizes where source material has real details — insert them.
 - **Wrong angle**: Post reads for practitioners but material suggests a broader audience (or vice versa) — raise it.
-- **Conclusion fizzles**: Ending restates intro or trails off — replace with a sharper close.
+- **Conclusion fizzles or lectures**: Ending restates the intro, trails off, or lands on a tidy takeaway/CTA — replace with the genuinely open thread or a reserved verdict.
+- **Influencer tells**: Draft contains banned tells (one-liner paragraphs, aphoristic closers, imperative lessons, bold pseudo-headers) — rewrite quieter, per the Voice section.
+- **Continuity slip**: A version number, date, or fact contradicts an earlier episode — fix it against the previous posts.
 - **Generic title**: Title could describe dozens of posts — push for a specific claim or hook.
 - **Tone mismatch**: Source is casual but draft is formal (or vice versa) — ask if they want the voice adjusted.
 - **Gaps flagged earlier**: Surface thin spots as concrete invitations: *"The pitfalls section would be stronger with a real example — do you have one?"*
