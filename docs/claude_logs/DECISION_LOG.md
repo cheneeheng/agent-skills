@@ -208,7 +208,7 @@ later pushed to origin fresh.
 
 ---
 
-### Entry 3
+### Entry 13
 
 **Type:** Decision
 **Mode:** Autonomous
@@ -219,3 +219,17 @@ later pushed to origin fresh.
 **Decision:** Extended the edits to `blog-editor` (template endings mirrored, Closing checklist rewritten, banned-tells and series-continuity checklist items added) and registered both duplicated blocks (Voice section, Structure by Post Type) in `CROSS_REFERENCES.md` per the Cross-Reference Rule. Left `blog-repurpose` untouched: its CTA conventions are platform-native to social formats (Twitter/LinkedIn), not the blog voice tmp.md targets.
 **Impact / Risk:** Low. blog-editor scope extension is the conservative reading of the propagation rule; repurposed social posts will still sound like social posts, which may contrast with the quieter blog voice — flagged for the user rather than changed.
 **Outcome:** Three SKILL.md files updated on branch `feat/blog-personal-voice`; ceh-blog bumped 1.0.4 -> 1.0.5.
+
+---
+
+### Entry 14
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-10
+**Task:** Revise the agent-coding-contract skill (validation policy, scope wording, authority hierarchy, subagent stop path, log mechanics) per evaluation review.
+
+**Context:** Most changes were user-specified. One fork was not: the user's global `~/.claude/CLAUDE.md` said "For new behavior, write tests" while the user's in-session clarification of the contract's intent was that models must not write unit/integration tests unprompted. With project/user `CLAUDE.md` now placed above the contract in the authority hierarchy (also per this session), leaving the global line intact would have overridden the new Validation Policy in every session.
+**Decision:** Updated the global `CLAUDE.md` line to "Do not write or run tests unless asked (quick syntax/type/sanity checks on edited code are fine)" — treating the in-session statement as the freshest expression of intent and keeping the two files consistent. Also relabeled the log's duplicate "Entry 3" heading (2026-06-10 blog entry) to "Entry 13" to restore sequential IDs, since the contract now mandates next-sequential-integer IDs.
+**Impact / Risk:** The global preference change affects all projects, not just this repo; flagged to the user for revert if "write tests for new behavior" was intentional as a global default.
+**Outcome:** SKILL.md and global CLAUDE.md updated in the same session; plugin version bump deferred to commit time per repo rules.
