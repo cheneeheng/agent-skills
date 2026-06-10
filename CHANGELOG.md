@@ -5,6 +5,48 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.3.1] — 2026-06-10
+
+`ceh-blog` rewritten for a personal, non-influencer voice with series continuity; all four
+skills compressed for token efficiency.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-blog` | v1.0.5 |
+
+### Changed
+
+- **`ceh-blog`** (v1.0.5) —
+  - **Voice**: new Voice section (word-for-word identical in `blog-writer` and `blog-interviewer`)
+    — first-person, reflective, the reader overhears the reasoning; banned influencer tells
+    (standalone one-liner paragraphs, aphoristic closers, imperative lessons, "If you're building
+    X, then Y", bold pseudo-headers, meta-takeaway sign-offs, CTA endings); a never-invent rule
+    (every beat from the material or the author's words — flag missing beats, don't fabricate);
+    and a `CLAUDE.md` blog-voice override.
+  - **Endings**: all six post-type templates end on "The Open Thread" (honest current state —
+    what's unresolved, what comes next; a reserved verdict is valid; closure only for a finished
+    series' final post) instead of Takeaway/CTA/conviction conclusions. Ending lines are
+    byte-identical across writer, interviewer, and editor.
+  - **Series continuity**: the blog is treated as serials — each project a series, each post an
+    episode. `blog-writer` gains a Series Awareness step (read prior posts, pick up the previous
+    episode's thread, cross-link, check continuity facts); `blog-interviewer` reads the blog (not
+    just the repo) in Phase 0, asks whether the new post answers the last post's open thread, and
+    pins chronology relative to the previous episode.
+  - **Interviewing**: four required story beats for story-voice posts (the turn, the moment, the
+    verdict, the thread — the thread becomes the ending); hypothesis-option questions permitted;
+    answer-drift handling (keep the answer, re-ask once at most); verbatim quote capture (the
+    user's phrasing is the voice).
+  - **`blog-editor`** aligned so it diagnoses influencer tells and series-continuity slips instead
+    of "fixing" open endings into conviction closers. `blog-repurpose` voice rules unchanged —
+    its CTA conventions are platform-native to social formats.
+  - **Token efficiency**: all four skill bodies compressed (−23% chars, 56.4k → 43.7k) with no
+    rule, trigger phrase, or template line dropped; the duplicated Voice and template blocks are
+    registered in `CROSS_REFERENCES.md`.
+
+---
+
 ## [3.3.0] — 2026-06-09
 
 New `ceh-plan-build-review` plugin: the full plan-driven development loop (plan → implement →
