@@ -238,7 +238,7 @@
 
   const MANIFEST_PATH = [".claude", "skills", ".manifest.json"]; // relative to project root
   const GITIGNORE_PATH = [".claude", ".gitignore"];
-  const GITIGNORE_LINE = "skills/";
+  const OLD_GITIGNORE_LINE = "skills/"; // legacy blanket-ignore line; migrated away from
 
   // ---------------------------------------------------------------------
   // State
@@ -340,6 +340,16 @@
     return Array.from(new Set(arr)).sort();
   }
 
+  // Lines that should be present in .claude/.gitignore: one for the manifest
+  // itself, plus one per currently-installed skill folder.
+  function gitignoreLinesFor(skillNames) {
+    const lines = ["skills/.manifest.json"];
+    for (const name of sortedUnique(skillNames)) {
+      lines.push(`skills/${name}/`);
+    }
+    return lines;
+  }
+
   // ---------------------------------------------------------------------
   // Filesystem helpers
   // ---------------------------------------------------------------------
@@ -395,7 +405,14 @@
     await writable.close();
   }
 
-  async function ensureGitignore(root) {
+  // Ensure .claude/.gitignore ignores the manifest and each given skill's
+  // folder individually (not the whole skills/ directory), so a project can
+  // track its own custom skills alongside synced ones.
+  //
+  // Migrates away from the old blanket "skills/" line if present. Appends
+  // any missing lines without reordering existing content; never duplicates
+  // a line.
+  async function ensureGitignore(root, skillNames) {
     const dir = await getDirPath(root, [".claude"], true);
     let existing = "";
     let exists = false;
@@ -408,26 +425,49 @@
       if (e && e.name !== "NotFoundError") throw e;
     }
 
-    if (exists) {
-      const lines = existing.split("\n");
-      // splitlines()-equivalent check: does any line equal "skills/" exactly?
-      const hasLine = existing.split(/\r\n|\r|\n/).includes(GITIGNORE_LINE);
-      if (hasLine) return;
-      let content = existing;
-      if (content.length > 0 && !content.endsWith("\n")) {
-        content += "\n";
-      }
-      content += GITIGNORE_LINE + "\n";
-      const fh = await dir.getFileHandle(".gitignore", { create: true });
-      const writable = await fh.createWritable();
-      await writable.write(content);
-      await writable.close();
-    } else {
-      const fh = await dir.getFileHandle(".gitignore", { create: true });
-      const writable = await fh.createWritable();
-      await writable.write(GITIGNORE_LINE + "\n");
-      await writable.close();
+    let lines = exists ? existing.split(/\r\n|\r|\n/) : [];
+    if (lines.length > 0 && lines[lines.length - 1] === "") {
+      lines = lines.slice(0, -1);
     }
+    const before = lines.join("\n");
+
+    lines = lines.filter((line) => line !== OLD_GITIGNORE_LINE);
+
+    for (const line of gitignoreLinesFor(skillNames)) {
+      if (!lines.includes(line)) {
+        lines.push(line);
+      }
+    }
+
+    const after = lines.join("\n");
+    if (after === before) return;
+
+    const fh = await dir.getFileHandle(".gitignore", { create: true });
+    const writable = await fh.createWritable();
+    await writable.write(after + "\n");
+    await writable.close();
+  }
+
+  // Remove the gitignore line for each given skill name ("skills/<name>/"),
+  // preserving all other lines and their order. No-op if the file is absent.
+  async function removeGitignoreLines(root, skillNames) {
+    const fh = await tryGetFilePath(root, [".claude"], ".gitignore");
+    if (!fh) return;
+
+    const file = await fh.getFile();
+    const existing = await file.text();
+    let lines = existing.split(/\r\n|\r|\n/);
+    if (lines.length > 0 && lines[lines.length - 1] === "") {
+      lines = lines.slice(0, -1);
+    }
+
+    const toRemove = new Set(skillNames.map((name) => `skills/${name}/`));
+    const newLines = lines.filter((line) => !toRemove.has(line));
+    if (newLines.length === lines.length) return;
+
+    const writable = await fh.createWritable();
+    await writable.write(newLines.length > 0 ? newLines.join("\n") + "\n" : "");
+    await writable.close();
   }
 
   async function getSkillsRoot(root, create) {
@@ -1001,7 +1041,7 @@
       }
 
       await writeManifest(projectHandle, newManifest);
-      await ensureGitignore(projectHandle);
+      await ensureGitignore(projectHandle, newSkills);
 
       manifest = newManifest;
       manifestExisted = true;
@@ -1053,6 +1093,7 @@
       }
 
       await writeManifest(projectHandle, newManifest);
+      await removeGitignoreLines(projectHandle, [name]);
       manifest = newManifest;
 
       renderCurrentState();

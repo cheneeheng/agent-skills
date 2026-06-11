@@ -45,7 +45,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $MANIFEST_NAME = ".manifest.json"
-$GITIGNORE_LINE = "skills/"
+$OLD_GITIGNORE_LINE = "skills/"  # legacy blanket-ignore line; migrated away from
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -124,9 +124,46 @@ function Save-Manifest {
     [System.IO.File]::WriteAllText($path, $json, $utf8NoBom)
 }
 
-# Ensure .claude/.gitignore contains the exact line "skills/".
+# Lines that should be present in .claude/.gitignore: one for the manifest
+# itself, plus one per currently-installed skill folder.
+function Get-GitignoreLines {
+    param([string[]]$SkillNames)
+
+    $lines = [System.Collections.Generic.List[string]]::new()
+    $lines.Add("skills/$MANIFEST_NAME")
+    foreach ($name in (@($SkillNames) | Sort-Object -Unique)) {
+        $lines.Add("skills/$name/")
+    }
+    return @($lines)
+}
+
+# Read .claude/.gitignore as a list of lines (no trailing empty element from
+# a final newline), or an empty array if the file is absent/empty.
+function Read-GitignoreLines {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        return @()
+    }
+    $content = Get-Content -LiteralPath $Path -Raw -Encoding utf8
+    if ($null -eq $content -or $content.Length -eq 0) {
+        return @()
+    }
+    $lines = @($content -split "`r?`n")
+    if ($lines.Count -gt 0 -and $lines[-1] -eq "") {
+        $lines = $lines[0..($lines.Count - 2)]
+    }
+    return @($lines)
+}
+
+# Ensure .claude/.gitignore ignores the manifest and each given skill's
+# folder individually (not the whole skills/ directory), so a project can
+# track its own custom skills alongside synced ones.
+#
+# Migrates away from the old blanket "skills/" line if present. Appends any
+# missing lines without reordering existing content; never duplicates a line.
 function Confirm-Gitignore {
-    param([string]$TargetDir)
+    param([string]$TargetDir, [string[]]$SkillNames)
 
     $claudeDir = Join-Path $TargetDir ".claude"
     if (-not (Test-Path -LiteralPath $claudeDir)) {
@@ -134,22 +171,45 @@ function Confirm-Gitignore {
     }
     $path = Join-Path $claudeDir ".gitignore"
 
-    if (Test-Path -LiteralPath $path -PathType Leaf) {
-        $content = Get-Content -LiteralPath $path -Raw -Encoding utf8
-        if ($null -eq $content) { $content = "" }
-        $lines = $content -split "`r?`n"
-        if ($lines -contains $GITIGNORE_LINE) {
-            return
+    $lines = Read-GitignoreLines -Path $path
+    $before = $lines -join "`n"
+
+    $lines = @($lines | Where-Object { $_ -ne $OLD_GITIGNORE_LINE })
+
+    foreach ($line in (Get-GitignoreLines -SkillNames $SkillNames)) {
+        if ($lines -notcontains $line) {
+            $lines += $line
         }
-        if ($content.Length -gt 0 -and -not ($content.EndsWith("`n"))) {
-            $content += "`n"
-        }
-        $content += $GITIGNORE_LINE + "`n"
-        [System.IO.File]::WriteAllText($path, $content, (New-Object System.Text.UTF8Encoding($false)))
     }
-    else {
-        [System.IO.File]::WriteAllText($path, $GITIGNORE_LINE + "`n", (New-Object System.Text.UTF8Encoding($false)))
+
+    $after = $lines -join "`n"
+    if ($after -eq $before) {
+        return
     }
+
+    [System.IO.File]::WriteAllText($path, $after + "`n", (New-Object System.Text.UTF8Encoding($false)))
+}
+
+# Remove the gitignore line for each given skill name ("skills/<name>/"),
+# preserving all other lines and their order. No-op if the file is absent.
+function Remove-GitignoreLines {
+    param([string]$TargetDir, [string[]]$SkillNames)
+
+    $path = Join-Path (Join-Path $TargetDir ".claude") ".gitignore"
+    $lines = Read-GitignoreLines -Path $path
+    if ($lines.Count -eq 0) {
+        return
+    }
+
+    $toRemove = @($SkillNames | ForEach-Object { "skills/$_/" })
+    $newLines = @($lines | Where-Object { $toRemove -notcontains $_ })
+
+    if ($newLines.Count -eq $lines.Count) {
+        return
+    }
+
+    $content = if ($newLines.Count -gt 0) { ($newLines -join "`n") + "`n" } else { "" }
+    [System.IO.File]::WriteAllText($path, $content, (New-Object System.Text.UTF8Encoding($false)))
 }
 
 # Recursively find every directory that directly contains a SKILL.md.
@@ -391,7 +451,7 @@ function Invoke-Install {
         $manifest["skills"] = @($selection)
 
         Save-Manifest -TargetDir $Target -Manifest $manifest
-        Confirm-Gitignore -TargetDir $Target
+        Confirm-Gitignore -TargetDir $Target -SkillNames $selection
 
         Write-Output "Installed $($selection.Count) skill(s): $($selection -join ', ')"
     }
@@ -470,7 +530,7 @@ function Invoke-Update {
         $manifest["updated"] = Get-NowIso
 
         Save-Manifest -TargetDir $Target -Manifest $manifest
-        Confirm-Gitignore -TargetDir $Target
+        Confirm-Gitignore -TargetDir $Target -SkillNames $unionSkills
 
         $selectionStr = if ($selection.Count -gt 0) { $selection -join ", " } else { "(none)" }
         Write-Output "Updated $($selection.Count) skill(s): $selectionStr"
@@ -526,6 +586,7 @@ function Invoke-Remove {
     $manifest["updated"] = Get-NowIso
 
     Save-Manifest -TargetDir $Target -Manifest $manifest
+    Remove-GitignoreLines -TargetDir $Target -SkillNames $names
 
     $removedStr = if ($removed.Count -gt 0) { $removed -join ", " } else { "(none found)" }
     Write-Output "Removed $($removed.Count) skill(s): $removedStr"

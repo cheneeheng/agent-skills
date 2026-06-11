@@ -16,7 +16,7 @@
 set -euo pipefail
 
 MANIFEST_NAME=".manifest.json"
-GITIGNORE_LINE="skills/"
+OLD_GITIGNORE_LINE="skills/"  # legacy blanket-ignore line; migrated away from
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -132,29 +132,81 @@ copy_skill() {
     cp -r "${src}/." "${dest}/"
 }
 
-# Ensure <target>/.claude/.gitignore contains the line "skills/" exactly once.
+# Lines that should be present in .claude/.gitignore: one for the manifest
+# itself, plus one per currently-installed skill folder.
+# $1 = newline-separated skill names (may be empty/blank)
+gitignore_lines_for() {
+    printf 'skills/%s\n' "$MANIFEST_NAME"
+    printf '%s\n' "$1" | while IFS= read -r name; do
+        [[ -z "$name" ]] && continue
+        printf 'skills/%s/\n' "$name"
+    done
+}
+
+# Ensure .claude/.gitignore ignores the manifest and each given skill's
+# folder individually (not the whole skills/ directory), so a project can
+# track its own custom skills alongside synced ones.
+#
+# Migrates away from the old blanket "skills/" line if present. Appends any
+# missing lines without reordering existing content; never duplicates a line.
 ensure_gitignore() {
-    # $1 = target
-    local target="$1"
+    # $1 = target, $2 = newline-separated skill names
+    local target="$1" names="$2"
     local gi_dir="${target}/.claude"
     local gi_path="${gi_dir}/.gitignore"
     mkdir -p "$gi_dir"
-    if [[ -f "$gi_path" ]]; then
-        if grep -qxF "$GITIGNORE_LINE" "$gi_path"; then
-            return 0
+
+    local existing=""
+    [[ -f "$gi_path" ]] && existing="$(cat "$gi_path")"
+
+    # Migration: drop the old blanket "skills/" line.
+    local filtered
+    filtered="$(printf '%s\n' "$existing" | grep -vxF "$OLD_GITIGNORE_LINE" || true)"
+
+    local wanted line
+    local -a to_append=()
+    wanted="$(gitignore_lines_for "$names")"
+    while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+        if ! grep -qxF "$line" <<<"$filtered"; then
+            to_append+=("$line")
         fi
-        # Append, ensuring the file ends with a newline before appending.
-        if [[ -s "$gi_path" ]]; then
-            local last_byte
-            last_byte="$(tail -c1 "$gi_path" || true)"
-            if [[ -n "$last_byte" ]]; then
-                printf '\n' >>"$gi_path"
-            fi
-        fi
-        printf '%s\n' "$GITIGNORE_LINE" >>"$gi_path"
-    else
-        printf '%s\n' "$GITIGNORE_LINE" >"$gi_path"
+    done <<<"$wanted"
+
+    if [[ "$filtered" == "$existing" && "${#to_append[@]}" -eq 0 ]]; then
+        return 0
     fi
+
+    {
+        if [[ -n "$filtered" ]]; then
+            printf '%s\n' "$filtered"
+        fi
+        for line in "${to_append[@]}"; do
+            printf '%s\n' "$line"
+        done
+    } >"$gi_path"
+}
+
+# Remove the gitignore line for each given skill name ("skills/<name>/"),
+# preserving all other lines and their order. No-op if the file is absent.
+remove_gitignore_lines() {
+    # $1 = target, $2 = newline-separated skill names to remove
+    local target="$1" names="$2"
+    local gi_path="${target}/.claude/.gitignore"
+    [[ -f "$gi_path" ]] || return 0
+
+    local -a args=()
+    local name
+    while IFS= read -r name; do
+        [[ -z "$name" ]] && continue
+        args+=(-e "skills/${name}/")
+    done <<<"$names"
+    [[ "${#args[@]}" -eq 0 ]] && return 0
+
+    local tmp
+    tmp="$(mktemp "${gi_path}.XXXXXX")"
+    grep -vxF "${args[@]}" "$gi_path" >"$tmp" || true
+    mv "$tmp" "$gi_path"
 }
 
 # Read the manifest as raw JSON text, or empty string if absent.
@@ -352,7 +404,7 @@ cmd_install() {
             | save_manifest "$target"
     fi
 
-    ensure_gitignore "$target"
+    ensure_gitignore "$target" "$selection"
 
     local count joined
     count="$(printf '%s\n' "$selection" | grep -c . || true)"
@@ -448,7 +500,7 @@ cmd_update_or_add() {
         '.skills = $skills | .updated = $updated' \
         <<<"$manifest_json" | save_manifest "$target"
 
-    ensure_gitignore "$target"
+    ensure_gitignore "$target" "$union_skills"
 
     local count joined
     count="$(printf '%s\n' "$selection" | grep -c . || true)"
@@ -514,6 +566,8 @@ cmd_remove() {
     jq --arg updated "$updated" --argjson remove "$names_json" \
         '.skills = ((.skills // []) - $remove | sort) | .updated = $updated' \
         <<<"$manifest_json" | save_manifest "$target"
+
+    remove_gitignore_lines "$target" "$names"
 
     local joined
     if [[ "${#removed[@]}" -eq 0 ]]; then

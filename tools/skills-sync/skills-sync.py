@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 MANIFEST_NAME = ".manifest.json"
-GITIGNORE_LINE = "skills/"
+OLD_GITIGNORE_LINE = "skills/"  # legacy blanket-ignore line; migrated away from
 
 
 def error(message):
@@ -62,19 +62,55 @@ def save_manifest(target, manifest):
         f.write("\n")
 
 
-def ensure_gitignore(target):
+def gitignore_lines_for(skill_names):
+    """Lines that should be present in .claude/.gitignore: one for the
+    manifest itself, plus one per currently-installed skill folder."""
+    lines = [f"skills/{MANIFEST_NAME}"]
+    lines += [f"skills/{name}/" for name in sorted(skill_names)]
+    return lines
+
+
+def ensure_gitignore(target, skill_names):
+    """Ensure .claude/.gitignore ignores the manifest and each given skill's
+    folder individually (not the whole skills/ directory), so a project can
+    track its own custom skills alongside synced ones.
+
+    Migrates away from the old blanket "skills/" line if present. Appends
+    any missing lines without reordering existing content; never duplicates
+    a line.
+    """
     path = Path(target) / ".claude" / ".gitignore"
     path.parent.mkdir(parents=True, exist_ok=True)
-    if path.exists():
-        content = path.read_text(encoding="utf-8")
-        if GITIGNORE_LINE in content.splitlines():
-            return
-        if content and not content.endswith("\n"):
-            content += "\n"
-        content += GITIGNORE_LINE + "\n"
-        path.write_text(content, encoding="utf-8")
-    else:
-        path.write_text(GITIGNORE_LINE + "\n", encoding="utf-8")
+
+    lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+    before = list(lines)
+
+    lines = [line for line in lines if line != OLD_GITIGNORE_LINE]
+
+    for line in gitignore_lines_for(skill_names):
+        if line not in lines:
+            lines.append(line)
+
+    if lines == before:
+        return
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def remove_gitignore_lines(target, skill_names):
+    """Remove the gitignore line for each given skill name, preserving all
+    other lines and their order. No-op if the file doesn't exist."""
+    path = Path(target) / ".claude" / ".gitignore"
+    if not path.exists():
+        return
+    to_remove = {f"skills/{name}/" for name in skill_names}
+    lines = path.read_text(encoding="utf-8").splitlines()
+    new_lines = [line for line in lines if line not in to_remove]
+    if new_lines == lines:
+        return
+    content = "\n".join(new_lines)
+    if new_lines:
+        content += "\n"
+    path.write_text(content, encoding="utf-8")
 
 
 def detect_skills(root):
@@ -232,7 +268,7 @@ def cmd_install(args):
         manifest["skills"] = selection
 
         save_manifest(target, manifest)
-        ensure_gitignore(target)
+        ensure_gitignore(target, selection)
 
         print(f"Installed {len(selection)} skill(s): {', '.join(selection)}")
     finally:
@@ -284,7 +320,7 @@ def cmd_update(args, require_skills=False):
         manifest["skills"] = sorted(set(manifest.get("skills", [])) | set(selection))
         manifest["updated"] = now_iso()
         save_manifest(target, manifest)
-        ensure_gitignore(target)
+        ensure_gitignore(target, manifest["skills"])
 
         print(f"Updated {len(selection)} skill(s): {', '.join(selection) or '(none)'}")
     finally:
@@ -319,6 +355,7 @@ def cmd_remove(args):
     manifest["skills"] = sorted(manifest.get("skills", []))
     manifest["updated"] = now_iso()
     save_manifest(target, manifest)
+    remove_gitignore_lines(target, names)
 
     print(f"Removed {len(removed)} skill(s): {', '.join(removed) or '(none found)'}")
 
