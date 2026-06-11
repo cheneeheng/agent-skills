@@ -24,7 +24,7 @@ your-library/
 ## Initial Config
 
 - `pyproject.toml` with an explicit build backend (hatchling), uv, ruff, mypy, pytest config —
-  see `ceh-python-library:packaging` and `ceh-python-library:python-environment`.
+  see `ceh-python-library:packaging` and `ceh-python-library:python-library-environment`.
 - Keep `dependencies = []` minimal; no web-service deps. Define `__all__` in `__init__.py` from the start.
 
 ## .gitignore

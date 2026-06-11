@@ -34,7 +34,7 @@ project/
 
 ## Initial Config
 
-- `pyproject.toml` with uv, ruff, mypy, pytest config — see `ceh-python-service:python-environment`.
+- `pyproject.toml` with uv, ruff, mypy, pytest config — see `ceh-python-service:python-service-environment`.
 - Web service deps: `fastapi`, `uvicorn[standard]`, `pydantic-settings`, `asyncpg`, `alembic`, `structlog`.
 
 ## .gitignore

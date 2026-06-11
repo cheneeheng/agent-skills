@@ -233,3 +233,25 @@ later pushed to origin fresh.
 **Decision:** Updated the global `CLAUDE.md` line to "Do not write or run tests unless asked (quick syntax/type/sanity checks on edited code are fine)" — treating the in-session statement as the freshest expression of intent and keeping the two files consistent. Also relabeled the log's duplicate "Entry 3" heading (2026-06-10 blog entry) to "Entry 13" to restore sequential IDs, since the contract now mandates next-sequential-integer IDs.
 **Impact / Risk:** The global preference change affects all projects, not just this repo; flagged to the user for revert if "write tests for new behavior" was intentional as a global default.
 **Outcome:** SKILL.md and global CLAUDE.md updated in the same session; plugin version bump deferred to commit time per repo rules.
+
+### Entry 15
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-11T00:00:00Z
+**Task:** Make duplicated skill names unique across plugins (python-environment, python-testing)
+
+**Context:** The user asked for unique, recognizable skill names but did not specify a naming
+scheme, whether to rename one or both copies of each pair, or how to size the version bumps.
+**Decision:** Renamed both copies of each pair to plugin-qualified names mirroring the plugin
+directory names: `python-service-environment` / `python-service-testing` (ceh-python-service) and
+`python-library-environment` / `python-library-testing` (ceh-python-library). Symmetric renames
+keep the name → plugin mapping obvious in hook tags, agent `skills:` lists, and cross-plugin
+references. Version bumps: MINOR for the two Python plugins (the skill-name surface changed —
+closest to the repo's "new skills" MINOR rule), PATCH for ceh-scaffolding and ceh-web-frontend
+(reference-text updates only). Historical records (CHANGELOG.md, docs/PLUGIN_REORG_PLAN.md, old
+DECISION_LOG entries) intentionally left with old names.
+**Impact / Risk:** Users invoking the old skill names (`/ceh-python-service:python-environment`
+etc.) must switch to the new names; auto-load behavior is unaffected (descriptions unchanged).
+**Outcome:** All four renames applied; repo-wide grep shows no stale references outside
+historical docs; new "Same Skill, Different Plugins" map added to CROSS_REFERENCES.md.

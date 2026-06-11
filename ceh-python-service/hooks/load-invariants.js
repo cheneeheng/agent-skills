@@ -11,7 +11,7 @@ These are non-negotiable defaults. For full patterns and code behind any rule, l
 skill via the Skill tool as \`ceh-python-service:<name>\`, where \`<name>\` is the tag shown in
 brackets below (e.g. \`ceh-python-service:python-security\`).
 
-Style & types [python-environment]:
+Style & types [python-service-environment]:
 - Type hints on every function signature and class attribute. Use 3.12 built-in generics (\`list[str]\`, not \`List[str]\`).
 - No \`Any\` without a comment explaining why. No \`# type: ignore\` without a comment. Never downgrade mypy \`strict = true\` to silence errors.
 - ruff only for lint/format — not flake8, pylint, isort, or Black. \`snake_case\` functions/vars, \`PascalCase\` classes, \`UPPER_SNAKE_CASE\` constants.

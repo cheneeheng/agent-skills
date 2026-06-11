@@ -16,7 +16,8 @@ stay single-sourced.
 | Accessibility | `/ceh-web-frontend:accessibility` | Writing component markup (Svelte or React) |
 
 > `environment` consolidates the former `coding-style` and `linting` skills so TypeScript style and
-> quality gates fire on file edits, matching the Python plugin's single `python-environment`.
+> quality gates fire on file edits, matching the Python plugins' single environment skill
+> (`python-service-environment` / `python-library-environment`).
 
 ## Hooks
 

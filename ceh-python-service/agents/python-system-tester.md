@@ -4,7 +4,7 @@ description: Use when the user explicitly asks for full end-to-end or system-lev
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
-  - python-testing
+  - python-service-testing
 permissionMode: acceptEdits
 maxTurns: 40
 ---
