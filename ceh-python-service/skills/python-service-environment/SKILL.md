@@ -1,9 +1,9 @@
 ---
-name: "python-environment"
-description: Load this skill when setting up or configuring the Python environment for a library: installing dependencies with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions, or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command is run, or a question arises about code style, type annotations, or import ordering. For web service environment (uvicorn/asyncpg) use ceh-python-service instead.
+name: "python-service-environment"
+description: Load this skill when setting up or configuring the Python environment: installing dependencies with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions, or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command is run, or a question arises about code style, type annotations, or import ordering.
 ---
 
-# Python Environment (Library)
+# Python Environment
 
 ## Environment
 
@@ -16,6 +16,7 @@ description: Load this skill when setting up or configuring the Python environme
 | Add a production dependency | `uv add <package>` |
 | Add a dev dependency | `uv add --dev <package>` |
 | Run any command | `uv run <command>` |
+| Start development server | `uv run uvicorn app.main:app --reload` |
 | Run tests | `uv run pytest` |
 | Lint | `uv run ruff check .` |
 | Format | `uv run ruff format .` |
@@ -23,16 +24,13 @@ description: Load this skill when setting up or configuring the Python environme
 
 **Never edit `uv.lock` manually. Never commit `.env`.**
 
-Keep the runtime dependency set minimal — a library inherits onto every consumer. Do not add web-service
-dependencies (`fastapi`, `uvicorn`, `asyncpg`); those belong to applications, not libraries.
-
 `pyproject.toml` configuration:
 ```toml
 [project]
-name = "your-library"
+name = "your-app"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = []  # keep minimal; every dependency is imposed on consumers
+dependencies = ["fastapi", "uvicorn[standard]", "pydantic-settings", "asyncpg", "alembic", "structlog"]
 
 [tool.ruff]
 line-length = 88
@@ -41,7 +39,7 @@ line-length = 88
 select = ["E", "F", "I", "UP", "N", "B"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["your_library"]
+known-first-party = ["app"]
 
 [tool.mypy]
 strict = true
@@ -58,18 +56,20 @@ asyncio_mode = "auto"
 - Type hints required on all function signatures and class attributes
 - Use Python 3.12 built-in generics: `list[str]`, not `List[str]`
 - Do not use `Any` without a comment explaining why
+- All `async def` route handlers; all I/O calls use `await`
 
 **Docstrings** (Google style, required on all public symbols):
 ```python
-def parse_duration(text: str) -> timedelta:
-    """Parses a human duration string into a timedelta.
+def reserve_stock(order: Order, qty: int) -> ReservationResult:
+    """Reserves stock for an order.
 
     Args:
-        text: Duration like "1h30m" or "45s".
+        order: The order requesting stock.
+        qty: Units to reserve.
     Returns:
-        The parsed timedelta.
+        ReservationResult with success or failure reason.
     Raises:
-        ValueError: If the string cannot be parsed.
+        InsufficientStockError: If qty exceeds available stock.
     """
 ```
 
@@ -79,10 +79,10 @@ One-line summary, then `Args` / `Returns` / `Raises` sections as needed. Omit se
 
 | Kind | Convention | Example |
 |------|-----------|---------|
-| Variables, functions | `snake_case` | `parse_duration`, `max_retries` |
-| Classes | `PascalCase` | `RetryPolicy` |
-| Constants | `UPPER_SNAKE_CASE` | `DEFAULT_TIMEOUT` |
-| Private members | `_leading_underscore` | `_normalize` |
+| Variables, functions | `snake_case` | `session_id`, `validate_event` |
+| Classes | `PascalCase` | `SessionState` |
+| Constants | `UPPER_SNAKE_CASE` | `MAX_CHALLENGES` |
+| Private members | `_leading_underscore` | `_apply_event` |
 
 **Imports** (three groups, separated by blank lines):
 ```python
@@ -90,13 +90,14 @@ One-line summary, then `Args` / `Returns` / `Raises` sections as needed. Omit se
 import asyncio
 
 # 2. Third-party
+from fastapi import HTTPException
 from pydantic import BaseModel
 
-# 3. Local package
-from your_library.core import RetryPolicy
+# 3. Local application
+from app.models.session import SessionState
 ```
 
-Never use `time.sleep()` in async code — use `await asyncio.sleep()`.
+**Pydantic v2:** Use `BaseModel` for all API request/response types and domain entities. Never use `time.sleep()` — use `await asyncio.sleep()`.
 
 ## Linting and Type Checking
 

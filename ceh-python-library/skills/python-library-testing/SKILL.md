@@ -1,5 +1,5 @@
 ---
-name: "python-testing"
+name: "python-library-testing"
 description: Load this skill when writing Python tests for a library: adding unit tests, tests that exercise the public API, fixtures, or mocks. Auto-load whenever a test file is created or modified, a pytest fixture is written, or a decision is made about what to mock vs what to test for real. For web service testing (real DB / HTTP) use ceh-python-service instead.
 ---
 

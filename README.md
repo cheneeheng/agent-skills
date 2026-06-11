@@ -56,14 +56,14 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-python-service` | asyncpg | `/ceh-python-service:asyncpg` | Writing database queries, transactions, tenant isolation, or connection pool config |
 | `ceh-python-service` | PostgreSQL | `/ceh-python-service:postgresql` | Designing a schema, choosing column types, or adding indexes |
 | `ceh-python-service` | Alembic | `/ceh-python-service:alembic` | Creating or running database migrations; migration deploy safety |
-| `ceh-python-service` | Python Environment | `/ceh-python-service:python-environment` | Setting up uv/pyproject.toml, writing type hints, configuring ruff/mypy |
-| `ceh-python-service` | Python Testing | `/ceh-python-service:python-testing` | Writing Python unit or integration tests |
+| `ceh-python-service` | Python Service Environment | `/ceh-python-service:python-service-environment` | Setting up uv/pyproject.toml, writing type hints, configuring ruff/mypy |
+| `ceh-python-service` | Python Service Testing | `/ceh-python-service:python-service-testing` | Writing Python unit or integration tests |
 | `ceh-python-service` | Python Observability | `/ceh-python-service:python-observability` | Adding structlog logging, metrics, health checks, or correlation IDs |
 | `ceh-python-service` | Python Security | `/ceh-python-service:python-security` | Secrets management, CORS, rate limiting, or input validation |
 | `ceh-python-library` | Packaging | `/ceh-python-library:packaging` | Build backend, src layout, wheels/sdist, publishing to PyPI |
 | `ceh-python-library` | Public API | `/ceh-python-library:public-api` | Defining `__all__`, changing a public signature, classifying a semver bump |
-| `ceh-python-library` | Python Environment | `/ceh-python-library:python-environment` | Setting up uv/pyproject.toml for a library (no web deps) |
-| `ceh-python-library` | Python Testing | `/ceh-python-library:python-testing` | Writing unit and public-API tests for a library |
+| `ceh-python-library` | Python Library Environment | `/ceh-python-library:python-library-environment` | Setting up uv/pyproject.toml for a library (no web deps) |
+| `ceh-python-library` | Python Library Testing | `/ceh-python-library:python-library-testing` | Writing unit and public-API tests for a library |
 | `ceh-web-frontend` | Environment | `/ceh-web-frontend:environment` | Bun/Vite setup, TypeScript style, ESLint/Prettier, type config |
 | `ceh-web-frontend` | SvelteKit | `/ceh-web-frontend:sveltekit` | Working on Svelte routes, stores, components, or the API client |
 | `ceh-web-frontend` | React + Vite | `/ceh-web-frontend:react-vite` | Working on React components, hooks, routing, or Vite config |

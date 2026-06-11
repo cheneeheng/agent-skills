@@ -6,6 +6,21 @@ this map exists so edits don't get lost.
 
 ---
 
+## Same Skill, Different Plugins (name map)
+
+These skill pairs are the **same foundational standard duplicated into two plugins** per the
+Shared-Standards Duplication Policy (see `CLAUDE.md`). Skill names are plugin-qualified so that
+every skill name in the repo is unique; this table maps each pair back to its shared standard.
+Editing one copy means editing the other in the same session — full file lists and divergence
+notes live in the detailed entries referenced below.
+
+| Shared standard | `ceh-python-service` name | `ceh-python-library` name | Detailed entry |
+|-----------------|---------------------------|---------------------------|----------------|
+| Python environment foundation (uv / ruff / mypy + style) | `python-service-environment` | `python-library-environment` | "Python environment foundation" below |
+| Python testing foundation (pytest core) | `python-service-testing` | `python-library-testing` | "Python testing foundation" below |
+
+---
+
 ## Layer boundaries (route → service → db)
 
 **Files:**
@@ -75,14 +90,14 @@ this map exists so edits don't get lost.
 | File | Section | Scope |
 |------|---------|-------|
 | `ceh-git-workflow/skills/open-pr/SKILL.md` | "Coverage Targets" section (under Definition of Done) | canonical — three rows incl. TypeScript |
-| `ceh-python-service/skills/python-testing/SKILL.md` | coverage section | two Python thresholds with identical row labels |
-| `ceh-python-library/skills/python-testing/SKILL.md` | coverage section | two Python thresholds with identical row labels |
+| `ceh-python-service/skills/python-service-testing/SKILL.md` | coverage section | two Python thresholds with identical row labels |
+| `ceh-python-library/skills/python-library-testing/SKILL.md` | coverage section | two Python thresholds with identical row labels |
 
 **What is shared (identical labels and thresholds):** two rows, word-for-word — `Python application package | 80%`, `Core business logic / domain services | 95%`.
 
 **What diverges:**
 - `open-pr` adds a third row (`TypeScript src/lib/ | 70%`) and the `mypy --strict` / `tsc --noEmit` note.
-- both `python-testing` copies omit the TypeScript row and add a pytest `--cov` command (`--cov=app` for the service, `--cov=your_library` for the library).
+- both testing-skill copies (`python-service-testing` / `python-library-testing`) omit the TypeScript row and add a pytest `--cov` command (`--cov=app` for the service, `--cov=your_library` for the library).
 
 ---
 
@@ -92,8 +107,8 @@ this map exists so edits don't get lost.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-python-service/skills/python-environment/SKILL.md` | entire file | service copy — web-service deps + uvicorn dev server (style half also injected by the service SessionStart hook) |
-| `ceh-python-library/skills/python-environment/SKILL.md` | entire file | library copy — no web deps, no uvicorn dev server (style half also injected by the library SessionStart hook) |
+| `ceh-python-service/skills/python-service-environment/SKILL.md` | entire file | service copy — web-service deps + uvicorn dev server (style half also injected by the service SessionStart hook) |
+| `ceh-python-library/skills/python-library-environment/SKILL.md` | entire file | library copy — no web deps, no uvicorn dev server (style half also injected by the library SessionStart hook) |
 
 **What is shared:** Python 3.12 + uv + `pyproject.toml`/`uv.lock` workflow, the uv command table, the ruff (line-length 88, `select = [E,F,I,UP,N,B]`) + mypy (`strict = true`) + pytest (`asyncio_mode = "auto"`) config, the coding-style rules (type hints, built-in generics, no `Any` without comment), naming table, three-group imports, and the "ruff only / no `# type: ignore` without comment" linting rules.
 
@@ -108,8 +123,8 @@ this map exists so edits don't get lost.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-python-service/skills/python-testing/SKILL.md` | entire file | service copy — real DB / HTTP integration |
-| `ceh-python-library/skills/python-testing/SKILL.md` | entire file | library copy — public-API tests, no DB/HTTP |
+| `ceh-python-service/skills/python-service-testing/SKILL.md` | entire file | service copy — real DB / HTTP integration |
+| `ceh-python-library/skills/python-library-testing/SKILL.md` | entire file | library copy — public-API tests, no DB/HTTP |
 
 **What is shared:** pytest + pytest-asyncio (`asyncio_mode = "auto"`), `tests/unit/` structure, `test_<what>_<expected_behavior>.py` naming, one-behavior-per-test rule, mocking rules (mock external boundaries, `unittest.mock`/`pytest-mock`), and the Coverage Targets block (see above).
 

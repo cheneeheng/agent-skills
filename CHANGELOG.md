@@ -5,6 +5,39 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.5.0] — 2026-06-11
+
+Duplicated skill names made unique across plugins: the `python-environment` / `python-testing`
+pairs shared by `ceh-python-service` and `ceh-python-library` are renamed to plugin-qualified
+names so each skill name maps to exactly one plugin.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-python-service` | v3.1.0 |
+| `ceh-python-library` | v1.2.0 |
+| `ceh-scaffolding` | v1.0.1 |
+| `ceh-web-frontend` | v3.0.3 |
+
+### Changed
+
+- **`ceh-python-service`** (v3.1.0) — skills renamed: `python-environment` →
+  `python-service-environment`, `python-testing` → `python-service-testing`. Hook tags, tester
+  agents' `skills:` lists, and in-plugin references updated.
+- **`ceh-python-library`** (v1.2.0) — skills renamed: `python-environment` →
+  `python-library-environment`, `python-testing` → `python-library-testing`. Hook tags and
+  in-plugin references updated.
+- **`ceh-scaffolding`** (v1.0.1) — scaffold skills' references updated to the new skill names.
+- **`ceh-web-frontend`** (v3.0.3) — reference-text updates to the new skill names.
+- `CROSS_REFERENCES.md` — new "Same Skill, Different Plugins" map tracking the renamed pairs;
+  root and plugin READMEs updated.
+
+Old invocations (`/ceh-python-service:python-environment` etc.) must switch to the new names;
+auto-load behavior is unaffected (descriptions unchanged).
+
+---
+
 ## [3.4.0] — 2026-06-11
 
 New standalone `skills-sync` tool under `tools/` — copies Claude Code skills from this repo's

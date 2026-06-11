@@ -12,8 +12,8 @@ For distributable libraries (packaging, public API, semver, no web deps) use `ce
 | `asyncpg` | Writing database queries, transactions, tenant isolation, or connection pool config |
 | `postgresql` | Designing a schema, choosing column types, or adding indexes |
 | `alembic` | Creating or running database migrations; migration deploy safety |
-| `python-environment` | Editing pyproject.toml, uv commands, type hints, or ruff/mypy config |
-| `python-testing` | Creating or modifying test files, fixtures, or mocks |
+| `python-service-environment` | Editing pyproject.toml, uv commands, type hints, or ruff/mypy config |
+| `python-service-testing` | Creating or modifying test files, fixtures, or mocks |
 | `python-observability` | Adding structlog logging, metrics, health checks, or correlation IDs |
 | `python-security` | Secrets management, CORS, rate limiting, or input validation |
 
@@ -27,9 +27,9 @@ and `compact` events and activates automatically when the plugin is enabled.
 ignore` without comment, parameterized SQL, secrets via `pydantic-settings`, the never-log list,
 correlation-ID propagation) are *invariants* — they must hold on every relevant change. But skill
 auto-loading is evaluated against the user's prompt at the start of a turn, so the invariant skills
-(`python-security`, `python-observability`, the style half of `python-environment`) reliably
+(`python-security`, `python-observability`, the style half of `python-service-environment`) reliably
 under-fire — nothing in "add a search endpoint" signals "this is security/logging sensitive." The
-action skills (`fastapi`, `python-testing`, `alembic`, `asyncpg`) trigger fine and stay on-demand.
+action skills (`fastapi`, `python-service-testing`, `alembic`, `asyncpg`) trigger fine and stay on-demand.
 The hook injects a compact version of the invariants every session so they always apply; each rule
 is tagged with the skill (e.g. `[python-security]`) that documents it in depth, loadable as
 `ceh-python-service:<name>`.
