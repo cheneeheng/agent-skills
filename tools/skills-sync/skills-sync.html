@@ -236,8 +236,8 @@
 (function () {
   "use strict";
 
-  const MANIFEST_PATH = ["claude", "skills", ".manifest.json"]; // relative to project root
-  const GITIGNORE_PATH = ["claude", ".gitignore"];
+  const MANIFEST_PATH = [".claude", "skills", ".manifest.json"]; // relative to project root
+  const GITIGNORE_PATH = [".claude", ".gitignore"];
   const GITIGNORE_LINE = "skills/";
 
   // ---------------------------------------------------------------------
@@ -376,7 +376,7 @@
   }
 
   async function readManifest(root) {
-    const fh = await tryGetFilePath(root, ["claude", "skills"], ".manifest.json");
+    const fh = await tryGetFilePath(root, [".claude", "skills"], ".manifest.json");
     if (!fh) return null;
     const file = await fh.getFile();
     const text = await file.text();
@@ -388,7 +388,7 @@
   }
 
   async function writeManifest(root, manifestObj) {
-    const fh = await getFilePath(root, ["claude", "skills"], ".manifest.json", true);
+    const fh = await getFilePath(root, [".claude", "skills"], ".manifest.json", true);
     const writable = await fh.createWritable();
     const text = JSON.stringify(manifestObj, null, 2) + "\n";
     await writable.write(text);
@@ -396,7 +396,7 @@
   }
 
   async function ensureGitignore(root) {
-    const dir = await getDirPath(root, ["claude"], true);
+    const dir = await getDirPath(root, [".claude"], true);
     let existing = "";
     let exists = false;
     try {
@@ -431,7 +431,7 @@
   }
 
   async function getSkillsRoot(root, create) {
-    return getDirPath(root, ["claude", "skills"], !!create);
+    return getDirPath(root, [".claude", "skills"], !!create);
   }
 
   // Recursively remove .claude/skills/<name>/ if present.

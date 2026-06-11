@@ -190,7 +190,7 @@ function Find-Skills {
 function Resolve-Selection {
     param([string]$Requested, [hashtable]$Available)
 
-    if ([string]::IsNullOrWhiteSpace($Requested) -or $Requested.Trim().ToLowerInvariant() -eq "all") {
+    if ($null -eq $Requested -or $Requested.Trim().ToLowerInvariant() -eq "all") {
         return @($Available.Keys | Sort-Object)
     }
 
@@ -410,7 +410,7 @@ function Invoke-Update {
         Write-ErrorAndExit "no manifest found - run install first"
     }
 
-    if ($RequireSkills -and [string]::IsNullOrWhiteSpace($Skills)) {
+    if ($RequireSkills -and [string]::IsNullOrEmpty($Skills)) {
         Write-ErrorAndExit "-Skills is required for 'add'"
     }
 
@@ -443,7 +443,7 @@ function Invoke-Update {
 
         $available = Find-Skills $srcRoot
 
-        if (-not [string]::IsNullOrWhiteSpace($Skills)) {
+        if (-not [string]::IsNullOrEmpty($Skills)) {
             $selection = Resolve-Selection -Requested $Skills -Available $available
         }
         else {

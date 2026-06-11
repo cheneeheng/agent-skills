@@ -94,7 +94,7 @@ resolve_selection() {
     local lower
     lower="$(printf '%s' "$requested" | tr '[:upper:]' '[:lower:]' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
 
-    if [[ -z "$requested" || "$lower" == "all" ]]; then
+    if [[ "$lower" == "all" ]]; then
         available_names "$available"
         return 0
     fi
@@ -376,7 +376,7 @@ cmd_update_or_add() {
         esac
     done
 
-    if [[ "$mode" == "add" && "$have_skills" -eq 0 ]]; then
+    if [[ "$mode" == "add" && ( "$have_skills" -eq 0 || -z "$skills" ) ]]; then
         err "--skills is required for 'add'"
     fi
 
@@ -416,7 +416,7 @@ cmd_update_or_add() {
     fi
 
     local selection
-    if [[ "$have_skills" -eq 1 ]]; then
+    if [[ "$have_skills" -eq 1 && -n "$skills" ]]; then
         selection="$(resolve_selection "$skills" "$available")"
     else
         # manifest skills ∩ available
