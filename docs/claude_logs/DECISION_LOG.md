@@ -233,3 +233,30 @@ later pushed to origin fresh.
 **Decision:** Updated the global `CLAUDE.md` line to "Do not write or run tests unless asked (quick syntax/type/sanity checks on edited code are fine)" — treating the in-session statement as the freshest expression of intent and keeping the two files consistent. Also relabeled the log's duplicate "Entry 3" heading (2026-06-10 blog entry) to "Entry 13" to restore sequential IDs, since the contract now mandates next-sequential-integer IDs.
 **Impact / Risk:** The global preference change affects all projects, not just this repo; flagged to the user for revert if "write tests for new behavior" was intentional as a global default.
 **Outcome:** SKILL.md and global CLAUDE.md updated in the same session; plugin version bump deferred to commit time per repo rules.
+
+---
+
+### Entry 15
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-11
+
+**Task:** Implement the `skills-sync` tool (Python/bash/PowerShell/HTML) per the uploaded
+`skills-sync.md` spec.
+
+**Context:** The spec describes a standalone CLI/HTML tool that copies *other* projects' Claude
+Code skills into `<project>/.claude/skills/`. It is meta-tooling for managing skill installs
+across arbitrary repos — not a `ceh-*` plugin, skill, or agent itself, so none of the
+"Adding a Skill/Agent" conventions in `CLAUDE.md` (plugin.json bumps, marketplace.json,
+README skill tables) apply, and it doesn't fit `ceh-dev-tools` (agents-only, scoped to
+repo-exploration agents). The repo had no existing top-level location for non-plugin tooling.
+**Decision:** Created a new top-level `tools/skills-sync/` directory holding all four
+implementations (`skills-sync.py`, `skills-sync.sh`, `skills-sync.ps1`, `skills-sync.html`),
+parallel to the `ceh-*` plugin directories and `docs/`. No README was added per the
+no-unrequested-docs rule; each script's own `--help`/usage text and the HTML UI are
+self-documenting.
+**Impact / Risk:** Low — new isolated directory, no existing files touched. If the user later
+wants this distributed differently (e.g. as part of `ceh-dev-tools`, or with a README), it's a
+simple move.
+**Outcome:** Implementation proceeds under `tools/skills-sync/`.
