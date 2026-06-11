@@ -193,3 +193,14 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
   ]
 }
 ```
+
+---
+
+## Tools
+
+| Tool | Path | Purpose |
+|------|------|---------|
+| skills-sync | `tools/skills-sync/` | Copy individual skills (from this repo or any other) into a project's `.claude/skills/` directory — install, update, add, remove, list. Python, bash, PowerShell, and browser-based HTML implementations. |
+
+`tools/` holds standalone meta-tooling that isn't itself a `ceh-*` plugin, skill, or agent — see
+`tools/skills-sync/README.md` for usage.
