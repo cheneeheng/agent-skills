@@ -233,3 +233,54 @@ later pushed to origin fresh.
 **Decision:** Updated the global `CLAUDE.md` line to "Do not write or run tests unless asked (quick syntax/type/sanity checks on edited code are fine)" — treating the in-session statement as the freshest expression of intent and keeping the two files consistent. Also relabeled the log's duplicate "Entry 3" heading (2026-06-10 blog entry) to "Entry 13" to restore sequential IDs, since the contract now mandates next-sequential-integer IDs.
 **Impact / Risk:** The global preference change affects all projects, not just this repo; flagged to the user for revert if "write tests for new behavior" was intentional as a global default.
 **Outcome:** SKILL.md and global CLAUDE.md updated in the same session; plugin version bump deferred to commit time per repo rules.
+
+---
+
+### Entry 15
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-11
+
+**Task:** Implement the `skills-sync` tool (Python/bash/PowerShell/HTML) per the uploaded
+`skills-sync.md` spec.
+
+**Context:** The spec describes a standalone CLI/HTML tool that copies *other* projects' Claude
+Code skills into `<project>/.claude/skills/`. It is meta-tooling for managing skill installs
+across arbitrary repos — not a `ceh-*` plugin, skill, or agent itself, so none of the
+"Adding a Skill/Agent" conventions in `CLAUDE.md` (plugin.json bumps, marketplace.json,
+README skill tables) apply, and it doesn't fit `ceh-dev-tools` (agents-only, scoped to
+repo-exploration agents). The repo had no existing top-level location for non-plugin tooling.
+**Decision:** Created a new top-level `tools/skills-sync/` directory holding all four
+implementations (`skills-sync.py`, `skills-sync.sh`, `skills-sync.ps1`, `skills-sync.html`),
+parallel to the `ceh-*` plugin directories and `docs/`. No README was added per the
+no-unrequested-docs rule; each script's own `--help`/usage text and the HTML UI are
+self-documenting.
+**Impact / Risk:** Low — new isolated directory, no existing files touched. If the user later
+wants this distributed differently (e.g. as part of `ceh-dev-tools`, or with a README), it's a
+simple move.
+**Outcome:** Implementation proceeds under `tools/skills-sync/`.
+
+---
+
+### Entry 16
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-11
+
+**Task:** Implement `tools/skills-sync/skills-sync.ps1` per the `skills-sync.md` spec.
+
+**Context:** The spec's PowerShell platform note explicitly offers a choice: "5.1-compatible if
+possible (no `??` operator if targeting 5.1; PS7-only is acceptable if documented — user runs
+`pwsh`)." `pwsh` is unavailable in this sandbox, so neither option could be executed/tested
+either way.
+**Decision:** Targeted PowerShell 7+ (`pwsh`) for cross-platform consistency with the bash
+version, and documented this in the script's header comment block (lines 11-15). No PS7-only
+operators (`??`, `?.`, ternary `?:`) are actually used in the script, so it likely also runs
+under 5.1, but it is tested/supported only against `pwsh`.
+**Impact / Risk:** Low — if 5.1-only support is required later, the script likely needs no
+changes (no PS7-only syntax used), just removal of the "PS7+" claim from the header after
+verification on Windows PowerShell 5.1.
+**Outcome:** `skills-sync.ps1` ships documented as PS7+ (`pwsh`); not executed in this sandbox
+(no `pwsh` available) — syntax-reviewed only.
