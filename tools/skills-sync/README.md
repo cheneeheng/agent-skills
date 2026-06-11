@@ -26,6 +26,12 @@ All four produce byte-compatible `.claude/skills/.manifest.json` manifests
 (same keys, key order, 2-space indent, trailing newline, LF line endings), so
 you can switch between them on the same project.
 
+`skills-sync.html` loads its styles and logic from sibling `skills-sync.css`
+and `js/*.js` files via classic (non-module) `<script>`/`<link>` tags, so it
+keeps working when opened directly via `file://`. Keep the whole
+`tools/skills-sync/` directory together when copying or distributing the
+HTML implementation — `skills-sync.html` alone is not enough.
+
 ## Commands
 
 - `install` — fresh install of selected skills from a GitHub repo or local folder; writes the manifest
