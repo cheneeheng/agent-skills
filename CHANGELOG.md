@@ -5,6 +5,21 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.4.0] — 2026-06-11
+
+New standalone `skills-sync` tool under `tools/` — copies Claude Code skills from this repo's
+plugins into a project's `.claude/skills/`. Repo tooling only; no plugin versions change.
+
+### Added
+
+- **`tools/skills-sync`** — skill-sync tool in three equivalent implementations (`skills-sync.ps1`,
+  `skills-sync.sh`, `skills-sync.py`) plus a Tidewater-themed `skills-sync.html` picker page
+  (CSS/JS extracted into separate files) and a tools README. Syncs selected skills into
+  `.claude/skills/`, ignoring individual skill folders rather than the whole `skills/` directory.
+  Cross-implementation bugs from a second audit pass fixed.
+
+---
+
 ## [3.3.2] — 2026-06-10
 
 `ceh-agent-coding-contract` contract clarified after a cross-model evaluation (Haiku 4.5,
