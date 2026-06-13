@@ -23,6 +23,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation agents |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
 | Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README agents |
+| Orchestration | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + explorer/executor/verifier subagents |
 
 ### Categorization
 
@@ -32,7 +33,7 @@ into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin (agents only). Each plugin is self-contained: a
@@ -91,6 +92,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-blog` | Blog Editor | `/ceh-blog:blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
 | `ceh-blog` | Blog Repurpose | `/ceh-blog:blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
 | `ceh-documentation` | User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
+| `ceh-orchestration` | Orchestrate | `/ceh-orchestration:orchestrate` | Decompose and delegate a big multi-step task — plan/delegate-only main session, cheap isolated workers, to cap context/token cost |
 
 ---
 
@@ -118,6 +120,9 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | `ceh-web-frontend` | TS System Tester | `/ceh-web-frontend:ts-system-tester` | Write Playwright E2E tests that exercise the full running stack as a real user would |
 | `ceh-ops` | GitHub Actions | `/ceh-ops:github-actions` | Create or fix GitHub Actions workflows, jobs, matrix builds, OIDC, reusable workflows |
 | `ceh-ops` | GitLab CI | `/ceh-ops:gitlab-ci` | Create or fix `.gitlab-ci.yml` pipelines, DAG stages, rules, protected variables, runners |
+| `ceh-orchestration` | Explorer | `/ceh-orchestration:explorer` | Locate code, map call sites, or summarize how something works — findings only, no changes (Haiku) |
+| `ceh-orchestration` | Executor | `/ceh-orchestration:executor` | Implement a single scoped task: code changes, edits, multi-step work (Sonnet) |
+| `ceh-orchestration` | Verifier | `/ceh-orchestration:verifier` | Check an executor's output against acceptance criteria — PASS/FAIL only (Haiku) |
 
 ---
 
@@ -149,6 +154,7 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-dev-tools@ceh-plugins --scope user
 /plugin install ceh-blog@ceh-plugins --scope user
 /plugin install ceh-documentation@ceh-plugins --scope user
+/plugin install ceh-orchestration@ceh-plugins --scope user
 ```
 
 Or install all at once using `--scope project` for project-specific installs.
@@ -189,7 +195,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/ceh-lessons-learned" },
     { "path": "~/agent-skills/ceh-dev-tools" },
     { "path": "~/agent-skills/ceh-blog" },
-    { "path": "~/agent-skills/ceh-documentation" }
+    { "path": "~/agent-skills/ceh-documentation" },
+    { "path": "~/agent-skills/ceh-orchestration" }
   ]
 }
 ```

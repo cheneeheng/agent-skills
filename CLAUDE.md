@@ -25,7 +25,7 @@ Plugins fall into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin (agents only). Categorization rules of thumb:
@@ -74,6 +74,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |
 | `ceh-blog` | Interview-driven blog post writing |
 | `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; changelog & README agents |
+| `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + explorer/executor/verifier subagents for cost-optimized multi-step work |
 
 ## Skills
 
