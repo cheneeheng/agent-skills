@@ -308,3 +308,61 @@ DECISION_LOG entries) intentionally left with old names.
 etc.) must switch to the new names; auto-load behavior is unaffected (descriptions unchanged).
 **Outcome:** All four renames applied; repo-wide grep shows no stale references outside
 historical docs; new "Same Skill, Different Plugins" map added to CROSS_REFERENCES.md.
+
+### Entry 18
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-13T10:20:00Z
+**Task:** Consolidate an external orchestration setup into a new `ceh-orchestration` plugin
+
+**Context:** The source setup (from another session) shipped as a slash command
+(`.claude/commands/orchestrate.md`), three `.claude/agents/*` files, and a thinned root
+`CLAUDE.md` skeleton. This repo has no `commands/` convention — every plugin delivers as
+skills + agents — and ships no CLAUDE.md templates. Several design forks were unresolved:
+delivery form for the orchestrate mode, plugin name, tier, agent names, and whether to ship
+the CLAUDE.md skeleton.
+**Decision:** (1) Delivered the `/orchestrate` slash command as a skill (`orchestrate`) with a
+moment-triggering description, matching the repo's skills+agents-only convention (the source
+summary itself names a skill as the alternative to a command). (2) Named the plugin
+`ceh-orchestration`, classified as a Use-case workflow tier plugin. (3) Kept the original
+worker names `explorer`/`executor`/`verifier` to preserve the delegation map the skill
+references, adapting only frontmatter to repo conventions. (4) Folded the lean-root-CLAUDE.md
+guidance inline into the skill as a cost lever rather than shipping a separate CLAUDE.md
+template file — keeps the plugin self-contained and avoids overlap with the user-level
+claude-md-management skills. (5) New plugin at v1.0.0; repo tag bumped MINOR to 3.6.0 (new
+skills + agents).
+**Impact / Risk:** Low — additive new plugin; no existing plugin changed. Generic agent names
+(`explorer`/`executor`/`verifier`) are namespaced under `ceh-orchestration:` so collisions are
+avoided, though the bare names are less self-descriptive than the repo's other agents.
+**Outcome:** Plugin created (plugin.json, README, skill, 3 agents); marketplace.json, CLAUDE.md,
+README.md, and CHANGELOG.md updated.
+
+### Entry 19
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-13T10:56:00Z
+**Task:** Replace the custom `explorer` worker with Claude Code's built-in `Explore` agent
+
+**Context:** Entry 18 shipped `ceh-orchestration` with a custom `explorer` Haiku agent. The
+user asked whether the built-in `Explore` agent makes more sense for that role. The plugin's
+own source summary notes that only the built-in Explore/Plan agents skip `CLAUDE.md`, while
+custom subagents always inherit it — and "trim what every subagent inherits" is cost lever #4
+in the skill. The explorer is the highest-fan-out, most-dispatched role, so the inheritance
+tax matters most there.
+**Decision:** Dropped the custom `explorer` agent and pointed the orchestrate skill's
+delegation map at the built-in `Explore` for read-only locate/map/summarize work. Kept
+`executor` (needs Edit/Write) and `verifier` (needs Bash + a controlled PASS/FAIL contract)
+custom, as neither has a built-in equivalent. Rationale: built-in Explore is purpose-built for
+fan-out search (reads excerpts, breadth hint) AND skips `CLAUDE.md`, so it carries the least
+context tax — outweighing the loss of the custom agent's enforced terse return-format and
+explicit Haiku routing (Explore is already concise and managed-cheap). Documented the one
+tradeoff in the skill: Explore starts without repo conventions, so convention context must go
+into the spec. No version bump — plugin still unreleased.
+**Impact / Risk:** Low — removes one agent file and reduces per-dispatch context cost for the
+exploration role. Searches needing repo-specific convention context now rely on the
+orchestrator putting that in the spec rather than the agent inheriting it from `CLAUDE.md`.
+**Outcome:** `explorer.md` deleted; skill delegation map + model routing, both READMEs,
+CLAUDE.md, plugin.json, marketplace.json, and the pending CHANGELOG entry updated to the
+built-in-Explore + executor/verifier shape.

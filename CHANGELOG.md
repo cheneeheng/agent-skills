@@ -5,6 +5,34 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.6.0] — 2026-06-13
+
+New `ceh-orchestration` plugin: consolidates a thin-orchestrator setup (cost-optimized,
+delegate-only main session plus worker subagents) into the marketplace.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-orchestration` | v1.0.0 |
+
+### Added
+
+- **`ceh-orchestration`** (v1.0.0) — new plugin.
+  - Skill `orchestrate` — thin-orchestrator mode: the main session restates the goal,
+    decomposes into a dependency-ordered plan, dispatches subtasks to workers, and keeps a
+    compact result ledger while doing no file I/O itself. Covers the context-isolation cost
+    model, model routing (Opus → Sonnet → Haiku), spec discipline, ranked cost levers, and
+    why subagents beat Agent Teams for a cost goal.
+  - Agents `executor` (Sonnet, scoped implementation) and `verifier` (Haiku, PASS/FAIL
+    acceptance check) — the workers the skill dispatches to. Both are scoped to
+    thin-orchestrator mode and do not auto-invoke outside it, so installing the plugin does
+    not divert ordinary edits into a subagent. Read-only exploration is delegated to Claude
+    Code's built-in `Explore` agent (no custom explorer ships), since it skips `CLAUDE.md`
+    inheritance and so carries the least context tax.
+
+---
+
 ## [3.5.0] — 2026-06-11
 
 Duplicated skill names made unique across plugins: the `python-environment` / `python-testing`
