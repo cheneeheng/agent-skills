@@ -337,3 +337,32 @@ skills + agents).
 avoided, though the bare names are less self-descriptive than the repo's other agents.
 **Outcome:** Plugin created (plugin.json, README, skill, 3 agents); marketplace.json, CLAUDE.md,
 README.md, and CHANGELOG.md updated.
+
+### Entry 19
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-13T10:56:00Z
+**Task:** Replace the custom `explorer` worker with Claude Code's built-in `Explore` agent
+
+**Context:** Entry 18 shipped `ceh-orchestration` with a custom `explorer` Haiku agent. The
+user asked whether the built-in `Explore` agent makes more sense for that role. The plugin's
+own source summary notes that only the built-in Explore/Plan agents skip `CLAUDE.md`, while
+custom subagents always inherit it — and "trim what every subagent inherits" is cost lever #4
+in the skill. The explorer is the highest-fan-out, most-dispatched role, so the inheritance
+tax matters most there.
+**Decision:** Dropped the custom `explorer` agent and pointed the orchestrate skill's
+delegation map at the built-in `Explore` for read-only locate/map/summarize work. Kept
+`executor` (needs Edit/Write) and `verifier` (needs Bash + a controlled PASS/FAIL contract)
+custom, as neither has a built-in equivalent. Rationale: built-in Explore is purpose-built for
+fan-out search (reads excerpts, breadth hint) AND skips `CLAUDE.md`, so it carries the least
+context tax — outweighing the loss of the custom agent's enforced terse return-format and
+explicit Haiku routing (Explore is already concise and managed-cheap). Documented the one
+tradeoff in the skill: Explore starts without repo conventions, so convention context must go
+into the spec. No version bump — plugin still unreleased.
+**Impact / Risk:** Low — removes one agent file and reduces per-dispatch context cost for the
+exploration role. Searches needing repo-specific convention context now rely on the
+orchestrator putting that in the spec rather than the agent inheriting it from `CLAUDE.md`.
+**Outcome:** `explorer.md` deleted; skill delegation map + model routing, both READMEs,
+CLAUDE.md, plugin.json, marketplace.json, and the pending CHANGELOG entry updated to the
+built-in-Explore + executor/verifier shape.

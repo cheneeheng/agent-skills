@@ -23,7 +23,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation agents |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
 | Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README agents |
-| Orchestration | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + explorer/executor/verifier subagents |
+| Orchestration | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) |
 
 ### Categorization
 
@@ -120,7 +120,6 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | `ceh-web-frontend` | TS System Tester | `/ceh-web-frontend:ts-system-tester` | Write Playwright E2E tests that exercise the full running stack as a real user would |
 | `ceh-ops` | GitHub Actions | `/ceh-ops:github-actions` | Create or fix GitHub Actions workflows, jobs, matrix builds, OIDC, reusable workflows |
 | `ceh-ops` | GitLab CI | `/ceh-ops:gitlab-ci` | Create or fix `.gitlab-ci.yml` pipelines, DAG stages, rules, protected variables, runners |
-| `ceh-orchestration` | Explorer | `/ceh-orchestration:explorer` | Locate code, map call sites, or summarize how something works — findings only, no changes (Haiku) |
 | `ceh-orchestration` | Executor | `/ceh-orchestration:executor` | Implement a single scoped task: code changes, edits, multi-step work (Sonnet) |
 | `ceh-orchestration` | Verifier | `/ceh-orchestration:verifier` | Check an executor's output against acceptance criteria — PASS/FAIL only (Haiku) |
 

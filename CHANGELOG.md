@@ -8,7 +8,7 @@ Versions refer to the Marketplace versions.
 ## [3.6.0] — 2026-06-13
 
 New `ceh-orchestration` plugin: consolidates a thin-orchestrator setup (cost-optimized,
-delegate-only main session plus a trio of worker subagents) into the marketplace.
+delegate-only main session plus worker subagents) into the marketplace.
 
 ### Plugin versions
 
@@ -24,9 +24,10 @@ delegate-only main session plus a trio of worker subagents) into the marketplace
     compact result ledger while doing no file I/O itself. Covers the context-isolation cost
     model, model routing (Opus → Sonnet → Haiku), spec discipline, ranked cost levers, and
     why subagents beat Agent Teams for a cost goal.
-  - Agents `explorer` (Haiku, findings-only code locator), `executor` (Sonnet, scoped
-    implementation), and `verifier` (Haiku, PASS/FAIL acceptance check) — the workers the
-    skill dispatches to.
+  - Agents `executor` (Sonnet, scoped implementation) and `verifier` (Haiku, PASS/FAIL
+    acceptance check) — the workers the skill dispatches to. Read-only exploration is
+    delegated to Claude Code's built-in `Explore` agent (no custom explorer ships), since it
+    skips `CLAUDE.md` inheritance and so carries the least context tax.
 
 ---
 

@@ -19,10 +19,11 @@ task length. Routing to cheaper models is a second-order saving stacked on top.
 One line: **the orchestrator's window is the expensive thing — guard its size,
 keep its prefix stable, and let cheap isolated workers absorb all the volume.**
 
-The main session is the orchestrator (not a file). Workers are subagents in this
-plugin — each runs in a fresh, isolated context and only its final message
-returns to the parent, so raw file contents and tool spew never land in the
-priciest, most-rebilled window.
+The main session is the orchestrator (not a file). Workers run as subagents —
+each in a fresh, isolated context, only its final message returning to the
+parent, so raw file contents and tool spew never land in the priciest,
+most-rebilled window. Read-only exploration goes to the **built-in `Explore`
+agent**; the `executor` and `verifier` workers ship with this plugin.
 
 ## Your job as orchestrator
 
@@ -48,8 +49,13 @@ priciest, most-rebilled window.
 
 Dispatch via the `Agent` tool, choosing the `subagent_type` that matches:
 
-- **explorer** (Haiku) — locating code, mapping call sites, summarizing how
-  something works. Use before planning when the layout is unknown.
+- **Explore** (built-in) — locating code, mapping call sites, summarizing how
+  something works. Use before planning when the layout is unknown. Prefer the
+  built-in over a custom agent here: it is read-only, reads excerpts rather than
+  whole files, takes a breadth hint (`medium` / `very thorough`), and — unlike
+  custom subagents — does **not** inherit `CLAUDE.md`, so it carries the least
+  context tax of any worker. It starts without repo conventions, so put any
+  convention the search needs into the spec.
 - **executor** (Sonnet) — all code changes, edits, and multi-step
   implementation. Use instead of editing in the main session.
 - **verifier** (Haiku) — checking an executor's output against acceptance
@@ -64,7 +70,8 @@ matters most on the **output** side — workers generate the bulk of output toke
   session).
 - **Sonnet** — most real execution: coding, transformation, multi-step work.
 - **Haiku** — mechanical work only: extraction, classification, routing,
-  single-file edits with an unambiguous spec; exploration and verification.
+  single-file edits with an unambiguous spec, and verification. (Read-only
+  exploration goes to the built-in `Explore` agent, not a Haiku worker.)
 
 > Gotcha: the env var `CLAUDE_CODE_SUBAGENT_MODEL` takes highest precedence and
 > forces *every* subagent onto one model, overriding per-agent `model:` fields.

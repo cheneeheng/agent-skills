@@ -31,15 +31,15 @@ subagents beat Agent Teams for a cost goal.
 
 ## Agents
 
-The orchestrate skill dispatches these three workers. Each runs in an isolated
-context and returns only a terse final message.
+The orchestrate skill dispatches these workers. Each runs in an isolated context
+and returns only a terse final message.
 
-### `explorer` (Haiku)
-
-Locates code, maps call sites, summarizes how something works. Returns findings
-with `file:line` pointers — makes no changes.
-
-**Invoke:** `/ceh-orchestration:explorer`
+For read-only exploration (locating code, mapping call sites, summarizing how
+something works) the skill uses Claude Code's **built-in `Explore` agent** rather
+than a custom one — it reads excerpts instead of whole files, takes a breadth
+hint, and, unlike custom subagents, does **not** inherit `CLAUDE.md`, so it
+carries the least context tax. This plugin therefore ships only the two workers
+that have no built-in equivalent:
 
 ### `executor` (Sonnet)
 

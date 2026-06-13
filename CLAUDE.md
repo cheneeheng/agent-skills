@@ -74,7 +74,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |
 | `ceh-blog` | Interview-driven blog post writing |
 | `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; changelog & README agents |
-| `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + explorer/executor/verifier subagents for cost-optimized multi-step work |
+| `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) for cost-optimized multi-step work |
 
 ## Skills
 
