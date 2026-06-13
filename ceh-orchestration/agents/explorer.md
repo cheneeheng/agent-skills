@@ -1,6 +1,6 @@
 ---
 name: explorer
-description: Use to locate code, map call sites, or summarize how something works. Returns findings only, makes no changes. Dispatched by the orchestrate skill before planning when the layout is unknown.
+description: Use when operating in thin-orchestrator mode (the orchestrate skill) to locate code, map call sites, or summarize how something works — dispatched before planning when the layout is unknown. Returns findings only, makes no changes.
 model: haiku
 tools: Read, Grep, Glob
 ---

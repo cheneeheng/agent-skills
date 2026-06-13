@@ -1,6 +1,6 @@
 ---
 name: executor
-description: Use PROACTIVELY for all code changes, file edits, and multi-step implementation tasks. MUST BE USED instead of editing files in the main session when operating under the orchestrate skill.
+description: "Use when operating in thin-orchestrator mode (the orchestrate skill) — the orchestrator dispatches you to implement a single scoped task: code changes, file edits, or multi-step implementation, instead of editing in the main session. Not a general-purpose editor; do NOT auto-invoke for ordinary edits outside orchestration."
 model: sonnet
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
