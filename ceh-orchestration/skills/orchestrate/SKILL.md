@@ -47,7 +47,8 @@ agent**; the `executor` and `verifier` workers ship with this plugin.
 
 ## Delegation map
 
-Dispatch via the `Agent` tool, choosing the `subagent_type` that matches:
+Launch the matching subagent for each subtask (set `subagent_type` to one of
+these):
 
 - **Explore** (built-in) — locating code, mapping call sites, summarizing how
   something works. Use before planning when the layout is unknown. Prefer the
