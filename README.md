@@ -47,6 +47,7 @@ into a shared base, so one plugin per use case is all you load.
 | Plugin | Skill | Invoke as | When to use |
 |--------|-------|-----------|-------------|
 | `ceh-agent-coding-contract` | Agent Coding Contract | `/ceh-agent-coding-contract:agent-coding-contract` | Start of any coding session — core rules, five-step workflow, stop conditions, non-goals |
+| `ceh-agent-coding-contract` | Write Less Code | `/ceh-agent-coding-contract:write-less-code` | Every coding session (auto — session-start load + per-turn reinforcement) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line) |
 | `ceh-plan-build-review` | Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning one release at a time — a greenfield skeleton or the next iteration |
 | `ceh-plan-build-review` | Plan Fullstack App to MVP | `/ceh-plan-build-review:plan-fullstack-app-to-mvp` | Planning the complete build to a working MVP in one session |
 | `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
