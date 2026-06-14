@@ -9,7 +9,7 @@ organized around **use cases** — load the ones that match what you are buildin
 
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
-| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents |
+| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism skill (always-on via hooks) |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | ADRs and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |

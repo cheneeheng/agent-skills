@@ -5,6 +5,33 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.7.0] — 2026-06-14
+
+New `write-less-code` skill in `ceh-agent-coding-contract`: the positive half of minimalism
+(the contract already owns the negative rules), wired always-on via session-start load plus a
+per-turn reinforcement hook.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.6.0 |
+
+### Added
+
+- **`ceh-agent-coding-contract`** (v2.6.0) — new skill `write-less-code`.
+  - The minimalism ladder (YAGNI → stdlib → native platform feature → already-installed
+    dependency → one line → minimum that works), native-platform-first, and the `// less-code:`
+    shortcut convention. Framed as the *positive* delta over the contract's "Universal Non-Goals"
+    (no new deps, no speculative abstractions, minimal diffs), not a restatement. Inspired by
+    [ponytail](https://github.com/DietrichGebert/ponytail) (MIT, DietrichGebert).
+  - Loaded at session start via a new `SessionStart` hook (`load-less-code.js`, firing on
+    `startup`/`resume`/`clear`/`compact`) and reinforced every turn via a `UserPromptSubmit` hook
+    (`less-code-payload.js`) that re-injects a compact ladder digest, so the reflex survives
+    long-session context drift. No configuration or env var required.
+
+---
+
 ## [3.6.0] — 2026-06-13
 
 New `ceh-orchestration` plugin: consolidates a thin-orchestrator setup (cost-optimized,
