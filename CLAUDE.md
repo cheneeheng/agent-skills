@@ -60,7 +60,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 
 | Plugin directory | Domain |
 |-----------------|--------|
-| `ceh-agent-coding-contract` | Behavioral contract for coding agents |
+| `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism reflex |
 | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app (iteratively or to MVP), implement from the plan, review against it |
 | `ceh-architecture` | Stack-agnostic design: ADRs, domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |

@@ -2,7 +2,7 @@
 
 A behavioral contract for coding agents: the rules that govern how an agent operates during a
 session — what it may change, when it must stop, and how it logs decisions. The plugin loads the
-contract automatically at session start.
+contract automatically at session start, alongside the `write-less-code` minimalism skill.
 
 > The plan-driven workflow skills (`implement-from-plan`, `review-against-plan`) moved to the
 > `ceh-plan-build-review` plugin, which bundles them with the planning skills.
@@ -12,24 +12,30 @@ contract automatically at session start.
 | Skill | When it loads | What it does |
 |-------|---------------|--------------|
 | `agent-coding-contract` | Every coding session (auto, via hook) | The full behavioral contract — role, core rules, five-step workflow, stop conditions, decision logging. |
+| `write-less-code` | Every coding session (auto, via hook) | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules. |
 
 **Manual triggers**
 
 - `agent-coding-contract` — `/agent-coding-contract`, or say `"load the contract"` / `"agent contract"` / `"coding contract"`.
+- `write-less-code` — `/write-less-code`, or say `"write less code"` / `"be lazy"` / `"simplest solution"` / `"yagni"`.
 
-## How the contract auto-loads
+## How the skills auto-load
 
-The plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-contract.js`) that injects
-a mandatory directive to load the `agent-coding-contract` skill before any other action. It
-activates automatically when the plugin is enabled — no global `settings.json` change required.
+The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled —
+no global `settings.json` change or env var required.
 
-It fires on three events:
+**At session start** — a `SessionStart` hook injects a directive to load each skill, firing on
+`startup`, `resume`, `clear`, and `compact` (so a fresh, resumed, or reset session has both loaded,
+and they are re-injected after compaction):
 
-- `startup` / `clear` — a fresh or reset session has no contract loaded.
-- `compact` — re-injects the contract in case context compaction dropped it.
+- `hooks/load-contract.js` — a **mandatory** directive to load `agent-coding-contract` before any
+  other action.
+- `hooks/load-less-code.js` — a directive to load `write-less-code` so the minimalism ladder is in
+  context before any code is written.
 
-`resume` is intentionally omitted: a resumed session inherits the contract already loaded before the
-resume.
+**Every turn** — a `UserPromptSubmit` hook (`hooks/less-code-payload.js`) re-injects a compact digest
+of the `write-less-code` ladder before each prompt. The once-per-session load fades as context grows;
+the per-turn digest keeps the reflex in the recency window so it holds through long sessions.
 
 ## What the contract enforces
 
