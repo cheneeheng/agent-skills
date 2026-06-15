@@ -60,19 +60,6 @@ runnable check behind — the smallest thing that fails if the logic breaks: an
 `assert`-based self-check or one small test file. No frameworks, no fixtures.
 Trivial one-liners need no test; YAGNI applies to tests too.
 
-## Always-on
-
-This skill is reinforced two ways, both automatic when the plugin is enabled —
-no configuration required:
-
-- **Loaded at session start** — a `SessionStart` hook (`hooks/load-less-code.js`)
-  injects a directive to load this full skill on `startup`, `resume`, `clear`,
-  and `compact`.
-- **Reinforced every turn** — a `UserPromptSubmit` hook
-  (`hooks/less-code-payload.js`) re-injects a compact digest of the ladder before
-  each prompt, so the reflex survives long-session context drift that a
-  once-per-session load does not.
-
 ---
 
 *Inspired by [ponytail](https://github.com/DietrichGebert/ponytail) (MIT, DietrichGebert).*

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// UserPromptSubmit hook — re-injects the write-less-code reflex before every
-// prompt so it survives long-session context drift (a once-per-session load
-// decays as context grows). The full skill is loaded separately at session
-// start via load-less-code.js; this is the compact per-turn digest. Runs
-// unconditionally whenever the plugin is enabled. Inspired by ponytail (MIT,
-// DietrichGebert).
+// UserPromptSubmit hook — injects the write-less-code reflex before every
+// prompt. This is the primary delivery of the minimalism ladder: it carries the
+// reflex on every turn, reliably from turn one, and survives long-session
+// context drift. The full write-less-code skill loads on demand when non-trivial
+// code is actually being written. Runs unconditionally whenever the plugin is
+// enabled. Inspired by ponytail (MIT, DietrichGebert).
 
 const payload = {
   hookSpecificOutput: {
