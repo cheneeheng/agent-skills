@@ -5,6 +5,31 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.7.1] — 2026-06-15
+
+Simplify `write-less-code` reinforcement in `ceh-agent-coding-contract`: drop the redundant
+session-start load that did not fire reliably, leaving the per-turn digest as the primary delivery.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.6.1 |
+
+### Changed
+
+- **`ceh-agent-coding-contract`** (v2.6.1) — the `write-less-code` skill is no longer force-loaded
+  at session start.
+  - Removed the `SessionStart` hook `load-less-code.js` (and its `hooks.json` entry). It injected a
+    deferred "before implementing, invoke the skill" directive that did not fire reliably when a
+    session ran a while before writing code.
+  - The per-turn `UserPromptSubmit` digest (`less-code-payload.js`) is now the primary delivery — it
+    carries the full ladder on every turn from turn one; the full skill loads on demand when
+    non-trivial code is written.
+  - Cut the "Always-on" plumbing section from the skill body (documentation, not behavior).
+
+---
+
 ## [3.7.0] — 2026-06-14
 
 New `write-less-code` skill in `ceh-agent-coding-contract`: the positive half of minimalism
