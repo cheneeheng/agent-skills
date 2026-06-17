@@ -5,6 +5,35 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.8.2] — 2026-06-17
+
+Expand the `ceh-git-workflow` skills with the concrete templates and examples that earlier
+token-efficiency passes had stripped, while keeping each skill tight.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.1.2 |
+
+### Changed
+
+- **`ceh-git-workflow`** (v3.1.2) — all eight skills expanded with inline templates and examples:
+  - `commit` — scope-selection guidance, `build`/`ci`/`style`/`revert` types, a bad-vs-good
+    subject, body formatting, and concrete footers including the AI-attribution line.
+  - `merge` — a merge-commit message template and a rebase-based conflict-resolution flow.
+  - `open-pr` — per-section how-to guidance and a filled-in example description.
+  - `branch` — the branch-from-main rationale and a rebase-to-stay-current flow.
+  - `code-review` — review structure, an approve/request-changes/comment verdict, and
+    author-response guidance.
+  - `dependency-management` — add/remove/upgrade commands plus lockfile and pinning caveats.
+  - `hotfix` — post-fix verification and post-mortem follow-up.
+  - `release` — pre-release version suffixes; changelog format deferred to its own skill.
+  - Cross-skill pointers now use trigger phrases only (no plugin/skill names) so they degrade
+    gracefully when a referenced plugin is not installed.
+
+---
+
 ## [3.8.1] — 2026-06-17
 
 Fix `check-semver.py` date parsing so it recognizes this repo's em-dash changelog headers.
