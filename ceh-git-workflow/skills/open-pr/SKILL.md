@@ -19,6 +19,7 @@ If a PR exceeds the guideline, split it by layer (schema → service → API).
 ## PR Title
 
 Must follow Conventional Commits format. It titles the PR and seeds the merge commit subject.
+Same rules as a commit subject: imperative, lowercase, no trailing period, ≤ 72 chars.
 
 ## PR Description Template
 
@@ -44,6 +45,46 @@ Must follow Conventional Commits format. It titles the PR and seeds the merge co
 - [ ] docs/adr/DECISIONS.md updated (if a durable decision was made)
 - [ ] Attribution included if AI tooling assisted
 ```
+
+### How to write each section
+
+- **What** — the change in one sentence, stated as an outcome for the reader, not a list of files.
+- **Why** — the problem or request that motivated it; link the ticket/issue (`Closes #NNN`).
+- **How** — only the non-obvious decisions: the approach taken and the alternatives rejected. Skip
+  if the diff is self-explanatory.
+- **Testing** — what you actually ran and what you added, so a reviewer can reproduce it. "Manually
+  verified X" is fine when honest; never imply coverage you didn't add.
+
+### Filled-in example
+
+```markdown
+## What
+Cancel bulk orders in one request instead of one call per order.
+
+## Why
+Support flagged 30+ manual single-cancels per incident. Closes #342.
+
+## How
+New POST /orders/cancel-bulk validates ≤100 IDs, then reuses the existing
+cancel_order() service in a single transaction. Rejected a queue-based
+approach — synchronous is simpler and the cap keeps it bounded.
+
+## Testing
+Unit tests for the 100-ID cap and partial-failure rollback. Integration
+test against a seeded DB. `pytest` + `mypy --strict` green locally.
+
+## Checklist
+- [x] All CI checks pass
+- [x] Tests added or updated for new behavior
+- [x] No `any` / `@ts-ignore` / `# type: ignore` introduced
+- [x] No secrets or credentials in code
+- [x] Migrations (if any) are backward-compatible
+- [ ] docs/adr/DECISIONS.md updated (if a durable decision was made)
+- [x] Attribution included if AI tooling assisted
+```
+
+Open as a **draft** while CI runs or the work is still settling; mark ready for review only once
+the self-review checklist passes. Request the reviewers the approval rules require (see below).
 
 ## Definition of Done
 
@@ -97,7 +138,7 @@ Before opening the PR, verify the change meets the bar for its type.
 
 **Merge commit only** — never squash, never rebase-merge; every commit lands on `main` as written.
 Because commits are not collapsed at merge time, keep them Conventional Commits format and clean the
-branch as you go. Full merge mechanics and post-merge cleanup live in the `merge` skill.
+branch as you go. Full merge mechanics and post-merge cleanup load when you say "merge the PR".
 
 ## Command
 

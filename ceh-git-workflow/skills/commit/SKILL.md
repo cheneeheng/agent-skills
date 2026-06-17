@@ -20,20 +20,45 @@ description: "Load this skill when writing a commit message or staging changes f
 | `feat` | New feature or behavior |
 | `fix` | Bug fix |
 | `refactor` | Code change with no behavior change |
+| `perf` | Performance improvement |
 | `test` | Adding or changing tests |
 | `docs` | Documentation only |
-| `chore` | Build, tooling, dependency updates |
-| `perf` | Performance improvement |
+| `style` | Formatting only — whitespace, semicolons; no code change |
+| `build` | Build system, packaging, or external dependencies |
+| `ci` | CI/CD configuration and pipelines |
+| `chore` | Maintenance, tooling; anything not covered above |
+| `revert` | Reverts a previous commit (body: `Reverts <sha>`) |
+
+## Scope
+
+The optional `(<scope>)` names the area of the codebase touched — a module, package, or
+component (`auth`, `orders`, `api`). Pick the narrowest noun that covers the change. Omit the
+parentheses entirely for repo-wide changes (`chore: bump all dev dependencies`). Keep it
+lowercase and consistent with scopes already used in the log (`git log --oneline`).
 
 ## Rules
 
-- Subject line: imperative mood, lowercase, no period, ≤ 72 characters
-- Body: explain *why*, not *what* — the diff already shows what changed
-- Breaking changes: `BREAKING CHANGE:` footer with migration notes
-- Reference issues: `Closes #123` or `Refs #456` in footer
-- Include AI tooling attribution in the footer if available
+- One logical change per commit. Don't mix a refactor with a feature, or two unrelated fixes —
+  split them so each can be reviewed and reverted on its own.
+- Subject line: imperative mood ("add", not "added"/"adds"), lowercase, no trailing period,
+  ≤ 72 characters.
+- Body: explain *why*, not *what* — the diff already shows what changed. Wrap at 72 columns.
+  Use `-` bullets for multiple points. Separate it from the subject with one blank line.
+- Breaking changes: `BREAKING CHANGE:` footer with migration notes (or a `!` after the
+  type/scope: `feat(api)!: ...`).
+- Reference issues: `Closes #123` (auto-closes on merge) or `Refs #456` (links only) in footer.
+- Attribution: when AI tooling assisted, add a footer line, e.g.
+  `Generated with [Claude Code](https://claude.com/claude-code)`.
 
-Good example:
+### Subject: bad vs. good
+
+```
+bad:  fixed bug                          # not imperative, no type/scope, vague
+bad:  fix(orders): Fixed the bug where.. # capitalized, past tense, trailing detail
+good: fix(orders): reject cancel on shipped orders
+```
+
+Full example (subject + body + footers):
 ```
 feat(orders): add bulk cancel endpoint
 
@@ -41,6 +66,8 @@ Supports cancelling up to 100 orders per request. Single-cancel
 endpoint remains unchanged; no migration needed.
 
 Closes #342
+Co-authored-by: Jane Doe <jane@example.com>
+Generated with [Claude Code](https://claude.com/claude-code)
 ```
 
 ## Commands

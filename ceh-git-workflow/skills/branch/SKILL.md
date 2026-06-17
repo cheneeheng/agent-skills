@@ -25,6 +25,10 @@ another feature branch. Delete branches after merge.
 
 Short description: lowercase, hyphen-separated, 3–5 words.
 
+Branch from `main` only so every branch starts from a deployable state and its diff stays scoped
+to one concern — branching off another feature branch entangles unmerged work and bloats the
+eventual PR.
+
 ## Rebase and Force-push
 
 - Rebase is fine locally during development
@@ -37,3 +41,16 @@ git checkout main
 git pull origin main
 git checkout -b <type>/<short-description>
 ```
+
+## Keeping a branch current
+
+For anything long-lived, rebase on `main` rather than merging `main` in — it keeps history linear
+and the eventual PR diff clean:
+
+```bash
+git fetch origin
+git rebase origin/main
+git push --force-with-lease     # your own branch only; --force-with-lease, never --force
+```
+
+Do this before opening the PR and again if `main` moves ahead while the PR is in review.
