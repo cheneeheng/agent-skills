@@ -71,7 +71,7 @@ def main() -> None:
     file_path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("CHANGELOG.md")
 
     if not file_path.exists():
-        print(f"❌  File not found: {file_path.resolve()}")
+        print(f"ERROR: File not found: {file_path.resolve()}")
         sys.exit(1)
 
     lines = file_path.read_text(encoding="utf-8").splitlines()
@@ -151,32 +151,32 @@ def main() -> None:
 
     # ── Report ───────────────────────────────────────────────────────────────
     total = len(versions) + unreleased_count
-    print(f"\n📋  Changelog Semver Validator")
+    print(f"\nChangelog Semver Validator")
     print(f"    File   : {file_path.resolve()}")
     print(f"    Entries: {total} ({unreleased_count} unreleased, {len(versions)} versioned)\n")
 
     if versions:
-        print("    Versions found (newest → oldest):")
+        print("    Versions found (newest -> oldest):")
         for v in versions:
             date_str = f"  {v['date']}" if v["date"] else "  (no date)"
             print(f"      {v['version']}{date_str}")
         print()
 
     if warnings:
-        print("⚠️   Warnings:")
+        print("Warnings:")
         for w in warnings:
-            print(f"    • {w}")
+            print(f"    - {w}")
         print()
 
     if errors:
-        print("❌  Errors:")
+        print("Errors:")
         for e in errors:
-            print(f"    • {e}")
+            print(f"    - {e}")
         print()
         print(f"    {len(errors)} error(s) found. Fix before releasing.")
         sys.exit(1)
     else:
-        print("✅  All version entries are valid semver. Changelog looks good!")
+        print("OK: All version entries are valid semver. Changelog looks good.")
         sys.exit(0)
 
 

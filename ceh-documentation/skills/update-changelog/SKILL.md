@@ -12,9 +12,13 @@ Inspect the project's git history, existing CHANGELOG.md, and codebase to produc
 ### 1. Gather Context
 
 ```bash
-git describe --tags --abbrev=0 2>/dev/null          # current version
-git log $(git describe --tags --abbrev=0 2>/dev/null)..HEAD --oneline --no-merges
-git tag --sort=-v:refname | head -20                # version history
+LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null)   # current version (empty if none)
+if [ -n "$LAST_TAG" ]; then
+  git log "$LAST_TAG"..HEAD --oneline --no-merges        # changes since last release
+else
+  git log --oneline --no-merges                          # no tags yet: full history
+fi
+git tag --sort=-v:refname | head -20                     # version history
 cat CHANGELOG.md 2>/dev/null || echo "No CHANGELOG.md found"
 ```
 

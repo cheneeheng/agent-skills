@@ -23,6 +23,15 @@ Invoke manually:
 - `"document how to use this"` / `"document how to operate this"`
 - `"admin manual"` / `"configuration guide"`
 
+**update-changelog** loads automatically when you say:
+- `"update the changelog"` / `"generate a changelog"`
+- `"document this release"` / `"write release notes"`
+- `"what changed since the last release"`
+
+**update-readme** loads automatically when you say:
+- `"update the readme"` / `"refresh the docs"`
+- `"document this feature"` / `"I just shipped X — update docs"`
+
 ## What It Produces
 
 Markdown written under `docs/guide/` — a single `index.md` for a focused guide, or a cross-linked tree rooted there with `index.md` as the entry point for a full manual or runbook:
