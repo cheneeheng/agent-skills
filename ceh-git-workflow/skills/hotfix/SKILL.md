@@ -10,7 +10,7 @@ For P1/P2 production issues that cannot wait for the next normal release.
 1. **Branch:** `fix/critical-<description>` from `main`
 2. **Scope:** Minimal fix only — no unrelated changes
 3. **Review:** 1 approval minimum, fast-tracked
-4. **CI:** All checks must pass — do **not** skip CI under pressure
+4. **CI:** All checks must pass — do **not** skip CI under pressure. A broken hotfix is worse than a delayed one.
 5. **Merge:** Merge commit to `main` (never squash — preserve the commits)
 6. **Tag:** Bump PATCH version, apply tag
 7. **Deploy:** Staging → production (abbreviated but both still required)
@@ -36,3 +36,13 @@ git push origin v<X.Y.Z>
 git branch -d fix/critical-<description>
 git push origin --delete fix/critical-<description>
 ```
+
+## After the Fix
+
+- **Verify in production** — confirm the original symptom is gone and error rates/latency are back
+  to baseline before declaring the incident resolved. Be ready to roll back if not.
+- **Post-mortem** — for P1/P2, write one within 48 hours; saying "write a post-mortem" loads the
+  format. The hotfix closes the bleeding; the post-mortem prevents the recurrence.
+
+The PR body should link the incident and name the symptom, so the merge commit explains itself in
+`git log`.

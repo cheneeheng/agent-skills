@@ -15,9 +15,15 @@ Tags follow semver: `v<major>.<minor>.<patch>`. Apply only to commits on `main` 
 
 When in doubt, bump PATCH. Never lower a version.
 
+Pre-release versions use a suffix: `v1.4.0-rc.1`, `v1.4.0-beta.1`. They sort below the final
+`v1.4.0`, so they're safe for staged rollouts.
+
 ## Command Sequence
 
-Before bumping the version, **update the changelog** for this release so the new version section and release notes are ready to reference.
+Before bumping the version, **update the changelog** for this release so the new version section
+and release notes are ready to reference — saying "update the changelog" loads the Keep a Changelog
+format and what belongs in a release-notes entry. The GitHub release notes (`--notes-file` below)
+reuse that version's changelog section.
 
 ```bash
 # 1. Bump the version in this project's manifest(s) — whatever the project uses

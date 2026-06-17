@@ -31,3 +31,31 @@ Examples:
 5. **Style** — only flag if linting tools don't catch it
 
 Do not comment on style a linter would catch. Do not re-litigate decisions in `docs/adr/DECISIONS.md` unless new risk is identified. Do not review from memory — verify against current file contents.
+
+## Structure of a Review
+
+Leave a short summary comment plus line-anchored comments:
+
+1. **Summary** — one or two sentences: what the PR does and your overall read. Lead with anything
+   that blocks.
+2. **Line comments** — each prefixed `[blocking]` / `[advisory]` / `[question]`, anchored to the
+   exact line, stating the problem and (for blocking) what would resolve it.
+
+End with an explicit verdict:
+
+| Verdict | When |
+|---------|------|
+| **Approve** | No `[blocking]` comments. Advisory items can be left to the author's judgment. |
+| **Request changes** | One or more `[blocking]` comments. Say what must change to flip to approve. |
+| **Comment** | Questions outstanding, or not your call to approve — no verdict yet. |
+
+Approve with non-blocking nits rather than withholding approval to force trivial changes.
+
+## Responding as the Author
+
+- `[blocking]`: fix it, or reply with the reasoning and reach agreement before merge.
+- `[advisory]`: address it or acknowledge why you're not ("good idea, out of scope for this PR").
+- `[question]`: answer in-thread; if the code was unclear enough to prompt the question, that's
+  often a signal to clarify the code or a comment.
+
+Resolve a thread only once it's actually addressed. Don't merge over unresolved `[blocking]` threads.

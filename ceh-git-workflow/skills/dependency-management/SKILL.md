@@ -15,6 +15,27 @@ description: "Load this skill when adding, removing, or upgrading a dependency: 
 
 If a dependency fails any of these, document why you're adding it anyway.
 
+## Commands
+
+```bash
+# Add (always commit the updated lockfile alongside the manifest)
+uv add httpx                 # Python runtime dep
+uv add --dev pytest          # Python dev/test dep
+bun add zod                  # TS runtime dep
+bun add --dev vitest         # TS dev dep
+
+# Remove (drops it from manifest + lockfile)
+uv remove httpx
+bun remove zod
+
+# Upgrade
+uv lock --upgrade-package httpx   # one package to its allowed range
+bun update zod
+```
+
+Commit `uv.lock` / `bun.lockb` in the **same commit** as the manifest change — a manifest edit
+without its lockfile produces non-reproducible installs.
+
 ## Pinning Policy
 
 | Environment | Pin level |
@@ -23,7 +44,9 @@ If a dependency fails any of these, document why you're adding it anyway.
 | Dev/test dependencies | Minor version (`^1.2.0`) |
 | CI tool versions | Exact version |
 
-Never use `*` or `latest`.
+Never use `*` or `latest`. Note the syntax differs by ecosystem: npm/bun use caret ranges
+(`^1.2.0`); Python uses comparison ranges (`>=1.2,<2.0`) or exact (`==1.2.0`). The lockfile pins
+the exact resolved version regardless — the manifest range only bounds what an upgrade may pick.
 
 ## Security Audits
 
