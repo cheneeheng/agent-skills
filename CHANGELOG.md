@@ -5,6 +5,40 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.8.0] — 2026-06-17
+
+Convert the `ceh-documentation` changelog and README agents into skills, so they run in the main
+session and reuse its live context instead of re-deriving it in an isolated agent.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-documentation` | v1.1.0 |
+| `ceh-git-workflow` | v3.1.1 |
+
+### Added
+
+- **`ceh-documentation`** (v1.1.0) — two skills converted from the former agents:
+  - `update-changelog` — generate or update `CHANGELOG.md` from git history (semver + Keep a
+    Changelog), with a no-tag full-history fallback and language-agnostic manifest references.
+  - `update-readme` — keep `README.md` accurate after a significant change, gated so
+    internal/minor changes are a no-op.
+
+### Changed
+
+- **`ceh-git-workflow`** (v3.1.1) — the `release` skill now prompts to update the changelog before
+  bumping the version, referenced by trigger phrase rather than a hard cross-plugin dependency.
+- **`ceh-documentation`** — `scripts/check-semver.py` output is now ASCII-only (fixes a Windows
+  cp1252 crash on the `→` glyph); fixed a nested-code-fence rendering bug in `user-operator-guide`.
+
+### Removed
+
+- **`ceh-documentation`** — the `changelog-agent` and `readme-updater` agents, superseded by the
+  `update-changelog` and `update-readme` skills.
+
+---
+
 ## [3.7.1] — 2026-06-15
 
 Simplify `write-less-code` reinforcement in `ceh-agent-coding-contract`: drop the redundant
