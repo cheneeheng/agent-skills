@@ -32,8 +32,9 @@ SEMVER_RE = re.compile(
     r"(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 )
 
-# ## [1.2.3] - 2024-01-15   or   ## [Unreleased]
-VERSION_HEADER_RE = re.compile(r"^##\s+\[([^\]]+)\](?:\s+-\s+(\S+))?")
+# ## [1.2.3] - 2024-01-15   or   ## [1.2.3] — 2024-01-15   or   ## [Unreleased]
+# Accept either a hyphen or an em-dash as the date separator.
+VERSION_HEADER_RE = re.compile(r"^##\s+\[([^\]]+)\](?:\s+[-—]\s+(\S+))?")
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

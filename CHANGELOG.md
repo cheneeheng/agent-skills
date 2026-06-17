@@ -5,6 +5,24 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.8.1] — 2026-06-17
+
+Fix `check-semver.py` date parsing so it recognizes this repo's em-dash changelog headers.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-documentation` | v1.1.1 |
+
+### Fixed
+
+- **`ceh-documentation`** (v1.1.1) — `scripts/check-semver.py` now accepts either a hyphen (`-`) or
+  an em-dash (`—`) as the date separator in version headers. Previously it only matched the hyphen,
+  so every em-dash entry (the repo's CHANGELOG convention) was flagged "no date".
+
+---
+
 ## [3.8.0] — 2026-06-17
 
 Convert the `ceh-documentation` changelog and README agents into skills, so they run in the main
