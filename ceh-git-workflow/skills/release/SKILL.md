@@ -17,7 +17,7 @@ When in doubt, bump PATCH. Never lower a version.
 
 ## Command Sequence
 
-Before bumping the version, update the changelog for this release (see `ceh-documentation:update-changelog`) so the new version section and release notes are ready to reference.
+Before bumping the version, **update the changelog** for this release so the new version section and release notes are ready to reference.
 
 ```bash
 # 1. Bump the version in this project's manifest(s) — whatever the project uses

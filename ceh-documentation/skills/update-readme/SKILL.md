@@ -30,7 +30,7 @@ and stop.
 ## Discovery
 
 1. Find README: check `README.md` at root, then `readme.md`, `README.rst`, `docs/README.md`. If none exists and the change is significant, create `README.md` at root.
-2. Understand what changed: `git diff HEAD~1 HEAD` or `git status` + `git diff`. Look at changed files, new top-level files, changes to `package.json`/`pyproject.toml`, new CLI args, route definitions, `.env.example`.
+2. Understand what changed: `git diff HEAD~1 HEAD` or `git status` + `git diff`. Look at changed files, new top-level files, changes to the project's dependency/build manifest (e.g. `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `*.csproj`), new CLI args, route definitions, `.env.example`.
 3. Read the current README fully before editing.
 
 ## Editing Principles

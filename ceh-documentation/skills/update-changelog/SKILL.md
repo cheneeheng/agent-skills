@@ -18,7 +18,7 @@ git tag --sort=-v:refname | head -20                # version history
 cat CHANGELOG.md 2>/dev/null || echo "No CHANGELOG.md found"
 ```
 
-Also check `package.json`, `pyproject.toml`, or `Cargo.toml` for the version if no tag exists.
+If no tag exists, read the version from whatever manifest the project uses (e.g. `package.json`, `pyproject.toml`, `Cargo.toml`, `*.csproj`, `build.gradle`, `VERSION`).
 
 ### 2. Determine Version and Categorize
 
