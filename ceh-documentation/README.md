@@ -56,7 +56,7 @@ Markdown written under `docs/guide/` — a single `index.md` for a focused guide
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates (used by `update-changelog`) |
+| `scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`) |
 
 Usage:
 
