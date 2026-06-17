@@ -101,7 +101,7 @@ If the target docs system (Docusaurus, MkDocs, mdBook) has its own naming/nav/fr
 
 ## Phase 4 — Write each procedure
 
-```markdown
+````markdown
 ### <Goal-stated task, e.g. "Rotate the API signing key">
 
 **When:** <triggering condition — for runbooks, the alert/symptom>
@@ -120,7 +120,7 @@ If the target docs system (Docusaurus, MkDocs, mdBook) has its own naming/nav/fr
 
 **Verify:** <the single check that proves it worked>
 **If it fails:** <1-2 likely failure modes + fix, or a link to troubleshooting>
-```
+````
 
 Step standards:
 - One action per step; if a step has an "and", consider splitting.
