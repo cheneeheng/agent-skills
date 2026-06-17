@@ -7,6 +7,8 @@ Claude Code plugin for writing end-user and operator-facing documentation — ta
 | Skill | Description |
 |-------|-------------|
 | `user-operator-guide` | Write or revise user guides and operator runbooks — distinguishes the two audiences, picks the right document type, and enforces task-oriented, verifiable procedures |
+| `update-changelog` | Generate or update `CHANGELOG.md` from git history using semver and Keep a Changelog format |
+| `update-readme` | Keep `README.md` accurate after significant changes (new features, CLI changes, config changes) |
 
 Invoke manually:
 
@@ -20,6 +22,15 @@ Invoke manually:
 - `"getting-started guide"` / `"installation guide"`
 - `"document how to use this"` / `"document how to operate this"`
 - `"admin manual"` / `"configuration guide"`
+
+**update-changelog** loads automatically when you say:
+- `"update the changelog"` / `"generate a changelog"`
+- `"document this release"` / `"write release notes"`
+- `"what changed since the last release"`
+
+**update-readme** loads automatically when you say:
+- `"update the readme"` / `"refresh the docs"`
+- `"document this feature"` / `"I just shipped X — update docs"`
 
 ## What It Produces
 
@@ -41,18 +52,11 @@ Markdown written under `docs/guide/` — a single `index.md` for a focused guide
 | Installation / Config Guide | Stand the system up correctly |
 | Troubleshooting Reference | Diagnose and fix a known failure |
 
-## Agents
-
-| Agent | When to use |
-|-------|-------------|
-| `changelog-agent` | Generate or update `CHANGELOG.md` from git history using semver and Keep a Changelog format |
-| `readme-updater` | Keep `README.md` accurate after significant changes (new features, CLI changes, config changes) |
-
 ## Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates (used by `changelog-agent`) |
+| `scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates (used by `update-changelog`) |
 
 Usage:
 

@@ -1,6 +1,6 @@
 ---
 name: user-operator-guide
-description: Load this skill when writing or revising end-user or operator-facing documentation — user guides, user manuals, getting-started guides, how-to manuals, operator runbooks, installation/configuration guides, administration manuals, and troubleshooting references. Trigger when the user says "write a user guide", "write a user manual", "operator guide", "admin manual", "ops runbook", "getting-started guide", "installation guide", "document how to use this", "document how to operate this", or asks to produce end-user or operations documentation. Not for API reference docs generated from code, blog posts (use ceh-blog), or README files (use the readme-updater agent).
+description: Load this skill when writing or revising end-user or operator-facing documentation — user guides, user manuals, getting-started guides, how-to manuals, operator runbooks, installation/configuration guides, administration manuals, and troubleshooting references. Trigger when the user says "write a user guide", "write a user manual", "operator guide", "admin manual", "ops runbook", "getting-started guide", "installation guide", "document how to use this", "document how to operate this", or asks to produce end-user or operations documentation. Not for API reference docs generated from code, blog posts (use ceh-blog), or README files (use update-readme).
 ---
 
 # User & Operator Guide
@@ -101,7 +101,7 @@ If the target docs system (Docusaurus, MkDocs, mdBook) has its own naming/nav/fr
 
 ## Phase 4 — Write each procedure
 
-```markdown
+````markdown
 ### <Goal-stated task, e.g. "Rotate the API signing key">
 
 **When:** <triggering condition — for runbooks, the alert/symptom>
@@ -120,7 +120,7 @@ If the target docs system (Docusaurus, MkDocs, mdBook) has its own naming/nav/fr
 
 **Verify:** <the single check that proves it worked>
 **If it fails:** <1-2 likely failure modes + fix, or a link to troubleshooting>
-```
+````
 
 Step standards:
 - One action per step; if a step has an "and", consider splitting.
