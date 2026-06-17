@@ -22,7 +22,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
 | Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation agents |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
-| Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README agents |
+| Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README maintenance |
 | Orchestration | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) |
 
 ### Categorization
@@ -93,6 +93,8 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-blog` | Blog Editor | `/ceh-blog:blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
 | `ceh-blog` | Blog Repurpose | `/ceh-blog:blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
 | `ceh-documentation` | User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
+| `ceh-documentation` | Update Changelog | `/ceh-documentation:update-changelog` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
+| `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
 | `ceh-orchestration` | Orchestrate | `/ceh-orchestration:orchestrate` | Decompose and delegate a big multi-step task — plan/delegate-only main session, cheap isolated workers, to cap context/token cost |
 
 ---
@@ -111,8 +113,6 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | Plugin | Agent | Invoke as | When to use |
 |--------|-------|-----------|-------------|
 | `ceh-dev-tools` | Repo Tree Mapper | `/ceh-dev-tools:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
-| `ceh-documentation` | Changelog Agent | `/ceh-documentation:changelog-agent` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
-| `ceh-documentation` | README Updater | `/ceh-documentation:readme-updater` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
 | `ceh-python-service` | Python Unit Tester | `/ceh-python-service:python-unit-tester` | Write isolated pytest unit tests for functions, classes, or modules with mocked dependencies |
 | `ceh-python-service` | Python Integration Tester | `/ceh-python-service:python-integration-tester` | Write tests for real component interactions — DB, HTTP between internal services, service boundaries |
 | `ceh-python-service` | Python System Tester | `/ceh-python-service:python-system-tester` | Write full end-to-end / acceptance tests that exercise the entire application stack |

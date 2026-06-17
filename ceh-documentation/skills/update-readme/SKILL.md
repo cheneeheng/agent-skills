@@ -1,14 +1,9 @@
 ---
-name: readme-updater
-description: "Use proactively when the user ships a new feature, adds a command/script/endpoint, changes install or setup steps, adds or removes dependencies, introduces environment variables, or changes the public API surface. Also trigger on: \"update the readme\", \"refresh the docs\", \"document this feature\", \"I just shipped X — update docs\". Do NOT invoke for bug fixes, refactors, or any change that does not affect how someone installs, runs, or configures the project."
-model: haiku
-tools: Read, Glob, Grep, Edit, Write, Bash
-permissionMode: acceptEdits
-maxTurns: 15
-background: true
+name: update-readme
+description: "Load this skill when keeping README.md accurate after a significant change — shipping a new feature, adding a command/script/endpoint, changing install or setup steps, adding or removing dependencies, introducing environment variables, or changing the public API surface. Trigger on \"update the readme\", \"refresh the docs\", \"document this feature\", \"I just shipped X — update docs\". Not for bug fixes, refactors, or any change that does not affect how someone installs, runs, or configures the project; not for changelogs (use update-changelog)."
 ---
 
-# README Updater
+# Update README
 
 Keep the project's README.md accurate after a significant change. Prefer surgical edits over rewrites. Do nothing when nothing material changed.
 
@@ -69,9 +64,3 @@ Do NOT touch: license, contributing guidelines, acknowledgments, badges — unle
 - Never rewrite the whole README when a few edits suffice.
 - Never commit or push.
 - In a monorepo, update only the READMEs affected by the change.
-
-## Output to Parent Session
-
-1. **What you changed** — which sections and why (2–4 lines)
-2. **What you skipped** — parts of the diff considered but not README-worthy
-3. **Follow-ups** — e.g. "CHANGELOG.md also looks stale" (flag only, don't act)
