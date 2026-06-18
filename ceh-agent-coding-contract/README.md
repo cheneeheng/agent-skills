@@ -24,12 +24,12 @@ contract automatically at session start, alongside the `write-less-code` minimal
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled —
 no global `settings.json` change or env var required.
 
-**At session start** — a `SessionStart` hook (`hooks/load-contract.js`) injects a **mandatory**
+**At session start** — a `SessionStart` hook (`hooks/load-contract.sh`) injects a **mandatory**
 directive to load `agent-coding-contract` before any other action, firing on `startup`, `resume`,
 `clear`, and `compact` (so a fresh, resumed, or reset session has it loaded, and it is re-injected
 after compaction).
 
-**Every turn** — a `UserPromptSubmit` hook (`hooks/less-code-payload.js`) re-injects a compact digest
+**Every turn** — a `UserPromptSubmit` hook (`hooks/less-code-payload.sh`) re-injects a compact digest
 of the `write-less-code` ladder before each prompt. This carries the minimalism reflex on every turn,
 reliably from turn one; the full `write-less-code` skill loads on demand when non-trivial code is
 actually being written.

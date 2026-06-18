@@ -219,7 +219,7 @@ notes live in the detailed entries referenced below.
 | File | Section | Scope |
 |------|---------|-------|
 | `ceh-agent-coding-contract/skills/write-less-code/SKILL.md` | "The ladder" + "When NOT to be lazy" | canonical — full skill, loaded on demand when code is written |
-| `ceh-agent-coding-contract/hooks/less-code-payload.js` | `additionalContext` array | compact digest of the ladder + never-simplify list, injected per-turn by the `UserPromptSubmit` hook |
+| `ceh-agent-coding-contract/hooks/less-code-payload.sh` | `additionalContext` array | compact digest of the ladder + never-simplify list, injected per-turn by the `UserPromptSubmit` hook |
 
 **What is shared:** the six-rung ladder (YAGNI → stdlib → native platform feature → already-installed
 dependency → one line → minimum that works) and the never-simplify-away list (trust-boundary

@@ -21,7 +21,7 @@ stay single-sourced.
 
 ## Hooks
 
-This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-invariants.js`) that
+This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-invariants.sh`) that
 injects the **frontend invariants** as always-on context. It fires on the `startup`, `clear`, and
 `compact` events and activates automatically when the plugin is enabled.
 
