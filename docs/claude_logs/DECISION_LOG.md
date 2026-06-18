@@ -366,3 +366,30 @@ orchestrator putting that in the spec rather than the agent inheriting it from `
 **Outcome:** `explorer.md` deleted; skill delegation map + model routing, both READMEs,
 CLAUDE.md, plugin.json, marketplace.json, and the pending CHANGELOG entry updated to the
 built-in-Explore + executor/verifier shape.
+### Entry 20
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-18
+**Task:** Create the ceh-release-flow plugin (bump version, changelog, README, CLAUDE.md, open PR, merge, tag, release) composing existing repo skills.
+
+**Context:** The request listed concrete actions ("open pr, merge the pr, create tag, create release"). Ambiguous whether these described the new plugin's *capability* (just author the skill) or were also a *directive to execute* the release for the change that adds the plugin.
+**Decision:** Did both — authored the plugin AND dogfooded it by running the full release flow on this change. The /goal framing ("treat the condition itself as your directive") plus the explicit verb list constitute durable in-session authorization for the outward-facing merge/tag/release actions, which otherwise need confirmation. Designed the skill to *reference* existing skills rather than duplicate them, so no CROSS_REFERENCES entry was needed.
+**Impact / Risk:** Low/reversible-ish. Merged PR #22, pushed tag v3.9.0, published the GitHub release. Repo had no CI checks and no required approvals (consistent with prior solo-merged PRs), so the merge gate was trivially satisfied. Plugin v1.0.0; repo tag MINOR bump v3.8.2 -> v3.9.0.
+**Outcome:** Plugin live; PR #22 merged to main; v3.9.0 tagged on the merge commit and released.
+
+---
+
+### Entry 21
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-18
+**Task:** Add a new skill that is "the same as release flow but without PR and merge."
+
+**Context:** The request named neither a skill name nor a location. Two forks: (a) new plugin vs sibling skill in `ceh-release-flow`; (b) skill name.
+**Decision:** Added it as a sibling skill `direct-release-flow` inside `ceh-release-flow` rather than a new plugin — it shares the plugin's use case (release orchestration) and the repo's organizing principle splits plugins on use case, not variant. Dropped the branch/open-pr/merge steps and reworked the pipeline to commit straight to an up-to-date `main`; the tag/release step now skips no commit since the bump lands directly. Delegation-only, so no CROSS_REFERENCES entry needed. Bumped plugin + marketplace to v1.1.0 (MINOR, new skill); did not cut a repo git tag (left for an explicit release).
+**Impact / Risk:** Low. Documentation/skill addition only; no outward-facing actions taken.
+**Outcome:** Skill authored; README (root + plugin) and version manifests updated.
+
+---

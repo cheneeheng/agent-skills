@@ -98,6 +98,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
 | `ceh-orchestration` | Orchestrate | `/ceh-orchestration:orchestrate` | Decompose and delegate a big multi-step task — plan/delegate-only main session, cheap isolated workers, to cap context/token cost |
 | `ceh-release-flow` | Release Flow | `/ceh-release-flow:release-flow` | Ship a complete release in one pass — version bump → changelog → README → CLAUDE.md → PR → merge → tag → release, sequencing the skill that owns each step |
+| `ceh-release-flow` | Direct Release Flow | `/ceh-release-flow:direct-release-flow` | PR-less variant — same release pipeline directly on `main` (no branch/PR/merge): version bump → changelog → README → CLAUDE.md → commit → tag → release |
 
 ---
 

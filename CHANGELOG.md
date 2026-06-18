@@ -5,6 +5,29 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.10.0] — 2026-06-18
+
+Add a PR-less variant to `ceh-release-flow`: `direct-release-flow` runs the same release pipeline
+straight on `main`, with no branch, PR, or merge.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-release-flow` | v1.1.0 |
+
+### Added
+
+- **`ceh-release-flow`** (v1.1.0) — new `direct-release-flow` skill: the PR-less twin of
+  `release-flow`. Same pipeline (semver bump → bump every manifest → changelog → README → CLAUDE.md
+  → commit → tag → GitHub release) but committed directly to an up-to-date `main`, dropping the
+  branch/open-pr/merge steps. For solo repos and low-risk releases where direct-to-`main` is the
+  norm. The plugin README gains a Dependencies section documenting the delegated skills and the
+  soft-dependency fallback (a missing plugin makes the flow apply the step's standard inline rather
+  than skip it).
+
+---
+
 ## [3.9.0] — 2026-06-18
 
 Add the `ceh-release-flow` plugin: a single orchestrator skill that ships a complete release in
