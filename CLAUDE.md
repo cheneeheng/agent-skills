@@ -25,7 +25,7 @@ Plugins fall into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin (agents only). Categorization rules of thumb:
@@ -75,6 +75,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-blog` | Interview-driven blog post writing |
 | `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; changelog & README maintenance |
 | `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) for cost-optimized multi-step work |
+| `ceh-release-flow` | End-to-end release orchestration: sequences version bump, changelog, README, CLAUDE.md, PR, merge, tag, and release by delegating to the skill that owns each step |
 
 ## Skills
 

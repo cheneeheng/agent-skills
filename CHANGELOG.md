@@ -5,6 +5,29 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.9.0] — 2026-06-18
+
+Add the `ceh-release-flow` plugin: a single orchestrator skill that ships a complete release in
+one pass by sequencing the skills that already own each step — no standard is duplicated.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-release-flow` | v1.0.0 (new) |
+
+### Added
+
+- **`ceh-release-flow`** (v1.0.0, new plugin) — `release-flow` skill orchestrating the end-to-end
+  release pipeline: semver bump → branch → bump every manifest → changelog → README → CLAUDE.md →
+  commit → PR → merge → tag → GitHub release. Delegates each step to its owning skill
+  (`ceh-git-workflow:branch`/`commit`/`open-pr`/`merge`/`release`,
+  `ceh-documentation:update-changelog`/`update-readme`); its only original content is the
+  step ordering, the gate between steps, and the rule that the bump lands via a reviewed PR and
+  the tag/release are cut on `main` against the merge commit after merge.
+
+---
+
 ## [3.8.2] — 2026-06-17
 
 Expand the `ceh-git-workflow` skills with the concrete templates and examples that earlier
