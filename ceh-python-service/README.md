@@ -19,7 +19,7 @@ For distributable libraries (packaging, public API, semver, no web deps) use `ce
 
 ## Hooks
 
-This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-invariants.js`) that
+This plugin ships a `SessionStart` hook (`hooks/hooks.json` → `hooks/load-invariants.sh`) that
 injects the **Python backend invariants** as always-on context. It fires on the `startup`, `clear`,
 and `compact` events and activates automatically when the plugin is enabled.
 

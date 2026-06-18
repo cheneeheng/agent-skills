@@ -5,6 +5,34 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.10.1] — 2026-06-18
+
+Rewrite every plugin hook from Node to pure Bash so hooks run on machines without a Node
+runtime (e.g. locked-down hosts where installing Node needs admin approval).
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.6.2 |
+| `ceh-architecture` | v3.0.3 |
+| `ceh-python-library` | v1.2.1 |
+| `ceh-python-service` | v3.1.1 |
+| `ceh-web-frontend` | v3.0.4 |
+
+### Changed
+
+- **`ceh-agent-coding-contract`** (v2.6.2), **`ceh-architecture`** (v3.0.3),
+  **`ceh-python-library`** (v1.2.1), **`ceh-python-service`** (v3.1.1),
+  **`ceh-web-frontend`** (v3.0.4) — all SessionStart/UserPromptSubmit hooks emitted a static
+  JSON payload via Node; each `*.js` is replaced by a `*.sh` that prints the identical JSON from a
+  single-quoted heredoc, and every `hooks.json` now invokes `bash` instead of `node` (the official
+  plugin-hook convention). Removes the Node runtime dependency; each `.sh` output was verified to
+  parse to JSON identical to the Node version. Plugin READMEs and `CROSS_REFERENCES.md` updated to
+  the new `.sh` paths.
+
+---
+
 ## [3.10.0] — 2026-06-18
 
 Add a PR-less variant to `ceh-release-flow`: `direct-release-flow` runs the same release pipeline
