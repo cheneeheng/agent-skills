@@ -287,7 +287,7 @@ together or falls apart):
   should be split.
 
 Then deliver:
-1. Save all files to `/mnt/user-data/outputs/planning/`.
+1. Save all files to `.agents_workspace/planning/`.
 2. Present them to the user.
 3. Close with a brief summary:
    - The MVP definition (the "In the MVP" list).

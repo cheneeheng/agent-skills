@@ -51,7 +51,8 @@ ceh-<plugin-name>/
     └── <skill-name>/
         ├── SKILL.md               # Required — all content inline; frontmatter + full body
         └── references/            # Sparingly — schemas and templates only (e.g. plan-schema.md)
-docs/                          # Plugin reorg plan, decision log, etc. — not a plugin
+docs/                          # Plugin reorg plan, ADRs, etc. — not a plugin
+.agents_workspace/             # Skill session artifacts (DECISION_LOG.md, LESSONS_LEARNED.md) — gitignored
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
 └── <tool-name>/               # e.g. skills-sync — own README.md, no plugin.json
 ```

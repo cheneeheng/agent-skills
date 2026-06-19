@@ -7,7 +7,7 @@ identifies mistakes and corrections, and appends structured lessons to `LESSONS_
 
 | Skill | Description |
 |-------|-------------|
-| `lessons-learned` | Extract lessons from the current session and append to `docs/claude_logs/LESSONS_LEARNED.md` |
+| `lessons-learned` | Extract lessons from the current session and append to `.agents_workspace/LESSONS_LEARNED.md` |
 
 Invoke manually:
 
@@ -38,7 +38,7 @@ weren't errors.
 
 ## Output
 
-Each lesson appended to `docs/claude_logs/LESSONS_LEARNED.md`:
+Each lesson appended to `.agents_workspace/LESSONS_LEARNED.md`:
 
 ```markdown
 ## YYYY-MM-DD — <short title describing the mistake>

@@ -166,7 +166,7 @@ Always point to the last artifact where that section was substantively written, 
 ## Step 3 — Delivery
 
 1. Run the **Anti-Overplan Check** over the draft before delivering — remove anything that isn't required for the current release.
-2. Save the file to `/mnt/user-data/outputs/planning/`.
+2. Save the file to `.agents_workspace/planning/`.
 3. Present the file to the user.
 4. Close with a brief summary:
    - What this plan covers

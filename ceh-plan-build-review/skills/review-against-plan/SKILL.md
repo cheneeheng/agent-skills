@@ -15,7 +15,8 @@ Read it before starting. The section table and pointer resolution rules are auth
 ## Step 1 — Locate and Parse Plan Docs
 
 1. Find the target plan files. If the user didn't specify, look for `SKELETON` and `ITER_NN`
-   files (`.md`) in the project root or a `docs/` directory. Filenames may carry a version tag
+   files (`.md`) under `.agents_workspace/planning/` (where the planning skills write them) or any
+   subfolder within it. Filenames may carry a version tag
    as a prefix or suffix — e.g. `SKELETON_v2.md`, `v2_ITER_03.md`. See "File Naming and Version
    Variants" in [references/plan-schema.md](references/plan-schema.md)
    for the matching rules.
