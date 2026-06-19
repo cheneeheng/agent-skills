@@ -66,13 +66,14 @@ Expected contents for each section, at both skeleton and iteration level.
 ## §02 · Architecture
 
 **Skeleton:**
-- A component diagram (text-based is fine): what exists and how the pieces connect
+- A component diagram in Mermaid (e.g. `flowchart` or `graph TD`) showing what exists and how the pieces connect — prefer Mermaid over ASCII art so it renders in any Markdown viewer
 - Data model: entity names and their key fields only — no full schema
 - API surface: list of routes with method, path, and one-line description. Return types can be stubs.
 - No auth, no caching, no queues unless the concept breaks without them
 
 **Iteration:**
 - Only the parts of the architecture that change
+- An updated Mermaid component diagram that visualizes what changed this iteration — mark new/modified pieces (e.g. a distinct Mermaid `style`/`class` or a `%% changed` comment) so the diff is visible at a glance
 - New entities, new routes, modified relationships
 - Pointer for anything untouched
 

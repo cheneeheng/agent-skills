@@ -40,7 +40,7 @@ Compare the section spec against the actual codebase. Specifically verify:
 
 | Section | What to check |
 |---------|--------------|
-| §02 Architecture | All specified components exist. Data model entities and key fields are present. All listed routes exist with correct method and path. No undocumented routes or entities. |
+| §02 Architecture | All specified components exist. Data model entities and key fields are present. All listed routes exist with correct method and path. No undocumented routes or entities. Diagram is Mermaid (not ASCII art) and reflects the current/changed architecture. |
 | §04 Backend | All specified modules and files exist. Each route/service is implemented (not just stubbed unless spec says so). Env var names match. `how to run` works. |
 | §05 Frontend | All specified pages/routes exist. Component tree matches. Placeholder data strategy followed. `how to run` works. |
 | §06 LLM/Prompts | Model and provider match. System prompt implemented. Input/output shape matches. |

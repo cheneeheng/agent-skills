@@ -85,7 +85,7 @@ block as scope boundary, not as work to implement. Every non-terminal iteration 
 | ID | Title | Skeleton content | Iteration content |
 |----|-------|-----------------|-------------------|
 | §01 | Concept | What the app does, who it's for, the single most important user flow | What changed; pointer if unchanged |
-| §02 | Architecture | Component diagram, data model (entity names + key fields), API surface (method + path + one-liner) | Changed entities/routes only; pointer otherwise |
+| §02 | Architecture | Mermaid component diagram, data model (entity names + key fields), API surface (method + path + one-liner) | Changed entities/routes only + updated Mermaid diagram showing the change; pointer otherwise |
 | §03 | Tech Stack | Language/runtime versions, one framework per layer, database, key libraries | New deps + rationale, version pins if relevant; pointer otherwise |
 | §04 | Backend | File/module tree (2–3 levels), one representative stub per route group, `how to run`, env var names | New modules/files, implementation detail for new endpoints; check `implementation-gotchas.md` |
 | §05 | Frontend | Page/screen list with routes, top-level component tree, `how to run`, placeholder data strategy | New screens/components, state changes, new API calls; check `implementation-gotchas.md` |

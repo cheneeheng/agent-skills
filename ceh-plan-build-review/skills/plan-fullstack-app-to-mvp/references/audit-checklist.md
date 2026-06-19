@@ -16,6 +16,7 @@ For each gap: if it's your call, resolve it and add the resolution inline. If it
 
 ## Architecture (§02)
 
+- [ ] Is the component diagram in Mermaid, not ASCII art? (ITER) Does it visualize what changed this iteration, not just the current state?
 - [ ] Is the data model complete enough to start building? (Entity names, key fields, relationships — not full schema, but no mystery fields)
 - [ ] Is the API surface defined with methods, paths, and expected response shapes?
 - [ ] Are cross-origin concerns addressed? (Which origins are allowed, cookie policy)
