@@ -45,7 +45,7 @@ The `agent-coding-contract` skill is the single source of truth. In short, it re
   Summarize. Validation, testing, and command execution happen only when explicitly requested.
 - **Make minimal, authorized changes** — localized diffs, no unsolicited refactors, touch only what
   is in scope, never claim work was done that wasn't.
-- **Log decisions made under ambiguity** to `docs/claude_logs/DECISION_LOG.md` (default path;
+- **Log decisions made under ambiguity** to `.agents_workspace/DECISION_LOG.md` (default path;
   override it via your project `CLAUDE.md`). See the skill for the entry format and when to log.
 
 Refer to the skill for the authoritative wording — this section is a summary and is not the contract

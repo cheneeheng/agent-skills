@@ -5,6 +5,38 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.10.3] — 2026-06-19
+
+Redirect all skill *session-artifact* outputs from `docs/` to `.agents_workspace/` so agent-generated
+logs and plans no longer land in the committed `docs/` tree. Committed project documentation (ADRs
+under `docs/adr/`, user guides under `docs/guide/`) is unchanged.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.6.3 |
+| `ceh-lessons-learned` | v2.0.4 |
+| `ceh-ops` | v3.0.1 |
+| `ceh-plan-build-review` | v1.0.2 |
+
+### Changed
+
+- **`ceh-agent-coding-contract`** (v2.6.3) — Decision Log default path moved from
+  `docs/claude_logs/DECISION_LOG.md` to `.agents_workspace/DECISION_LOG.md` (SKILL + README).
+- **`ceh-lessons-learned`** (v2.0.4) — `LESSONS_LEARNED.md` output moved from `docs/claude_logs/`
+  to `.agents_workspace/` (SKILL + README).
+- **`ceh-ops`** (v3.0.1) — `rollback` skill's Decision Log default path updated to
+  `.agents_workspace/DECISION_LOG.md`.
+- **`ceh-plan-build-review`** (v1.0.2) — plan producers (`plan-fullstack-app-iteratively`,
+  `plan-fullstack-app-to-mvp`) now save to `.agents_workspace/planning/`; consumers
+  (`implement-from-plan`, `review-against-plan`) now expect plans under `.agents_workspace/planning/`
+  or any subfolder within it.
+- **Repo** — `.gitignore` now ignores `.agents_workspace/`; root `CLAUDE.md` structure tree updated
+  to document the new workspace directory.
+
+---
+
 ## [3.10.2] — 2026-06-19
 
 Require Mermaid diagrams (not ASCII art) in plan-build-review's §02 Architecture section, and

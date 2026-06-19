@@ -116,7 +116,7 @@ one change's reviewers; the log is the durable cross-session record. Write the e
 the decision, not reconstructed at the end. Explaining a judgment call in a commit body is the signal
 it also belongs here.
 
-Append to `docs/claude_logs/DECISION_LOG.md` (the default convention). Create the file and any missing parent directories if they do not exist — creating and appending to this log is pre-authorized and never a scope violation. Use the next sequential integer as the entry ID (read the last entry's ID first). To use a different location, specify a `DECISION_LOG.md` path in your project `CLAUDE.md`; add the path to `.gitignore` if you do not want agent decision logs committed to the repo.
+Append to `.agents_workspace/DECISION_LOG.md` (the default convention). Create the file and any missing parent directories if they do not exist — creating and appending to this log is pre-authorized and never a scope violation. Use the next sequential integer as the entry ID (read the last entry's ID first). To use a different location, specify a `DECISION_LOG.md` path in your project `CLAUDE.md`; add the path to `.gitignore` if you do not want agent decision logs committed to the repo.
 
 ```markdown
 ### Entry <ID>

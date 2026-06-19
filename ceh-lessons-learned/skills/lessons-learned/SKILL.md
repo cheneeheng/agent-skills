@@ -6,7 +6,7 @@ description: Extract lessons learned from the current conversation and append th
 # Lessons Learned Extractor
 
 Review the full conversation, identify moments where something went wrong or required correction,
-and append structured lessons to `docs/claude_logs/LESSONS_LEARNED.md`.
+and append structured lessons to `.agents_workspace/LESSONS_LEARNED.md`.
 
 ## What counts as a lesson
 
@@ -36,7 +36,7 @@ that weren't errors. Write for a future LLM reading cold — so the next session
 
 ## File handling
 
-1. Check whether `docs/claude_logs/LESSONS_LEARNED.md` exists.
+1. Check whether `.agents_workspace/LESSONS_LEARNED.md` exists.
 2. If missing, create it (including parent directories) with this header:
    ```markdown
    # Lessons Learned

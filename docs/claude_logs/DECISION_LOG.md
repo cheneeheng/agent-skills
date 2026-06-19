@@ -393,3 +393,37 @@ built-in-Explore + executor/verifier shape.
 **Outcome:** Skill authored; README (root + plugin) and version manifests updated.
 
 ---
+
+### Entry 22
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-19
+**Task:** Redirect all skill output paths from `docs/` to `.agents_workspace/`, updating READMEs and CLAUDE.md.
+
+**Context:** "All skills that write outputs to `docs/`" is ambiguous: `docs/` holds two distinct
+things — agent session artifacts (`docs/claude_logs/DECISION_LOG.md`, `LESSONS_LEARNED.md`) and
+committed project documentation (`docs/adr/` ADRs, `docs/guide/` user guides). CHANGELOG entry 1190
+already records a deliberate split between "Claude session artifacts" and "shared developer
+documentation." Forks: (a) which paths count as "outputs"; (b) whether to preserve the `claude_logs/`
+subdir under the new root; (c) where to migrate the existing committed log.
+**Decision:** Scoped "outputs" to the session artifacts only (`DECISION_LOG.md`, `LESSONS_LEARNED.md`),
+because `.agents_workspace/` (dot-prefixed, "workspace") denotes ephemeral agent working files, not
+committed deliverables. ADRs and user guides stay in `docs/` — they are product documentation. Plan
+skills wrote to `/mnt/user-data/outputs/planning/` (not `docs/`); a follow-up instruction moved them
+to `.agents_workspace/planning/` too, and the consumer skills (`implement-from-plan`,
+`review-against-plan`) now look there first.
+Flattened `docs/claude_logs/X.md` -> `.agents_workspace/X.md` (the workspace dir replaces the
+redundant `claude_logs/` segment). Added `.agents_workspace/` to `.gitignore` (session artifacts are
+not committed) and a structure-tree entry in `CLAUDE.md`. Appended this entry to the *existing*
+committed `docs/claude_logs/DECISION_LOG.md` rather than the new (gitignored) location, to preserve
+log continuity and keep the decision under version control; migrating the historical log is a separate,
+unrequested concern.
+**Impact / Risk:** Low. Edits across 3 SKILL.md, 2 plugin READMEs, `CLAUDE.md`, and `.gitignore`.
+Did not bump plugin/marketplace versions or add a CHANGELOG release section — repo convention reserves
+those for commit/release time; flagged as follow-up. CHANGELOG historical entries and
+`skills-sync/README.md`'s pointer to Entry 15 left intact (factual records of the old path).
+**Outcome:** Forward-looking output-path references in skills, READMEs, and CLAUDE.md now point at
+`.agents_workspace/`; `.gitignore` updated.
+
+---
