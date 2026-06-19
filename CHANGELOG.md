@@ -5,6 +5,28 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.10.2] — 2026-06-19
+
+Require Mermaid diagrams (not ASCII art) in plan-build-review's §02 Architecture section, and
+require iteration diagrams to visualize what changed rather than just restating the current state.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-plan-build-review` | v1.0.1 |
+
+### Changed
+
+- **`ceh-plan-build-review`** (v1.0.1) — §02 Architecture skeleton diagrams must now be Mermaid
+  instead of ASCII art; iteration diagrams must additionally visualize what changed this iteration.
+  Propagated across the producer specs (`plan-fullstack-app-iteratively`,
+  `plan-fullstack-app-to-mvp`), the consumer schemas (`implement-from-plan`, `review-against-plan`),
+  both audit checklists, and `review-against-plan`'s post-implementation check table.
+  `CROSS_REFERENCES.md` updated with the new duplication entry.
+
+---
+
 ## [3.10.1] — 2026-06-18
 
 Rewrite every plugin hook from Node to pure Bash so hooks run on machines without a Node
