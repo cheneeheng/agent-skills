@@ -175,6 +175,30 @@ notes live in the detailed entries referenced below.
 
 ---
 
+## §02 Architecture diagram requirement (Mermaid, not ASCII art; iterations visualize the change)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "§02 · Architecture" | producer copy — golden standard, same wording as the iterative copy |
+| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | "§02 · Architecture" | producer copy — identical wording |
+| `ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | "Sections" table, §02 row | consumer copy — condensed table-cell form |
+| `ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md` | "Sections" table, §02 row | consumer copy — identical to the `implement-from-plan` row |
+| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/audit-checklist.md` | "Architecture (§02)" | verification copy — pre-delivery check |
+| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/audit-checklist.md` | "Architecture (§02)" | verification copy — identical bullet |
+| `ceh-plan-build-review/skills/review-against-plan/SKILL.md` | "Check" table, §02 row | verification copy — post-implementation review check |
+
+**What is shared:** the component diagram must be Mermaid, not ASCII art; at skeleton level it shows what exists and how pieces connect; at iteration level it must additionally visualize what changed (new/modified pieces marked distinctly), not just restate the current state.
+
+**What diverges:**
+- the two `section-specs.md` copies carry the full skeleton/iteration prose (word-for-word identical).
+- the two `plan-schema.md` copies carry the condensed table-cell form (word-for-word identical).
+- the two `audit-checklist.md` copies carry a single checklist bullet (word-for-word identical).
+- `review-against-plan/SKILL.md` carries the verification as a clause appended to its existing §02 check-table row, not a standalone bullet.
+
+---
+
 ## Blog Voice section (personal voice, banned tells, never-invent rule)
 
 **Files:**
