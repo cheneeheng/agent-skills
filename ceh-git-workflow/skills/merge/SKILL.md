@@ -54,17 +54,23 @@ git push --force-with-lease            # your own feature branch only
 
 Re-run CI after the rebase; the pre-merge gate applies to the rebased state, not the pre-conflict one.
 
-## Post-Merge Cleanup
+## Merge & Cleanup
+
+Prefer `--auto` when the repo allows it: GitHub queues the merge and lands it the moment the gate
+(CI + approvals, enforced server-side via branch protection) goes green, then deletes the branch.
+Probe for support and fall back to a direct merge (which requires the gate already green):
 
 ```bash
-gh pr merge <number> --merge --delete-branch   # merge commit + delete remote & local tracking branch
-git checkout main && git pull origin main      # return to main and sync
-git branch -d <branch-name>                    # only if a local copy lingers (e.g. merged via UI)
-git fetch --prune                              # drop stale remote-tracking refs
+if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then
+  gh pr merge <number> --merge --auto --delete-branch   # queues; lands when the gate goes green
+else
+  gh pr merge <number> --merge --delete-branch          # gate must already be green
+fi
+git checkout main && git pull origin main   # return to main and sync
+git branch -d <branch-name>                 # only if a local copy lingers (e.g. merged via UI)
+git fetch --prune                           # drop stale remote-tracking refs
 ```
 
 `git branch -d` (lowercase) refuses an unmerged branch — do not force with `-D` unless you intend
-to discard unmerged commits.
-
-For "create a PR, merge it, delete the branch": open the PR, wait for the gate to pass, then run
-the cleanup above. Never merge before CI finishes — surface it and wait rather than merging red.
+to discard unmerged commits. For "create a PR, merge it, delete the branch", chain this after the
+PR opens. Never bypass CI — surface a red gate and wait rather than merging red.
