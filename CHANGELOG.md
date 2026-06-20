@@ -5,6 +5,44 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.11.0] — 2026-06-20
+
+Consolidate architecture decision records into the living architecture doc. The standalone `adr`
+skill is replaced by a `document-architecture` skill that captures durable decisions as a **Key
+Decisions** section inside `ARCHITECTURE.md` (alongside the Mermaid diagrams), and every other
+skill that referenced `docs/adr/DECISIONS.md` now points at `ARCHITECTURE.md` Key Decisions.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-architecture` | v3.1.0 |
+| `ceh-git-workflow` | v3.1.3 |
+| `ceh-ops` | v3.0.2 |
+| `ceh-python-service` | v3.1.2 |
+
+### Added
+
+- **`ceh-architecture`** (v3.1.0) — new `document-architecture` skill: maintains a living
+  `ARCHITECTURE.md` with Mermaid diagrams and a **Key Decisions** section that records durable
+  architectural decisions inline (replacing separate ADR files).
+
+### Removed
+
+- **`ceh-architecture`** (v3.1.0) — removed the standalone `adr` skill; its responsibility is now
+  folded into `document-architecture`.
+
+### Changed
+
+- **`ceh-git-workflow`** (v3.1.3) — `code-review`, `dependency-management`, and `open-pr` skills
+  now reference `ARCHITECTURE.md` Key Decisions instead of `docs/adr/DECISIONS.md`.
+- **`ceh-ops`** (v3.0.2) — `deploy` skill's breaking-change gate now requires an `ARCHITECTURE.md`
+  Key Decisions entry instead of an ADR entry.
+- **`ceh-python-service`** (v3.1.2) — `fastapi` skill's API-versioning guidance now records the
+  deprecation timeline in `ARCHITECTURE.md` Key Decisions instead of an ADR.
+
+---
+
 ## [3.10.3] — 2026-06-19
 
 Redirect all skill *session-artifact* outputs from `docs/` to `.agents_workspace/` so agent-generated
