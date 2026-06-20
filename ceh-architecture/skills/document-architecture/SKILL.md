@@ -1,11 +1,11 @@
 ---
 name: "document-architecture"
-description: Load this skill when creating or updating the project's living architecture document — an ARCHITECTURE.md that is mainly Mermaid diagrams plus a Key Decisions log. Trigger when the user says "write the architecture doc", "add architecture diagrams", "create ARCHITECTURE.md", "document the system architecture", "diagram the system", "update the architecture doc", or "record this decision". Also load when a version re-plan changes the system's shape (new component, changed data flow, reversed design choice) and the committed picture or decision log must be brought back in sync.
+description: Load this skill when creating or updating the project's living architecture document — an ARCHITECTURE.md that is mainly Mermaid diagrams plus a Key Decisions log. Trigger when the user says "write the architecture doc", "add architecture diagrams", "create ARCHITECTURE.md", "document the system architecture", "diagram the system", "update the architecture doc", or "record this decision". Also load when a version re-plan changes the system's shape (new component, changed data flow, reversed design choice) and the current picture or decision log must be brought back in sync.
 ---
 
 # Document Architecture
 
-Maintain one living `docs/ARCHITECTURE.md` — the committed, always-current picture of the system.
+Maintain one living `.agents_workspace/ARCHITECTURE.md` — the always-current picture of the system.
 It is **mainly Mermaid diagrams** plus a **Key Decisions** log that holds the durable, cross-version
 "why". Keep it in sync: when a version re-plan changes the system's shape, update the affected
 diagram and append any new decision in the same change.
@@ -81,6 +81,6 @@ Append entries to a `## Key Decisions` section at the bottom of `ARCHITECTURE.md
 
 ## Storage
 
-`docs/ARCHITECTURE.md` at the repo root `docs/` directory. For a large system, the diagram set may
-move to `docs/architecture/` with one file per view, but the `## Key Decisions` log stays in a
+`.agents_workspace/ARCHITECTURE.md`. For a large system, the diagram set may
+move to `.agents_workspace/architecture/` with one file per view, but the `## Key Decisions` log stays in a
 single file so the decision trail is greppable in one place.
