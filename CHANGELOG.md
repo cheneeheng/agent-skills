@@ -5,6 +5,26 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.11.2] — 2026-06-20
+
+The `merge` skill now uses GitHub auto-merge when the repository allows it, falling back to a direct
+merge otherwise — the merge lands automatically once the branch-protection gate (CI + approvals) is
+satisfied, instead of waiting on CI by hand.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.1.4 |
+
+### Changed
+
+- **`ceh-git-workflow`** (v3.1.4) — `merge` skill probes `gh repo view --json autoMergeAllowed` and
+  prefers `gh pr merge --merge --auto` when enabled, falling back to a direct merge; the auto-merge
+  and post-merge cleanup steps are consolidated into a single **Merge & Cleanup** section.
+
+---
+
 ## [3.11.1] — 2026-06-20
 
 Move the living architecture doc out of the committed `docs/` tree into the gitignored
