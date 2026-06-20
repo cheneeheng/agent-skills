@@ -76,7 +76,7 @@ notes live in the detailed entries referenced below.
 |------|---------|-------|
 | `ceh-git-workflow/skills/open-pr/SKILL.md` | two "Checklist" blocks — the rendered template (after the body) and the `gh pr create` heredoc | canonical — only holder; the seven items appear twice in this one file |
 
-**What is shared:** seven checklist items, repeated word-for-word in both "Checklist" blocks inside `open-pr`: "All CI checks pass", "Tests added or updated for new behavior", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "docs/adr/DECISIONS.md updated (if a durable decision was made)", "Attribution included if AI tooling assisted".
+**What is shared:** seven checklist items, repeated word-for-word in both "Checklist" blocks inside `open-pr`: "All CI checks pass", "Tests added or updated for new behavior", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "ARCHITECTURE.md Key Decisions updated (if a durable decision was made)", "Attribution included if AI tooling assisted".
 
 **What diverges:**
 - The two `open-pr` blocks are identical — keep them in sync when editing.

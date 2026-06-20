@@ -11,7 +11,7 @@ organized around **use cases** — load the ones that match what you are buildin
 |--------|-----------|---------|
 | Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism skill (always-on via hooks) |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
-| Architecture | `ceh-architecture` | ADRs and domain modeling (stack-agnostic design) |
+| Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | Python Library | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
 | Web Frontend | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, ESLint/Prettier, Vitest, Playwright, accessibility |
@@ -53,7 +53,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-plan-build-review` | Plan Fullstack App to MVP | `/ceh-plan-build-review:plan-fullstack-app-to-mvp` | Planning the complete build to a working MVP in one session |
 | `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
 | `ceh-plan-build-review` | Review Against Plan | `/ceh-plan-build-review:review-against-plan` | Auditing implementation against a SKELETON.md or ITER_NN.md planning document |
-| `ceh-architecture` | ADR | `/ceh-architecture:adr` | Making a significant architectural decision |
+| `ceh-architecture` | Document Architecture | `/ceh-architecture:document-architecture` | Writing/updating the living `ARCHITECTURE.md` — Mermaid diagrams + a Key Decisions log |
 | `ceh-architecture` | Domain Modeling | `/ceh-architecture:domain-modeling` | Designing entities, IDs, status fields, or layer boundaries |
 | `ceh-python-service` | FastAPI | `/ceh-python-service:fastapi` | Writing route handlers, DI, middleware, exception hierarchy, or REST API design |
 | `ceh-python-service` | asyncpg | `/ceh-python-service:asyncpg` | Writing database queries, transactions, tenant isolation, or connection pool config |

@@ -56,11 +56,11 @@ uv run pip-audit    # Python
 bun audit           # TypeScript
 ```
 
-Address all high-severity findings before release. Document accepted medium-severity exceptions in `docs/adr/DECISIONS.md`.
+Address all high-severity findings before release. Document accepted medium-severity exceptions in `ARCHITECTURE.md` Key Decisions.
 
 ## Major Version Upgrades
 
 Require:
 1. A dedicated PR (not bundled with feature work)
-2. A brief ADR entry explaining the upgrade and breaking changes handled
+2. A brief Key Decisions entry in `ARCHITECTURE.md` explaining the upgrade and breaking changes handled
 3. Full test suite pass after upgrade

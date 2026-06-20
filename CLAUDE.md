@@ -51,7 +51,7 @@ ceh-<plugin-name>/
     └── <skill-name>/
         ├── SKILL.md               # Required — all content inline; frontmatter + full body
         └── references/            # Sparingly — schemas and templates only (e.g. plan-schema.md)
-docs/                          # Plugin reorg plan, ADRs, etc. — not a plugin
+docs/                          # Plugin reorg plan, architecture docs, etc. — not a plugin
 .agents_workspace/             # Skill session artifacts (DECISION_LOG.md, LESSONS_LEARNED.md) — gitignored
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
 └── <tool-name>/               # e.g. skills-sync — own README.md, no plugin.json
@@ -63,7 +63,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 |-----------------|--------|
 | `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism reflex |
 | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app (iteratively or to MVP), implement from the plan, review against it |
-| `ceh-architecture` | Stack-agnostic design: ADRs, domain modeling |
+| `ceh-architecture` | Stack-agnostic design: living architecture docs (Mermaid diagrams + Key Decisions), domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
 | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility |

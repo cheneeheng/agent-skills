@@ -1,7 +1,8 @@
 # ceh-architecture
 
-Stack-agnostic architectural standards: recording significant decisions (ADRs) and domain modeling
-(identifier formats, status enums, state transitions, layer boundaries).
+Stack-agnostic architectural standards: maintaining a living architecture document (Mermaid diagrams
+plus a Key Decisions log) and domain modeling (identifier formats, status enums, state transitions,
+layer boundaries).
 
 REST API design now lives in `ceh-python-service:fastapi`; PostgreSQL schema design in
 `ceh-python-service:postgresql`; directory layout in `ceh-scaffolding`.
@@ -10,7 +11,7 @@ REST API design now lives in `ceh-python-service:fastapi`; PostgreSQL schema des
 
 | Skill | Triggers When |
 |-------|---------------|
-| `adr` | Making a significant architectural decision that should be recorded |
+| `document-architecture` | Writing or updating the living `ARCHITECTURE.md` — Mermaid diagrams plus a Key Decisions log — including when a version re-plan changes the system's shape |
 | `domain-modeling` | Designing entities, identifier formats, status enums, state transitions, or layer boundaries |
 
 ## Hooks

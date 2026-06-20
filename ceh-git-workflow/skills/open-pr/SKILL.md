@@ -42,7 +42,7 @@ Same rules as a commit subject: imperative, lowercase, no trailing period, ≤ 7
 - [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
 - [ ] No secrets or credentials in code
 - [ ] Migrations (if any) are backward-compatible
-- [ ] docs/adr/DECISIONS.md updated (if a durable decision was made)
+- [ ] ARCHITECTURE.md Key Decisions updated (if a durable decision was made)
 - [ ] Attribution included if AI tooling assisted
 ```
 
@@ -79,7 +79,7 @@ test against a seeded DB. `pytest` + `mypy --strict` green locally.
 - [x] No `any` / `@ts-ignore` / `# type: ignore` introduced
 - [x] No secrets or credentials in code
 - [x] Migrations (if any) are backward-compatible
-- [ ] docs/adr/DECISIONS.md updated (if a durable decision was made)
+- [ ] ARCHITECTURE.md Key Decisions updated (if a durable decision was made)
 - [x] Attribution included if AI tooling assisted
 ```
 
@@ -157,7 +157,7 @@ gh pr create \
 - [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
 - [ ] No secrets or credentials in code
 - [ ] Migrations (if any) are backward-compatible
-- [ ] docs/adr/DECISIONS.md updated (if a durable decision was made)
+- [ ] ARCHITECTURE.md Key Decisions updated (if a durable decision was made)
 - [ ] Attribution included if AI tooling assisted
 EOF
 )"

@@ -28,4 +28,4 @@ Complete every step in order. No skipping.
 |-------|-----------|----------------------|
 | Internal | No user-visible or API change | None |
 | User-visible | UI change, new feature, behavioral change | PR description required |
-| Breaking | API contract change, schema migration, removed endpoint | ADR entry + migration plan before merge |
+| Breaking | API contract change, schema migration, removed endpoint | ARCHITECTURE.md Key Decisions entry + migration plan before merge |

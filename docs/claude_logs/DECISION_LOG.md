@@ -427,3 +427,15 @@ those for commit/release time; flagged as follow-up. CHANGELOG historical entrie
 `.agents_workspace/`; `.gitignore` updated.
 
 ---
+
+### Entry 23
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-20T00:00:00Z
+**Task:** Add architecture documentation skill; consolidate the under-triggering ADR skill into it.
+
+**Context:** The `adr` skill never auto-fired in a plan-driven workflow — the SKELETON/ITER plans already capture decisions at decision time, and changes are handled by re-planning a version. User asked to add an architecture-documentation skill (Mermaid-diagram-centric ARCHITECTURE.md) and reviewed the ADR overlap. Two forks were the user's to resolve.
+**Decision:** Per user choice: (1) consolidate — remove the standalone `adr` skill and fold durable decisions into the architecture doc; (2) decisions live inline in `docs/ARCHITECTURE.md` under a `## Key Decisions` section, and the six `docs/adr/DECISIONS.md` references across `ceh-git-workflow` (open-pr ×3, code-review, dependency-management ×2), `ceh-ops` (deploy), and `ceh-python-service` (fastapi) were repointed to it. New skill `document-architecture` added to `ceh-architecture` (MINOR → 3.1.0); the three peripheral plugins took content-only PATCH bumps. Canonical path `docs/ARCHITECTURE.md` and the standard diagram set (context/components/flows/ER/state) were my execution choices. This also resolved pre-existing drift between the `adr` skill's numbered-file convention and the single-file path the rest of the repo assumed.
+**Impact / Risk:** Four plugins re-versioned; CROSS_REFERENCES.md PR-checklist block updated to match. Historical CHANGELOG/DECISION_LOG/PLUGIN_REORG_PLAN mentions of ADRs left intact as record. No repo git tag cut (left to user).
+**Outcome:** JSON valid; plugin.json ↔ marketplace.json versions match; no stale active references remain.

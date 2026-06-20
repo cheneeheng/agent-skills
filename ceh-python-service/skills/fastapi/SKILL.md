@@ -62,7 +62,7 @@ Do not return `200` for errors. Do not return `500` for user input errors.
 
 ### API Versioning
 
-Prefer backward-compatible additions (new optional fields, new endpoints). Only version when a breaking change cannot be avoided. When required: use a URL prefix (`/v2/resources`), maintain `/v1/` for a documented deprecation period, and record the timeline as an ADR.
+Prefer backward-compatible additions (new optional fields, new endpoints). Only version when a breaking change cannot be avoided. When required: use a URL prefix (`/v2/resources`), maintain `/v1/` for a documented deprecation period, and record the timeline in `ARCHITECTURE.md` Key Decisions.
 
 ### Headers
 
