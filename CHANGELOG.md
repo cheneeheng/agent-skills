@@ -5,6 +5,26 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.11.3] — 2026-06-20
+
+Add continuous integration that validates the repository's structural integrity on every push to
+`main` and every pull request. Repo-tooling only — no plugin behavior changes.
+
+### Plugin versions
+
+No plugin version changes — this release adds repo-level CI tooling only.
+
+### Added
+
+- **CI** — `.github/workflows/validate.yml` runs a new stdlib-only validator
+  (`tools/validate-plugins/validate.py`) that checks: `plugin.json`/`marketplace.json` manifests
+  (valid JSON, name matches directory, semver, version parity, every plugin listed with an existing
+  source), `SKILL.md` and agent frontmatter (`name` + `description`, name matches directory),
+  `references/` and `${CLAUDE_PLUGIN_ROOT}/scripts/` file references, `plugin:component` skill
+  references, and script syntax (`bash -n` / `shellcheck` / `py_compile`).
+
+---
+
 ## [3.11.2] — 2026-06-20
 
 The `merge` skill now uses GitHub auto-merge when the repository allows it, falling back to a direct
