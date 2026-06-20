@@ -30,7 +30,7 @@ Examples:
 4. **Design** — right abstraction? Fits existing patterns?
 5. **Style** — only flag if linting tools don't catch it
 
-Do not comment on style a linter would catch. Do not re-litigate decisions in `docs/adr/DECISIONS.md` unless new risk is identified. Do not review from memory — verify against current file contents.
+Do not comment on style a linter would catch. Do not re-litigate decisions recorded in `ARCHITECTURE.md` Key Decisions unless new risk is identified. Do not review from memory — verify against current file contents.
 
 ## Structure of a Review
 
