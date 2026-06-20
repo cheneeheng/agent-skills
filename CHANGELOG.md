@@ -5,6 +5,26 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.11.1] — 2026-06-20
+
+Move the living architecture doc out of the committed `docs/` tree into the gitignored
+`.agents_workspace/`. The `user-operator-guide` output stays in `docs/guide/` — those guides are
+intended deliverables for other readers and must remain committed.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-architecture` | v3.1.1 |
+
+### Changed
+
+- **`ceh-architecture`** (v3.1.1) — `document-architecture` now writes the living architecture doc to
+  `.agents_workspace/ARCHITECTURE.md` (and `.agents_workspace/architecture/` for large systems)
+  instead of `docs/`.
+
+---
+
 ## [3.11.0] — 2026-06-20
 
 Consolidate architecture decision records into the living architecture doc. The standalone `adr`
