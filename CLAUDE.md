@@ -94,6 +94,9 @@ Each skill is a self-contained SKILL.md file with frontmatter and inline content
 4. Bump version in both:
    - `ceh-<plugin>/.claude-plugin/plugin.json`
    - `.claude-plugin/marketplace.json`
+5. Validate before committing: `python tools/validate-plugins/validate.py`
+   (checks manifest/marketplace sync, semver, and skill/agent frontmatter — the same
+   gate CI runs via `.github/workflows/validate.yml`).
 
 > **Plugin-agent frontmatter gotcha:** Claude Code ignores `permissionMode`, `hooks`, and
 > `mcpServers` on plugin subagents (security restriction — see the
@@ -116,6 +119,9 @@ Each skill is a self-contained SKILL.md file with frontmatter and inline content
 5. Bump version in both:
    - `ceh-<plugin>/.claude-plugin/plugin.json`
    - `.claude-plugin/marketplace.json`
+6. Validate before committing: `python tools/validate-plugins/validate.py`
+   (checks manifest/marketplace sync, semver, and skill/agent frontmatter — the same
+   gate CI runs via `.github/workflows/validate.yml`).
 
 ## Commands
 
@@ -128,6 +134,9 @@ find . -path '*skills/<name>/SKILL.md'
 
 # Verify every plugin is listed in marketplace.json
 grep '"name"' ceh-*/.claude-plugin/plugin.json .claude-plugin/marketplace.json
+
+# Validate the whole repo (manifests, skills, agents, references, scripts) — CI runs this too
+python tools/validate-plugins/validate.py
 ```
 
 ## Versioning
