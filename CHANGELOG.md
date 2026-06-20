@@ -19,8 +19,8 @@ satisfied, instead of waiting on CI by hand.
 
 ### Changed
 
-- **`ceh-git-workflow`** (v3.1.4) — `merge` skill probes `gh repo view --json autoMergeAllowed` and
-  prefers `gh pr merge --merge --auto` when enabled, falling back to a direct merge; the auto-merge
+- **`ceh-git-workflow`** (v3.1.4) — `merge` skill probes `gh api repos/{owner}/{repo} --jq .allow_auto_merge`
+  and prefers `gh pr merge --merge --auto` when enabled, falling back to a direct merge; the auto-merge
   and post-merge cleanup steps are consolidated into a single **Merge & Cleanup** section.
 
 ---
