@@ -61,7 +61,7 @@ Prefer `--auto` when the repo allows it: GitHub queues the merge and lands it th
 Probe for support and fall back to a direct merge (which requires the gate already green):
 
 ```bash
-if [ "$(gh repo view --json autoMergeAllowed -q .autoMergeAllowed)" = "true" ]; then
+if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then
   gh pr merge <number> --merge --auto --delete-branch   # queues; lands when the gate goes green
 else
   gh pr merge <number> --merge --delete-branch          # gate must already be green
