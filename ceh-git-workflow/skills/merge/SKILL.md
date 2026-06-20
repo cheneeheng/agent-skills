@@ -54,35 +54,23 @@ git push --force-with-lease            # your own feature branch only
 
 Re-run CI after the rebase; the pre-merge gate applies to the rebased state, not the pre-conflict one.
 
-## Auto-Merge (when the repo allows it)
+## Merge & Cleanup
 
-Prefer `--auto` so GitHub merges the moment the branch protection gate (CI + required approvals)
-is satisfied, instead of waiting on CI yourself. It only works if the repo has auto-merge enabled,
-so probe first and fall back to a direct merge:
+Prefer `--auto` when the repo allows it: GitHub queues the merge and lands it the moment the gate
+(CI + approvals, enforced server-side via branch protection) goes green, then deletes the branch.
+Probe for support and fall back to a direct merge (which requires the gate already green):
 
 ```bash
 if [ "$(gh repo view --json autoMergeAllowed -q .autoMergeAllowed)" = "true" ]; then
-  gh pr merge <number> --merge --auto --delete-branch   # queues; merges when the gate goes green
+  gh pr merge <number> --merge --auto --delete-branch   # queues; lands when the gate goes green
 else
-  gh pr merge <number> --merge --delete-branch          # direct merge — gate must already be green
+  gh pr merge <number> --merge --delete-branch          # gate must already be green
 fi
-```
-
-With `--auto`, the branch deletes automatically after GitHub completes the merge. The pre-merge
-gate above still applies — GitHub enforces it via branch protection before the queued merge fires.
-
-## Post-Merge Cleanup
-
-```bash
-gh pr merge <number> --merge --delete-branch   # direct merge; for auto-merge see the section above
-git checkout main && git pull origin main      # return to main and sync
-git branch -d <branch-name>                    # only if a local copy lingers (e.g. merged via UI)
-git fetch --prune                              # drop stale remote-tracking refs
+git checkout main && git pull origin main   # return to main and sync
+git branch -d <branch-name>                 # only if a local copy lingers (e.g. merged via UI)
+git fetch --prune                           # drop stale remote-tracking refs
 ```
 
 `git branch -d` (lowercase) refuses an unmerged branch — do not force with `-D` unless you intend
-to discard unmerged commits.
-
-For "create a PR, merge it, delete the branch": open the PR, then queue the merge with `--auto`
-if the repo allows it (it lands when the gate goes green); otherwise wait for the gate to pass and
-run the direct cleanup. Either way never bypass CI — surface it and wait rather than merging red.
+to discard unmerged commits. For "create a PR, merge it, delete the branch", chain this after the
+PR opens. Never bypass CI — surface a red gate and wait rather than merging red.
