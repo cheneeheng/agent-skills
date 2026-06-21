@@ -55,8 +55,9 @@ Before any question, gather everything that already constrains the plan.
    `**/SKELETON*.md`, `**/ITER_*.md` (and version-tagged variants). If found, read them. They
    carry §01 Concept (what it does, who it's for, the key flow), §02 Architecture, §03 Tech Stack
    — your product, target-user hint, and solution detail are already there. Resolve the
-   `depends_on` chain to the latest state (the schema is documented in
-   `ceh-plan-build-review/.../plan-schema.md`). Record their stems in `derived_from`.
+   `depends_on` chain to the latest state (the artifact schema is documented in
+   `ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md`). Record their
+   stems in `derived_from`.
 2. **Anything the user provided** — a PRD, pitch deck, spec, README, landing page, a pasted
    description. Read it directly. A GitHub URL: fetch the README.
 3. **Other plan-shaped files** — `PRD.md`, `BRIEF.md`, `docs/` product notes. Use them as input,
