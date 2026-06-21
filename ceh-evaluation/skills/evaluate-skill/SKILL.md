@@ -17,21 +17,30 @@ description: >-
 # Evaluate Skill
 
 Produce an **evidence-based verdict** on a Claude Code skill or plugin — one whose quality has been
-measured, not asserted. The deliverable is a single living `SKILL_EVAL.md` in the target's eval
-folder under `.agents_workspace` (see Output location), revised in place across a fix/re-run loop
-until it passes a 6-point readiness gate and the user confirms.
+measured, not asserted. The deliverable is a single living `SKILL_EVAL.md` in the current evaluation
+run's folder under `.agents_workspace` (see Output location), revised in place across a fix/re-run
+loop until it passes a 6-point readiness gate and the user confirms. Each fresh evaluation gets its
+own indexed run folder, so re-running the skill never overwrites a prior run's report or evidence.
 
 ### Output location
 
-All output goes under `.agents_workspace/skill-evals/<target-name>/` — never next to the target
-itself. `<target-name>` is the skill or plugin name (e.g. `evaluate-skill`, `ceh-evaluation`).
-`.agents_workspace/` is the standard agent-artifacts directory at the host repo root; create it and
-any missing parents if absent. That folder holds both the report and the raw run evidence:
+All output goes under `.agents_workspace/skill-evals/<target-name>/run-<NNN>/` — never next to the
+target itself. `<target-name>` is the skill or plugin name (e.g. `evaluate-skill`, `ceh-evaluation`);
+`<NNN>` is a zero-padded sequential run index. `.agents_workspace/` is the standard agent-artifacts
+directory at the host repo root; create it and any missing parents if absent.
+
+Each fresh evaluation gets a **new run folder** so prior runs are never overwritten: use the next
+integer after the highest existing `run-NNN` for this target (`run-001` if none). Within a run, the
+fix/re-run loop revises *that run's* `SKILL_EVAL.md` in place and adds `iteration-<N>/` evidence
+subdirs. The run folder holds both the report and the raw run evidence:
 
 ```
 .agents_workspace/skill-evals/<target-name>/
-├── SKILL_EVAL.md            # the living report
-└── iteration-<N>/           # raw run outputs per loop
+├── run-001/
+│   ├── SKILL_EVAL.md        # the living report for this run
+│   └── iteration-<N>/       # raw run outputs per fix/re-run loop
+└── run-002/                 # a later re-evaluation — run-001 left untouched
+    └── ...
 ```
 
 The reason this skill exists: a skill that "looks fine" on read often under-triggers, restates what
@@ -101,9 +110,11 @@ march. Each loop closes one gap.
 3. **Detect optional cross-checks** (do not require any): a `validate.py` / validation script in the
    repo, the `skill-creator` skill, the `plugin-dev:*` agents. Note which are available; you will
    run them as confirmation in Phase 2 only where cheap.
-4. **Resume if continuing.** If `SKILL_EVAL.md` already exists in the target's eval folder
-   (`.agents_workspace/skill-evals/<target-name>/`), you are continuing the loop — read it, re-score
-   the gate, resume at the lowest-scoring dimension.
+4. **New run vs. resume.** Default to a **new run folder** (next `run-NNN`) so a re-evaluation never
+   overwrites prior evidence. Only resume the latest existing run — reusing its folder instead of
+   creating a new one — when its `SKILL_EVAL.md` is still `status: draft` and the user is continuing
+   an interrupted loop; then read it, re-score the gate, and resume at the lowest-scoring dimension.
+   A re-evaluation of an already-passed (or otherwise completed) target always starts a fresh run.
 
 For a **plugin** target, the evaluation is: manifest/structural checks + run the per-skill
 evaluation for each skill + a cross-skill collision check (do two descriptions claim overlapping
@@ -137,16 +148,16 @@ From those, generate the three test inputs the run phase needs:
 Show the user the derived criteria and the batteries: *"Here's what I'll measure and the test
 prompts — do these match your intent, or adjust?"* Bad test inputs produce a worthless evaluation,
 so this checkpoint matters. Then write the draft `SKILL_EVAL.md` (schema in
-`references/eval-report-schema.md`) to `.agents_workspace/skill-evals/<target-name>/` with
-`eval_gate: 0/6` and proceed.
+`references/eval-report-schema.md`) to the current run folder
+(`.agents_workspace/skill-evals/<target-name>/run-<NNN>/`) with `eval_gate: 0/6` and proceed.
 
 ---
 
 ## Phase 2 — Run the battery
 
-Put raw run outputs in the eval folder's `iteration-<N>/` subdirectory
-(`.agents_workspace/skill-evals/<target-name>/iteration-<N>/`) so the report stays readable and the
-evidence stays auditable. Measure four dimensions.
+Put raw run outputs in the current run folder's `iteration-<N>/` subdirectory
+(`.agents_workspace/skill-evals/<target-name>/run-<NNN>/iteration-<N>/`) so the report stays readable
+and the evidence stays auditable. Measure four dimensions.
 
 ### 1. Structural integrity (deterministic, inline)
 
