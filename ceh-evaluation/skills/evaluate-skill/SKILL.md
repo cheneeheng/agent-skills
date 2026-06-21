@@ -189,7 +189,10 @@ MUSTs? Cite specific lines as evidence for each judgment — quotes, not vibes.
 ### 4. Behavioral lift (with-skill vs baseline, the expensive one)
 
 For each behavioral task, spawn **two subagents in the same turn**: one with the skill available,
-one with no skill (the baseline). Save both outputs to the workspace. Then **grade** each output
+one with no skill (the baseline). Instruct each subagent to write **any code or files it produces
+only under this run's `iteration-<N>/generated/` folder** — never in the host repo or next to the
+target — so the working tree stays clean and the generated artifacts remain auditable evidence.
+Save both transcripts to the workspace. Then **grade** each output
 against that task's assertions — pass/fail with a cited quote from the transcript or output as
 evidence; a file that exists but has wrong content is a fail. Run each task **N times** and report
 the spread, because a single run is noise. The finding is the *difference*: does with-skill clear
