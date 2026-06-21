@@ -5,6 +5,30 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.12.0] — 2026-06-21
+
+Add the **`ceh-business-plan`** plugin — an interview-driven workflow that turns a product idea, or
+an existing `plan-build-review` app plan, into a validated business plan with a clear product-market
+fit. It drafts proactively from whatever already exists, then runs a disciplined interview/revise
+loop that attacks the plan's weakest assumption one question at a time until an 8-point PMF
+readiness gate passes.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-business-plan` | v1.0.0 (new) |
+
+### Added
+
+- **`ceh-business-plan`** — new use-case workflow plugin with the `develop-business-plan` skill. The
+  skill seeds a draft from `plan-build-review` app plans (`SKELETON.md` / `ITER_NN.md`) or any
+  PRD/spec/pitch, tags every load-bearing claim `[evidence]` / `[assumption]` /
+  `[hypothesis-to-test]`, and loops interview → revise → re-score until the PMF gate reaches 8/8 and
+  the user confirms. Ships a `business-plan-schema.md` reference template.
+
+---
+
 ## [3.11.3] — 2026-06-20
 
 Add continuous integration that validates the repository's structural integrity on every push to

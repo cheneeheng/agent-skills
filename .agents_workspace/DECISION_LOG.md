@@ -464,3 +464,25 @@ untouched (`branch` prefix, `update-readme` README search path, `implement-from-
 longer committed by default; a user who wants it in the repo must promote it manually. User/operator
 guides remain committed deliverables under `docs/guide/`.
 **Outcome:** Edits applied; ceh-architecture bumped to 3.1.1; CHANGELOG 3.11.1 added.
+
+### Entry 25
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-21
+**Task:** Create a new business-plan plugin (`/goal`).
+
+**Context:** The goal text blends a build instruction ("create a new business plan plugin") with a
+description of runtime behavior ("use existing app plans as a starting point, interview the user
+rigorously for product-market fit, loop until a satisfiable business plan"). Two readings: (a)
+build a reusable plugin/skill that performs that loop, or (b) run a business-plan session for the
+user's own product right now.
+**Decision:** Built the plugin (reading a). The phrase "Create a new business plan plugin" names
+the deliverable; the loop/interview language describes what the plugin *does*, which I encoded into
+the skill body. This matches the repo's existing interview-driven precedent (`ceh-blog`). Created
+`ceh-business-plan` with one skill `develop-business-plan` (proactive draft → PMF interview loop →
+revise, gated by an 8-point PMF readiness checklist) plus a `business-plan-schema.md` reference,
+and registered it in marketplace.json, both READMEs, and CLAUDE.md tables.
+**Impact / Risk:** New plugin at v1.0.0; repo plugin count grows by one. No existing plugin
+touched beyond table registrations. Validator passes.
+**Outcome:** `python tools/validate-plugins/validate.py` → "OK: all plugin checks passed".
