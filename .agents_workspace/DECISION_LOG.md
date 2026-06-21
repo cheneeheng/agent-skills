@@ -486,3 +486,15 @@ and registered it in marketplace.json, both READMEs, and CLAUDE.md tables.
 **Impact / Risk:** New plugin at v1.0.0; repo plugin count grows by one. No existing plugin
 touched beyond table registrations. Validator passes.
 **Outcome:** `python tools/validate-plugins/validate.py` → "OK: all plugin checks passed".
+
+### Entry 26
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-21
+**Task:** Create the skill/plugin evaluator plugin
+
+**Context:** User approved the evaluator design but asked for a plugin name broader than the proposed `ceh-skill-eval` because the plugin will later include an evaluator agent and a post-write hook, not just one skill. The specific name was left to me.
+**Decision:** Named the plugin `ceh-evaluation` (use-case-workflow tier) with a single skill `evaluate-skill`. Scope-declaring and component-agnostic so an agent and a hook can be added without a rename. Kept one skill covering both skills and plugins, and used generic subagents (no custom agent files yet) per the approved plan and write-less-code.
+**Impact / Risk:** Low. Name is easy to change pre-release. Self-contained: external skill-creator/plugin-dev plugins are optional cross-checks only, documented in the plugin README callout per user requirement.
+**Outcome:** Plugin created, wired into marketplace.json, root README, CLAUDE.md; `python tools/validate-plugins/validate.py` passes.

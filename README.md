@@ -26,6 +26,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Orchestration | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) |
 | Release Flow | `ceh-release-flow` | Orchestrate an end-to-end release in one pass: version bump → changelog → README → CLAUDE.md → PR → merge → tag → GitHub release, by sequencing the skills that own each step |
 | Business Plan | `ceh-business-plan` | Turn a product idea or app plan into a validated business plan via a product-market-fit interview loop — draft, interrogate the weakest assumption, revise until a PMF gate passes |
+| Evaluation | `ceh-evaluation` | Evaluate a skill or plugin you just wrote — derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a readiness gate passes |
 
 ### Categorization
 
@@ -35,7 +36,7 @@ into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin (agents only). Each plugin is self-contained: a
@@ -101,6 +102,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-release-flow` | Release Flow | `/ceh-release-flow:release-flow` | Ship a complete release in one pass — version bump → changelog → README → CLAUDE.md → PR → merge → tag → release, sequencing the skill that owns each step |
 | `ceh-release-flow` | Direct Release Flow | `/ceh-release-flow:direct-release-flow` | PR-less variant — same release pipeline directly on `main` (no branch/PR/merge): version bump → changelog → README → CLAUDE.md → commit → tag → release |
 | `ceh-business-plan` | Develop Business Plan | `/ceh-business-plan:develop-business-plan` | Draft a business plan proactively from app plans or a product idea, then loop interview→revise until the product-market-fit readiness gate passes |
+| `ceh-evaluation` | Evaluate Skill | `/ceh-evaluation:evaluate-skill` | Evaluate a skill or plugin you wrote — derive its criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a 6-point gate passes |
 
 ---
 
@@ -162,6 +164,7 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-orchestration@ceh-plugins --scope user
 /plugin install ceh-release-flow@ceh-plugins --scope user
 /plugin install ceh-business-plan@ceh-plugins --scope user
+/plugin install ceh-evaluation@ceh-plugins --scope user
 ```
 
 Or install all at once using `--scope project` for project-specific installs.
@@ -205,7 +208,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/ceh-documentation" },
     { "path": "~/agent-skills/ceh-orchestration" },
     { "path": "~/agent-skills/ceh-release-flow" },
-    { "path": "~/agent-skills/ceh-business-plan" }
+    { "path": "~/agent-skills/ceh-business-plan" },
+    { "path": "~/agent-skills/ceh-evaluation" }
   ]
 }
 ```

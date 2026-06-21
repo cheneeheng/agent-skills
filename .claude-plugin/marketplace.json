@@ -177,6 +177,16 @@
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "MIT",
       "keywords": ["agent", "business-plan", "product-market-fit", "pmf", "interview", "validation", "strategy", "go-to-market"]
+    },
+    {
+      "name": "ceh-evaluation",
+      "source": "./ceh-evaluation",
+      "description": "CEH evaluation: evaluate a Claude Code skill or plugin you just wrote against derived, evidence-based criteria — structural integrity, triggering accuracy, content quality, and behavioral lift — then loop fix/re-run until a readiness gate passes. Self-contained; treats skill-creator and plugin-dev as optional cross-checks, not authorities.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "MIT",
+      "keywords": ["agent", "evaluation", "skill", "plugin", "quality-gate", "triggering", "simulation", "rubric"]
     }
   ]
 }
