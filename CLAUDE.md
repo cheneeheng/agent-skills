@@ -8,7 +8,7 @@ Each plugin is a standalone, self-contained **use case** (see Organizing Princip
 Plugins are split on a single axis: **use case** — load exactly the plugins that match what you are
 building. This replaced an earlier mixed axis (tech-domain + lifecycle-phase) that baked in a
 fullstack-web assumption and forced the same standard into multiple plugins where copies drifted.
-The full rationale and migration record live in `docs/PLUGIN_REORG_PLAN.md`.
+The full rationale and migration record live in `.agents_workspace/PLUGIN_REORG_PLAN.md`.
 
 Two consequences drive how skills are written and where they live:
 
@@ -42,6 +42,7 @@ Plugins fall into three tiers:
 ## Structure
 
 ```
+.agents_workspace/            # Skill session artifacts (DECISION_LOG.md, LESSONS_LEARNED.md, ARCHITECTURE.md), plugin reorg plan, architecture docs, etc. — not a plugin
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 ceh-<plugin-name>/
 ├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here
@@ -51,8 +52,7 @@ ceh-<plugin-name>/
     └── <skill-name>/
         ├── SKILL.md               # Required — all content inline; frontmatter + full body
         └── references/            # Sparingly — schemas and templates only (e.g. plan-schema.md)
-docs/                          # Plugin reorg plan, architecture docs, etc. — not a plugin
-.agents_workspace/             # Skill session artifacts (DECISION_LOG.md, LESSONS_LEARNED.md, ARCHITECTURE.md) — gitignored
+docs/                          # User facing docs
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
 └── <tool-name>/               # e.g. skills-sync — own README.md, no plugin.json
 ```

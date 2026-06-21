@@ -5,7 +5,7 @@ Copy Claude Code skills from a GitHub repo or a local folder into a project's
 tracked by a small manifest.
 
 This is standalone meta-tooling, separate from the `ceh-*` plugin marketplace
-in this repo (see `docs/claude_logs/DECISION_LOG.md`, Entry 15). It works
+in this repo (see `.agents_workspace/DECISION_LOG.md`, Entry 15). It works
 against any source repo or folder containing skills (directories with a
 `SKILL.md`), detected recursively — no particular layout (e.g. a plugin
 marketplace structure) is assumed.

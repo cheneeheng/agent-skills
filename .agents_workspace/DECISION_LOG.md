@@ -19,7 +19,7 @@
 **Type:** Decision
 **Mode:** Autonomous
 **Timestamp:** 2026-06-05
-**Task:** Execute the plugin reorganization (`docs/PLUGIN_REORG_PLAN.md`).
+**Task:** Execute the plugin reorganization (`.agents_workspace/PLUGIN_REORG_PLAN.md`).
 
 **Context:** The user asked to "create a new feature branch and implement everything in the reorg."
 The plan itself prescribes six phases, each shipped as its own PR with its own version bumps.
@@ -302,7 +302,7 @@ directory names: `python-service-environment` / `python-service-testing` (ceh-py
 keep the name → plugin mapping obvious in hook tags, agent `skills:` lists, and cross-plugin
 references. Version bumps: MINOR for the two Python plugins (the skill-name surface changed —
 closest to the repo's "new skills" MINOR rule), PATCH for ceh-scaffolding and ceh-web-frontend
-(reference-text updates only). Historical records (CHANGELOG.md, docs/PLUGIN_REORG_PLAN.md, old
+(reference-text updates only). Historical records (CHANGELOG.md, .agents_workspace/PLUGIN_REORG_PLAN.md, old
 DECISION_LOG entries) intentionally left with old names.
 **Impact / Risk:** Users invoking the old skill names (`/ceh-python-service:python-environment`
 etc.) must switch to the new names; auto-load behavior is unaffected (descriptions unchanged).
@@ -366,6 +366,7 @@ orchestrator putting that in the spec rather than the agent inheriting it from `
 **Outcome:** `explorer.md` deleted; skill delegation map + model routing, both READMEs,
 CLAUDE.md, plugin.json, marketplace.json, and the pending CHANGELOG entry updated to the
 built-in-Explore + executor/verifier shape.
+
 ### Entry 20
 
 **Type:** Decision
@@ -402,7 +403,7 @@ built-in-Explore + executor/verifier shape.
 **Task:** Redirect all skill output paths from `docs/` to `.agents_workspace/`, updating READMEs and CLAUDE.md.
 
 **Context:** "All skills that write outputs to `docs/`" is ambiguous: `docs/` holds two distinct
-things — agent session artifacts (`docs/claude_logs/DECISION_LOG.md`, `LESSONS_LEARNED.md`) and
+things — agent session artifacts (`.agents_workspace/DECISION_LOG.md`, `LESSONS_LEARNED.md`) and
 committed project documentation (`docs/adr/` ADRs, `docs/guide/` user guides). CHANGELOG entry 1190
 already records a deliberate split between "Claude session artifacts" and "shared developer
 documentation." Forks: (a) which paths count as "outputs"; (b) whether to preserve the `claude_logs/`
@@ -413,10 +414,10 @@ committed deliverables. ADRs and user guides stay in `docs/` — they are produc
 skills wrote to `/mnt/user-data/outputs/planning/` (not `docs/`); a follow-up instruction moved them
 to `.agents_workspace/planning/` too, and the consumer skills (`implement-from-plan`,
 `review-against-plan`) now look there first.
-Flattened `docs/claude_logs/X.md` -> `.agents_workspace/X.md` (the workspace dir replaces the
+Flattened `.agents_workspace/X.md` -> `.agents_workspace/X.md` (the workspace dir replaces the
 redundant `claude_logs/` segment). Added `.agents_workspace/` to `.gitignore` (session artifacts are
 not committed) and a structure-tree entry in `CLAUDE.md`. Appended this entry to the *existing*
-committed `docs/claude_logs/DECISION_LOG.md` rather than the new (gitignored) location, to preserve
+committed `.agents_workspace/DECISION_LOG.md` rather than the new (gitignored) location, to preserve
 log continuity and keep the decision under version control; migrating the historical log is a separate,
 unrequested concern.
 **Impact / Risk:** Low. Edits across 3 SKILL.md, 2 plugin READMEs, `CLAUDE.md`, and `.gitignore`.
@@ -439,3 +440,27 @@ those for commit/release time; flagged as follow-up. CHANGELOG historical entrie
 **Decision:** Per user choice: (1) consolidate — remove the standalone `adr` skill and fold durable decisions into the architecture doc; (2) decisions live inline in `docs/ARCHITECTURE.md` under a `## Key Decisions` section, and the six `docs/adr/DECISIONS.md` references across `ceh-git-workflow` (open-pr ×3, code-review, dependency-management ×2), `ceh-ops` (deploy), and `ceh-python-service` (fastapi) were repointed to it. New skill `document-architecture` added to `ceh-architecture` (MINOR → 3.1.0); the three peripheral plugins took content-only PATCH bumps. Canonical path `docs/ARCHITECTURE.md` and the standard diagram set (context/components/flows/ER/state) were my execution choices. This also resolved pre-existing drift between the `adr` skill's numbered-file convention and the single-file path the rest of the repo assumed.
 **Impact / Risk:** Four plugins re-versioned; CROSS_REFERENCES.md PR-checklist block updated to match. Historical CHANGELOG/DECISION_LOG/PLUGIN_REORG_PLAN mentions of ADRs left intact as record. No repo git tag cut (left to user).
 **Outcome:** JSON valid; plugin.json ↔ marketplace.json versions match; no stale active references remain.
+
+---
+
+### Entry 24
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-20
+**Task:** Redirect remaining skill outputs from `docs/` to `.agents_workspace/`.
+
+**Context:** The goal was to move architecture skill output (and all other skill output) from
+`docs/` to `.agents_workspace/`. The prior commit d320020 (v3.10.3) deliberately carved out
+`docs/guide/` (user-operator-guide) and `docs/ARCHITECTURE.md` (document-architecture) as
+*committed* deliverables, explicitly leaving them in `docs/`. The new instruction directly
+contradicts that carve-out.
+**Decision:** Moved only `document-architecture` to `.agents_workspace/ARCHITECTURE.md`; dropped the
+word "committed" from its framing since `.agents_workspace/` is gitignored. The user subsequently
+clarified that `user-operator-guide` must stay in `docs/guide/` because those guides are deliverables
+intended for other readers, so that skill was left unchanged. Left non-output `docs/` references
+untouched (`branch` prefix, `update-readme` README search path, `implement-from-plan` read example).
+**Impact / Risk:** The architecture doc is now produced into a gitignored directory, so it is no
+longer committed by default; a user who wants it in the repo must promote it manually. User/operator
+guides remain committed deliverables under `docs/guide/`.
+**Outcome:** Edits applied; ceh-architecture bumped to 3.1.1; CHANGELOG 3.11.1 added.

@@ -714,7 +714,7 @@ SessionStart hook audit: added one missing invariants hook and fixed two that we
 
 ## [3.0.0] — 2026-06-05
 
-Use-case-based plugin reorganization (see `docs/PLUGIN_REORG_PLAN.md`). **Breaking:** four plugins
+Use-case-based plugin reorganization (see `.agents_workspace/PLUGIN_REORG_PLAN.md`). **Breaking:** four plugins
 were renamed; there are no alias shims. Net 11 → 13 plugins.
 
 ### Plugin versions
