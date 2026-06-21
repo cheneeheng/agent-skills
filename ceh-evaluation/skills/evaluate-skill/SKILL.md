@@ -17,9 +17,22 @@ description: >-
 # Evaluate Skill
 
 Produce an **evidence-based verdict** on a Claude Code skill or plugin — one whose quality has been
-measured, not asserted. The deliverable is a single living `SKILL_EVAL.md` next to the target,
-revised in place across a fix/re-run loop until it passes a 6-point readiness gate and the user
-confirms.
+measured, not asserted. The deliverable is a single living `SKILL_EVAL.md` in the target's eval
+folder under `.agents_workspace` (see Output location), revised in place across a fix/re-run loop
+until it passes a 6-point readiness gate and the user confirms.
+
+### Output location
+
+All output goes under `.agents_workspace/skill-evals/<target-name>/` — never next to the target
+itself. `<target-name>` is the skill or plugin name (e.g. `evaluate-skill`, `ceh-evaluation`).
+`.agents_workspace/` is the standard agent-artifacts directory at the host repo root; create it and
+any missing parents if absent. That folder holds both the report and the raw run evidence:
+
+```
+.agents_workspace/skill-evals/<target-name>/
+├── SKILL_EVAL.md            # the living report
+└── iteration-<N>/           # raw run outputs per loop
+```
 
 The reason this skill exists: a skill that "looks fine" on read often under-triggers, restates what
 the model already knows, or makes no measurable difference to outcomes. You only learn which by
@@ -88,8 +101,9 @@ march. Each loop closes one gap.
 3. **Detect optional cross-checks** (do not require any): a `validate.py` / validation script in the
    repo, the `skill-creator` skill, the `plugin-dev:*` agents. Note which are available; you will
    run them as confirmation in Phase 2 only where cheap.
-4. **Resume if continuing.** If `SKILL_EVAL.md` already exists next to the target, you are
-   continuing the loop — read it, re-score the gate, resume at the lowest-scoring dimension.
+4. **Resume if continuing.** If `SKILL_EVAL.md` already exists in the target's eval folder
+   (`.agents_workspace/skill-evals/<target-name>/`), you are continuing the loop — read it, re-score
+   the gate, resume at the lowest-scoring dimension.
 
 For a **plugin** target, the evaluation is: manifest/structural checks + run the per-skill
 evaluation for each skill + a cross-skill collision check (do two descriptions claim overlapping
@@ -123,14 +137,16 @@ From those, generate the three test inputs the run phase needs:
 Show the user the derived criteria and the batteries: *"Here's what I'll measure and the test
 prompts — do these match your intent, or adjust?"* Bad test inputs produce a worthless evaluation,
 so this checkpoint matters. Then write the draft `SKILL_EVAL.md` (schema in
-`references/eval-report-schema.md`) with `eval_gate: 0/6` and proceed.
+`references/eval-report-schema.md`) to `.agents_workspace/skill-evals/<target-name>/` with
+`eval_gate: 0/6` and proceed.
 
 ---
 
 ## Phase 2 — Run the battery
 
-Put raw run outputs in a sibling workspace `<target>-eval-workspace/iteration-<N>/` so the report
-stays readable and the evidence stays auditable. Measure four dimensions.
+Put raw run outputs in the eval folder's `iteration-<N>/` subdirectory
+(`.agents_workspace/skill-evals/<target-name>/iteration-<N>/`) so the report stays readable and the
+evidence stays auditable. Measure four dimensions.
 
 ### 1. Structural integrity (deterministic, inline)
 

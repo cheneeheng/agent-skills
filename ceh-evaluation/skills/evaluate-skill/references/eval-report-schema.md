@@ -1,10 +1,12 @@
 # Skill Evaluation Report Schema
 
-The artifact this skill produces. One file, `SKILL_EVAL.md`, written next to the target it evaluates
-(beside the `SKILL.md` for a skill, or at the plugin root for a plugin). It is a **living
-document**: each fix/re-run loop revises it in place, not a fresh copy. Raw run outputs live in a
-sibling `<target>-eval-workspace/iteration-<N>/` directory and are referenced from the report, not
-pasted into it.
+The artifact this skill produces. One file, `SKILL_EVAL.md`, written to the target's eval folder
+under `.agents_workspace` — `.agents_workspace/skill-evals/<target-name>/SKILL_EVAL.md`, where
+`<target-name>` is the skill or plugin name — never next to the target itself. It is a **living
+document**: each fix/re-run loop revises it in place, not a fresh copy. Raw run outputs live in that
+same folder's `iteration-<N>/` subdirectory
+(`.agents_workspace/skill-evals/<target-name>/iteration-<N>/`) and are referenced from the report,
+not pasted into it.
 
 ## Frontmatter
 

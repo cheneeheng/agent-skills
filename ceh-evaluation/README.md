@@ -23,9 +23,10 @@ Revise   → fix that gap, re-run only the affected dimension, re-score
 Validate → flip status to passed; hand off the advisory backlog
 ```
 
-The deliverable is a living `SKILL_EVAL.md` next to the target (schema in
-`skills/evaluate-skill/references/eval-report-schema.md`); raw run outputs go in a sibling
-`<target>-eval-workspace/`.
+The deliverable is a living `SKILL_EVAL.md` in the target's eval folder under `.agents_workspace`
+(`.agents_workspace/skill-evals/<target-name>/SKILL_EVAL.md`; schema in
+`skills/evaluate-skill/references/eval-report-schema.md`); raw run outputs go in that folder's
+`iteration-<N>/` subdirectory.
 
 **Default gate thresholds** (defaults, not laws — a niche skill sets its own battery size, and the
 threshold actually used is recorded in the report so the score is reproducible): a skill **triggers
