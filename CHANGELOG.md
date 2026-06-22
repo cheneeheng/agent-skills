@@ -5,6 +5,28 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.13.3] — 2026-06-22
+
+Reconcile the `orchestrate` trigger with measured behavior so it stops over-promising on pure
+cost-framed tasks. Skill-content only — no new skills or agents.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-orchestration` | v1.0.1 |
+
+### Changed
+
+- **`ceh-orchestration` / `orchestrate`** — narrowed the trigger to heterogeneous /
+  investigation-heavy work and added carve-outs (mechanical single-pass changes → tooling; a
+  single one-off subagent dispatch → not this skill). A skill evaluation found the prior
+  "minimize token/context cost on any big task" wording over-promised: on mechanical work,
+  tooling (sed + typecheck) beats delegation, so the skill produced no behavioral lift there.
+  Re-test confirmed the change is non-regressive (positives 6/8, false-fires 0/8).
+
+---
+
 ## [3.13.2] — 2026-06-22
 
 Disambiguate the trigger boundary between `plan-fullstack-app-to-mvp` and its iterative counterpart
