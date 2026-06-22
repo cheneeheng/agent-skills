@@ -5,6 +5,25 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.13.1] — 2026-06-22
+
+Sharpen the `release-flow` skill's merge step so it prefers GitHub auto-merge instead of hand-polling
+CI. Skill-content only — no new skills or agents.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-release-flow` | v1.1.1 |
+
+### Changed
+
+- **`ceh-release-flow` / `release-flow`** — step 9 now explicitly nudges toward `--auto` (queue the
+  merge and let GitHub land it when the branch-protection gate goes green; don't poll CI by hand),
+  pointing at the `ceh-git-workflow:merge` auto-merge probe rather than duplicating its mechanics.
+
+---
+
 ## [3.13.0] — 2026-06-22
 
 Add the **`ceh-evaluation`** plugin — a workflow for evaluating a Claude Code skill or plugin you
