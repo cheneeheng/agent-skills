@@ -5,7 +5,8 @@ description: >-
   whether it is any good before you ship it. Triggers include: evaluate my skill, is this skill any
   good, will my skill trigger, why doesn't my skill fire, does this skill actually help, review my
   plugin quality, grade my skill, test my skill's triggering, benchmark my skill, is my plugin ready
-  to ship, evaluate this SKILL.md, check my agent/plugin against best practices. It reads the target,
+  to ship, evaluate this SKILL.md, check my agent/plugin against best practices, just check if my
+  skill actually helps without the full battery. It reads the target,
   derives per-target success criteria, runs an evidence-based battery (structural integrity,
   triggering accuracy, content quality, behavioral lift vs a no-skill baseline), then loops
   fix → re-run until a 6-point readiness gate passes and you confirm. Self-contained — it uses the
@@ -96,6 +97,22 @@ Phase 5  Validate   → flip status: passed; hand off remaining advisory finding
 
 Like a good interview, **the lowest-scoring dimension picks the next fix** — never a fixed checklist
 march. Each loop closes one gap.
+
+---
+
+## Scoped run — behavioral lift only
+
+The full loop measures all four dimensions; `ceh-evaluation:evaluate-skill-lite` measures the three
+cheap ones (structural + triggering + content). The one dimension neither cheap path gives you is
+**behavioral lift** — so that is the only thing worth scoping here.
+
+When the user asks "just check if it actually helps" (and doesn't want the full battery), run
+**dimension 4 only** — 1 task, with-skill vs baseline, N=1 (~2 subagent calls + grading). Report the
+assertion delta and say so in the report. This is a sanity read, not the gate: N=1 is noise, re-run
+at N≥3 before trusting it, and it never sets `status: passed`.
+
+For triggering, structure, or content in isolation, use `evaluate-skill-lite` rather than this skill.
+For all four dimensions with variance and the full 6-point gate, run the loop above.
 
 ---
 
@@ -276,9 +293,6 @@ unproven — an honest draft beats a report claiming a quality it didn't measure
 
 **Target is a brand-new skill with no usage:** that's the normal case — derive criteria from the
 text and measure via simulation. No history is needed.
-
-**"Just tell me if it'll trigger, skip the rest":** run dimension 2 only, report the trigger rates,
-and note the other criteria are unmeasured.
 
 **Plugin with many skills:** evaluate the most-changed/riskiest skill in full, sample the others for
 structural + triggering, and always run the cross-skill collision check.
