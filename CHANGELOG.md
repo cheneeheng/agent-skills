@@ -5,6 +5,27 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.13.2] — 2026-06-22
+
+Disambiguate the trigger boundary between `plan-fullstack-app-to-mvp` and its iterative counterpart
+so version-increment requests stop routing to the all-at-once planner. Skill-content only — no new
+skills or agents.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-plan-build-review` | v1.0.3 |
+
+### Changed
+
+- **`ceh-plan-build-review` / `plan-fullstack-app-to-mvp`** — sharpened the description so "plan the
+  next version" / "plan v2's scope" routes to `plan-fullstack-app-iteratively`, and only an entire
+  major-version-to-MVP request routes here. A skill evaluation found the prior wording over-triggered
+  on version-increment prompts (false-positive rate 1/6 → 0/6 after the fix).
+
+---
+
 ## [3.13.1] — 2026-06-22
 
 Sharpen the `release-flow` skill's merge step so it prefers GitHub auto-merge instead of hand-polling
