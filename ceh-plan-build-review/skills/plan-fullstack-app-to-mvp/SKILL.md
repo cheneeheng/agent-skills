@@ -11,8 +11,12 @@ description: >-
   This is the all-at-once counterpart to plan-fullstack-app-iteratively: choose THIS
   skill to plan the entire build to MVP in one session, and choose
   plan-fullstack-app-iteratively when the user wants only the next release planned, or
-  when the app is large, novel, or uncertain. A built-in complexity gate will recommend
-  that fallback when planning everything upfront would be unsafe.
+  when the app is large, novel, or uncertain. Planning 'the next version' or a single
+  version's next increment (e.g. 'plan v2's scope', 'plan the next release') is the
+  iterative skill's job; choose THIS skill for a new major version only when the user
+  wants that ENTIRE version planned to its own MVP in one session (e.g. 'plan all of v2
+  to MVP'). A built-in complexity gate will recommend that fallback when planning
+  everything upfront would be unsafe.
 ---
 
 # Plan Fullstack App to MVP
