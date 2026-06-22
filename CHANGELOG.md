@@ -5,6 +5,35 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.13.0] — 2026-06-22
+
+Add the **`ceh-evaluation`** plugin — a workflow for evaluating a Claude Code skill or plugin you
+just wrote. It derives the skill's own success criteria, then measures four dimensions with evidence
+— structural integrity, triggering accuracy, content quality, and behavioral lift — and loops
+fix → re-run until a readiness gate passes. It treats `skill-creator` and `plugin-dev` as optional
+cross-checks, not authorities, and ships a lite dev-loop variant that skips behavioral lift for a
+cheap sanity check during iteration.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-evaluation` | v1.1.2 (new) |
+
+### Added
+
+- **`ceh-evaluation`** — new use-case workflow plugin with two skills. `evaluate-skill` runs the
+  full evaluation: it derives criteria from the target skill, scores structure / triggering /
+  content / behavioral lift against evidence captured under `.agents_workspace/`, and loops
+  fix → re-run until a 6-point readiness gate passes. `evaluate-skill-lite` is a fast dev-loop
+  variant — structure + a single triggering pass + content only — that skips behavioral lift and
+  reports a partial 4/6 gate for cheap iteration before the full ship verdict. Eval-generated code
+  is confined to per-run `iteration-N/generated/` directories, and output is indexed per run so
+  re-runs do not overwrite prior evidence. Ships `eval-report-schema.md` and `eval-rubric.md`
+  reference templates.
+
+---
+
 ## [3.12.0] — 2026-06-21
 
 Add the **`ceh-business-plan`** plugin — an interview-driven workflow that turns a product idea, or

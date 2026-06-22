@@ -498,3 +498,15 @@ touched beyond table registrations. Validator passes.
 **Decision:** Named the plugin `ceh-evaluation` (use-case-workflow tier) with a single skill `evaluate-skill`. Scope-declaring and component-agnostic so an agent and a hook can be added without a rename. Kept one skill covering both skills and plugins, and used generic subagents (no custom agent files yet) per the approved plan and write-less-code.
 **Impact / Risk:** Low. Name is easy to change pre-release. Self-contained: external skill-creator/plugin-dev plugins are optional cross-checks only, documented in the plugin README callout per user requirement.
 **Outcome:** Plugin created, wired into marketplace.json, root README, CLAUDE.md; `python tools/validate-plugins/validate.py` passes.
+
+### Entry 27
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-22T00:00:00Z
+**Task:** Run release-flow for the ceh-evaluation plugin.
+
+**Context:** release-flow's pipeline assumes branching `chore/release-vX.Y.Z` from `main`, but the new `ceh-evaluation` plugin exists only on the unmerged `feat/ceh-evaluation-plugin` branch. A fresh release branch off `main` would not contain the plugin.
+**Decision:** Ride the existing `feat/ceh-evaluation-plugin` branch as the release branch. Feature work (plugin v1.1.2, README, CLAUDE.md, marketplace) is already committed and consistent; the only missing release artifact is the CHANGELOG entry. Repo tag: v3.12.0 → v3.13.0 (MINOR, new plugin). Plugin version 1.1.2 left as-is (already set; not a bump candidate during release).
+**Impact / Risk:** Low — PR-gated merge to main precedes tagging; tag points at the merge commit per the skill's hard rules.
+**Outcome:** Pending merge + tag.
