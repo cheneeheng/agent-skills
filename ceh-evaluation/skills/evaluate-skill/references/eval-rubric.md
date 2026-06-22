@@ -75,6 +75,9 @@ it shouldn't.
 
 - Each prompt runs through a **fresh (cold) subagent** that has the skill available. Cold matters:
   the subagent has none of your context, so the trigger decision reflects what a real user gets.
+- **Hand the subagent only the user's prompt — never ask it which skills it would load** (or to
+  "report skills used"). Naming the skill library primes skill-consideration and inflates the
+  positive rate; observe whether the skill fires while the agent simply handles the task.
 - Run each prompt **N = 3 times** (triggering is probabilistic). Count a prompt as "fires" if it
   triggers in ≥ 2 of 3 runs.
 - Report positive trigger rate and near-miss false-positive rate **separately** — a skill can score

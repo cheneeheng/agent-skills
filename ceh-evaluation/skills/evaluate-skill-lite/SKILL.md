@@ -122,11 +122,14 @@ each as pass/fail with the specific evidence. If a repo `validate.py` exists, ru
 
 ### 2. Triggering accuracy (cold subagents, N=1)
 
-Run each battery prompt through a **fresh subagent** that has the skill available, **once** each, and
-record whether the skill fired. Cold subagents matter — they reflect real triggering, not your
-context. Report positive trigger rate and near-miss false-positive rate separately. N=1 is a sanity
-read, not a statistic — say so; if a result looks borderline, note it as worth an N=3 re-check in the
-full skill rather than trusting the single run.
+Use the **exact cold-invocation protocol** in `../evaluate-skill/references/eval-rubric.md` Part 2
+("Running it"), but run each prompt **once** (N=1) instead of N=3 — lite changes only the repetition
+count, never the protocol. In particular: hand each fresh subagent **only the user prompt** and
+observe whether the skill fires while it handles the task; **do not** ask it which skills it would
+load — that priming inflates the positive rate and is precisely what makes a lite number diverge
+from a full run. Report positive trigger rate and near-miss false-positive rate separately. N=1 is a
+sanity read, not a statistic — say so; if a result looks borderline, or disagrees with a prior full
+run, note it as worth an N=3 re-check in the full skill rather than trusting the single run.
 
 > Triggering note: the model only consults a skill for tasks it can't trivially handle alone. Make
 > positive prompts substantive enough that consulting the skill is plausibly worthwhile — a one-step
