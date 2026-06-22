@@ -256,6 +256,28 @@ digest in sync with the skill when either changes.
 
 ---
 
+## Evaluate-skill shared blocks (structural checks + triggering note)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-evaluation/skills/evaluate-skill/SKILL.md` | "Structural integrity" check + "Triggering note" blockquote | canonical — full skill |
+| `ceh-evaluation/skills/evaluate-skill-lite/SKILL.md` | Phase 2 dimensions 1 & 2 | near-verbatim restatement in the lite variant |
+
+**What is shared:** the deterministic structural-integrity check list (frontmatter parses,
+`name` matches dir, `description` present, body non-trivial, `references/` discipline; plugin manifest
++ marketplace version match) and the "Triggering note" blockquote ("the model only consults a skill
+for tasks it can't trivially handle alone …").
+
+**What diverges:**
+- `evaluate-skill-lite` shares the `references/` directory by relative path (`../evaluate-skill/references/`)
+  rather than copying the rubric or report schema — those are not duplicated.
+- The lite triggering note drops "behavioral and" (lite has no behavioral dimension) and lite runs
+  triggering at N=1 vs the full skill's N=3.
+
+---
+
 ## Update Protocol
 
 When changing a shared block:

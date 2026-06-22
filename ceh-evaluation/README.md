@@ -55,11 +55,13 @@ composite score**.
 | Skill | Description |
 |-------|-------------|
 | `evaluate-skill` | Derive a skill/plugin's own criteria, measure structure/triggering/content/behavioral lift with evidence, and loop fix→re-run until a 6-point readiness gate passes |
+| `evaluate-skill-lite` | Fast dev-loop variant — runs only the three cheap dimensions (structure, single-pass triggering, content) and skips behavioral lift; reports a partial gate (max 4/6, criteria 5–6 unproven) for cheap iteration while you are still writing. Shares `evaluate-skill`'s rubric and report schema. Hand off to `evaluate-skill` for the full ship verdict. |
 
 Invoke manually:
 
 ```
-/ceh-evaluation:evaluate-skill
+/ceh-evaluation:evaluate-skill        # full ship verdict (includes behavioral lift)
+/ceh-evaluation:evaluate-skill-lite   # fast dev-loop check (skips behavioral lift)
 ```
 
 ## Roadmap

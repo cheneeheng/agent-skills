@@ -103,6 +103,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-release-flow` | Direct Release Flow | `/ceh-release-flow:direct-release-flow` | PR-less variant — same release pipeline directly on `main` (no branch/PR/merge): version bump → changelog → README → CLAUDE.md → commit → tag → release |
 | `ceh-business-plan` | Develop Business Plan | `/ceh-business-plan:develop-business-plan` | Draft a business plan proactively from app plans or a product idea, then loop interview→revise until the product-market-fit readiness gate passes |
 | `ceh-evaluation` | Evaluate Skill | `/ceh-evaluation:evaluate-skill` | Evaluate a skill or plugin you wrote — derive its criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a 6-point gate passes |
+| `ceh-evaluation` | Evaluate Skill — Lite | `/ceh-evaluation:evaluate-skill-lite` | Fast dev-loop check — structure + triggering (single pass) + content only; skips behavioral lift, reports a partial 4/6 gate for cheap iteration before the full ship verdict |
 
 ---
 
