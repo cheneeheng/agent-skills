@@ -80,8 +80,8 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-scaffolding` | Scaffold Fullstack Web | `/ceh-scaffolding:scaffold-fullstack-web` | Starting a fullstack web app (service + frontend in one repo) |
 | `ceh-git-workflow` | Branch | `/ceh-git-workflow:branch` | Creating or naming a branch |
 | `ceh-git-workflow` | Commit | `/ceh-git-workflow:commit` | Writing a commit message or staging changes |
-| `ceh-git-workflow` | Open PR | `/ceh-git-workflow:open-pr` | Opening a pull request, writing a PR description, or checking the definition of done |
-| `ceh-git-workflow` | Merge | `/ceh-git-workflow:merge` | Merging a PR and deleting the branch afterward |
+| `ceh-git-workflow` | Open PR | `/ceh-git-workflow:open-pr` | Opening a pull request, writing a PR description, checking the definition of done, or enabling auto-merge on repos that allow it |
+| `ceh-git-workflow` | Merge | `/ceh-git-workflow:merge` | Merging a PR (immediate or auto-merge) or a local branch into `main`, then deleting the branch afterward |
 | `ceh-git-workflow` | Hotfix | `/ceh-git-workflow:hotfix` | Executing a critical production fix |
 | `ceh-git-workflow` | Release | `/ceh-git-workflow:release` | Tagging a release or bumping a version |
 | `ceh-git-workflow` | Code Review | `/ceh-git-workflow:code-review` | Reviewing a PR or leaving review comments |

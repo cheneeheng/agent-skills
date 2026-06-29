@@ -68,6 +68,25 @@ notes live in the detailed entries referenced below.
 
 ---
 
+## Auto-merge probe + enable (gh pr merge --auto)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-git-workflow/skills/merge/SKILL.md` | "PR Merge & Cleanup" section | canonical — full probe with the direct-merge fallback |
+| `ceh-git-workflow/skills/open-pr/SKILL.md` | "Auto-Merge" section + the `gh pr merge --auto` tail of the "Command" block | enables auto-merge at PR-creation time on repos that allow it |
+
+**What is shared:** the `allow_auto_merge` probe (`gh api repos/{owner}/{repo} --jq .allow_auto_merge`) guarding `gh pr merge --merge --auto --delete-branch`, which queues the PR to land when the gate (CI + approvals) goes green.
+
+**What diverges:**
+- `merge` adds the direct-merge fallback (`gh pr merge --merge --delete-branch`) for repos without auto-merge, where the gate must already be green.
+- `open-pr` runs only the probe-and-enable half, right after `gh pr create`, so a PR opened on an auto-merge repo lands itself without a separate merge invocation.
+
+**What also references this:** `ceh-release-flow:release-flow` step 9 names the same `--auto` behavior but delegates to the `merge` skill rather than inlining the command — keep its wording consistent if the probe changes.
+
+---
+
 ## PR Checklist Items
 
 **Files:**
