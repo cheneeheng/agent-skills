@@ -5,6 +5,32 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.13.4] — 2026-06-29
+
+Close an auto-merge gap in the git workflow: opening a PR now enables GitHub auto-merge on repos
+that allow it, so a PR can land itself without invoking the merge skill separately or running a full
+release. The merge skill is reframed to cover both PR merges and local no-PR branch merges.
+Skill-content only — no new skills or agents.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.1.5 |
+| `ceh-release-flow` | v1.1.2 |
+
+### Changed
+
+- **`ceh-git-workflow` / `open-pr`** — after creating the PR, probe `allow_auto_merge` and enable
+  auto-merge (`gh pr merge --merge --auto --delete-branch`) on repos that allow it, so the PR lands
+  itself when the gate goes green — no separate merge step or release flow required.
+- **`ceh-git-workflow` / `merge`** — reframed from PR-only to cover both PR merges (immediate or
+  auto-merge) and local no-PR branch merges into `main` (`git merge --no-ff` + branch cleanup).
+- **`ceh-release-flow` / `release-flow`** — pipeline steps 8–9 now reflect that `open-pr` queues
+  auto-merge at PR-creation time; step 9 confirms it lands or falls back to a direct merge.
+
+---
+
 ## [3.13.3] — 2026-06-22
 
 Reconcile the `orchestrate` trigger with measured behavior so it stops over-promising on pure

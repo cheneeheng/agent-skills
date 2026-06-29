@@ -1,6 +1,6 @@
 ---
 name: "open-pr"
-description: "Load when creating or opening a pull request, any phrasing — create/open/raise/make/submit/send a PR, pull request, or merge request, or pushing a branch for review. Handles the PR-creation half of compound requests like 'create a PR, merge it, delete the branch' (merge/cleanup is the merge skill). Covers the PR title, the What/Why/How/Testing/Checklist template, size limits, and the author self-review checklist."
+description: "Load when creating or opening a pull request, any phrasing — create/open/raise/make/submit/send a PR, pull request, or merge request, or pushing a branch for review. Handles the PR-creation half of compound requests like 'create a PR, merge it, delete the branch' (merge/cleanup is the merge skill). Covers the PR title, the What/Why/How/Testing/Checklist template, size limits, the author self-review checklist, and enabling GitHub auto-merge on repos that allow it so the PR lands itself when the gate goes green."
 ---
 
 # Opening a Pull Request
@@ -140,6 +140,22 @@ Before opening the PR, verify the change meets the bar for its type.
 Because commits are not collapsed at merge time, keep them Conventional Commits format and clean the
 branch as you go. Full merge mechanics and post-merge cleanup load when you say "merge the PR".
 
+## Auto-Merge
+
+If the repo has auto-merge enabled (`allow_auto_merge`), enable it on the PR right after creating
+it so the PR lands itself the moment the gate (CI + approvals, enforced server-side via branch
+protection) goes green — no separate "merge it" step and no release flow required. This is the
+hands-off path for repos configured for it; on repos without auto-merge, the explicit merge skill
+handles landing the PR. A draft PR is safe to queue — auto-merge waits until the PR is marked ready.
+
+```bash
+if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then
+  gh pr merge --merge --auto --delete-branch   # queues; lands when CI + approvals go green
+fi
+```
+
+To merge immediately (gate already green) or to merge a local branch with no PR, use the merge skill.
+
 ## Command
 
 ```bash
@@ -161,4 +177,9 @@ gh pr create \
 - [ ] Attribution included if AI tooling assisted
 EOF
 )"
+
+# On repos that allow it, queue auto-merge so the PR lands itself when the gate goes green:
+if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then
+  gh pr merge --merge --auto --delete-branch
+fi
 ```
