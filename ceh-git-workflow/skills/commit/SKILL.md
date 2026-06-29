@@ -1,5 +1,5 @@
 ---
-name: "commit"
+name: commit
 description: "Load this skill when writing a commit message or staging changes for a commit: choosing the correct Conventional Commits type and scope, formatting the subject line, writing a useful body, or adding footers for breaking changes and issue references. Auto-load whenever a git commit is being made, a commit message is being composed, or staged changes are being reviewed before committing."
 ---
 

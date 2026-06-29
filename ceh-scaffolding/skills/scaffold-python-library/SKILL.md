@@ -1,5 +1,5 @@
 ---
-name: "scaffold-python-library"
+name: scaffold-python-library
 description: Load this skill when starting or scaffolding a new distributable Python library: creating the src/ layout, build metadata, type marker, tests, and .gitignore. Trigger when the user says "start/scaffold a Python library", "new Python package/SDK", or sets up a publishable package. For a web service use scaffold-python-service.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: "summarize-chat"
+name: summarize-chat
 description: Summarize the current conversation into a structured markdown document for LLM handoff. Trigger when the user asks to "summarize the chat", "summarize the conversation", "create a session summary", or "summarize what we did".
 ---
 

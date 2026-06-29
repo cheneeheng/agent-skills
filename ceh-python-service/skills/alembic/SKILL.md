@@ -1,5 +1,5 @@
 ---
-name: "alembic"
+name: alembic
 description: Load this skill when creating or running database migrations with Alembic: generating revision files, applying or rolling back migrations, configuring env.py for asyncpg, or following migration safety rules. Auto-load whenever alembic commands are run or migration files are created or edited.
 ---
 

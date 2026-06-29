@@ -1,5 +1,5 @@
 ---
-name: "packaging"
+name: packaging
 description: Load this skill when packaging or publishing a Python library: choosing a build backend, configuring pyproject.toml build metadata, laying out a src/ package, building wheels and sdists, or publishing to PyPI. Auto-load whenever build-system config is edited, a release is built with uv build, or a publish to PyPI/TestPyPI is prepared. Not for application deployment (see ceh-ops/deploy).
 ---
 

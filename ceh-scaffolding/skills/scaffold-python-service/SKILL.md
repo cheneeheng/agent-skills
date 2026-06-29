@@ -1,5 +1,5 @@
 ---
-name: "scaffold-python-service"
+name: scaffold-python-service
 description: Load this skill when starting or scaffolding a new Python (FastAPI) web service: creating the initial directory layout, layer boundaries, base config, and .gitignore. Trigger when the user says "start/scaffold a FastAPI service", "new Python backend project", or sets up a fresh service repo. For a library use scaffold-python-library; for the frontend use scaffold-web-frontend.
 ---
 

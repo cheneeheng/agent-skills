@@ -1,5 +1,5 @@
 ---
-name: "hotfix"
+name: hotfix
 description: "Load this skill when executing a critical production fix: branching from main with the fix/critical- prefix, keeping the fix minimal in scope, opening a PR with the required approval, and tagging a PATCH release after merge. Auto-load whenever a critical bug is being fixed directly, a hotfix branch is being created, or a PATCH release is being cut after an urgent fix."
 ---
 

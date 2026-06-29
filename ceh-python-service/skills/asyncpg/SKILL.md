@@ -1,5 +1,5 @@
 ---
-name: "asyncpg"
+name: asyncpg
 description: Load this skill when writing asyncpg database code: parameterized queries, tenant isolation (owner_id filtering), atomic transactions, connection pool configuration, or raw SQL patterns. Auto-load whenever asyncpg is imported, a SQL query is written, or a database transaction is needed.
 ---
 
