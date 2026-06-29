@@ -1,5 +1,5 @@
 ---
-name: "agent-coding-contract"
+name: agent-coding-contract
 description: Core behavioral contract for all coding sessions. Load proactively before any implementation, refactoring, or multi-file change. Defines agent role, core rules, five-step task workflow, stop conditions, decision logging, and universal non-goals. Also load when user says "load the contract", "agent contract", or "coding contract".
 ---
 

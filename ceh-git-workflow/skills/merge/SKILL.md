@@ -1,5 +1,5 @@
 ---
-name: "merge"
+name: merge
 description: "Load when merging and cleaning up after, any phrasing — merge/land/integrate a PR or a local branch, 'merge it', 'merge and delete the branch', 'clean up the branch', 'merge this branch into main'. Also the merge half of compound requests like 'create a PR, merge it, delete the branch'. Covers both the PR-merge case (gh pr merge, including auto-merge) and the local no-PR branch-merge case (git merge --no-ff into main), the pre-merge gate (CI green, approvals, rebased, clean history), merge-commit strategy (no squash/rebase-merge), and post-merge cleanup (delete remote + local branch, return to main, pull)."
 ---
 
