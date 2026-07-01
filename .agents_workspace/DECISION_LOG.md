@@ -510,3 +510,23 @@ touched beyond table registrations. Validator passes.
 **Decision:** Ride the existing `feat/ceh-evaluation-plugin` branch as the release branch. Feature work (plugin v1.1.2, README, CLAUDE.md, marketplace) is already committed and consistent; the only missing release artifact is the CHANGELOG entry. Repo tag: v3.12.0 → v3.13.0 (MINOR, new plugin). Plugin version 1.1.2 left as-is (already set; not a bump candidate during release).
 **Impact / Risk:** Low — PR-gated merge to main precedes tagging; tag points at the merge commit per the skill's hard rules.
 **Outcome:** Pending merge + tag.
+
+### Entry 28
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-01T00:00:00Z
+**Task:** Add a "design-system" skill offering a menu of frontend design templates (Meridian, Tidewater).
+
+**Context:** User asked for a frontend-design skill with a template menu, dropping 2 templates
+(brand_*.css + brand-guide_*.html) in the repo root. Two forks were unresolved: (a) which plugin
+hosts the skill — a new ceh-frontend-design plugin vs. the existing ceh-web-frontend; (b) where the
+large CSS/HTML template assets live given the repo's "content inline in SKILL.md" rule.
+**Decision:** (a) Placed it in ceh-web-frontend as skill `design-system` rather than a new plugin —
+frontend visual design is the same use case as building a web frontend, and a new plugin adds
+marketplace churn for one skill. (b) Put the 4 template files under the skill's `references/<name>/`
+tree — the CLAUDE.md reserves references/ for "schemas and templates," and these are literal template
+assets too large to inline. Bumped ceh-web-frontend 3.0.4 -> 3.1.0 (MINOR, new skill).
+**Impact / Risk:** Low. Skill is stack-agnostic CSS, additive only. If a broader design library grows,
+it can be promoted to its own plugin later. Validator passes.
+**Outcome:** `python tools/validate-plugins/validate.py` -> OK.
