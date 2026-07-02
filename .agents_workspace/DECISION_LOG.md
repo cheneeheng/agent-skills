@@ -530,3 +530,24 @@ assets too large to inline. Bumped ceh-web-frontend 3.0.4 -> 3.1.0 (MINOR, new s
 **Impact / Risk:** Low. Skill is stack-agnostic CSS, additive only. If a broader design library grows,
 it can be promoted to its own plugin later. Validator passes.
 **Outcome:** `python tools/validate-plugins/validate.py` -> OK.
+
+---
+
+### Entry 29
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-02
+**Task:** Release flow for the design-system skill on the current feature branch.
+
+**Context:** Release-flow step 6 asks whether CLAUDE.md needs updating. Adding a new skill changed the
+web-frontend plugin's capability surface, so it was not obvious whether the project CLAUDE.md needed a
+touch.
+**Decision:** No CLAUDE.md update. The project CLAUDE.md lists plugins by domain, not individual
+skills; the `ceh-web-frontend` domain ("SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright,
+accessibility") is unchanged conceptually and the file never enumerates per-plugin skills. Also ran
+the release on the current branch `feat/frontend-design-system-skill` per explicit user instruction
+("on current branch"), skipping the skill's default `chore/release-vX.Y.Z` branch. Repo tag bumped
+MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 from skill creation.
+**Impact / Risk:** Low. CLAUDE.md stays accurate; README already carries the new skill row.
+**Outcome:** CHANGELOG [3.14.0] written; validator passes.
