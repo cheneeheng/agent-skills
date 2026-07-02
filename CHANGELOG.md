@@ -5,6 +5,27 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.14.0] — 2026-07-02
+
+Add a `design-system` skill to `ceh-web-frontend` for giving a frontend its visual look and feel —
+picking a theme or brand from bundled templates rather than restating generic design advice. Ships
+with two ready-to-use brand templates (`meridian`, `tidewater`), each a `brand.css` plus a
+`brand-guide.html` reference.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-web-frontend` | v3.1.0 |
+
+### Added
+
+- **`ceh-web-frontend` / `design-system`** — new skill that fires when giving a frontend its visual
+  design (look/feel, theme, or brand), offering a menu of bundled brand templates and applying the
+  chosen one; description sharpened for triggering and scoped with named non-goals.
+
+---
+
 ## [3.13.4] — 2026-06-29
 
 Close an auto-merge gap in the git workflow: opening a PR now enables GitHub auto-merge on repos
