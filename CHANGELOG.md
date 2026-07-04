@@ -5,6 +5,30 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.14.1] — 2026-07-04
+
+Audit of the `ceh-blog` skills for the personal, series-first voice. Skill descriptions are
+shortened for manual invocation (trigger-signal lists dropped in favor of a routing hint),
+`blog-repurpose` gains series awareness — adaptations use the post's open thread as enticement
+into the serial without spoiling earlier episodes — and the plugin README is reframed to
+manual-invocation-first. Content-only — no new skills or agents.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-blog` | v1.0.6 |
+
+### Changed
+
+- **`ceh-blog` / all four skills** — frontmatter descriptions cut to what-it-does plus a one-line
+  routing hint between the skills; auto-trigger signal lists removed.
+- **`ceh-blog` / `blog-repurpose`** — new Series Awareness block: threads and newsletter blurbs
+  point at the series and use the open thread as the hook.
+- **`ceh-blog` / README** — manual-invocation-first framing replaces the auto-trigger phrase lists.
+
+---
+
 ## [3.14.0] — 2026-07-02
 
 Add a `design-system` skill to `ceh-web-frontend` for giving a frontend its visual look and feel —
