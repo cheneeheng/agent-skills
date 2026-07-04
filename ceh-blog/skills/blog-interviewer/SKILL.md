@@ -1,6 +1,6 @@
 ---
 name: blog-interviewer
-description: Interview the user to shape a blog post, then draft it. Trigger when the starting point is only a topic, idea, project, repo, or experience — nothing written yet. Signals: "help me write a blog post", "interview me for a post", "I want to blog about X", "write a post about this repo", "I have an idea for an article", or a GitHub link/repo/README to turn into a post. Not for ready-made notes or an outline (use blog-writer); not for an existing draft to improve (use blog-editor).
+description: Interview the user to shape a blog post, then draft it — for when the starting point is only a topic, idea, repo, or experience with nothing written yet. For ready-made notes use blog-writer; for an existing draft use blog-editor.
 ---
 
 # Blog Interviewer Skill

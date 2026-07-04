@@ -20,43 +20,16 @@ thread, keeps continuity facts straight, and leaves a thread of its own. If the 
 | `blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
 | `blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
 
-Invoke manually:
+These skills are designed for **manual invocation** — pick the one matching your starting point:
 
 ```
-/ceh-blog:blog-interviewer
-/ceh-blog:blog-writer
-/ceh-blog:blog-editor
-/ceh-blog:blog-repurpose
+/ceh-blog:blog-interviewer   # only a topic, idea, repo, or experience — nothing written yet
+/ceh-blog:blog-writer        # notes, bullets, or an outline ready — no interview needed
+/ceh-blog:blog-editor        # a draft in prose that needs diagnosis and revision
+/ceh-blog:blog-repurpose     # a finished post to adapt for other channels
 ```
 
-**blog-interviewer** loads automatically when you say:
-- `"help me write a blog post"`
-- `"I want to blog about X"`
-- `"interview me for a post"`
-- `"I have an idea for an article"`
-- `"write a blog post about this repo"`
-
-Also triggers when a user shares a project repo, README, or code and wants to write about it.
-
-**blog-writer** loads automatically when you say:
-- `"turn this into a blog post"`
-- `"write a post from these notes"`
-- `"draft a blog post from this"`
-- `"here's my outline, write the post"`
-
-**blog-editor** loads automatically when you say:
-- `"edit this draft"`
-- `"polish this post"`
-- `"this post feels off"`
-- `"make this better"`
-- `"review my draft"`
-
-**blog-repurpose** loads automatically when you say:
-- `"turn this into a thread"`
-- `"make a LinkedIn post from this"`
-- `"repurpose this post"`
-- `"write a TL;DR for this"`
-- `"make a newsletter blurb"`
+They can still load automatically when a request clearly matches ("help me write a blog post about this repo", "turn these notes into a post", "edit this draft", "make a thread from this"), but manual invocation is the primary path.
 
 ## What It Produces
 

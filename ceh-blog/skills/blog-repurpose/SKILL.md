@@ -1,6 +1,6 @@
 ---
 name: blog-repurpose
-description: Adapt a finished blog post into other formats — Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb. Trigger when the user has a complete post and wants it reshaped for a different channel. Signals: "turn this into a thread", "make a LinkedIn post from this", "write a TL;DR", "repurpose this post", "adapt this for Twitter", "make a newsletter blurb". Not when there is no complete draft yet — use blog-interviewer, blog-writer, or blog-editor first.
+description: Adapt a finished blog post into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb. Requires a complete draft — otherwise use blog-interviewer, blog-writer, or blog-editor first.
 ---
 
 # Blog Repurpose Skill
@@ -23,6 +23,8 @@ If the user specifies format(s), proceed immediately. Otherwise ask once:
 ## Step 1 — Read the Post
 
 Identify: **the thesis** (the single central claim); **the key takeaway**; **the audience**; **the tone**; **length** (enough content to thread, or short-form?).
+
+**Series awareness**: if the post is an episode in a series, the adaptation is the reader's entry point into the whole serial — use that. The thread's closing CTA or the newsletter blurb can point at the series ("part 3 of the [X] build — start at part 1: [link]"), and the post's open thread (what's unresolved, what comes next) is natural enticement material: it promises a next episode without manufacturing a cliffhanger. Don't spoil an earlier episode's payoff in the adaptation.
 
 **No clear thesis**: flag before repurposing — a fuzzy post produces fuzzy content. Offer to sharpen first (suggest `/ceh-blog:blog-editor`) or proceed as-is; wait for the answer.
 

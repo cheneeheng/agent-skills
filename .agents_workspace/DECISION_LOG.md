@@ -551,3 +551,15 @@ the release on the current branch `feat/frontend-design-system-skill` per explic
 MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 from skill creation.
 **Impact / Risk:** Low. CLAUDE.md stays accurate; README already carries the new skill row.
 **Outcome:** CHANGELOG [3.14.0] written; validator passes.
+
+### Entry 30
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-04T00:00:00+02:00
+**Task:** Audit ceh-blog skills; shorten descriptions for manual invocation
+
+**Context:** The goal asked for shortened descriptions (manual invocation) and series-format focus, but did not specify how much routing to keep in descriptions, nor which files beyond the four SKILL.md frontmatters could change.
+**Decision:** Kept a one-line routing hint ("for X use blog-writer") in each shortened description — disambiguation between the four skills is cheap and useful even when invoked manually. Added a Series Awareness block to blog-repurpose (the only skill lacking one, and the surface that actually entices external readers into the series) and rewrote the plugin README's "loads automatically" sections to a manual-invocation framing, since keeping long trigger-phrase lists would contradict the new intent. PATCH bump 1.0.5 -> 1.0.6 (content/description only).
+**Impact / Risk:** Auto-triggering of these skills becomes less likely with shorter descriptions — accepted, per the stated intent. Registered cross-reference blocks (Voice, post-type structures) untouched.
+**Outcome:** validate.py passes; all changes on branch docs/blog-skills-audit.
