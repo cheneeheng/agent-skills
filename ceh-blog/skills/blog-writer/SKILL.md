@@ -1,6 +1,6 @@
 ---
 name: blog-writer
-description: Draft a complete blog post from raw material — notes, bullets, an outline, or fragments — with no interview. Trigger when the user has non-prose material ready and wants to go straight to a draft. Signals: "turn these notes into a post", "write a post from this outline", "draft from these bullets", "I've got my notes, just write it". Not for a bare topic with no material or a repo/code artefact (use blog-interviewer); not for written prose to improve (use blog-editor).
+description: Draft a complete blog post straight from raw material — notes, bullets, an outline, or fragments — with no interview. For a bare topic or a repo use blog-interviewer; for existing prose use blog-editor.
 ---
 
 # Blog Writer Skill

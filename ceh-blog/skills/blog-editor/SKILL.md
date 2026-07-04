@@ -1,6 +1,6 @@
 ---
 name: blog-editor
-description: Diagnose and revise an existing blog draft — polish, tighten, or fix structure while preserving the author's voice. Trigger when the starting point is prose already written (sentences and paragraphs). Signals: "edit this draft", "improve this post", "clean this up", "this doesn't land right", "review my draft", "make this better". Not for notes, bullets, or a bare topic (use blog-writer or blog-interviewer); not during an active interviewer/writer session — those handle their own revisions.
+description: Diagnose and revise an existing blog draft — polish, tighten, or fix structure while preserving the author's voice. For notes or a bare topic use blog-writer or blog-interviewer instead.
 ---
 
 # Blog Editor Skill
