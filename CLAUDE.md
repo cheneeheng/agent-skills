@@ -24,7 +24,7 @@ Plugins fall into three tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow` |
+| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled` |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -79,6 +79,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-release-flow` | End-to-end release orchestration: sequences version bump, changelog, README, CLAUDE.md, PR, merge, tag, and release by delegating to the skill that owns each step |
 | `ceh-business-plan` | Interview-driven business plan: draft from an app plan or product idea, then loop interview/revise until a product-market-fit readiness gate passes |
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix/re-run until a readiness gate passes; skill-creator and plugin-dev are optional cross-checks only |
+| `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task: deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
 
 ## Skills
 
