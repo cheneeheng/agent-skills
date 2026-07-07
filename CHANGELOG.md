@@ -5,6 +5,31 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.15.0] — 2026-07-07
+
+Add the `ceh-fabled` plugin — a cross-cutting reasoning-discipline layer for any non-trivial task.
+Its single `fabled` skill encodes the process behind high-effort frontier-model output: silent
+effort triage, generating genuine alternatives before committing, full-depth decomposition,
+adversarial self-review, verification of the checkable, and calibrated, conviction-forward delivery.
+Six task-typed reference files (reasoning moves, decision standards, technical rigor, research
+epistemics, writing standards, interaction discipline) load on demand. Ships as a new plugin at
+v1.0.0; no other plugin changed.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-fabled` | v1.0.0 |
+
+### Added
+
+- **`ceh-fabled` / `fabled`** — new plugin and skill applying frontier-grade reasoning discipline
+  (deliberate thinking, alternative generation, adversarial self-review, verification, calibrated
+  conviction) to analysis, decisions, debugging, architecture, planning, evaluation, research, and
+  substantive writing; scoped with an effort-triage gate so trivial tasks skip the machinery.
+
+---
+
 ## [3.14.1] — 2026-07-04
 
 Audit of the `ceh-blog` skills for the personal, series-first voice. Skill descriptions are
