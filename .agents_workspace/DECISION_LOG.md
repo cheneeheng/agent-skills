@@ -599,3 +599,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** (1) Hook scripts placed in `scripts/` (not `hooks/`) so `tools/validate-plugins/validate.py` bash-checks them; `hooks/hooks.json` references them via `${CLAUDE_PLUGIN_ROOT}/scripts/...`. (2) Deleted `settings-hooks-snippet.json` — plugin hooks load automatically, snippet is obsolete. (3) Classified cross-cutting tier (applies to most sessions, like ceh-fabled). (4) Version 1.0.0 (matches ceh-fabled/ceh-business-plan precedent for new plugins). (5) Added `command -v jq || exit 0` degrade to both hook scripts — without jq they are inert rather than erroring; fail-open here is unavoidable since exit 2 on PreToolUse would block every Bash call. (6) Guard deny message now interpolates the configured TTL instead of hardcoding "15 minutes". (7) Plugin README rewritten self-contained since the spec file was removed per request.
 **Impact / Risk:** Machines without jq silently lack the hard-trigger layer (documented in plugin README with install commands). Hook scripts in `scripts/` diverges from the plugin-dev convention of `hooks/` but gains CI syntax checking.
 **Outcome:** Validator passes; guard and failure-watch functionally tested (deny/allow/ack/TTL/threshold/reset/no-jq cases) with a scratchpad jq 1.8.2 binary.
+
+### Entry 34
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-08T00:00:00Z
+**Task:** Release flow for v3.17.0 (ceh-advisor plugin)
+
+**Context:** The release-flow skill's step 2 says branch `chore/release-vX.Y.Z` from main, but the feature branch `feat/ceh-advisor-plugin` is itself unmerged — and repo precedent (v3.16.0, commit 6e24266 inside PR #44) puts the changelog-only release commit on the feature branch, merged via the feature PR, tagged after merge. Also unresolved: whether the three plugins with README-only invoke-syntax edits get PATCH bumps.
+**Decision:** Release commit rides the existing feature branch (matches precedent; avoids a second PR whose only content is a changelog entry). No PATCH bumps for `ceh-dev-tools`/`ceh-orchestration`/`ceh-release-flow` — v3.16.0 precedent shipped release commits without bumping doc-touched plugins, and the edits are cosmetic invoke-syntax strings; noted as "doc-only, no version bumps" in the changelog. Repo tag v3.17.0 = MINOR (new plugin adds agents).
+**Impact / Risk:** Installed users of the three README-touched plugins won't auto-update to the new invoke syntax until each plugin's next real bump — acceptable for cosmetic docs.
+**Outcome:** Pending merge + tag.
