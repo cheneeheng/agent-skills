@@ -28,7 +28,7 @@ Runs the release pipeline top to bottom, delegating each step:
 | Merge + delete branch | `ceh-git-workflow:merge` |
 | Tag + publish release | `ceh-git-workflow:release` |
 
-**Invoke:** `/ceh-release-flow:release-flow`
+**Invoke:** `@"ceh-release-flow:release-flow (agent)"`
 
 **Auto-triggers on:** "run the release flow", "do the full release", "ship this release end to
 end", "release this project", "bump version, update docs, open a PR, merge, tag and release".
@@ -48,7 +48,7 @@ The PR-less variant — same pipeline directly on `main`, with no branch, PR, or
 | Commit the bump + docs to `main` | `ceh-git-workflow:commit` |
 | Tag + publish release | `ceh-git-workflow:release` |
 
-**Invoke:** `/ceh-release-flow:direct-release-flow`
+**Invoke:** `@"ceh-release-flow:direct-release-flow (agent)"`
 
 **Auto-triggers on:** "run the release flow without a PR", "do the full release directly on main",
 "release this project without opening a PR", "cut a release without a PR".

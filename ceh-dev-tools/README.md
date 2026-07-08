@@ -8,7 +8,7 @@ Developer productivity agents for repository exploration and codebase orientatio
 
 Generates an annotated, clickable `REPO_MAP.md` from any repository. Every file and folder is linked and labeled with its purpose.
 
-**Invoke:** `/ceh-dev-tools:repo-tree-mapper`
+**Invoke:** `@"ceh-dev-tools:repo-tree-mapper (agent)"`
 
 **Auto-triggers on:** "map this codebase", "show me the repo tree", "what's in this repo", "project structure overview", "document the project structure", or any onboarding/orientation request.
 

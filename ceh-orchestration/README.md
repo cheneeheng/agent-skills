@@ -18,7 +18,7 @@ dependency-ordered plan, dispatch each subtask to a worker, and keep a compact
 ledger of outcomes (never raw contents). The orchestrator does no file I/O
 itself.
 
-**Invoke:** `/ceh-orchestration:orchestrate`
+**Invoke:** `@"ceh-orchestration:orchestrate (agent)"`
 
 **Auto-triggers on:** "orchestrate this", "act as orchestrator", "thin
 orchestrator mode", "delegate this", "plan and delegate", "don't edit directly",
@@ -46,14 +46,14 @@ that have no built-in equivalent:
 Implements a single scoped task: code changes, edits, multi-step implementation.
 Returns a files-changed list and a 1–2 line summary — no diffs or tool output.
 
-**Invoke:** `/ceh-orchestration:executor`
+**Invoke:** `@"ceh-orchestration:executor (agent)"`
 
 ### `verifier` (Haiku)
 
 Checks an executor's output against explicit acceptance criteria and runs the
 named checks. Returns PASS/FAIL plus a one-line reason — fixes nothing.
 
-**Invoke:** `/ceh-orchestration:verifier`
+**Invoke:** `@"ceh-orchestration:verifier (agent)"`
 
 > **Plugin-agent limitation:** Claude Code **ignores** the `permissionMode`,
 > `hooks`, and `mcpServers` frontmatter fields on plugin subagents (security
