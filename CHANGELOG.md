@@ -5,6 +5,45 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.17.0] — 2026-07-08
+
+Add the `ceh-advisor` plugin — a stronger-model second-opinion subagent, an owned replacement for
+the native `/advisor`. The main session consults the advisor at decision points, failure loops,
+irreversible actions, and pre-completion gates; the reviewer model is a single `model:` line in
+the agent frontmatter (Opus, high effort). Triggering is two-layer: soft description-driven
+routing plus deterministic hook backstops that ship with the plugin and load automatically via
+`hooks/hooks.json` — a PreToolUse guard that denies destructive bash commands until a fresh
+advisor acknowledgement exists, and a PostToolUse watch that interrupts after consecutive failed
+commands to force a diagnosis challenge. The advisor enforces an explicit handoff contract
+(Situation / Options considered / Leaning toward / Relevant files) since subagents cannot see the
+main conversation. Ships as a new plugin at v1.0.0; no other plugin's content changed.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-advisor` | v1.0.0 |
+
+### Added
+
+- **`ceh-advisor` / `ceh-advisor` agent** — verdict-first, read-only senior reviewer: conclusion
+  in line 1, justification from files it reads itself, deliberate steelmanning of rejected
+  options, and "missing: X, Y" instead of a guessed verdict on insufficient handoff.
+- **`ceh-advisor` / destructive-command guard** (PreToolUse, Bash) — denies `rm -rf`,
+  `git push --force`, migrations, `terraform apply`, `kubectl delete`, etc. until the advisor's
+  one-line verdict is written to `.claude/.ceh-advisor-ack` (TTL-bound, doubles as an audit
+  trail); extensible via `.claude/ceh-advisor-patterns.txt`.
+- **`ceh-advisor` / consecutive-failure watch** (PostToolUse, Bash) — after N consecutive failed
+  bash calls (default 3), feeds back an instruction to stop iterating and have the advisor
+  challenge the diagnosis; both hooks degrade to inert when `jq` is absent.
+
+### Changed
+
+- **Plugin READMEs** (`ceh-dev-tools`, `ceh-orchestration`, `ceh-release-flow`) — agent invoke
+  syntax updated from the slash form to the `@`-mention form; doc-only, no version bumps.
+
+---
+
 ## [3.16.0] — 2026-07-08
 
 Add subagent versions of the four mechanical git moments to `ceh-git-workflow`: `commit-author`,

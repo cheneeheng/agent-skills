@@ -24,7 +24,7 @@ Plugins fall into three tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled` |
+| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor` |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -47,7 +47,8 @@ Plugins fall into three tiers:
 ceh-<plugin-name>/
 ├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here
 ├── agents/                   # Optional — subagents for complex autonomous tasks
-├── scripts/                  # Optional — shell helpers (e.g. coverage, branch delete)
+├── hooks/                    # Optional — hooks.json wiring hook scripts via ${CLAUDE_PLUGIN_ROOT} (e.g. ceh-advisor)
+├── scripts/                  # Optional — shell helpers and hook scripts (e.g. coverage, branch delete)
 └── skills/
     └── <skill-name>/
         ├── SKILL.md               # Required — all content inline; frontmatter + full body
@@ -80,6 +81,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-business-plan` | Interview-driven business plan: draft from an app plan or product idea, then loop interview/revise until a product-market-fit readiness gate passes |
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix/re-run until a readiness gate passes; skill-creator and plugin-dev are optional cross-checks only |
 | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task: deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
+| `ceh-advisor` | Stronger-model second-opinion subagent (agent + hooks, no skills): consulted at decision points, failure loops, irreversible actions, and pre-completion gates; ships a destructive-command guard and a consecutive-failure watch hook |
 
 ## Skills
 
