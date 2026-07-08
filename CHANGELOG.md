@@ -5,6 +5,48 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.16.0] — 2026-07-08
+
+Add subagent versions of the four mechanical git moments to `ceh-git-workflow`: `commit-author`,
+`pr-opener`, `branch-merger`, and `release-cutter`. Each runs on Sonnet at medium effort in an
+isolated context, preloads the skill that owns its moment via the `skills:` frontmatter field
+(zero content duplication, no drift), and derives what changed from `git status`/`diff`/`log`
+itself — callers pass only context the diff cannot show (the why, issue refs, testing notes, a
+target version). The two `ceh-release-flow` skills gain an optional delegation path that
+dispatches their mechanical tail steps to these agents while keeping every gate in the
+orchestrating flow. The changelog/README updaters deliberately stay skills-only — they need the
+live session's intent, which an isolated subagent cannot recover from a diff.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.2.0 |
+| `ceh-release-flow` | v1.1.3 |
+
+### Added
+
+- **`ceh-git-workflow` / `commit-author`** — subagent that stages and creates one Conventional
+  Commit for work already in the tree; pushes only when the caller says so.
+- **`ceh-git-workflow` / `pr-opener`** — subagent that pushes the branch and opens the PR with the
+  What/Why/How/Testing template, queueing auto-merge where the repo allows it; never invents
+  testing claims.
+- **`ceh-git-workflow` / `branch-merger`** — subagent that merges a PR or local branch into `main`
+  behind the pre-merge gate (never past red) and runs the post-merge cleanup.
+- **`ceh-git-workflow` / `release-cutter`** — subagent that tags `main` and publishes the GitHub
+  release, committing the version bump only when it has not already landed ("tag-only" mode for
+  the release flow).
+
+### Changed
+
+- **`ceh-release-flow` / `release-flow`** — new "Delegating steps 7–10 to subagents" section:
+  commit/PR/merge/release may be dispatched to the matching `ceh-git-workflow` agent when
+  installed; gates stay with the flow; skill delegation remains the fallback.
+- **`ceh-release-flow` / `direct-release-flow`** — same optional delegation for its commit and
+  tag+release steps (7–8).
+
+---
+
 ## [3.15.0] — 2026-07-07
 
 Add the `ceh-fabled` plugin — a cross-cutting reasoning-discipline layer for any non-trivial task.
