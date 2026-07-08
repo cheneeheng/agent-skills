@@ -28,6 +28,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Business Plan | `ceh-business-plan` | Turn a product idea or app plan into a validated business plan via a product-market-fit interview loop — draft, interrogate the weakest assumption, revise until a PMF gate passes |
 | Evaluation | `ceh-evaluation` | Evaluate a skill or plugin you just wrote — derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a readiness gate passes |
 | Fabled | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
+| Advisor | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
 
 ### Categorization
 
@@ -36,7 +37,7 @@ into three tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled` |
+| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor` |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -138,6 +139,7 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | `ceh-ops` | GitLab CI | `/ceh-ops:gitlab-ci` | Create or fix `.gitlab-ci.yml` pipelines, DAG stages, rules, protected variables, runners |
 | `ceh-orchestration` | Executor | `/ceh-orchestration:executor` | Implement a single scoped task: code changes, edits, multi-step work (Sonnet) |
 | `ceh-orchestration` | Verifier | `/ceh-orchestration:verifier` | Check an executor's output against acceptance criteria — PASS/FAIL only (Haiku) |
+| `ceh-advisor` | Advisor | `/ceh-advisor:ceh-advisor` | Verdict-first second opinion before an architectural commit, after 2+ failed fixes, before an irreversible action, or before declaring a complex task done (Opus, high effort); requires a handoff block — also hard-triggered by the plugin's hooks on destructive commands and failure streaks |
 
 ---
 
@@ -174,6 +176,7 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-business-plan@ceh-plugins --scope user
 /plugin install ceh-evaluation@ceh-plugins --scope user
 /plugin install ceh-fabled@ceh-plugins --scope user
+/plugin install ceh-advisor@ceh-plugins --scope user
 ```
 
 Or install all at once using `--scope project` for project-specific installs.
@@ -219,7 +222,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/ceh-release-flow" },
     { "path": "~/agent-skills/ceh-business-plan" },
     { "path": "~/agent-skills/ceh-evaluation" },
-    { "path": "~/agent-skills/ceh-fabled" }
+    { "path": "~/agent-skills/ceh-fabled" },
+    { "path": "~/agent-skills/ceh-advisor" }
   ]
 }
 ```
