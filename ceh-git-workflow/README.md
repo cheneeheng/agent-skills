@@ -19,5 +19,23 @@ Auto-trigger on context; each loads only the relevant content.
 | `code-review` | Writing PR review comments |
 | `dependency-management` | Adding, removing, or upgrading a dependency |
 
-> Documentation agents (`changelog-agent`, `readme-updater`) now live in the `ceh-documentation` plugin.
+> Documentation for changelog/README updates lives in the `ceh-documentation` plugin (as skills —
+> they need the live session context, see that plugin's history).
 > The former `gitignore` skill was folded into the per-project-type skills in `ceh-scaffolding`.
+
+## Agents
+
+Subagent versions of the four mechanical git moments, for delegating the step out of the main
+session. Each runs on Sonnet at medium effort, preloads the skill that owns its moment (zero
+content duplication), and derives what changed from `git status`/`diff`/`log` itself — pass only
+context the diff cannot show (the why, issue refs, testing notes, a target version).
+
+| Agent | Delegated moment | Preloads |
+|-------|------------------|----------|
+| `commit-author` | Stage and create one commit | `commit` |
+| `pr-opener` | Push the branch and open the PR (queues auto-merge where allowed) | `open-pr` |
+| `branch-merger` | Merge a PR or local branch into `main`, then clean up | `merge` |
+| `release-cutter` | Tag `main` and publish the release (bump commit only if not landed) | `release` |
+
+For in-session work the skills remain the default; the agents exist for background/delegated
+runs — e.g. the `ceh-release-flow` pipeline steps.

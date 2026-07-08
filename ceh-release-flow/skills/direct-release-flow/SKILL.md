@@ -29,6 +29,16 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 | 7 | Commit the bump + docs straight to `main` | "commit" → `ceh-git-workflow:commit` | Subject `chore: release vX.Y.Z`, tree clean, pushed to `main` |
 | 8 | Tag and publish the release on `main` | "cut a release" → `ceh-git-workflow:release` | Tag pushed, release created |
 
+## Delegating steps 7–8 to subagents
+
+Steps 7–8 are mechanical once the docs are written. When the `ceh-git-workflow` agents are
+installed, dispatch them to the subagent that owns each — `commit-author` (7, tell it the commit
+goes straight to `main` and must be pushed) and `release-cutter` (8, pass "tag-only" plus the
+changelog notes file) — to keep the main session lean. The gates stay **here**: check each step's
+gate on the agent's report before dispatching the next. Steps 1–6 stay in the main session — they
+need the session's context to write correct docs. Without the agents, delegate to the skills by
+trigger phrase as in the table.
+
 ## Step 8 detail — tag and release after the commit lands
 
 The bump is already committed to `main` in step 7, so **skip the release skill's commit step** and

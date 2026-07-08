@@ -563,3 +563,27 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** Kept a one-line routing hint ("for X use blog-writer") in each shortened description — disambiguation between the four skills is cheap and useful even when invoked manually. Added a Series Awareness block to blog-repurpose (the only skill lacking one, and the surface that actually entices external readers into the series) and rewrote the plugin README's "loads automatically" sections to a manual-invocation framing, since keeping long trigger-phrase lists would contradict the new intent. PATCH bump 1.0.5 -> 1.0.6 (content/description only).
 **Impact / Risk:** Auto-triggering of these skills becomes less likely with shorter descriptions — accepted, per the stated intent. Registered cross-reference blocks (Voice, post-type structures) untouched.
 **Outcome:** validate.py passes; all changes on branch docs/blog-skills-audit.
+
+### Entry 31
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-08T00:00:00+02:00
+**Task:** Add commit/open-pr/merge/release subagents to ceh-git-workflow
+
+**Context:** User asked whether to also recreate agent versions of the changelog/README updaters (converted to skills in 3d7f400).
+**Decision:** No. 3d7f400 records why the agent form failed for those two: they need the live session's intent (the "why"), which a subagent re-deriving from git diff loses. The four new git agents are different — their input IS the repo state. Kept update-changelog/update-readme as skills only.
+**Impact / Risk:** If a future flow wants doc updates out-of-session, the decision must be revisited; the `skills:` preload field now makes that cheaper than in June.
+**Outcome:** ceh-documentation untouched.
+
+### Entry 32
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-08T00:00:00+02:00
+**Task:** Wire ceh-release-flow to the new subagents
+
+**Context:** User left "should the release flow use the subagents" to me.
+**Decision:** Yes, but as an optional delegation path, not a rewrite: added a short "Delegating steps to subagents" section to release-flow (steps 7-10) and direct-release-flow (steps 7-8). The pipeline tables and skill-delegation fallback are unchanged; gates stay with the orchestrating flow.
+**Impact / Risk:** Cross-plugin reference from ceh-release-flow to ceh-git-workflow agents (already precedented by its skill references). Fallback keeps the flow working without the agents installed.
+**Outcome:** Both flow skills updated; ceh-release-flow bumped 1.1.2 -> 1.1.3.

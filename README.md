@@ -130,6 +130,10 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | `ceh-web-frontend` | TS Unit Tester | `/ceh-web-frontend:ts-unit-tester` | Write isolated Vitest unit tests for functions, classes, and modules with mocked dependencies |
 | `ceh-web-frontend` | TS Integration Tester | `/ceh-web-frontend:ts-integration-tester` | Write tests wiring real stores, MSW handlers, and multiple components together |
 | `ceh-web-frontend` | TS System Tester | `/ceh-web-frontend:ts-system-tester` | Write Playwright E2E tests that exercise the full running stack as a real user would |
+| `ceh-git-workflow` | Commit Author | `/ceh-git-workflow:commit-author` | Create one commit in an isolated subagent; derives the change from git diff, pass only the why (Sonnet, medium effort) |
+| `ceh-git-workflow` | PR Opener | `/ceh-git-workflow:pr-opener` | Push the branch and open the PR in an isolated subagent; queues auto-merge where allowed (Sonnet, medium effort) |
+| `ceh-git-workflow` | Branch Merger | `/ceh-git-workflow:branch-merger` | Merge a PR or local branch into `main` and clean up, gate-checked, in an isolated subagent (Sonnet, medium effort) |
+| `ceh-git-workflow` | Release Cutter | `/ceh-git-workflow:release-cutter` | Tag `main` and publish the release in an isolated subagent; bump commit only if not landed (Sonnet, medium effort) |
 | `ceh-ops` | GitHub Actions | `/ceh-ops:github-actions` | Create or fix GitHub Actions workflows, jobs, matrix builds, OIDC, reusable workflows |
 | `ceh-ops` | GitLab CI | `/ceh-ops:gitlab-ci` | Create or fix `.gitlab-ci.yml` pipelines, DAG stages, rules, protected variables, runners |
 | `ceh-orchestration` | Executor | `/ceh-orchestration:executor` | Implement a single scoped task: code changes, edits, multi-step work (Sonnet) |

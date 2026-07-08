@@ -31,6 +31,18 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 | 9 | Merge and delete the branch — if step 8 queued auto-merge, this just confirms it lands; otherwise prefer `--auto` (or a direct merge once green). Don't poll CI by hand | "merge the PR" → `ceh-git-workflow:merge` (auto-merge probe) | CI green, approvals met, merged to `main` |
 | 10 | Tag and publish the release on `main` | "cut a release" → `ceh-git-workflow:release` | Tag pushed, release created |
 
+## Delegating steps 7–10 to subagents
+
+Steps 7–10 are mechanical once the docs are written: their input is the branch state, not the
+conversation. When the `ceh-git-workflow` agents are installed, dispatch each to the subagent that
+owns it — `commit-author` (7), `pr-opener` (8), `branch-merger` (9), `release-cutter` (10, pass
+"tag-only" since the bump landed via the PR) — to keep the main session lean. Each agent preloads
+its owning skill and derives what changed from git itself; pass only what the diff cannot show
+(the vX.Y.Z, issue refs, the changelog notes file for step 10). The gates stay **here**: check
+each step's gate on the agent's report before dispatching the next. Steps 1–6 stay in the main
+session — they need the session's context (what changed and why) to write correct docs. Without
+the agents, delegate to the skills by trigger phrase as in the table.
+
 ## Step 10 detail — tag and release *after* merge
 
 The release skill commits the bump to `main` directly; here the bump already landed via the PR, so
