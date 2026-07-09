@@ -158,25 +158,28 @@ To merge immediately (gate already green) or to merge a local branch with no PR,
 
 ## Command
 
+Write the PR body to a temp file and pass it with `--body-file`, then delete the file. Never
+inline the body with a shell heredoc or a PowerShell `@'...'@` here-string: the temp-file path
+avoids all shell quoting and behaves identically in PowerShell and Bash. The same applies to
+later edits (`gh pr edit <N> --body-file body.md`).
+
 ```bash
+# Write the body to body.md:
+#   ## What
+#   ## Why
+#   ## How
+#   ## Testing
+#   ## Checklist
+#   - [ ] All CI checks pass
+#   - [ ] Tests added or updated for new behavior
+#   - [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
+#   - [ ] No secrets or credentials in code
+#   - [ ] Migrations (if any) are backward-compatible
+#   - [ ] ARCHITECTURE.md Key Decisions updated (if a durable decision was made)
+#   - [ ] Attribution included if AI tooling assisted
 git push -u origin <branch-name>
-gh pr create \
-  --title "<type>(<scope>): <short summary>" \
-  --body "$(cat <<'EOF'
-## What
-## Why
-## How
-## Testing
-## Checklist
-- [ ] All CI checks pass
-- [ ] Tests added or updated for new behavior
-- [ ] No `any` / `@ts-ignore` / `# type: ignore` introduced
-- [ ] No secrets or credentials in code
-- [ ] Migrations (if any) are backward-compatible
-- [ ] ARCHITECTURE.md Key Decisions updated (if a durable decision was made)
-- [ ] Attribution included if AI tooling assisted
-EOF
-)"
+gh pr create --title "<type>(<scope>): <short summary>" --body-file body.md
+rm body.md
 
 # On repos that allow it, queue auto-merge so the PR lands itself when the gate goes green:
 if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then

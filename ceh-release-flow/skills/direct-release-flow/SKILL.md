@@ -34,7 +34,9 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 Steps 7–8 are mechanical once the docs are written. When the `ceh-git-workflow` agents are
 installed, dispatch them to the subagent that owns each — `commit-author` (7, tell it the commit
 goes straight to `main` and must be pushed) and `release-cutter` (8, pass "tag-only" plus the
-changelog notes file) — to keep the main session lean. The gates stay **here**: check each step's
+changelog notes file) — to keep the main session lean. Dispatch each on the model and effort
+declared in its frontmatter: **Claude Sonnet at medium reasoning effort** for both. These steps
+write to `main` — do not downgrade to a smaller model or lower effort. The gates stay **here**: check each step's
 gate on the agent's report before dispatching the next. Steps 1–6 stay in the main session — they
 need the session's context to write correct docs. Without the agents, delegate to the skills by
 trigger phrase as in the table.

@@ -5,6 +5,31 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.17.2] — 2026-07-09
+
+Move the multi-line git/gh message convention out of global config and into the git skills that
+own each moment, and pin the release-flow subagent-delegation steps to an explicit model and
+effort. Both are documentation-only refinements to existing skills — no skills or agents added.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.2.1 |
+| `ceh-release-flow` | v1.1.4 |
+
+### Changed
+
+- **`ceh-git-workflow`** — `commit` and `open-pr` build multi-line commit/PR messages via a temp
+  file (`git commit -F`, `gh pr create --body-file`) instead of inline heredocs, and `merge` uses
+  `--body-file` for multi-line merge bodies. The temp-file path avoids shell quoting and behaves
+  identically in PowerShell and Bash.
+- **`ceh-release-flow`** — the subagent-delegation sections of `release-flow` and
+  `direct-release-flow` now state the model and effort to dispatch each `ceh-git-workflow` agent on
+  (Sonnet at medium reasoning effort), sourced from the agents' frontmatter.
+
+---
+
 ## [3.17.1] — 2026-07-09
 
 Add a description-length gate to the plugin validator: `tools/validate-plugins/validate.py`
