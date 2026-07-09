@@ -8,8 +8,9 @@ Exits non-zero if any check fails.
 Checks:
   manifests  - plugin.json valid, name matches dir, semver version; marketplace.json
                lists every plugin with a matching version and an existing source path.
-  skills     - every skills/<name>/SKILL.md has name + description frontmatter, name == dir.
-  agents     - every agents/<name>.md has name + description frontmatter.
+  skills     - every skills/<name>/SKILL.md has name + description frontmatter, name == dir,
+               description <= 1024 chars.
+  agents     - every agents/<name>.md has name + description frontmatter, description <= 1024 chars.
   references - `references/...` mentions and `${CLAUDE_PLUGIN_ROOT}/scripts/...` mentions
                in SKILL.md/agent files resolve to a real file.
   skill-refs - `plugin:component` references resolve to a real skill or agent.
@@ -27,6 +28,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
+MAX_DESCRIPTION_LEN = 1024
 
 errors: list[str] = []
 
@@ -142,8 +144,11 @@ def check_frontmatter_doc(path: Path, expected_name: str | None) -> None:
         fail(where, "frontmatter missing 'name'")
     elif expected_name is not None and fm["name"] != expected_name:
         fail(where, f"frontmatter name '{fm['name']}' != directory '{expected_name}'")
-    if not fm.get("description"):
+    desc = fm.get("description")
+    if not desc:
         fail(where, "frontmatter missing 'description'")
+    elif len(desc) > MAX_DESCRIPTION_LEN:
+        fail(where, f"description is {len(desc)} chars, exceeds {MAX_DESCRIPTION_LEN} limit")
 
 
 def check_skills() -> None:
