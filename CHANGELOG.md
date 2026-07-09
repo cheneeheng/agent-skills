@@ -5,6 +5,41 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.17.1] — 2026-07-09
+
+Add a description-length gate to the plugin validator: `tools/validate-plugins/validate.py`
+now fails any skill or agent whose frontmatter `description` exceeds 1024 chars, enforced in
+CI on every push/PR via the existing `.github/workflows/validate.yml` job. Trimmed the three
+descriptions that were already over the limit — `plan-fullstack-app-to-mvp`
+(`ceh-plan-build-review`), `evaluate-skill` (`ceh-evaluation`), and `design-system`
+(`ceh-web-frontend`) — preserving every trigger phrase and disambiguation rule. No skills or
+agents added.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-plan-build-review` | v1.0.4 |
+| `ceh-evaluation` | v1.1.3 |
+| `ceh-web-frontend` | v3.1.1 |
+
+### Added
+
+- **`tools/validate-plugins/validate.py`** — enforces a 1024-char limit on every skill/agent
+  frontmatter `description`, checked in CI on every push and pull request.
+
+### Fixed
+
+- **`ceh-plan-build-review` / `plan-fullstack-app-to-mvp`** — description trimmed from 1245 to
+  1019 chars; all trigger phrases and the disambiguation logic against
+  `plan-fullstack-app-iteratively` preserved.
+- **`ceh-evaluation` / `evaluate-skill`** — description trimmed from 1096 to 995 chars; all
+  trigger phrases, the evidence-based battery steps, and both "not for" exclusions preserved.
+- **`ceh-web-frontend` / `design-system`** — description trimmed from 1185 to 1021 chars; all
+  trigger phrases, the Meridian/Tidewater menu, and all four "not for" redirects preserved.
+
+---
+
 ## [3.17.0] — 2026-07-08
 
 Add the `ceh-advisor` plugin — a stronger-model second-opinion subagent, an owned replacement for
