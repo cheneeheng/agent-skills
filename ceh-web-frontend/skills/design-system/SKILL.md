@@ -1,6 +1,17 @@
 ---
 name: design-system
-description: Load this skill when giving a web frontend its visual design — picking a look and feel, theme, brand, or design system before building UI, or restyling an existing app. Offers a menu of ready-made, token-driven design systems (Meridian, Tidewater) the user chooses from, then wires the chosen one in and builds markup against its shared token + component contract. Auto-load whenever the user says "create a frontend design", "style my app", "pick a theme/design system", "give it a look and feel", "apply a brand", "make it look good", "choose a UI style", or starts the visual layer of a new frontend, including React/Svelte apps that want buttons, cards, badges, and tables "out of the box" — prefer this bundled house style over reaching for a generic component library (shadcn/ui, MUI, Mantine) when the goal is one coherent look. Stack-agnostic CSS — works with plain HTML, SvelteKit, or React. Not for accessibility fixes, including color-contrast/WCAG remediation (use ceh-web-frontend:accessibility), project tooling setup (ceh-web-frontend:environment), component or route logic (ceh-web-frontend:react-vite, ceh-web-frontend:sveltekit), or system/API/database-schema design.
+description: >-
+  Load when giving a web frontend its visual design — picking a look and feel, theme, brand, or
+  design system before building UI, or restyling an existing app. Offers a menu of ready-made,
+  token-driven design systems (Meridian, Tidewater); wires the chosen one in and builds markup
+  against its shared token + component contract. Auto-load on: create a frontend design, style my
+  app, pick a theme/design system, give it a look and feel, apply a brand, make it look good, choose
+  a UI style, or starting the visual layer of a new frontend (React/Svelte apps wanting buttons,
+  cards, badges, tables "out of the box"). Prefer this bundled style over a generic component
+  library (shadcn/ui, MUI, Mantine) for one coherent look. Stack-agnostic CSS — works with plain
+  HTML, SvelteKit, or React. Not for accessibility/WCAG fixes (use ceh-web-frontend:accessibility),
+  tooling setup (use ceh-web-frontend:environment), component/route logic (use
+  ceh-web-frontend:react-vite, ceh-web-frontend:sveltekit), or system/API/DB schema design.
 ---
 
 # Frontend Design System

@@ -1,18 +1,17 @@
 ---
 name: evaluate-skill
 description: >-
-  Use this skill to evaluate a Claude Code skill or plugin you just wrote or changed — to find out
-  whether it is any good before you ship it. Triggers include: evaluate my skill, is this skill any
-  good, will my skill trigger, why doesn't my skill fire, does this skill actually help, review my
-  plugin quality, grade my skill, test my skill's triggering, benchmark my skill, is my plugin ready
-  to ship, evaluate this SKILL.md, check my agent/plugin against best practices, just check if my
-  skill actually helps without the full battery. It reads the target,
-  derives per-target success criteria, runs an evidence-based battery (structural integrity,
-  triggering accuracy, content quality, behavioral lift vs a no-skill baseline), then loops
-  fix → re-run until a 6-point readiness gate passes and you confirm. Self-contained — it uses the
-  Anthropic skill-creator and plugin-dev plugins only as optional cross-checks if present, never as
-  required dependencies. Not for writing a skill from scratch (that is authoring) and not for general
-  code review of an application (use ceh-git-workflow:code-review).
+  Use this skill to evaluate a Claude Code skill or plugin you just wrote or changed, to find out
+  whether it is any good before you ship it. Triggers: evaluate my skill, is this skill any good,
+  will my skill trigger, why doesn't my skill fire, does this skill actually help, review my plugin
+  quality, grade my skill, test my skill's triggering, benchmark my skill, is my plugin ready to
+  ship, evaluate this SKILL.md, check my agent/plugin against best practices, just check if my skill
+  helps without the full battery. Reads the target, derives per-target success criteria, runs an
+  evidence-based battery (structural integrity, triggering accuracy, content quality, behavioral
+  lift vs a no-skill baseline), then loops fix → re-run until a 6-point readiness gate passes and
+  you confirm. Self-contained: uses skill-creator and plugin-dev only as optional cross-checks,
+  never required. Not for writing a skill from scratch (use authoring) or general app code review
+  (use ceh-git-workflow:code-review).
 ---
 
 # Evaluate Skill
