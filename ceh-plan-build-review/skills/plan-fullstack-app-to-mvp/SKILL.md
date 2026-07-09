@@ -1,22 +1,19 @@
 ---
 name: plan-fullstack-app-to-mvp
 description: >-
-  Use this skill when a user wants the COMPLETE build plan for an app — from an empty
-  repo all the way to a working MVP — produced in a single planning session, rather
-  than one release at a time. Triggers include: plan this whole app to MVP, give me
-  the full plan to a first version, plan everything upfront, I don't want to keep
-  coming back to re-plan, lay out all the iterations to get this shipped, plan the
-  complete build for X, end-to-end plan to a first usable version. Best for
-  small-to-moderate, well-understood apps where the whole build is foreseeable.
-  This is the all-at-once counterpart to plan-fullstack-app-iteratively: choose THIS
-  skill to plan the entire build to MVP in one session, and choose
-  plan-fullstack-app-iteratively when the user wants only the next release planned, or
-  when the app is large, novel, or uncertain. Planning 'the next version' or a single
-  version's next increment (e.g. 'plan v2's scope', 'plan the next release') is the
-  iterative skill's job; choose THIS skill for a new major version only when the user
-  wants that ENTIRE version planned to its own MVP in one session (e.g. 'plan all of v2
-  to MVP'). A built-in complexity gate will recommend that fallback when planning
-  everything upfront would be unsafe.
+  Use when a user wants the COMPLETE build plan for an app, empty repo to working MVP,
+  in one session, not one release at a time. Triggers: plan this whole app to MVP, full
+  plan to a first version, plan everything upfront, don't want to keep re-planning, lay
+  out all iterations to ship this, plan the complete build for X, end-to-end plan to a
+  first usable version. Best for small-to-moderate, well-understood apps with a
+  foreseeable whole build. All-at-once counterpart to plan-fullstack-app-iteratively:
+  choose THIS skill to plan the entire build to MVP in one session; choose the
+  iterative skill when only the next release is wanted, or the app is large, novel, or
+  uncertain. Planning 'the next version' or a version's next increment (e.g. 'plan v2's
+  scope') is the iterative skill's job; choose THIS skill for a new major version only
+  when its ENTIRE version is planned to MVP in one session (e.g. 'plan all of v2 to
+  MVP'). A built-in complexity gate recommends the iterative fallback when upfront
+  planning is unsafe.
 ---
 
 # Plan Fullstack App to MVP

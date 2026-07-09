@@ -235,7 +235,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 | Tool | Path | Purpose |
 |------|------|---------|
 | skills-sync | `tools/skills-sync/` | Copy individual skills (from this repo or any other) into a project's `.claude/skills/` directory — install, update, add, remove, list. Python, bash, PowerShell, and browser-based HTML implementations. |
-| validate-plugins | `tools/validate-plugins/` | Repo-integrity checker run by CI (`.github/workflows/validate.yml`): validates plugin manifests, skill/agent frontmatter, file and skill references, and script syntax. Stdlib-only Python. |
+| validate-plugins | `tools/validate-plugins/` | Repo-integrity checker run by CI (`.github/workflows/validate.yml`): validates plugin manifests, skill/agent frontmatter (including a 1024-char cap on `description`), file and skill references, and script syntax. Stdlib-only Python. |
 
 `tools/` holds standalone meta-tooling that isn't itself a `ceh-*` plugin, skill, or agent — see
 `tools/skills-sync/README.md` for usage.
