@@ -47,7 +47,10 @@ Merge pull request #<N>: <type>(<scope>): <PR title>
 - Body: one or two lines of context — the "why", and anything a future bisect would want
   (e.g. "behind feature flag X", "requires migration 0042"). Skip if the PR title says it all.
 - With the CLI, `gh pr merge <N> --merge --subject "..." --body "..."` sets it explicitly;
-  otherwise edit the message in the GitHub merge dialog before confirming.
+  otherwise edit the message in the GitHub merge dialog before confirming. If the body spans
+  more than one line, write it to a temp file and pass `--body-file <file>` (then delete it)
+  rather than an inline `--body` — the temp-file path avoids shell quoting and works the same
+  in PowerShell and Bash.
 
 ## Resolving Conflicts
 

@@ -77,14 +77,16 @@ git add <files>
 git commit -m "<type>(<scope>): <short summary>"
 ```
 
-Multi-line (body or footer needed):
+Multi-line (body or footer needed) — write the message to a temp file and commit with `-F`,
+then delete the file. Never build a multi-line message with an inline shell heredoc or a
+PowerShell `@'...'@` here-string: the temp-file path avoids all shell quoting and behaves
+identically in PowerShell and Bash.
 ```bash
-git commit -m "$(cat <<'EOF'
-<type>(<scope>): <short summary>
-
-<body — explain why, not what>
-
-<footer — BREAKING CHANGE or Closes #NNN>
-EOF
-)"
+# Write the message to msg.txt:
+#   <type>(<scope>): <short summary>
+#
+#   <body — explain why, not what>
+#
+#   <footer — BREAKING CHANGE or Closes #NNN>
+git commit -F msg.txt && rm msg.txt
 ```
