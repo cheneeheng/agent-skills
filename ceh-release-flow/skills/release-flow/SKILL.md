@@ -36,9 +36,11 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 Steps 7–10 are mechanical once the docs are written: their input is the branch state, not the
 conversation. When the `ceh-git-workflow` agents are installed, dispatch each to the subagent that
 owns it — `commit-author` (7), `pr-opener` (8), `branch-merger` (9), `release-cutter` (10, pass
-"tag-only" since the bump landed via the PR) — to keep the main session lean. Each agent preloads
-its owning skill and derives what changed from git itself; pass only what the diff cannot show
-(the vX.Y.Z, issue refs, the changelog notes file for step 10). The gates stay **here**: check
+"tag-only" since the bump landed via the PR) — to keep the main session lean. Dispatch each on the
+model and effort declared in its frontmatter: **Claude Sonnet at medium reasoning effort** for all
+four. The steps are mechanical but write to `main` — do not downgrade to a smaller model or lower
+effort. Each agent preloads its owning skill and derives what changed from git itself; pass only
+what the diff cannot show (the vX.Y.Z, issue refs, the changelog notes file for step 10). The gates stay **here**: check
 each step's gate on the agent's report before dispatching the next. Steps 1–6 stay in the main
 session — they need the session's context (what changed and why) to write correct docs. Without
 the agents, delegate to the skills by trigger phrase as in the table.
