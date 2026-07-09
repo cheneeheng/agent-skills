@@ -611,3 +611,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** Release commit rides the existing feature branch (matches precedent; avoids a second PR whose only content is a changelog entry). No PATCH bumps for `ceh-dev-tools`/`ceh-orchestration`/`ceh-release-flow` — v3.16.0 precedent shipped release commits without bumping doc-touched plugins, and the edits are cosmetic invoke-syntax strings; noted as "doc-only, no version bumps" in the changelog. Repo tag v3.17.0 = MINOR (new plugin adds agents).
 **Impact / Risk:** Installed users of the three README-touched plugins won't auto-update to the new invoke syntax until each plugin's next real bump — acceptable for cosmetic docs.
 **Outcome:** Pending merge + tag.
+
+### Entry 35
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-09T00:00:00Z
+**Task:** Run release-flow for the git-workflow + release-flow doc changes.
+
+**Context:** release-flow's "one version everywhere" step assumes a single project version, but this repo uses per-plugin versions plus a separate repo git tag. The two touched plugins (ceh-git-workflow 3.2.1, ceh-release-flow 1.1.4) were already bumped and committed on the branch.
+**Decision:** Adapt the flow to the mono-repo model: skip the unified-version step (per-plugin bumps already landed), cut repo tag v3.17.2 as PATCH from v3.17.1 (docs-only, no skills/agents added). Release commit (changelog) rides the existing feature branch, matching the v3.16.0/v3.17.0 precedent (Entry 34). README and project CLAUDE.md unchanged — no new plugin/skill/agent and no install/config surface touched. Steps 7-10 delegated to the ceh-git-workflow subagents at model sonnet, effort medium per user request.
+**Impact / Risk:** Low — content-only docs release; tag points at the merge commit on main.
+**Outcome:** Pending changelog commit, PR, merge, tag.
