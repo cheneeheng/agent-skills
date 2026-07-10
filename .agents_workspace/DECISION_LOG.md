@@ -635,3 +635,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** (1) Propagated the canonical (to-mvp golden standard) §02 wording to the iterative copy per the Update Protocol, rather than weakening the registered "word-for-word identical" contract. (2) Added the identical handoff sentence to writer and editor and registered the new 3-file duplication in CROSS_REFERENCES.md. (3) Reworded the validate step to locate the script relative to the plugin root instead of the env var, keeping the manual fallback. Also fixed the inverted pre-release ordering in check-semver.py semver_key (release must outrank its pre-release, semver §11) — verified with key checks and an end-to-end run.
 **Impact / Risk:** All content-level; five plugins PATCH-bumped. Blog handoff line adds a small duplication maintenance cost, mitigated by the CROSS_REFERENCES entry.
 **Outcome:** validate.py passes; check-semver.py verified against a prerelease-containing changelog.
+
+### Entry 37
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-10T00:00:00+02:00
+**Task:** Round-2 plugin audit (remaining 12 plugins, ceh-summarize-chat excluded per user)
+
+**Context:** Round 2 touched ceh-git-workflow again (bun.lockb -> bun.lock in dependency-management) after round 1 had already bumped it to 3.2.2 on this unreleased branch. Options: bump again to 3.2.3 per-commit, or keep 3.2.2 for the branch's single release state.
+**Decision:** Keep 3.2.2 — both commits land in the same unreleased branch/session, so a second PATCH bump would version-churn a state no consumer ever saw. ceh-python-service bumped 3.1.2 -> 3.1.3 (fastapi error-shape example nested under "error" to match its own contract; python-integration-tester httpx fixture moved to ASGITransport since app= was removed in httpx 0.28).
+**Impact / Risk:** None material; validator confirms manifest/marketplace sync.
+**Outcome:** validate.py passes.

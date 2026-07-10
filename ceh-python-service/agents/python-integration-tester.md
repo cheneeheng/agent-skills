@@ -43,11 +43,13 @@ async def db_conn(db_pool):
         await tr.rollback()
 ```
 
-**FastAPI with httpx:**
+**FastAPI with httpx** (`app=` was removed in httpx 0.28 — use `ASGITransport`):
 ```python
 @pytest.fixture
 async def async_client(app):
-    async with AsyncClient(app=app, base_url="http://test") as c:
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as c:
         yield c
 ```
 

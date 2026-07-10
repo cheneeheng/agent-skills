@@ -142,9 +142,11 @@ async def handler(request: Request, exc: SessionNotFoundError):
     return JSONResponse(
         status_code=404,
         content={
-            "code": "session_not_found",
-            "message": str(exc),
-            "correlation_id": getattr(request.state, "correlation_id", None),
+            "error": {
+                "code": "session_not_found",
+                "message": str(exc),
+                "correlation_id": getattr(request.state, "correlation_id", None),
+            }
         },
     )
 ```
