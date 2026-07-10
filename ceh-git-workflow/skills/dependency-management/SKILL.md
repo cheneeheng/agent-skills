@@ -33,7 +33,7 @@ uv lock --upgrade-package httpx   # one package to its allowed range
 bun update zod
 ```
 
-Commit `uv.lock` / `bun.lockb` in the **same commit** as the manifest change — a manifest edit
+Commit `uv.lock` / `bun.lock` in the **same commit** as the manifest change — a manifest edit
 without its lockfile produces non-reproducible installs.
 
 ## Pinning Policy

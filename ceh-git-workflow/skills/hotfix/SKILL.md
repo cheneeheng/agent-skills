@@ -31,7 +31,11 @@ gh pr create --title "fix(<scope>): <description>"
 
 # After merge — bump PATCH version, tag, clean up
 git checkout main && git pull origin main
-git tag v<X.Y.Z>
+# Bump the PATCH version in the project manifest(s), then:
+git add <manifest files>
+git commit -m "chore: bump version to v<X.Y.Z>"
+git push origin main
+git tag -a v<X.Y.Z> -m "v<X.Y.Z> — <symptom fixed>"   # annotated: some repos enforce it
 git push origin v<X.Y.Z>
 git branch -d fix/critical-<description>
 git push origin --delete fix/critical-<description>

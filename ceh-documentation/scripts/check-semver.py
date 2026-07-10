@@ -54,7 +54,7 @@ def semver_key(parsed: tuple) -> tuple:
     """
     major, minor, patch, pre = parsed
     # No pre-release → higher precedence than any pre-release
-    pre_rank = (0,) if not pre else (1, pre)
+    pre_rank = (1,) if not pre else (0, pre)
     return (major, minor, patch) + pre_rank
 
 

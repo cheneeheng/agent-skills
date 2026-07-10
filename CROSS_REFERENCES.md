@@ -255,6 +255,22 @@ notes live in the detailed entries referenced below.
 
 ---
 
+## Blog repurpose handoff line
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-blog/skills/blog-interviewer/SKILL.md` | end of "Phase 4 — Refine" | canonical |
+| `ceh-blog/skills/blog-writer/SKILL.md` | end of "Phase 4 — Refine" | word-for-word copy |
+| `ceh-blog/skills/blog-editor/SKILL.md` | end of "Step 4 — Invite Feedback" | word-for-word copy |
+
+**What is shared:** the single handoff sentence pointing a satisfied user at
+`/ceh-blog:blog-repurpose` (Twitter/X thread, LinkedIn post, TL;DR, newsletter blurb) — identical
+in all three files.
+
+---
+
 ## Write-less-code ladder (skill + per-turn digest)
 
 **Files:**

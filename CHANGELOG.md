@@ -5,6 +5,56 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.17.3] — 2026-07-10
+
+Full review/audit pass over all nineteen plugins (`ceh-summarize-chat` excluded by request):
+verify every registered cross-reference block is in lockstep, syntax-check every shell script,
+and fix the defects found. Content-only fixes to existing skills, agents, and scripts — no
+skills or agents added.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.6.4 |
+| `ceh-blog` | v1.0.7 |
+| `ceh-documentation` | v1.1.2 |
+| `ceh-git-workflow` | v3.2.2 |
+| `ceh-plan-build-review` | v1.0.5 |
+| `ceh-python-service` | v3.1.3 |
+
+### Fixed
+
+- **`ceh-documentation` / `scripts/check-semver.py`** — pre-release ordering in `semver_key` was
+  inverted (a release ranked below its own pre-release, contradicting semver §11), so a correct
+  newest-first changelog containing `1.2.3` above `1.2.3-rc.1` failed validation.
+- **`ceh-documentation` / `update-changelog`** — the validate step located the bundled script via
+  `${CLAUDE_PLUGIN_ROOT}`, which is only set for hook commands; it now resolves the script
+  relative to the plugin root, keeping the manual fallback.
+- **`ceh-git-workflow` / `hotfix`** — the command block used a lightweight tag where the release
+  skill requires an annotated one, and never showed the PATCH version-bump commit that step 6
+  demands; both corrected.
+- **`ceh-git-workflow` / `dependency-management`** — `bun.lockb` → `bun.lock`, aligning with
+  `ceh-web-frontend:environment` and the Bun 1.2+ text lockfile default.
+- **`ceh-python-service` / `fastapi`** — the global exception-handler example returned a flat
+  error body while claiming to match the skill's own contract, which nests fields under
+  `"error"`; the example now matches.
+- **`ceh-python-service` / `python-integration-tester`** — the httpx fixture used
+  `AsyncClient(app=...)`, removed in httpx 0.28; replaced with `ASGITransport`.
+- **`ceh-agent-coding-contract` / README** — the workflow summary contradicted the contract's
+  Validation Policy (quick scoped checks are always allowed, not request-gated).
+- **`ceh-plan-build-review`** — propagated drifted canonical §02 wording in `section-specs.md`
+  to the iterative copy, and made plan output paths explicit
+  (`.agents_workspace/planning/`) to match what the consumer skills glob.
+
+### Changed
+
+- **`ceh-blog`** — `blog-writer` and `blog-editor` now end with the same `blog-repurpose`
+  handoff line `blog-interviewer` already had; the three-file duplication is registered in
+  `CROSS_REFERENCES.md`.
+
+---
+
 ## [3.17.2] — 2026-07-09
 
 Move the multi-line git/gh message convention out of global config and into the git skills that

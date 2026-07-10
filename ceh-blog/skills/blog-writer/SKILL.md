@@ -193,6 +193,8 @@ Watch for and raise:
 
 If the user wants a different angle or structure, **re-draft** — a revision that fights the original structure reads like a revision.
 
+Once the user is satisfied, mention: *"When you're ready to share this, `/ceh-blog:blog-repurpose` can adapt it into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb."*
+
 ---
 
 ## Output Format
