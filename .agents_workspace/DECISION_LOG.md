@@ -647,3 +647,40 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** Keep 3.2.2 — both commits land in the same unreleased branch/session, so a second PATCH bump would version-churn a state no consumer ever saw. ceh-python-service bumped 3.1.2 -> 3.1.3 (fastapi error-shape example nested under "error" to match its own contract; python-integration-tester httpx fixture moved to ASGITransport since app= was removed in httpx 0.28).
 **Impact / Risk:** None material; validator confirms manifest/marketplace sync.
 **Outcome:** validate.py passes.
+
+
+### Entry 38
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-10T00:00:00+02:00
+**Task:** Review both ceh-fabled skills for parity with invoking Fable directly (Sonnet/Opus as executor)
+
+**Context:** The fabled skill's no-extended-thinking fallback ("write a scratchpad, then drop it before delivering") is not executable — emitted response text cannot be retracted. Candidate fixes: delete the fallback (thinking-only), force a visible working section, or externalize the scratchpad.
+**Decision:** Externalize: in an agent environment write working notes to a temp file or reason between tool calls; in plain chat allow a compact, clearly delimited visible working section. Deleting the fallback would silently drop the discipline exactly where weaker models need it. Also inlined the think-before-verdict rule into fabled-plan-review rather than making a fabled load mandatory (keeps the skill self-contained and cheap), and removed the "(or the fixes are small)" self-edit authorization that contradicted both the same sentence and the coding contract.
+**Impact / Risk:** Content-only; plugin already at uncommitted 1.1.0 on this branch, no further bump. Plain-chat fallback still leaks working text into the response — accepted as the only executable option there.
+**Outcome:** validate.py passes.
+
+### Entry 39
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-10T00:00:00+02:00
+**Task:** Add fabled-stuck skill to ceh-fabled
+
+**Context:** ceh-fabled was already bumped 1.0.0 -> 1.1.0 in this branch's uncommitted changes (for fabled-plan-review). Adding a second new skill raised the question: bump again to 1.2.0 or fold into the pending bump.
+**Decision:** Keep 1.1.0. The repo rule is "bump only at commit time"; nothing between 1.0.0 and now has been committed or released, so both new skills ship under the same pending MINOR bump.
+**Impact / Risk:** None — versions in plugin.json and marketplace.json stay in sync; a second MINOR bump would only inflate the version number.
+**Outcome:** validate.py passes with 1.1.0 and three skills in ceh-fabled.
+
+### Entry 40
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-10T00:00:00+02:00
+**Task:** Second parity review of ceh-fabled skills — "applied by Sonnet/Opus, behave as if Fable were invoked"
+
+**Context:** Entry 38 fixed the executability of the scratchpad fallback; this pass asked whether a weaker model would actually *execute* the protocol rather than read and skip it. Candidate remedies ranged from restructuring the skill around a step-0 engagement checklist to targeted enforcement edits.
+**Decision:** Targeted enforcement edits to fabled/SKILL.md only: (1) triage must be *written* as the first reasoning line (was "silently" — on a low-thinking-budget model that means never); (2) reference loading hooked into triage as a pre-stage-1 action and "load" defined as a Read tool call, since the section sat after the Core Loop and was skippable; (3) stage 4 now sweeps the draft against the anti-patterns list, which was previously passive; (4) discipline declared session-persistent, matching what invoking Fable actually does; (5) description gains "as fable"/"fable mode" trigger phrases (plan-review had them, the core skill did not). fabled-plan-review and fabled-stuck left unchanged — already imperative, self-contained, correct relative paths. No version re-bump: content edits to the pending uncommitted 1.1.0 (Entry 39 precedent).
+**Impact / Risk:** Content-only; slightly longer SKILL.md. Risk of over-instruction on trivial tasks is bounded by the existing trivial-tier escape hatch.
+**Outcome:** validate.py passes.

@@ -5,16 +5,20 @@ frontier-grade output: deliberate reasoning before answering, generating alterna
 self-review, explicit verification, and calibrated, conviction-forward delivery. It raises the
 floor on any non-trivial task without pretending to add capability the underlying model lacks.
 
-## Skill
+## Skills
 
 | Skill | Description |
 |-------|-------------|
 | `fabled` | Apply frontier-grade reasoning discipline to analysis, decisions, tradeoffs, debugging, architecture, planning, evaluation, research, and substantive writing |
+| `fabled-plan-review` | Review an existing plan against frontier-grade planning discipline — problem fidelity, alternatives, decomposition, pre-mortem, verifiability — delivering a verdict and concrete fixes |
+| `fabled-stuck` | Escape a failure loop after repeated failed fix attempts — freeze, inventory the attempts, attack their shared assumption, re-derive the diagnosis from raw evidence, probe before fixing |
 
 Invoke manually:
 
 ```
 /ceh-fabled:fabled
+/ceh-fabled:fabled-plan-review
+/ceh-fabled:fabled-stuck
 ```
 
 Or load automatically when the task involves:
@@ -22,6 +26,7 @@ Or load automatically when the task involves:
 - Debugging, architecture, or planning where a shallow answer risks being wrong
 - Research and fact-finding where accuracy is the product
 - A challenge to a previous answer, a reported error, or a request for a review or audit
+- A failure loop — two or more failed fixes for the same symptom, "still broken", "same error"
 
 ## The Core Loop
 
