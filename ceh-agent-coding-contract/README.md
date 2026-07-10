@@ -42,7 +42,8 @@ The `agent-coding-contract` skill is the single source of truth. In short, it re
   continue; stop only for the hard cases (unresolvable conflicts, repo state contradicting
   instructions, risk of data loss, inconsistent partial failure).
 - **Follow the five-step workflow** — Understand → Confirm scope → Apply changes → Validate →
-  Summarize. Validation, testing, and command execution happen only when explicitly requested.
+  Summarize. Quick checks scoped to the edit are always allowed; test suites, builds, and
+  state-changing commands run only when explicitly requested.
 - **Make minimal, authorized changes** — localized diffs, no unsolicited refactors, touch only what
   is in scope, never claim work was done that wasn't.
 - **Log decisions made under ambiguity** to `.agents_workspace/DECISION_LOG.md` (default path;

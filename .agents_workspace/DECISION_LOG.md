@@ -623,3 +623,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** Adapt the flow to the mono-repo model: skip the unified-version step (per-plugin bumps already landed), cut repo tag v3.17.2 as PATCH from v3.17.1 (docs-only, no skills/agents added). Release commit (changelog) rides the existing feature branch, matching the v3.16.0/v3.17.0 precedent (Entry 34). README and project CLAUDE.md unchanged — no new plugin/skill/agent and no install/config surface touched. Steps 7-10 delegated to the ceh-git-workflow subagents at model sonnet, effort medium per user request.
 **Impact / Risk:** Low — content-only docs release; tag points at the merge commit on main.
 **Outcome:** Pending changelog commit, PR, merge, tag.
+
+### Entry 36
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-10T00:00:00+02:00
+**Task:** Seven-plugin review/audit/cleanup on chore/plugin-skill-review-audit
+
+**Context:** The audit surfaced items where "fix (if needed)" left the remedy open: (1) section-specs.md §02 drift between the two planner copies — propagate wording vs relax CROSS_REFERENCES; (2) blog-writer/blog-editor lacked the blog-repurpose handoff line that blog-interviewer has — fix vs report-only; (3) update-changelog's validate step used ${CLAUDE_PLUGIN_ROOT}, which is unset in skill Bash calls.
+**Decision:** (1) Propagated the canonical (to-mvp golden standard) §02 wording to the iterative copy per the Update Protocol, rather than weakening the registered "word-for-word identical" contract. (2) Added the identical handoff sentence to writer and editor and registered the new 3-file duplication in CROSS_REFERENCES.md. (3) Reworded the validate step to locate the script relative to the plugin root instead of the env var, keeping the manual fallback. Also fixed the inverted pre-release ordering in check-semver.py semver_key (release must outrank its pre-release, semver §11) — verified with key checks and an end-to-end run.
+**Impact / Risk:** All content-level; five plugins PATCH-bumped. Blog handoff line adds a small duplication maintenance cost, mitigated by the CROSS_REFERENCES entry.
+**Outcome:** validate.py passes; check-semver.py verified against a prerelease-containing changelog.

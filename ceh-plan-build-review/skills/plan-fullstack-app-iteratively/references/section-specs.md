@@ -74,7 +74,7 @@ Expected contents for each section, at both skeleton and iteration level.
 **Iteration:**
 - Only the parts of the architecture that change
 - An updated Mermaid component diagram that visualizes what changed this iteration — mark new/modified pieces (e.g. a distinct Mermaid `style`/`class` or a `%% changed` comment) so the diff is visible at a glance
-- New entities, new routes, modified relationships
+- New entities, new routes, modified relationships — extending, never contradicting, what earlier artifacts established
 - Pointer for anything untouched
 
 ---
@@ -86,7 +86,7 @@ Expected contents for each section, at both skeleton and iteration level.
 - Framework choices (one per layer)
 - Database (type + name)
 - Key libraries (only those needed for the skeleton to run)
-- No version pinning required at skeleton stage — add in iteration when a version decision matters
+- No version pinning required at skeleton stage — add in an iteration when a version decision matters
 
 **Iteration:**
 - New dependencies added by this iteration, with rationale

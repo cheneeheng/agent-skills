@@ -94,7 +94,7 @@ Overplanning is a blocking risk: a developer who reads ahead into unresolved det
 
 **Goal:** Produce just enough to build a working skeleton — screens render, routes respond, but functionality is stubbed. The developer should be able to run the app and get a first impression of whether the concept is right.
 
-**Output:** A single file `planning/SKELETON.md` for the default family, or `planning/SKELETON_vN.md` for a version family (e.g. `SKELETON_v2.md`). Skeletons carry no `depends_on` (see [Plan Families and Versions](#plan-families-and-versions)).
+**Output:** A single file `.agents_workspace/planning/SKELETON.md` for the default family, or `.agents_workspace/planning/SKELETON_vN.md` for a version family (e.g. `SKELETON_v2.md`). Skeletons carry no `depends_on` (see [Plan Families and Versions](#plan-families-and-versions)).
 
 ### Sections in SKELETON.md
 
@@ -125,7 +125,7 @@ See `references/section-specs.md` for the expected contents of each section at s
 
 **When:** Adding to or changing an existing project, within an existing or new version family.
 
-**Output:** A single file `planning/ITER_NN.md` (default family) or `planning/ITER_NN_vN.md` (version family), where `NN` is the next available two-digit number **within that family** (the counter restarts per family — `ITER_01_v2.md` is the first iteration of the `v2` family, independent of `ITER_01.md`).
+**Output:** A single file `.agents_workspace/planning/ITER_NN.md` (default family) or `.agents_workspace/planning/ITER_NN_vN.md` (version family), where `NN` is the next available two-digit number **within that family** (the counter restarts per family — `ITER_01_v2.md` is the first iteration of the `v2` family, independent of `ITER_01.md`).
 
 ### Sections in ITER_NN.md
 

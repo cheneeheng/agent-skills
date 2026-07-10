@@ -150,6 +150,8 @@ After sharing the edited draft, ask exactly this — one question, no menu of re
 
 Wait for their answer, then address what they raise specifically.
 
+Once the user is satisfied, mention: *"When you're ready to share this, `/ceh-blog:blog-repurpose` can adapt it into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb."*
+
 ---
 
 ## Edge Cases

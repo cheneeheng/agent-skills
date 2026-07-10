@@ -88,11 +88,13 @@ Add comparison links at the bottom (infer repo URL from `git remote get-url orig
 
 ### 5. Validate
 
+Run the bundled validator, which ships at `scripts/check-semver.py` under the plugin root (two directories above this skill's base directory):
+
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/check-semver.py" CHANGELOG.md
+python3 "<plugin-root>/scripts/check-semver.py" CHANGELOG.md
 ```
 
-If the script is absent, scan `CHANGELOG.md` manually: verify all version headers match `MAJOR.MINOR.PATCH` (with optional `-prerelease` or `+build`), dates are `YYYY-MM-DD`, versions are newest-first, no duplicates.
+If the script cannot be located, scan `CHANGELOG.md` manually: verify all version headers match `MAJOR.MINOR.PATCH` (with optional `-prerelease` or `+build`), dates are `YYYY-MM-DD`, versions are newest-first, no duplicates.
 
 ## Constraints
 

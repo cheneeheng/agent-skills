@@ -192,14 +192,14 @@ upfront planning is wise.
 
 Produce the full set for this family in one session. For the default family:
 
-- `planning/SKELETON.md`
-- `planning/ITER_01.md` … `planning/ITER_NN.md` (the sequence from Step 3)
+- `.agents_workspace/planning/SKELETON.md`
+- `.agents_workspace/planning/ITER_01.md` … `ITER_NN.md` (the sequence from Step 3)
 
 For a new major version, tag every filename in the family with `_vN` and restart the
 counter at 01:
 
-- `planning/SKELETON_v2.md` (omit if this version reuses the prior scaffold)
-- `planning/ITER_01_v2.md` … `planning/ITER_NN_v2.md`
+- `.agents_workspace/planning/SKELETON_v2.md` (omit if this version reuses the prior scaffold)
+- `.agents_workspace/planning/ITER_01_v2.md` … `ITER_NN_v2.md`
 
 The final iteration of the family is the **terminator**: it carries `mvp: true` plus
 `mvp_target` and the `## Out of MVP scope` block. Every other iteration **omits** the
@@ -222,7 +222,7 @@ iterations produced earlier with `plan-fullstack-app-iteratively`. This is a
 **continuation**, not a fresh family, and the same-family rules apply (no version tag, no
 new skeleton):
 
-- Read every existing `planning/` artifact first to establish current state. **Do not
+- Read every existing `.agents_workspace/planning/` artifact first to establish current state. **Do not
   rewrite the skeleton or any existing iteration** — they are delivered artifacts.
 - Run Step 1's gate and Step 2's boundary against the **remaining** path to MVP, not the
   whole app. What's already built is given; you're sequencing only what's left.
