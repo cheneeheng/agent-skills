@@ -108,6 +108,8 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-evaluation` | Evaluate Skill | `/ceh-evaluation:evaluate-skill` | Evaluate a skill or plugin you wrote — derive its criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a 6-point gate passes |
 | `ceh-evaluation` | Evaluate Skill — Lite | `/ceh-evaluation:evaluate-skill-lite` | Fast dev-loop check — structure + triggering (single pass) + content only; skips behavioral lift, reports a partial 4/6 gate for cheap iteration before the full ship verdict |
 | `ceh-fabled` | Fabled | `/ceh-fabled:fabled` | Any non-trivial task with more than one plausible answer — deliberate reasoning, alternatives, adversarial self-review, verification, and calibrated conviction |
+| `ceh-fabled` | Fabled Plan Review | `/ceh-fabled:fabled-plan-review` | Review an existing plan against frontier-grade planning discipline — problem fidelity, alternatives, decomposition, pre-mortem, verifiability — verdict plus concrete fixes |
+| `ceh-fabled` | Fabled Stuck | `/ceh-fabled:fabled-stuck` | Escape a failure loop after repeated failed fixes — freeze, inventory attempts, attack their shared assumption, re-derive the diagnosis from evidence, probe before fixing |
 
 ---
 

@@ -5,6 +5,39 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.18.0] — 2026-07-10
+
+`ceh-fabled` grows from one skill to three: a plan-review skill that raises an existing plan to
+frontier-grade planning discipline, and a failure-loop escape skill for repeated failed fixes.
+The core `fabled` skill gets an enforcement pass so weaker executor models (Sonnet/Opus) actually
+run the protocol instead of reading past it.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-fabled` | v1.1.0 |
+
+### Added
+
+- **`ceh-fabled` / `fabled-plan-review`** — review an existing plan (implementation plan,
+  plan-mode output, migration plan, design doc) against a six-dimension rubric — problem fidelity,
+  alternatives considered, decomposition quality, pre-mortem risk honesty, verifiability,
+  calibrated delivery — delivering a lead verdict (*ready* / *ready after fixes* / *needs rework*),
+  findings with concrete fixes, and a plan anti-pattern list.
+- **`ceh-fabled` / `fabled-stuck`** — escape a failure loop after two or more failed fixes for the
+  same symptom: freeze, inventory the attempts, attack their shared assumption, re-derive the
+  diagnosis from raw evidence, widen the hypothesis space across five axes, probe before fixing,
+  and exit only when the original failing case passes and the earlier failures are explained.
+
+### Changed
+
+- **`ceh-fabled` / `fabled`** — enforcement edits for weaker executor models: effort triage must
+  be written as the first line of reasoning (was "silently"), reference loading is defined as a
+  pre-stage-1 Read tool call hooked into triage, the adversarial-review stage now sweeps the draft
+  against the anti-patterns list, the discipline is declared session-persistent, and the
+  description gains "as fable" / "fable mode" trigger phrases.
+
 ## [3.17.3] — 2026-07-10
 
 Full review/audit pass over all nineteen plugins (`ceh-summarize-chat` excluded by request):

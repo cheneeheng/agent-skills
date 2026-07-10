@@ -1,6 +1,6 @@
 ---
 name: fabled
-description: Apply frontier-grade reasoning discipline (deep deliberate thinking, adversarial self-review, verification, calibrated conviction) to any non-trivial task. Use this skill whenever the task involves analysis, decisions, tradeoffs, debugging, architecture, planning, evaluation, research, fact-finding, substantive writing, or anything where a shallow first-pass answer risks being wrong or generic — even if the user doesn't ask you to "think hard." Also use it when the user challenges a previous answer, reports an error, or asks for a review or audit. If the task has more than one plausible answer or approach, use this skill.
+description: Apply frontier-grade reasoning discipline (deep deliberate thinking, adversarial self-review, verification, calibrated conviction) to any non-trivial task. Use this skill whenever the task involves analysis, decisions, tradeoffs, debugging, architecture, planning, evaluation, research, fact-finding, substantive writing, or anything where a shallow first-pass answer risks being wrong or generic — even if the user doesn't ask you to "think hard." Also use it when the user challenges a previous answer, reports an error, or asks for a review or audit, and whenever the user says "as fable", "fable mode", "think like fable", "do this as fable", or asks for the answer a stronger model would give. If the task has more than one plausible answer or approach, use this skill.
 ---
 
 # Fabled — Reason Like a Frontier Model at Maximum Thinking Effort
@@ -9,7 +9,7 @@ This skill encodes the *process* that distinguishes high-effort frontier-model o
 
 ## When to engage (effort triage)
 
-Before anything else, classify the task. Do this silently in one or two sentences of reasoning.
+Before anything else, classify the task, and write the classification as the first line of your reasoning (extended thinking or scratchpad) — one sentence naming the tier and why. An unwritten triage silently defaults to the lowest tier; writing it down is what makes the rest of the protocol fire.
 
 - **Trivial** (single fact, mechanical transform, one obvious answer): answer directly. Do not apply the full protocol — over-processing trivial tasks wastes tokens and reads as padding.
 - **Standard** (clear task, some judgment): apply the Core Loop below at moderate depth — one reasoning pass, one review pass.
@@ -17,11 +17,15 @@ Before anything else, classify the task. Do this silently in one or two sentence
 
 The most common failure is misclassifying a hard task as standard. Signals that a task is hard: the user's framing contains an unstated assumption; there are competing valid approaches; correctness is checkable and being wrong is costly; the honest answer might be one the user doesn't want.
 
+For standard and hard tasks, the classification's first consequence is loading references: before starting stage 1 of the Core Loop, load every reference file whose condition matches the task (see Reference files below).
+
+This triage applies to every subsequent non-trivial task in the session, not only the message that loaded this skill. Re-run it each time a new task arrives; the discipline does not expire after one answer.
+
 ## Thinking budget
 
 This skill emulates a model running at maximum thinking effort. The defining behavior of high thinking effort is not a different kind of reasoning — it is *refusing to stop early*.
 
-- If extended thinking is available, use it fully. If not, do the reasoning in an explicit working scratchpad before composing the final answer, then deliver only the answer (compress or drop the scratchpad).
+- If extended thinking is available, use it fully. If not, externalize the scratchpad — text already emitted into the response cannot be retracted. In an agent environment, write the working notes to a temporary file (or reason stepwise between tool calls) and deliver only the answer; in plain chat, do the work in a clearly delimited working section before the answer and keep it compact.
 - Scale thinking to difficulty: for hard tasks, the reasoning should typically be several times longer than the delivered answer. If your thinking for a hard task fits in a paragraph, you have not thought yet — you have recalled.
 - Do not stop at the first coherent conclusion. The first coherent conclusion is the input to review, not the output of the task. Attempt to break it at least once (see stage 4) before accepting it.
 - If two consecutive reasoning passes produce the same stuck state, do not repeat a third — change strategy: new decomposition, new representation, or work backward from the goal. `references/reasoning-moves.md` is the toolkit for this.
@@ -29,7 +33,7 @@ This skill emulates a model running at maximum thinking effort. The defining beh
 
 ## The Core Loop
 
-Run these stages in order. Do the thinking explicitly — in extended thinking if available, otherwise in a working section you write before the final answer (and then omit or compress in the delivered response).
+Run these stages in order. Do the thinking explicitly — in extended thinking if available, otherwise in an externalized scratchpad as described under Thinking budget.
 
 ### 1. Understand the actual problem
 
@@ -51,6 +55,7 @@ Committing to the first idea that comes to mind is the signature of low-effort r
 - Decompose the problem into parts small enough that each part's answer is checkable.
 - For each part, distinguish what you *know* from what you're *inferring* — and mark inferences as such in your reasoning.
 - When reasoning hits something uncertain (a fact past knowledge cutoff, an API detail, a number you're pattern-matching rather than computing), stop and resolve it: search, compute, or explicitly carry the uncertainty forward. Never paper over it with confident prose.
+- When working with tools, digest each result before the next action: update knowns and unknowns, and state which hypothesis the result confirms or kills. Chaining tool calls without integrating their outputs is motion, not progress.
 - Chase second-order consequences. A conclusion that survives one step of "and then what happens?" is far more reliable than one that hasn't been pushed.
 
 ### 4. Adversarial self-review
@@ -60,6 +65,7 @@ Before delivering, attack your own draft as a skeptical expert would:
 - Is any claim doing rhetorical work without evidentiary support?
 - Does the answer actually satisfy the constraints from stage 1, or did it drift toward a nearby easier problem?
 - If the answer is code or math: trace it. Walk through execution with a concrete input; recompute the arithmetic independently rather than re-reading it.
+- Sweep the draft against the anti-patterns list at the end of this skill. Each match is a defect to repair, not a caveat to append.
 
 If the review finds a real flaw, fix the answer — don't just append a caveat. Caveats are for genuine residual uncertainty, not for flaws you were too lazy to repair.
 
@@ -81,7 +87,7 @@ Anything checkable must be checked before it ships:
 
 ## Reference files — load by task type
 
-Load every reference whose condition matches the task; most substantive tasks match two or three. For hard tasks, when in doubt, load it.
+Load every reference whose condition matches the task; most substantive tasks match two or three. For hard tasks, when in doubt, load it. "Load" means Read the file from this skill's `references/` directory before starting the Core Loop — recalling what a reference probably says is not loading it, and skipping the Read is how this skill degrades back into the model's default behavior.
 
 - **`references/reasoning-moves.md`** — Load for any hard task, and whenever you are stuck, the problem resists your first decomposition, or the task is novel. The core thinking toolkit: decomposition patterns, backward chaining, inversion, extreme-case testing, representation changes, estimation anchors.
 - **`references/decision-standards.md`** — Load for decisions, evaluations, recommendations, tradeoff analysis, "should I / which one / is this a good idea" tasks. Verdict construction, tradeoff framing, reversibility weighting, pre-mortems, honest negative verdicts.
