@@ -1,6 +1,7 @@
 ---
 name: review-against-plan
-description: Load when the user wants to audit or verify that the current codebase matches a SKELETON.md or ITER_NN.md planning document — including version-tagged variants like SKELETON_v2.md or v2_ITER_03.md. For each in-scope section, checks the actual implementation against the spec, identifies gaps, deviations, and errors, then fixes them. Trigger when the user says "review against plan", "check implementation", "audit the spec", "verify the plan is implemented", "review the v2 plan", "audit v2 iter plans", "did I implement everything", "plan compliance check", or points to a plan file (any version tag) and asks to check, review, audit, or verify whether the implementation matches it.
+disable-model-invocation: true
+description: Audit or verify that the current codebase matches a SKELETON.md or ITER_NN.md planning document — including version-tagged variants like SKELETON_v2.md or v2_ITER_03.md. For each in-scope section, checks the actual implementation against the spec, identifies gaps, deviations, and errors, then fixes them.
 ---
 
 # Review Against Plan

@@ -5,6 +5,44 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.19.1] — 2026-07-12
+
+Sixteen task/workflow skills across eight plugins are now **user-invocation only**: each gets
+`disable-model-invocation: true` so the model no longer auto-triggers it, and its description is
+trimmed of triggering scaffolding (the `Trigger when the user says "…"` phrase lists, `Auto-load`/
+`Load when` clauses, keyword stuffing) while keeping the one-line capability statement and the
+`Not for X, use Y` disambiguation pointers. These are explicit tasks a user directs — plan an app,
+implement/review a plan, write a business plan or blog post, evaluate a skill, summarize the chat,
+extract lessons, orchestrate, or run a release flow — not reference standards that should fire on a
+code moment.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-blog` | v1.0.8 |
+| `ceh-business-plan` | v1.0.1 |
+| `ceh-evaluation` | v1.1.4 |
+| `ceh-summarize-chat` | v2.0.4 |
+| `ceh-lessons-learned` | v2.0.5 |
+| `ceh-orchestration` | v1.0.2 |
+| `ceh-release-flow` | v1.1.5 |
+| `ceh-plan-build-review` | v1.0.6 |
+
+### Changed
+
+- **`ceh-blog`** — `blog-interviewer`, `blog-writer`, `blog-editor`, `blog-repurpose` set to
+  user-invocation only (descriptions were already trigger-phrase-free; flag added).
+- **`ceh-business-plan` / `develop-business-plan`**, **`ceh-evaluation` / `evaluate-skill`,
+  `evaluate-skill-lite`**, **`ceh-summarize-chat` / `summarize-chat`**, **`ceh-orchestration` /
+  `orchestrate`**, **`ceh-release-flow` / `release-flow`, `direct-release-flow`** — set to
+  user-invocation only; trigger-phrase lists removed from descriptions.
+- **`ceh-lessons-learned` / `lessons-learned`** — set to user-invocation only; removed the
+  "trigger proactively at the end of a session" clause that contradicted the new flag.
+- **`ceh-plan-build-review`** — all four skills (`plan-fullstack-app-iteratively`,
+  `plan-fullstack-app-to-mvp`, `implement-from-plan`, `review-against-plan`) set to user-invocation
+  only; these are explicit tasks pointed at a specific artifact, not proactive code-moment skills.
+
 ## [3.19.0] — 2026-07-12
 
 The `ceh-web-frontend` design-system skill becomes **`ui-design`** — expanded from a theme-picker

@@ -1,6 +1,7 @@
 ---
 name: direct-release-flow
-description: "Load when shipping a complete project release in one pass directly on main, with no PR and no merge — bump the version, update the changelog/README/CLAUDE.md, commit straight to main, then tag and publish the release. Trigger on \"run the release flow without a PR\", \"do the full release directly on main\", \"release this project without opening a PR\", \"bump version, update docs, commit, tag and release\", or \"cut a release without a PR\". This skill only sequences the steps and gates between them; it delegates each step to the skill that owns it (update-changelog, update-readme, commit, release). For the PR-gated variant use ceh-release-flow:release-flow; for tagging alone use ceh-git-workflow:release; for an urgent production fix use ceh-git-workflow:hotfix."
+disable-model-invocation: true
+description: "Ship a complete project release in one pass directly on main, with no PR and no merge — bump the version, update the changelog/README/CLAUDE.md, commit straight to main, then tag and publish the release. This skill only sequences the steps and gates between them; it delegates each step to the skill that owns it (update-changelog, update-readme, commit, release). For the PR-gated variant use ceh-release-flow:release-flow; for tagging alone use ceh-git-workflow:release; for an urgent production fix use ceh-git-workflow:hotfix."
 ---
 
 # Direct Release Flow

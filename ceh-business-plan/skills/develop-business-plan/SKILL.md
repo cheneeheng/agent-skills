@@ -1,16 +1,14 @@
 ---
 name: develop-business-plan
+disable-model-invocation: true
 description: >-
-  Use this skill to turn a product idea — or an existing app/product plan — into a validated
-  business plan with a clear product-market fit. Triggers include: write a business plan, help me
-  with a business plan, build a business plan from my app plan, is there product-market fit for
-  this, validate my product idea, who would pay for this, find the market for X, pressure-test my
-  startup idea, what is the go-to-market, business case for this. If app plans exist (the
-  plan-build-review SKELETON.md / ITER_NN.md files) or the user provides any plan, PRD, spec, or
-  pitch, this skill reads them first and drafts proactively; otherwise it starts by interviewing.
-  It then loops — interrogate the weakest assumption, revise the plan — until a product-market-fit
-  readiness gate passes and the user is satisfied. Not for the technical build plan of the app
-  itself (use ceh-plan-build-review) and not for a marketing blog post (use ceh-blog).
+  Turn a product idea — or an existing app/product plan — into a validated business plan with a
+  clear product-market fit. If app plans exist (the plan-build-review SKELETON.md / ITER_NN.md
+  files) or the user provides any plan, PRD, spec, or pitch, this skill reads them first and drafts
+  proactively; otherwise it starts by interviewing. It then loops — interrogate the weakest
+  assumption, revise the plan — until a product-market-fit readiness gate passes and the user is
+  satisfied. Not for the technical build plan of the app itself (use ceh-plan-build-review) and not
+  for a marketing blog post (use ceh-blog).
 ---
 
 # Develop Business Plan

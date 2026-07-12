@@ -696,3 +696,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** (a) Renamed to `ui-design` — short, unambiguous within the web-frontend plugin namespace; kept "design system" as a trigger phrase in the description so old phrasing still fires. Alternatives `visual-design` / `ui-visual-design` rejected as vaguer/clunkier. (b) Added `references/examples.md` (good/bad markup per rule section) despite the references-policy wording — explicit user instruction overrides the convention; single file, not shared across skills. (c) Bumped plugin 3.1.1 → 3.2.0 (MINOR) because the rename changes the skill's invocation name, which is more than a content PATCH.
 **Impact / Risk:** Users invoking `/ceh-web-frontend:design-system` by exact name must switch to `/ceh-web-frontend:ui-design`; historical CHANGELOG/eval references to the old name left untouched intentionally.
 **Outcome:** validate.py passes; all changes uncommitted on feat/design-system-visual-design.
+
+### Entry 1
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-12
+**Task:** release-flow for the disable-model-invocation change (repo v3.19.1)
+
+**Context:** The release-flow pipeline says branch `chore/release-vX.Y.Z` from main and bump versions there. But the release's actual changes (16 SKILL.md edits) and the 8 per-plugin version bumps already existed uncommitted on the working branch `chore/disable-model-invocation-user-only-skills`.
+**Decision:** Reuse the existing feature branch as the release branch rather than creating `chore/release-v3.19.1`; the release IS these changes, so a separate branch would just be churn. Repo tag bump is PATCH (v3.19.0 → v3.19.1) — content/description + frontmatter only, no new skills or agents.
+**Impact / Risk:** Branch name does not match the `chore/release-*` convention; low risk (cosmetic). Tag/release still cut on main after merge per the hard rules.
+**Outcome:** Pending merge + tag.

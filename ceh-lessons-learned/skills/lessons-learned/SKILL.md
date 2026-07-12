@@ -1,6 +1,7 @@
 ---
 name: lessons-learned
-description: Extract lessons learned from the current conversation and append them to LESSONS_LEARNED.md. Trigger when the user asks to "extract lessons learned", "do a retrospective", "capture what went wrong", or "write up lessons learned". Also trigger proactively at the end of a session that involved notable errors or rework — the user may not think to ask.
+disable-model-invocation: true
+description: Extract lessons learned from the current conversation — reviewing the session for moments that went wrong or required rework — and append them to LESSONS_LEARNED.md.
 ---
 
 # Lessons Learned Extractor

@@ -1,16 +1,15 @@
 ---
 name: evaluate-skill-lite
+disable-model-invocation: true
 description: >-
-  Use this skill for a fast, cheap sanity check on a Claude Code skill or plugin while you are still
-  writing or iterating on it — not the full ship gate. Triggers include: quick check my skill, lite
-  eval, dev check this skill, fast skill check, sanity-check my skill, will this trigger, quick
-  triggering check, is the description sharp enough, give me a cheap pass before I keep editing. It
-  runs only the three cheap dimensions — structural integrity, triggering accuracy (single pass, no
-  N-run statistics), and content quality against the shared rubric — and deliberately SKIPS the
-  expensive behavioral-lift battery (paired with/baseline subagents across N runs), reporting the gate
-  as partial (4/6 measured, criteria 5–6 unproven). For the full evidence-based verdict with behavioral
-  lift before shipping, use ceh-evaluation:evaluate-skill instead. Not for writing a skill from scratch
-  (that is authoring) and not for general code review of an application.
+  A fast, cheap sanity check on a Claude Code skill or plugin while you are still writing or
+  iterating on it — not the full ship gate. Runs only the three cheap dimensions — structural
+  integrity, triggering accuracy (single pass, no N-run statistics), and content quality against the
+  shared rubric — and deliberately SKIPS the expensive behavioral-lift battery (paired with/baseline
+  subagents across N runs), reporting the gate as partial (4/6 measured, criteria 5–6 unproven). For
+  the full evidence-based verdict with behavioral lift before shipping, use
+  ceh-evaluation:evaluate-skill instead. Not for writing a skill from scratch (that is authoring) and
+  not for general code review of an application.
 ---
 
 # Evaluate Skill — Lite

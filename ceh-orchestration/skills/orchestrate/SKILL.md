@@ -1,6 +1,7 @@
 ---
 name: orchestrate
-description: Load when starting a large, multi-step task with several heterogeneous or investigation-heavy parts that you want to decompose and delegate rather than execute directly — to cap context/token cost by keeping the main session lean and pushing all file I/O and execution into cheap isolated subagents. Trigger when the user says "orchestrate this", "act as orchestrator", "thin orchestrator mode", "delegate this", "plan and delegate", "don't edit directly", "fan this out to subagents", or asks to coordinate cheap workers on a big multi-area change. Not for mechanical single-pass changes where a scripted edit plus a typecheck is cheaper than delegating (e.g. a repo-wide rename), nor for a single one-off subagent dispatch. Stays in effect for the rest of the session once entered.
+disable-model-invocation: true
+description: Enter thin-orchestrator mode for a large, multi-step task with several heterogeneous or investigation-heavy parts — decompose and delegate rather than execute directly, capping context/token cost by keeping the main session lean and pushing all file I/O and execution into cheap isolated subagents. Not for mechanical single-pass changes where a scripted edit plus a typecheck is cheaper than delegating (e.g. a repo-wide rename), nor for a single one-off subagent dispatch. Stays in effect for the rest of the session once entered.
 ---
 
 # Orchestrate

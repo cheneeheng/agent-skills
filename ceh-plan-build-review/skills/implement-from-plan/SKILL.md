@@ -1,6 +1,7 @@
 ---
 name: implement-from-plan
-description: Load when the user has a SKELETON.md or ITER_NN.md planning document — including version-tagged variants like SKELETON_v2.md or v2_ITER_03.md — and wants to implement it. Reads plan frontmatter to determine artifact type and scope, then implements each in-scope section in order (§01–§06), resolving iteration pointers and depends_on chains to find authoritative specs. Trigger when the user says "implement from plan", "implement this spec", "implement SKELETON", "implement ITER", "implement the v2 plan", "implement v2 iter plans", "build the v3 skeleton", "build from the plan", "start implementing", or points to a SKELETON.md or ITER_NN.md (any version tag) and asks to build, implement, or execute it. Also trigger when the user opens a planning doc and says "let's go" or "let's build this".
+disable-model-invocation: true
+description: Implement a SKELETON.md or ITER_NN.md planning document — including version-tagged variants like SKELETON_v2.md or v2_ITER_03.md. Reads plan frontmatter to determine artifact type and scope, then implements each in-scope section in order (§01–§06), resolving iteration pointers and depends_on chains to find authoritative specs.
 ---
 
 # Implement From Plan
