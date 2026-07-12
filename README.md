@@ -76,7 +76,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-web-frontend` | React + Vite | `/ceh-web-frontend:react-vite` | Working on React components, hooks, routing, or Vite config |
 | `ceh-web-frontend` | Frontend Testing | `/ceh-web-frontend:frontend-testing` | Writing Vitest, Testing Library, MSW, or Playwright tests |
 | `ceh-web-frontend` | Accessibility | `/ceh-web-frontend:accessibility` | Writing component markup (Svelte or React) |
-| `ceh-web-frontend` | Design System | `/ceh-web-frontend:design-system` | Giving a frontend its visual design — picking a look/feel, theme, or brand from bundled templates |
+| `ceh-web-frontend` | UI Design | `/ceh-web-frontend:ui-design` | Frontend UI visual design — layout, hierarchy, navigation, states, plus theme/brand from bundled templates |
 | `ceh-scaffolding` | Scaffold Python Service | `/ceh-scaffolding:scaffold-python-service` | Starting a FastAPI/Python web service repo |
 | `ceh-scaffolding` | Scaffold Python Library | `/ceh-scaffolding:scaffold-python-library` | Starting a distributable Python library/package |
 | `ceh-scaffolding` | Scaffold Web Frontend | `/ceh-scaffolding:scaffold-web-frontend` | Starting a SvelteKit or React + Vite frontend |
