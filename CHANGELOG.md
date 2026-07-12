@@ -5,6 +5,39 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.19.0] — 2026-07-12
+
+The `ceh-web-frontend` design-system skill becomes **`ui-design`** — expanded from a theme-picker
+into a comprehensive, framework-agnostic frontend UI visual design skill: the design decisions
+(layout, hierarchy, navigation, states, density) now come first, with the bundled theme templates
+as one layer of the whole.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-web-frontend` | v3.2.0 |
+
+### Changed
+
+- **`ceh-web-frontend` / `ui-design`** — renamed from `design-system` (the old name read as
+  backend/DB system design; "design system" remains a trigger phrase in the description) and
+  expanded into the full visual layer: a five-question design pass run before any markup, four
+  layout archetypes (app shell, top-nav, focused flow, dashboard grid) with content-width and
+  spacing-rhythm rules, hierarchy rules (one primary action per view, when a page title appears
+  vs. repeats the nav label, "boxes are not structure"), navigation placement (sidebar vs. top bar
+  vs. tabs vs. breadcrumbs, frequency ordering, active-state requirement), color/depth discipline,
+  designed empty/loading/error/overflow states, density matching, a generic-AI anti-pattern list,
+  and a six-point review pass. The original Meridian/Tidewater template workflow is kept,
+  condensed into a "Theme layer" section.
+
+### Added
+
+- **`ceh-web-frontend` / `ui-design` / `references/examples.md`** — worked good/bad markup for
+  each rule section (layout, spacing, header anatomy, navigation, color, states, density), built
+  on the theme token/class contract; kept as a single file because the sections are consumed
+  together when building a page.
+
 ## [3.18.0] — 2026-07-10
 
 `ceh-fabled` grows from one skill to three: a plan-review skill that raises an existing plan to
