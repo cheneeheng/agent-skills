@@ -1,5 +1,6 @@
 ---
 name: blog-interviewer
+disable-model-invocation: true
 description: Interview the user to shape a blog post, then draft it — for when the starting point is only a topic, idea, repo, or experience with nothing written yet. For ready-made notes use blog-writer; for an existing draft use blog-editor.
 ---
 

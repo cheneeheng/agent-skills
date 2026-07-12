@@ -1,18 +1,13 @@
 ---
 name: plan-fullstack-app-iteratively
+disable-model-invocation: true
 description: >-
-  Use this skill to plan a software project one release at a time: each session
-  produces a single artifact scoped to the next build, never the finished product.
-  Triggers include: help me plan the next feature, plan the next version, plan this
-  iteration, what should I build first, help me think through this architecture, create
-  a skeleton plan for a new app, pre-development planning, or any time a user describes
-  one piece of work to plan without committing to the whole roadmap. ALWAYS use this
-  skill even for vague or early-stage descriptions — it handles ambiguity. Covers
-  greenfield skeletons and iterative feature planning for existing apps. This is the
-  incremental counterpart to plan-fullstack-app-to-mvp: choose THIS skill to plan one
-  release at a time, and choose plan-fullstack-app-to-mvp when the user wants the entire
-  build from skeleton to a finished MVP in a single session (e.g. 'plan the whole
-  thing', 'I dont want to keep re-planning').
+  Plan a software project one release at a time: each session produces a single artifact
+  scoped to the next build, never the finished product. Handles vague or early-stage
+  descriptions. Covers greenfield skeletons and iterative feature planning for existing
+  apps. The incremental counterpart to plan-fullstack-app-to-mvp: choose THIS skill to
+  plan one release at a time, and choose plan-fullstack-app-to-mvp when the entire build
+  from skeleton to a finished MVP is wanted in a single session.
 ---
 
 # Plan Fullstack App Iteratively
