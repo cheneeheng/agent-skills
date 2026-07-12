@@ -684,3 +684,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** Targeted enforcement edits to fabled/SKILL.md only: (1) triage must be *written* as the first reasoning line (was "silently" — on a low-thinking-budget model that means never); (2) reference loading hooked into triage as a pre-stage-1 action and "load" defined as a Read tool call, since the section sat after the Core Loop and was skippable; (3) stage 4 now sweeps the draft against the anti-patterns list, which was previously passive; (4) discipline declared session-persistent, matching what invoking Fable actually does; (5) description gains "as fable"/"fable mode" trigger phrases (plan-review had them, the core skill did not). fabled-plan-review and fabled-stuck left unchanged — already imperative, self-contained, correct relative paths. No version re-bump: content edits to the pending uncommitted 1.1.0 (Entry 39 precedent).
 **Impact / Risk:** Content-only; slightly longer SKILL.md. Risk of over-instruction on trivial tasks is bounded by the existing trivial-tier escape hatch.
 **Outcome:** validate.py passes.
+
+### Entry 41
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-12T00:00:00+02:00
+**Task:** Rename ceh-web-frontend design-system skill and add per-section examples.
+
+**Context:** User asked "should we rename" without naming a target; also asked for examples under references/, which the repo CLAUDE.md reserves for schemas/templates shared across skills.
+**Decision:** (a) Renamed to `ui-design` — short, unambiguous within the web-frontend plugin namespace; kept "design system" as a trigger phrase in the description so old phrasing still fires. Alternatives `visual-design` / `ui-visual-design` rejected as vaguer/clunkier. (b) Added `references/examples.md` (good/bad markup per rule section) despite the references-policy wording — explicit user instruction overrides the convention; single file, not shared across skills. (c) Bumped plugin 3.1.1 → 3.2.0 (MINOR) because the rename changes the skill's invocation name, which is more than a content PATCH.
+**Impact / Risk:** Users invoking `/ceh-web-frontend:design-system` by exact name must switch to `/ceh-web-frontend:ui-design`; historical CHANGELOG/eval references to the old name left untouched intentionally.
+**Outcome:** validate.py passes; all changes uncommitted on feat/design-system-visual-design.
