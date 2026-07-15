@@ -5,6 +5,32 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.19.2] — 2026-07-15
+
+The `ceh-web-frontend` `ui-design` skill gains a **finishing recipes** layer, extracted from a
+real iterative UI-refresh session so first-pass output lands at post-review quality: a UI that
+follows every core rule can still read as a primitive draft (default tables, raw symbols, status
+as plain text, buttons floating in space), and these recipes close that gap on the first build.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-web-frontend` | v3.2.1 |
+
+### Changed
+
+- **`ceh-web-frontend` / `ui-design`** — new *Finishing recipes* part: command dock for global
+  state and its single action, eyebrow-above-panel section headers, humanized tables (words not
+  symbols, lifecycle pills, semantic current-row highlight), lifecycle colors + node-and-rail
+  steppers, identity monograms, stat blocks, recessed/auto-grow inputs, app-wide themed
+  scrollbars, and a one-motion micro-interaction rule. Core rules gain the surface-ladder depth
+  rule (`--bg` chrome / `--surface` command surfaces / `--surface-2` clickable cards). Six new
+  "finish tell" anti-patterns and a seventh *finish audit* review-pass item. SKILL.md restructured
+  into four parts (design pass / core rules / finishing recipes / quality gates) with a 4-step
+  workflow intro; `references/examples.md` gains worked token-compliant markup per recipe;
+  description gains polish/primitive trigger phrases.
+
 ## [3.19.1] — 2026-07-12
 
 Sixteen task/workflow skills across eight plugins are now **user-invocation only**: each gets
