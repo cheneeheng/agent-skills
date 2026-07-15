@@ -14,7 +14,7 @@ stay single-sourced.
 | React + Vite | `/ceh-web-frontend:react-vite` | Editing React components, hooks, routing, or `vite.config.ts` |
 | Frontend Testing | `/ceh-web-frontend:frontend-testing` | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers |
 | Accessibility | `/ceh-web-frontend:accessibility` | Writing component markup (Svelte or React) |
-| UI Design | `/ceh-web-frontend:ui-design` | Any frontend UI visual design decision — layout archetypes, hierarchy, navigation placement, empty/loading/error states, density — plus theming from bundled token-driven templates (Meridian, Tidewater) |
+| UI Design | `/ceh-web-frontend:ui-design` | Any frontend UI visual design decision — layout archetypes, hierarchy, navigation placement, empty/loading/error states, density, finishing recipes (command dock, humanized tables, lifecycle steppers) — plus theming from bundled token-driven templates (Meridian, Tidewater) |
 
 > `environment` consolidates the former `coding-style` and `linting` skills so TypeScript style and
 > quality gates fire on file edits, matching the Python plugins' single environment skill

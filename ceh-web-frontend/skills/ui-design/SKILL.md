@@ -2,37 +2,42 @@
 name: ui-design
 description: >-
   Load when making any frontend UI visual design decision — laying out a page or app shell, placing
-  navigation, deciding whether a title/section/card appears, establishing hierarchy and spacing, or
-  picking a look and feel, theme, or brand before building UI, or restyling an existing app. Covers
-  the full visual layer: layout archetypes, hierarchy, navigation placement, color/depth usage,
-  empty/loading/error states, density, and a bundled token-driven theme (Meridian, Tidewater).
+  navigation, deciding whether a title/section/card appears, establishing hierarchy and spacing,
+  picking a look and feel, theme, or brand before building UI, or restyling/polishing an existing
+  app. Covers the full visual layer: layout archetypes, hierarchy, navigation placement,
+  color/depth usage, empty/loading/error states, density, finishing recipes, and a bundled
+  token-driven theme (Meridian, Tidewater).
   Auto-load on: design the UI, lay out this page, where should the nav go, make it look
-  good/modern/professional, style my app, pick a theme/design system, apply a brand, review this UI
-  design, or starting the visual layer of a new frontend. Framework-agnostic — plain HTML,
-  SvelteKit, React, or anything else. Not for accessibility/WCAG fixes (accessibility), tooling
-  setup (environment), component/route logic (react-vite, sveltekit), or API/DB schema design.
+  good/modern/professional, polish this UI, the UI looks primitive/basic/plain, style my app, pick
+  a theme/design system, apply a brand, review this UI design, or starting the visual layer of a
+  new frontend. Framework-agnostic — plain HTML, SvelteKit, React, or anything else. Not for
+  accessibility/WCAG fixes (accessibility), tooling setup (environment), component/route logic
+  (react-vite, sveltekit), or API/DB schema design.
 ---
 
 # Frontend UI Visual Design
 
-Deliver a UI that is modern, intuitive, and coherent by working in two layers, in this order:
+Deliver a UI that is modern, intuitive, and coherent. Work in this order:
 
-1. **Design decisions** — layout, hierarchy, navigation, states, density. Made *before* markup,
-   using the rules below. These are framework-agnostic: they hold for plain HTML, SvelteKit, React,
-   or any other stack.
-2. **Theme** — colors, type, spacing values, component styles. Never hand-rolled: install one of the
-   bundled token-driven templates (see *Theme layer* below) and build against its contract.
+1. **Design pass** — answer the five questions below *before* writing any markup.
+2. **Theme** — install one of the bundled token-driven templates (*Theme layer*, end of this file).
+   Never hand-roll colors, type, or spacing.
+3. **Build** — apply the *Core rules* and *Finishing recipes* below, consulting
+   `references/examples.md` (worked good/bad markup per section) and the chosen theme's
+   `brand-guide.html`.
+4. **Review pass** — run the checklist before calling the UI done.
 
-Most bad UI is not a bad theme — it is unexamined defaults: everything centered, everything boxed,
-uniform spacing, no visual priority. The design pass exists to force those decisions explicitly.
+Two failure modes produce almost all bad UI, and this file targets both:
 
-Worked good/bad markup for the rule sections below lives in `references/examples.md` — consult it
-when building, alongside the chosen theme's `brand-guide.html`.
+- **Unexamined defaults** — everything centered, everything boxed, uniform spacing, no visual
+  priority. The design pass and core rules force those decisions explicitly.
+- **The primitive draft** — structurally correct but unfinished: default table styling, raw
+  symbols for data, status as plain text, buttons floating in space. The finishing recipes close
+  that gap on the first build, not after review.
 
 ## The design pass
 
-Before writing any markup, answer these five questions and state the answers (one line each) so the
-choices are reviewable:
+Answer these five questions and state the answers (one line each) so the choices are reviewable:
 
 1. **What kind of surface is this?** Data-dense tool, content/marketing page, focused single-task
    flow, or metric overview. This classification drives every later choice.
@@ -41,7 +46,9 @@ choices are reviewable:
 4. **Which theme template?** (Theme layer below)
 5. **What do empty, loading, and error look like?** Designed now, not retrofitted.
 
-Then build, then run the *Review pass* at the end.
+---
+
+# Core rules
 
 ## Layout
 
@@ -102,7 +109,8 @@ key-value cards — never squash columns.
 - Skip the standalone title when it would only repeat the active nav item with zero added
   information — in an app shell, the highlighted nav item already says "Dashboard"; a lone
   "Dashboard" `h1` under it is noise. Either add value (count, date range, status) or drop it and
-  promote the content.
+  promote the content — in app shells, the eyebrow-above-panel header (*Finishing recipes*) is the
+  usual replacement.
 - Focused flows title the *task*, not the app: "Create your account", not "Signup Page".
 - Standard header anatomy when a title exists: optional eyebrow (uppercase micro-label for
   category/context) → title → one-line description → header-level actions right-aligned on the same
@@ -132,6 +140,11 @@ key-value cards — never squash columns.
   successful, at risk, or destructive — never as decoration or variety.
 - **One depth language.** The templates each pick it (Meridian: soft shadows; Tidewater: borders).
   Do not add both a border and a shadow and a background tint to the same element.
+- **Layer the page with the surface ladder.** The three background tokens are a depth ladder, not
+  interchangeable fills: page chrome (topbar, sidebar) sits on `--bg` and recedes; command
+  surfaces (docks, framed panels) sit on `--surface`; interactive, clickable cards step up to
+  `--surface-2` so the brightest things on screen are the ones that open. When chrome, toolbar,
+  and content all share one background they blend into a single slab.
 - Data-viz uses the `--data-*` ramp in order; do not invent chart colors.
 
 ## States: design the unhappy paths first
@@ -155,9 +168,117 @@ Match density to usage frequency: tools someone uses all day run dense (32–36p
 (generous `--space-8+` sections, larger type). Choose once per surface and apply consistently —
 mixed density inside one view reads as broken.
 
-## Anti-patterns — the generic-AI tells
+---
 
-Reject these on sight, in your own output and in review:
+# Finishing recipes
+
+The core rules make a UI *correct*; these recipes make it *finished*. Apply them on the first
+build. In page order: the command dock (global state), section headers, then how data is displayed
+(tables, lifecycle colors, monograms, stat blocks), then controls and motion. Worked markup for
+each lives in `references/examples.md`.
+
+## Command dock — global state and its action
+
+When app-wide state exists (a current run, round, or selection) with one primary action on it, do
+not cram it into the topbar and do not repeat it per page. The topbar stays brand + nav; the state
+gets a **dock**: a bordered, rounded card floating below the chrome, width-aligned with the
+content column so its edges share the cards' gutter.
+
+- **Three panels split by hairline vertical rules, each panel's content centered.** Centered
+  blocks floating in open space read as accidental; centered inside delineated panels read as
+  deliberate — the rules are what license the centering.
+- **Left — identity:** eyebrow (`CURRENT ROUND`) → the state's name at display size (the dock's
+  focal point), with metadata as quiet mono chips on the title line, not raw hyperlinks.
+- **Center — the action:** the one primary action as an accent-filled pill with a one-line muted
+  micro-caption beneath saying what it does ("runs the 2 queued orders"). The center always
+  carries the state's *current* call-to-action — a live progress line while running, the review
+  action when finished — and collapses (rules included) when there is no action.
+- **Right — outcome:** mirror the left's anatomy with an eyebrow + stat block for the last result;
+  the whole panel is a quiet link to the detail/history view.
+- Optionally crown the dock with a 2–3px accent rule across its top, echoing the primary button.
+- Hide the dock entirely when there is no state and no history — a fresh install gets no empty band.
+- **State lives once:** anything the dock shows disappears from individual views — no second
+  primary button, no repeated status heading, no duplicate cost readout anywhere in the app.
+
+## Section headers — eyebrow above the panel
+
+- Label every list, table, and grid section with an uppercase eyebrow plus count (`PROJECTS · 2`)
+  and a one-line muted caption explaining what the section is.
+- The header sits on the page **above** the panel — never inside the card.
+- Use the same vocabulary on every view (`PROJECTS`, `QUEUED ORDERS`, `ROUND HISTORY`) so the
+  pages read as one system. This replaces the redundant page title.
+
+## Humanized tables
+
+Default table styling is the strongest primitive tell. Every data table gets this treatment:
+
+- **Frame it:** the table lives alone in a surface panel; its eyebrow header sits above the panel.
+- **Cells read as words, not symbols:** "Round 2", not a `#` column with a bare integer; outcomes
+  as color-coded words ("1 succeeded" in success, "2 failed" in danger).
+- **Show only what happened:** a red zero is noise — omit zero counts, use an em dash when
+  nothing ran.
+- **Status is a colored pill** from the lifecycle palette (next recipe), never plain text.
+- Numbers use tabular figures; rows get a hover wash and pointer; rows that navigate are keyboard
+  operable (`tabindex="0"` + Enter); the last row drops its separator.
+- **Highlight the semantically current row, not the first row:** key the highlight to state
+  ("the open one") so it retires when the state closes. Idiom: a 2–3px brand edge on the leading
+  side plus a faint brand wash, drawn with an inset shadow so column alignment does not shift.
+- Any table containing form fields uses `table-layout: fixed` so content cannot renegotiate
+  column widths.
+
+## Lifecycle colors and flow
+
+For any domain state machine (draft → running → review → done):
+
+- Assign each stage one color **once** and use it in every representation — status badge, stepper
+  node, history pill — so color alone identifies the stage anywhere in the app.
+- Show progression as a **node-and-rail stepper**, not text: small nodes joined by a continuous
+  rail, stage labels beneath.
+- Past stages muted; the current node lit in its stage color with a soft halo, pulsing only while
+  actively running; future stages ghosted. The rail fills through the current node so a transition
+  visibly flows forward.
+
+## Identity monograms
+
+- Entity cards and rows lead with a small rounded monogram tile: the entity's initial on a wash
+  tint picked from the `--data-*` ramp by a stable name hash, with a matching hairline border —
+  every entity keeps its color everywhere it appears.
+- On hover or keyboard focus, slide in a `→` at the card's corner so "this opens" is unmistakable.
+
+## Stat blocks
+
+- Summary numbers are stats, not sentences: the value at stat size (`--fs-500`, tabular figures)
+  over a tiny muted label, an eyebrow above the group.
+- Semantic color on the value only when it carries state, and only when nonzero.
+- A stat block that navigates is one quiet link — no underline; tint the eyebrow on hover.
+
+## Inputs on dense surfaces
+
+- A field inside a card is a **recessed well**: `--bg` fill one rung below its card, hairline
+  border, brightening on hover, brand border on focus — visible at rest, never a ghost that only
+  appears on hover.
+- Free text of unpredictable length is an auto-growing textarea: `field-sizing: content` with a
+  one-line min-height and a viewport-relative max, plus `overflow-wrap: anywhere` so an unbroken
+  string wraps instead of widening the layout.
+- Placeholders are ≤3 words ("add instruction…"); the full explanation goes in the tooltip. A long
+  placeholder wraps and forces scrollbars in an empty field.
+- Theme scrollbars app-wide: `scrollbar-width: thin` with a `--border-strong` thumb on
+  transparent — the OS-default chunky scrollbar breaks any polished surface it appears on.
+
+## Micro-interactions
+
+Exactly one small motion per interactive element, using the theme's motion tokens: the primary
+action may lift with a deeper shadow or rotate its glyph on hover; affordances (the monogram `→`)
+slide in on hover/focus; state changes transition color rather than snapping. Never animate more
+than one property group per element, and never decorate static content with motion.
+
+---
+
+# Quality gates
+
+## Anti-patterns — reject on sight
+
+Structure tells (a design pass never happened):
 
 - Everything centered — body text, forms, and headers all on the center axis.
 - Every section boxed: border + shadow + background tint on the same element, cards inside cards.
@@ -170,6 +291,15 @@ Reject these on sight, in your own output and in review:
 - Five type sizes or three font families in one view.
 - Happy path only — empty/loading/error left as afterthoughts.
 
+Finish tells (the primitive draft shipped):
+
+- Topbar, toolbars, and content cards all on the same background — no depth ladder, one slab.
+- A `#` column header, bare integers, or raw symbols where a word fits ("Round 2", "3 failed").
+- A zero rendered in the danger color — show only what happened.
+- A state machine rendered as plain text when its stages are known.
+- Global state or its primary action repeated on individual views (two "End turn" buttons).
+- OS-default scrollbars inside a themed surface.
+
 ## Review pass
 
 Before calling the UI done, verify:
@@ -181,6 +311,9 @@ Before calling the UI done, verify:
 4. **One primary action** per view; active nav state visible; title rule applied.
 5. **State coverage:** empty, loading, error, overflow all handled.
 6. **Token compliance:** no hardcoded hex, px sizes, or shadows — `var(--token)` everywhere.
+7. **Finish audit:** depth ladder distinct (chrome vs command surfaces vs clickable cards); table
+   cells read as words with lifecycle colors consistent across every representation; section
+   eyebrows share one vocabulary; global state and its action appear exactly once.
 
 ---
 
