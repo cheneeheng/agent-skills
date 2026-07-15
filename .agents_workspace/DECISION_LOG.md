@@ -708,3 +708,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** Reuse the existing feature branch as the release branch rather than creating `chore/release-v3.19.1`; the release IS these changes, so a separate branch would just be churn. Repo tag bump is PATCH (v3.19.0 → v3.19.1) — content/description + frontmatter only, no new skills or agents.
 **Impact / Risk:** Branch name does not match the `chore/release-*` convention; low risk (cosmetic). Tag/release still cut on main after merge per the hard rules.
 **Outcome:** Pending merge + tag.
+
+### Entry 42
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-15T00:00:00+02:00
+**Task:** Fold the UI-polish lessons from session d12296e3 (claude-code-command-center UI refresh) into ceh-web-frontend:ui-design.
+
+**Context:** User asked to extract "core ideas and design choices" from the transcript so future skill invocations reach the session's final quality first-pass; which lessons count as generalizable vs app-specific, and where they land in the skill, was left to me.
+**Decision:** (a) Generalized nine patterns (depth ladder, command dock, eyebrow-above-panel headers, humanized tables, lifecycle colors + node-and-rail stepper, identity monograms, stat blocks, recessed/auto-grow inputs + themed scrollbars, single micro-interaction) and dropped app-specific content (round semantics, End Turn, terracotta-specific choices — expressed via tokens instead). (b) Structured as a new "Finishing recipes — past the primitive draft" section rather than scattering across existing sections, because the session's failure mode was a distinct *finishing* gap, not a rule violation; depth ladder alone merged into "Color and depth" where it natively belongs. (c) Added six anti-patterns, a 7th review-pass "finish audit" item, polish/primitive trigger phrases, and worked markup in references/examples.md (Entry 41 precedent for that file). (d) PATCH bump 3.2.0 → 3.2.1 in plugin.json + marketplace.json — content-only.
+**Impact / Risk:** SKILL.md grows ~90 lines; risk of over-prescribing the dock pattern on apps without global state is bounded by the "when app-wide state exists" precondition.
+**Outcome:** validate.py passes; changes uncommitted on feat/ui-design-polish-layer.
