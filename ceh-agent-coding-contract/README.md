@@ -13,11 +13,15 @@ contract automatically at session start, alongside the `write-less-code` minimal
 |-------|---------------|--------------|
 | `agent-coding-contract` | Every coding session (auto, via hook) | The full behavioral contract — role, core rules, five-step workflow, stop conditions, decision logging. |
 | `write-less-code` | Every coding session (auto, via hook) | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules. |
+| `shrink-diff` | On demand — when a feature branch is functionally done and its diff should get smaller before review | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code. |
+| `refactor-repo` | Manual only (`/refactor-repo`) — never auto-fires | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate. |
 
 **Manual triggers**
 
 - `agent-coding-contract` — `/agent-coding-contract`, or say `"load the contract"` / `"agent contract"` / `"coding contract"`.
 - `write-less-code` — `/write-less-code`, or say `"write less code"` / `"be lazy"` / `"simplest solution"` / `"yagni"`.
+- `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
+- `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
 
 ## How the skills auto-load
 

@@ -720,3 +720,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** (a) Generalized nine patterns (depth ladder, command dock, eyebrow-above-panel headers, humanized tables, lifecycle colors + node-and-rail stepper, identity monograms, stat blocks, recessed/auto-grow inputs + themed scrollbars, single micro-interaction) and dropped app-specific content (round semantics, End Turn, terracotta-specific choices — expressed via tokens instead). (b) Structured as a new "Finishing recipes — past the primitive draft" section rather than scattering across existing sections, because the session's failure mode was a distinct *finishing* gap, not a rule violation; depth ladder alone merged into "Color and depth" where it natively belongs. (c) Added six anti-patterns, a 7th review-pass "finish audit" item, polish/primitive trigger phrases, and worked markup in references/examples.md (Entry 41 precedent for that file). (d) PATCH bump 3.2.0 → 3.2.1 in plugin.json + marketplace.json — content-only.
 **Impact / Risk:** SKILL.md grows ~90 lines; risk of over-prescribing the dock pattern on apps without global state is bounded by the "when app-wide state exists" precondition.
 **Outcome:** validate.py passes; changes uncommitted on feat/ui-design-polish-layer.
+
+### Entry 43
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-18
+**Task:** Draft shrink-diff and refactor-repo skills (ceh-agent-coding-contract)
+
+**Context:** The "Adding a Skill" checklist says bump plugin.json + marketplace.json, but the Versioning section says bump only at commit time, not during iterative edits. This session drafts the skills without committing. Also, shrink-diff's trigger phrases risked colliding with ceh-git-workflow skills ("clean up the branch" is merge-skill vocabulary, "branch" naming collides with the branch skill).
+**Decision:** Deferred the version bump (2.6.4 → 2.7.0 MINOR, plus marketplace mirror) to commit time per the Versioning section, which is the more specific rule. Chose diff-object trigger phrases ("shrink the diff", "can this diff be smaller") and avoided "clean up the branch"; refactor-repo gets disable-model-invocation: true so the whole-repo mode can never auto-fire.
+**Impact / Risk:** If the drafts are committed without the bump, CI still passes (versions stay in sync) but the auto-update convention is violated — the bump must accompany the commit.
+**Outcome:** validate.py passes; drafts uncommitted on feat/shrink-diff-refactor-skills.
