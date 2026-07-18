@@ -289,6 +289,25 @@ digest in sync with the skill when either changes.
 - SKILL.md is the full guidance (rules, output discipline, the `// less-code:` comment convention); the payload is the compressed per-turn reflex.
 - the `agent-coding-contract` skill states the complementary *negative* rules (no new deps, no speculative abstractions, minimal diffs) in its "Universal Non-Goals" — not a copy, but keep the two from contradicting on the dependency stance.
 
+**What also references this:** the "Retroactive ladder + behavior preservation" entry below re-frames the same six rungs for already-written code (`shrink-diff` / `refactor-repo`) — if the ladder's rungs change, keep the retroactive framing aligned.
+
+---
+
+## Retroactive ladder + behavior preservation (shrink-diff / refactor-repo)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-agent-coding-contract/skills/shrink-diff/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | canonical — branch-diff-scoped application |
+| `ceh-agent-coding-contract/skills/refactor-repo/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | word-for-word copy — campaign-wide application |
+
+**What is shared:** the six-rung retroactive ladder (delete outright → stdlib → native platform feature → installed dependency → one line → keep as the minimum, collapsing single-implementation abstractions / single-caller wrappers / config-for-a-constant) and the behavior-preservation rules (never mix a behavior change into a refactor; tests before and after where coverage exists, red-before is a finding not a license; mechanical transforms only without coverage; `refactor:` commits separate from any other change).
+
+**What diverges:**
+- `shrink-diff` applies both blocks to the branch's seed set in one pass; `refactor-repo` applies them per approved cluster in Phase 3, with skip-and-report emphasized for uncovered areas.
+- the retroactive ladder derives from the Write-less-code ladder entry above (same six rungs, re-framed in hindsight) — a rung change there propagates here.
+
 ---
 
 ## Evaluate-skill shared blocks (structural checks + triggering note)

@@ -5,6 +5,39 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.20.0] — 2026-07-18
+
+`ceh-agent-coding-contract` gains **retroactive refactoring**: the write-less-code standard,
+which fires at write time inside one session, now has a counterpart for code that accreted across
+multiple sessions and commits. `shrink-diff` simplifies a finished feature branch's accumulated
+diff against `main` before review; `refactor-repo` runs a propose-then-apply refactor campaign
+over a whole codebase or named module, and is user-invocation only.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.7.0 |
+
+### Added
+
+- **`ceh-agent-coding-contract` / `shrink-diff`** — new skill: retroactively apply the
+  write-less-code standard to everything a feature branch changed (`git diff main...HEAD`,
+  merge-base comparison), across however many commits or sessions produced it. Hunts duplication
+  the branch introduced against existing code, dead weight the branch created, over-built
+  structure, and retroactive-ladder violations; ranks candidates by payoff over risk. Diff-scoped:
+  unchanged code may be edited only for three flagged causes (dedupe, inline a single-caller
+  helper, delete newly dead code). Behavior-preservation gate: tests before/after where coverage
+  exists, mechanical transforms only where it doesn't, `refactor:` commits separate.
+- **`ceh-agent-coding-contract` / `refactor-repo`** — new skill, `disable-model-invocation: true`
+  (never auto-fires): whole-codebase or per-module refactor campaign in four phases — read-only
+  inventory (with per-area test-coverage status), ranked candidate proposal grouped into
+  PR-sized clusters, hard stop for explicit cluster approval, then apply on `refactor/` branches
+  under the same behavior-preservation gate with skip-and-report for uncovered areas.
+- **`CROSS_REFERENCES.md`** — new entry for the two blocks shared word-for-word between the
+  skills (retroactive ladder + behavior preservation), cross-linked to the write-less-code
+  ladder entry.
+
 ## [3.19.2] — 2026-07-15
 
 The `ceh-web-frontend` `ui-design` skill gains a **finishing recipes** layer, extracted from a
