@@ -72,8 +72,17 @@ point is that the model consults the advisor.
 - Pattern matching is string-level, not shell-aware — a destructive pattern inside a quoted
   argument (`grep "TRUNCATE TABLE" docs/`) also denies. The backstop fails toward deny: a false
   positive costs one consult, a false negative costs the data.
-- Honest-agent assumption: nothing stops the model from writing the ack without consulting. The
-  guard is a backstop against *forgetting*, not an adversarial control.
+- Honest-agent assumption: **no code ever writes the ack file** — step 3 of the protocol is carried
+  out by the model itself, so the party being restrained is also the party issuing its own
+  permission. Nothing stops it writing the ack without consulting. The guard is a backstop against
+  *forgetting*, not an adversarial control.
+- The ack is a blanket pass, not a per-command one: any destructive command is unlocked for the
+  full TTL once one consult has happened. Lower `CEH_ADVISOR_ACK_TTL` if that window is too wide.
+- Inside a **subagent** the guard still denies, but with a different message. Subagents have no
+  `Task` tool, so "invoke ceh-advisor" is a dead end that leaves them stuck; they are told to stop
+  and report to their caller instead, and explicitly told not to write the ack themselves. The
+  guard is not skipped for subagents — that would let any destructive command through simply by
+  delegating it. A fresh ack written by the caller *before* delegating does unlock the subagent.
 - Failure detection is heuristic (`is_error` plus common failure strings) because the PostToolUse
   payload shape has varied across Claude Code versions — extend the grep on false negatives.
 - The guard **fails closed**. A deny is signalled the documented way — JSON on stdout with exit 0 —

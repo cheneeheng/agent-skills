@@ -801,3 +801,36 @@ visible workflow change. No version re-bump: 1.0.1 from Entry 45 is still uncomm
 ships as part of the same change.
 **Outcome:** 20/20 targeted cases pass (6 force-push spellings deny, 6 near-miss branch names
 allow, 8 regressions unchanged); validate.py passes.
+
+### Entry 47
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-19T00:00:00Z
+**Task:** Make the ceh-advisor guard actionable inside subagents, using the `agent_id` hook field.
+
+**Context:** The user proposed gating the guard on `agent_type` so it only runs when the advisor
+agent is involved. That inverts the field's meaning — `agent_type` identifies whose context the
+hook fires in, and the advisor has `tools: Read, Grep, Glob` (no Bash), so the guard would have
+fired never while the main session went unguarded. The real problem the field exposes: verified
+that no agent in this repo has `Task`/`Agent` in its tools, so a denied subagent is handed an
+impossible instruction ("invoke the ceh-advisor subagent") and deadlocks.
+
+**Decision:** Keep denying inside subagents, but branch the message on `payload["agent_id"]`:
+tell the subagent to stop and report to its caller, and explicitly not to write the ack itself.
+Rejected skipping the guard for subagents — that would turn delegation into a universal bypass.
+Placed the check *after* the ack lookup so a caller who consults and then delegates still works.
+Did not add an anti-recursion check for `agent_type == ceh-advisor:ceh-advisor`: real in
+principle, but the advisor has no Bash tool, so it is speculative until that changes.
+
+**Impact / Risk:** Latent-trap fix, not a live outage — no current git-workflow agent trips a
+pattern (the merge skill uses `git branch -d`, and the guard matches `-D`). Any delegated agent
+needing a force-push or `rm -rf` would have deadlocked. ceh-advisor 1.0.1 -> 1.0.2.
+**Outcome:** 5/5 cases pass (main-session deny unchanged, subagent deny with new message,
+subagent benign allow, subagent unlocked by a caller's fresh ack, main-session ack unchanged).
+
+**Also surfaced (not changed):** the user noticed nothing in the codebase ever writes the ack
+file. Confirmed by grep — the only writes are the README smoke-test snippet and the instruction
+text. The model writes its own permission slip. This is the documented honest-agent assumption;
+README now states it explicitly, along with the fact that an ack is a blanket pass for the full
+TTL rather than scoped to the reviewed command.

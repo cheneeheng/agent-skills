@@ -136,6 +136,19 @@ def main() -> None:
             emit("allow", f"ceh-advisor consulted (ack fresh): {verdict}")
             sys.exit(0)
 
+    # No fresh ack. A subagent cannot run the consult protocol - it has no Task
+    # tool, so "invoke ceh-advisor" is a dead end that leaves it stuck. Deny with
+    # an instruction it can actually act on. Deliberately still a deny: skipping
+    # the guard here would let any destructive command through by delegating it.
+    if payload.get("agent_id"):
+        deny(
+            f"Destructive command blocked by ceh-advisor guard: {cmd}",
+            "You are running as a subagent and cannot invoke ceh-advisor via the Task tool. "
+            "Stop and report to your caller that this command needs an advisor consult before "
+            "it can run, and let the caller decide. Do not write the ack file yourself - you "
+            "are not in a position to have had the consult.",
+        )
+
     deny(
         f"Destructive command blocked by ceh-advisor guard: {cmd}",
         consult_protocol(ttl),
