@@ -151,6 +151,16 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 ## Installing in Claude Code
 
+### Prerequisites
+
+`python3` on `PATH` — required by the hooks in `ceh-advisor` and `ceh-agent-coding-contract`
+(stdlib only, no packages). Every other plugin works without it.
+
+This matters most for `ceh-advisor`: its destructive-command guard **fails closed**, so without
+`python3` it blocks every `rm -rf`, `git push --force`, `terraform destroy`, and similar until the
+interpreter is available. Install with `winget install Python.Python.3.12` / `brew install python`
+/ `apt install python3`.
+
 ### Step 1 — Add the marketplace
 
 ```
