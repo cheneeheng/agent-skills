@@ -732,3 +732,15 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** Deferred the version bump (2.6.4 → 2.7.0 MINOR, plus marketplace mirror) to commit time per the Versioning section, which is the more specific rule. Chose diff-object trigger phrases ("shrink the diff", "can this diff be smaller") and avoided "clean up the branch"; refactor-repo gets disable-model-invocation: true so the whole-repo mode can never auto-fire.
 **Impact / Risk:** If the drafts are committed without the bump, CI still passes (versions stay in sync) but the auto-update convention is violated — the bump must accompany the commit.
 **Outcome:** validate.py passes; drafts uncommitted on feat/shrink-diff-refactor-skills.
+
+### Entry 44
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-18T23:35:00Z
+**Task:** Add usage-limit guard hook + usage-limit-handoff skill to ceh-agent-coding-contract
+
+**Context:** Three unspecified implementation choices: (1) hook language — plugin convention is bash+jq, but jq is not installed on the target machine, which would make the hook silently inert (ceh-advisor's jq-based hooks are already inert here for the same reason); (2) how often the guard re-fires once over threshold; (3) default threshold value.
+**Decision:** (1) PowerShell (`pwsh -NoProfile`) instead of bash+jq — the data source (statusline export) is itself a pwsh script, so pwsh is a given wherever the data exists; (2) re-fire only per 5-point usage band above threshold, so an ignored warning escalates instead of spamming every tool call; (3) default threshold 80%, overridable via `CEH_USAGE_LIMIT_THRESHOLD`.
+**Impact / Risk:** Hook is Windows/pwsh-leaning, diverging from the repo's bash hook convention; inert (by design) on machines without pwsh or without the statusline export. jq absence on this machine also affects ceh-advisor hooks — flagged to user, not fixed (out of scope).
+**Outcome:** Dry-run against live statusline data passed all three cases (fire at exit 2 with message, band-based re-fire suppression, below-threshold silence).

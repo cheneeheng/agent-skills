@@ -9,7 +9,7 @@ organized around **use cases** — load the ones that match what you are buildin
 
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
-| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`) |
+| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`) |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
@@ -55,6 +55,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-agent-coding-contract` | Write Less Code | `/ceh-agent-coding-contract:write-less-code` | Every coding session (auto — session-start load + per-turn reinforcement) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line) |
 | `ceh-agent-coding-contract` | Shrink Diff | `/ceh-agent-coding-contract:shrink-diff` | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main` |
 | `ceh-agent-coding-contract` | Refactor Repo | `/ceh-agent-coding-contract:refactor-repo` | Manual only — propose-then-apply refactor campaign over the whole repo or a named module |
+| `ceh-agent-coding-contract` | Usage Limit Handoff | `/ceh-agent-coding-contract:usage-limit-handoff` | Auto via PostToolUse guard hook when 5h usage crosses the threshold (default 95%) — stop cleanly, report done vs open, end the turn |
 | `ceh-plan-build-review` | Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning one release at a time — a greenfield skeleton or the next iteration |
 | `ceh-plan-build-review` | Plan Fullstack App to MVP | `/ceh-plan-build-review:plan-fullstack-app-to-mvp` | Planning the complete build to a working MVP in one session |
 | `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |

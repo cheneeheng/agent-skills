@@ -15,6 +15,7 @@ contract automatically at session start, alongside the `write-less-code` minimal
 | `write-less-code` | Every coding session (auto, via hook) | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules. |
 | `shrink-diff` | On demand — when a feature branch is functionally done and its diff should get smaller before review | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code. |
 | `refactor-repo` | Manual only (`/refactor-repo`) — never auto-fires | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate. |
+| `usage-limit-handoff` | When the usage-limit guard hook fires (5h window past threshold) | Stop-and-summarize protocol: close the current atomic step, start nothing new, report done vs open work with resume instructions, end the turn. |
 
 **Manual triggers**
 
@@ -22,6 +23,7 @@ contract automatically at session start, alongside the `write-less-code` minimal
 - `write-less-code` — `/write-less-code`, or say `"write less code"` / `"be lazy"` / `"simplest solution"` / `"yagni"`.
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
+- `usage-limit-handoff` — `/usage-limit-handoff`, or say `"wrap up the session"` / `"usage limit handoff"` / `"stop and summarize"`.
 
 ## How the skills auto-load
 
@@ -37,6 +39,18 @@ after compaction).
 of the `write-less-code` ladder before each prompt. This carries the minimalism reflex on every turn,
 reliably from turn one; the full `write-less-code` skill loads on demand when non-trivial code is
 actually being written.
+
+**Every tool call** — a `PostToolUse` hook (`hooks/usage-limit-watch.sh`) watches the 5-hour
+rate-limit percentage. When it crosses `CEH_USAGE_LIMIT_THRESHOLD` (default 95%), the hook tells
+the agent to stop starting new work and run `usage-limit-handoff`; if ignored, it re-fires every
+5 further points of usage.
+
+> **Prerequisite for the usage-limit guard:** the hook reads the rate-limit data that a statusline
+> export writes to `~/.claude/statusline/<project-dir>/<session_id>.jsonl` — a statusline script
+> that appends its stdin JSON there (each line `{"session_id", "ts", "data": <payload>}`, with
+> `:` and path separators in the project dir name replaced by `-`). Claude Code itself provides
+> `rate_limits` only to the statusline, not to hooks, hence the relay. Without the export (or
+> without `jq`) the hook is inert — everything else in the plugin works unchanged.
 
 ## What the contract enforces
 
