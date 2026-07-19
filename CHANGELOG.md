@@ -5,6 +5,49 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.21.1] — 2026-07-19
+
+The usage-limit guard shipped in 3.21.0 stops **preemptively**. It watched only the 5-hour window
+and fired at 95%, which is late enough that the summary competes with the work for the last of the
+budget. It now takes whichever window is closest to its cap — the weekly window included — and
+fires at 90%, so the handoff is written while everything is still in context rather than
+reconstructed afterwards.
+
+Two premises behind the original design turned out to be wrong. The statusline export is not a
+weak proxy: it is the **only** local surface carrying live account-wide quota (transcripts record
+only the after-the-fact `apiErrorStatus: 429`, never a running percentage), and it refreshes on
+every API round-trip, so per-tool-call sampling is fresh enough to act on. Polling an API endpoint
+instead was rejected — an API key reports the org API rate limits, a different pool from the
+Pro/Max subscription, and the OAuth usage endpoint needs credentials read from a hook, is
+undocumented, and the probe consumes the quota it measures.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.8.2 |
+
+### Changed
+
+- **`ceh-agent-coding-contract` / `usage-limit-watch.py`** — the hook now iterates the
+  `rate_limits` dict and takes the worst window instead of hardcoding `five_hour`, so the **weekly
+  limit triggers the handoff too** and any future window needs no code change. Threshold default
+  drops **95% → 90%**.
+- **Sensor reliability** — reads the newest record across *all* sessions and projects, so a second
+  Claude Code window cannot leave a session acting on a stale number; adds a staleness guard
+  (`CEH_USAGE_STALE_MINUTES`, default 15), since a stale low reading reads as safety that is not
+  there; and **warns once per session when the statusline export is missing** instead of silently
+  no-opping while the user assumes they are protected.
+- **`ceh-agent-coding-contract` / `usage-limit-handoff`** — the skill now writes a durable artifact
+  to `.agents_workspace/handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.md` plus one line in a
+  global `~/.claude/handoff/index.md`, so work is findable days later without remembering which
+  repo it was in. Previously it only reported in chat, which does not survive the session.
+- **Subagent routing** — `exit 2` reaches the subagent's own loop, and a subagent's final report is
+  never shown to the user, so a subagent that trips the guard now stops and reports **upward**
+  rather than writing an artifact it only has partial context for. Only the main session writes the
+  handoff. The escalation band stays keyed on `session_id`, which subagents share with the parent,
+  so the whole session escalates together.
+
 ## [3.21.0] — 2026-07-19
 
 `ceh-agent-coding-contract` gains a **usage-limit handoff**: a guard hook watches the 5-hour
