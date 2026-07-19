@@ -25,11 +25,29 @@ and release notes are ready to reference — saying "update the changelog" loads
 format and what belongs in a release-notes entry. The GitHub release notes (`--notes-file` below)
 reuse that version's changelog section.
 
+## Attribution
+
+Both artifacts this skill produces carry the attribution footer the environment supplies —
+surfaced verbatim in the session's Git instructions. Reproduce the line exactly; never substitute
+a literal from this skill or from memory. If the relevant setting is `false`/empty, or no
+attribution line is supplied, omit the footer.
+
+| Artifact | Setting | Where the footer goes |
+|----------|---------|-----------------------|
+| Version-bump commit (step 1) | `attribution.commit` | Last line of the commit message |
+| GitHub release notes (step 3) | `attribution.pr` | Last line of the notes file |
+
+The annotated tag message (step 2) takes no attribution — keep it to `v<X.Y.Z> — <summary>`.
+
 ```bash
 # 1. Bump the version in this project's manifest(s) — whatever the project uses
-#    (pyproject.toml, package.json, plugin.json, marketplace.json, Cargo.toml, ...), commit
+#    (pyproject.toml, package.json, plugin.json, marketplace.json, Cargo.toml, ...), commit.
+#    A footer means a multi-line message: write it to msg.txt and use -F, never inline -m.
+#      chore: bump version to v<X.Y.Z>
+#
+#      <attribution footer exactly as configured in settings>
 git add <manifest files>
-git commit -m "chore: bump version to v<X.Y.Z>"
+git commit -F msg.txt && rm msg.txt
 git push origin main
 
 # 2. Tag and push. Use an annotated tag (-a -m): some repos enforce it,
@@ -37,6 +55,7 @@ git push origin main
 git tag -a v<X.Y.Z> -m "v<X.Y.Z> — <summary>"
 git push origin v<X.Y.Z>
 
-# 3. (Optional) Publish a GitHub release for the tag
+# 3. (Optional) Publish a GitHub release for the tag. Append the attribution footer to the
+#    notes file after the changelog section, then delete the file.
 gh release create v<X.Y.Z> --title "v<X.Y.Z>" --notes-file <notes file>
 ```

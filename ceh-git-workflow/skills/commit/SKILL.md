@@ -47,8 +47,10 @@ lowercase and consistent with scopes already used in the log (`git log --oneline
 - Breaking changes: `BREAKING CHANGE:` footer with migration notes (or a `!` after the
   type/scope: `feat(api)!: ...`).
 - Reference issues: `Closes #123` (auto-closes on merge) or `Refs #456` (links only) in footer.
-- Attribution: when AI tooling assisted, add a footer line, e.g.
-  `Generated with [Claude Code](https://claude.com/claude-code)`.
+- Attribution: use the footer the environment already supplies — the `attribution.commit` value
+  from Claude Code settings, surfaced verbatim in the session's Git instructions. Reproduce that
+  line exactly; never substitute a literal from this skill or from memory. If settings set
+  `attribution.commit` to `false`/empty, or no attribution line is supplied, omit the footer.
 
 ### Subject: bad vs. good
 
@@ -67,7 +69,7 @@ endpoint remains unchanged; no migration needed.
 
 Closes #342
 Co-authored-by: Jane Doe <jane@example.com>
-Generated with [Claude Code](https://claude.com/claude-code)
+<attribution footer exactly as configured in settings — see Attribution above>
 ```
 
 ## Commands
