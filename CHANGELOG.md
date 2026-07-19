@@ -5,6 +5,42 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.21.2] — 2026-07-19
+
+`ceh-git-workflow`'s commit skill hardcoded an attribution footer. Skill bodies load **after** the
+harness Git instructions, so that literal won the conflict and silently overrode whatever the user
+had configured as `attribution.commit` — a setting that appeared to be ignored was in fact being
+overwritten by the standard meant to describe it.
+
+The three skills that emit an attribution footer now defer to the setting instead of restating it.
+Worth noting for anyone who customized the value: a custom `attribution.commit` **replaces** the
+default `Co-Authored-By: Claude` git trailer rather than adding to it, and free text like
+`Generated with …` is not `Key: Value`, so it is a footer line that `git interpret-trailers` will
+not parse. Use trailer syntax if the footer needs to stay machine-readable.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.2.3 |
+
+### Fixed
+
+- **`ceh-git-workflow` / `commit`** — the Attribution rule and the worked example no longer carry a
+  literal footer string. Both point at `attribution.commit` from Claude Code settings and forbid
+  substituting a literal from the skill or from memory.
+- **`ceh-git-workflow` / `open-pr`** — the "Attribution included if AI tooling assisted" checklist
+  item now names its source (`attribution.pr`), and the filled-in example ends with the same
+  placeholder the commit skill uses, so the pattern is consistent across both skills.
+- **`ceh-git-workflow` / `release`** — new Attribution section mapping the version-bump commit to
+  `attribution.commit` and the GitHub release notes to `attribution.pr`. The annotated tag message
+  is explicitly excluded — a markdown link is noise in `git tag -n` output. Step 1 switches from
+  inline `-m` to `-F`, since a single `-m` cannot carry a footer and the instruction would
+  otherwise have been unfollowable as written.
+
+Omission is the fallback throughout: when the relevant setting is `false`/empty or no attribution
+line is supplied, the footer is dropped rather than invented, so a dangling reference fails closed.
+
 ## [3.21.1] — 2026-07-19
 
 The usage-limit guard shipped in 3.21.0 stops **preemptively**. It watched only the 5-hour window

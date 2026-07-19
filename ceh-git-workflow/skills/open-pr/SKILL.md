@@ -54,6 +54,10 @@ Same rules as a commit subject: imperative, lowercase, no trailing period, ≤ 7
   if the diff is self-explanatory.
 - **Testing** — what you actually ran and what you added, so a reviewer can reproduce it. "Manually
   verified X" is fine when honest; never imply coverage you didn't add.
+- **Attribution** — the checklist item is satisfied by the `attribution.pr` value from Claude Code
+  settings, surfaced verbatim in the session's Git instructions. Append that line to the end of the
+  body exactly as given; never substitute a literal from this skill or from memory. If settings set
+  `attribution.pr` to `false`/empty, or no attribution line is supplied, omit it and check the box.
 
 ### Filled-in example
 
@@ -81,6 +85,8 @@ test against a seeded DB. `pytest` + `mypy --strict` green locally.
 - [x] Migrations (if any) are backward-compatible
 - [ ] ARCHITECTURE.md Key Decisions updated (if a durable decision was made)
 - [x] Attribution included if AI tooling assisted
+
+<attribution footer exactly as configured in settings — see Attribution above>
 ```
 
 Open as a **draft** while CI runs or the work is still settling; mark ready for review only once
