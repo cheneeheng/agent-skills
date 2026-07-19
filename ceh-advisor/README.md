@@ -45,8 +45,13 @@ Hard-trigger backstops, wired by `hooks/hooks.json` and loaded automatically wit
 
 | Script | Event | What it does |
 |--------|-------|-------------|
-| `scripts/ceh-advisor-guard.sh` | PreToolUse (Bash) | Denies destructive commands (`rm -rf`, `git push --force`, `git reset --hard`, migrations, `terraform apply`, `kubectl delete`, ...) until a fresh advisor ack exists |
-| `scripts/ceh-advisor-failure-watch.sh` | PostToolUse (Bash) | At N consecutive failed bash calls, exits 2 to feed back: stop iterating, consult the advisor, challenge the diagnosis — any success resets the streak |
+| `scripts/ceh-advisor-guard.py` | PreToolUse (Bash) | Denies destructive commands (`rm -rf`, `git push --force`, `git reset --hard`, migrations, `terraform apply`, `kubectl delete`, ...) until a fresh advisor ack exists |
+| `scripts/ceh-advisor-failure-watch.py` | PostToolUse (Bash) | At N consecutive failed bash calls, exits 2 to feed back: stop iterating, consult the advisor, challenge the diagnosis — any success resets the streak |
+
+**Requires `python3` on PATH.** Both hooks are Python (stdlib only, no packages) so they behave
+identically on Linux, macOS, and Windows — the previous bash+`jq` versions needed a POSIX shell and
+a `jq` binary that Windows does not ship. If `python3` is missing: `winget install Python.Python.3.12`
+/ `brew install python` / `apt install python3`.
 
 **Guard protocol:** deny → main session invokes `ceh-advisor` with a full handoff block covering
 why the command is necessary and its blast radius → writes the advisor's one-line verdict into
@@ -71,9 +76,18 @@ point is that the model consults the advisor.
   guard is a backstop against *forgetting*, not an adversarial control.
 - Failure detection is heuristic (`is_error` plus common failure strings) because the PostToolUse
   payload shape has varied across Claude Code versions — extend the grep on false negatives.
-- Both scripts require `jq` on PATH; without it they degrade to inert (allow everything, silently)
-  rather than erroring on every bash call. Install it to get the hard-trigger layer:
-  `winget install jqlang.jq` / `brew install jq` / `apt install jq`.
+- The guard **fails closed**. A deny is signalled the documented way — JSON on stdout with exit 0 —
+  so it always carries a readable reason. An unparseable payload denies too, because a guard that
+  cannot tell whether a command is destructive must not wave it through. `hooks.json` appends
+  `|| exit 2` to the guard command so a missing `python3` (exit 127) or an unhandled crash (exit 1)
+  *also* blocks: Claude Code treats only exit 2 as blocking, so without that suffix the guard would
+  fail open exactly when it is most broken. The trade-off is that a broken install blocks every
+  destructive command until `python3` is on PATH — deliberate, and the reason it is documented here.
+- The failure watch is advisory and **fails open**: on error it prints one line to stderr and exits
+  1 (visible warning, nothing blocked) rather than a traceback on every bash call.
+- `--force-with-lease` is **not** matched. It is still a history-rewriting push, just a safer one;
+  add `git\s+push\s+(.*\s)?--force-with-lease` to `.claude/ceh-advisor-patterns.txt` if you want it
+  gated too.
 - No Stop hook by default — a pre-completion gate on `Stop` fires on *every* stop, expensive and
   noisy. To add one yourself, put a prompt hook in your `settings.json` that blocks when the
   session involved high-stakes work and `ceh-advisor` was never consulted; trial it behind a flag
@@ -86,21 +100,21 @@ Smoke-test the hooks directly (`$PLUGIN` = this plugin's root, repo checkout or 
 ```bash
 # Guard: destructive command, no ack -> deny JSON
 echo '{"tool_name":"Bash","tool_input":{"command":"git push --force origin main"},"session_id":"t1"}' \
-  | bash "$PLUGIN/scripts/ceh-advisor-guard.sh"
+  | python3 "$PLUGIN/scripts/ceh-advisor-guard.py"
 
 # Guard: benign command -> silent allow (no output, exit 0)
 echo '{"tool_name":"Bash","tool_input":{"command":"ls -la"},"session_id":"t1"}' \
-  | bash "$PLUGIN/scripts/ceh-advisor-guard.sh"
+  | python3 "$PLUGIN/scripts/ceh-advisor-guard.py"
 
 # Guard: fresh ack -> allow with verdict in reason
 mkdir -p .claude && echo "Go ahead — branch is already merged upstream." > .claude/.ceh-advisor-ack
 echo '{"tool_name":"Bash","tool_input":{"command":"git push --force origin main"},"session_id":"t1"}' \
-  | bash "$PLUGIN/scripts/ceh-advisor-guard.sh"
+  | python3 "$PLUGIN/scripts/ceh-advisor-guard.py"
 
 # Failure watch: third consecutive failure -> exit 2 + stderr nudge
 for i in 1 2 3; do
   echo '{"tool_name":"Bash","tool_input":{"command":"pytest"},"session_id":"t2","tool_response":{"is_error":true}}' \
-    | bash "$PLUGIN/scripts/ceh-advisor-failure-watch.sh"; echo "run $i exit: $?"
+    | python3 "$PLUGIN/scripts/ceh-advisor-failure-watch.py"; echo "run $i exit: $?"
 done
 ```
 

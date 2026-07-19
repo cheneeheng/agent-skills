@@ -40,7 +40,7 @@ of the `write-less-code` ladder before each prompt. This carries the minimalism 
 reliably from turn one; the full `write-less-code` skill loads on demand when non-trivial code is
 actually being written.
 
-**Every tool call** — a `PostToolUse` hook (`hooks/usage-limit-watch.sh`) watches the 5-hour
+**Every tool call** — a `PostToolUse` hook (`hooks/usage-limit-watch.py`) watches the 5-hour
 rate-limit percentage. When it crosses `CEH_USAGE_LIMIT_THRESHOLD` (default 95%), the hook tells
 the agent to stop starting new work and run `usage-limit-handoff`; if ignored, it re-fires every
 5 further points of usage.
@@ -49,8 +49,13 @@ the agent to stop starting new work and run `usage-limit-handoff`; if ignored, i
 > export writes to `~/.claude/statusline/<project-dir>/<session_id>.jsonl` — a statusline script
 > that appends its stdin JSON there (each line `{"session_id", "ts", "data": <payload>}`, with
 > `:` and path separators in the project dir name replaced by `-`). Claude Code itself provides
-> `rate_limits` only to the statusline, not to hooks, hence the relay. Without the export (or
-> without `jq`) the hook is inert — everything else in the plugin works unchanged.
+> `rate_limits` only to the statusline, not to hooks, hence the relay. Without the export the hook
+> is inert — everything else in the plugin works unchanged.
+>
+> The hook needs `python3` on PATH (stdlib only, no packages), which is what makes it behave the
+> same on Linux, macOS, and Windows; it replaced a bash+`jq` version that needed a POSIX shell and
+> a `jq` binary Windows does not ship. It is advisory, so it fails open: on error it prints one
+> line to stderr and exits 1 (visible warning, nothing blocked).
 
 ## What the contract enforces
 

@@ -57,7 +57,7 @@ session with none of this context.
 
 ## Notes
 
-- The trigger is the `usage-limit-watch.sh` PostToolUse hook in this plugin. It fires at
+- The trigger is the `usage-limit-watch.py` PostToolUse hook in this plugin. It fires at
   `CEH_USAGE_LIMIT_THRESHOLD` (default 95%) and re-fires every 5 points above it — a repeat
   warning means the first one was ignored; stop immediately.
 - If the guard fires while mid-handoff, ignore it: the protocol is already running.

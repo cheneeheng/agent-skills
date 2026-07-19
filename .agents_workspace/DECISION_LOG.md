@@ -744,3 +744,60 @@ MINOR v3.13.4 -> v3.14.0 (new skill); plugin ceh-web-frontend already at 3.1.0 f
 **Decision:** (1) PowerShell (`pwsh -NoProfile`) instead of bash+jq — the data source (statusline export) is itself a pwsh script, so pwsh is a given wherever the data exists; (2) re-fire only per 5-point usage band above threshold, so an ignored warning escalates instead of spamming every tool call; (3) default threshold 80%, overridable via `CEH_USAGE_LIMIT_THRESHOLD`.
 **Impact / Risk:** Hook is Windows/pwsh-leaning, diverging from the repo's bash hook convention; inert (by design) on machines without pwsh or without the statusline export. jq absence on this machine also affects ceh-advisor hooks — flagged to user, not fixed (out of scope).
 **Outcome:** Dry-run against live statusline data passed all three cases (fire at exit 2 with message, band-based re-fire suppression, below-threshold silence).
+
+### Entry 45
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-19T00:00:00Z
+**Task:** Port the three logic hooks (advisor guard, advisor failure-watch, usage-limit-watch) from bash+jq to Python for Windows/Linux parity.
+
+**Context:** Three forks the user's brief left open. (1) The shell guard signalled deny via JSON
+on stdout with exit 0; the first Python draft emitted deny JSON *and* exit 2, mixing the two
+documented PreToolUse mechanisms. (2) "Fail closed" was specified for the guard, but the same
+policy applied to the two advisory PostToolUse hooks would block tool calls on any parse error.
+(3) A pattern-parity sweep found `git push -f origin main` is not matched by the inherited
+pattern set (only `--force`, or `-f` at end-of-string).
+
+**Decision:** (1) Deny goes through JSON + exit 0 so it always carries a readable reason; exit 2
+is reserved for the crash/no-interpreter backstop, added as `|| exit 2` in hooks.json because
+Claude Code treats only exit 2 as blocking — without it a missing `python3` (127) would fail
+*open*. (2) Fail-closed for the PreToolUse guard only; the two advisory hooks catch exceptions,
+print one stderr line, and exit 1 (visible, non-blocking) — a traceback on an all-tools
+PostToolUse hook would spam every call. (3) Preserved the `-f` gap rather than fixing it: the
+task was a port, and silently changing guard coverage would make the parity check meaningless.
+Documented it in the plugin README with the one-line pattern to close it.
+
+**Impact / Risk:** Hooks now require `python3` on PATH. A broken install blocks every destructive
+command until fixed — deliberate, and documented. The six static-payload hooks stay bash: they
+have no logic, and a shell is more universally present than Python. Verified 21/21 decision
+parity against the shell originals before deleting them.
+**Outcome:** validate.py passes; all three hooks smoke-tested including anti-spam banding,
+streak reset, corrupt payloads, and missing interpreter.
+
+### Entry 46
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-19T00:00:00Z
+**Task:** Close the `git push -f` gap in the ceh-advisor guard pattern set (follow-up to Entry 45).
+
+**Context:** Entry 45 deliberately preserved the gap to keep the port's parity check meaningful.
+With the port landed, the user asked for the fix. The old pattern
+`git\s+push\s.*(--force|\s-f(\s|$))` could never match a bare `git push -f origin main`: the `\s`
+before `-f` required a space that the preceding `git push\s` had already consumed, so the flag was
+only caught in non-first position.
+
+**Decision:** Replaced with `git\s+push\s+(.*\s)?(--force|-f)(\s|$)`. The optional `(.*\s)?` prefix
+lets the flag sit in first position or later, and anchoring both alternatives with `(\s|$)` keeps
+branch names like `hotfix-f` and `feature-force` allowed. This also tightens `--force`, which
+previously had no trailing anchor and would have matched `--forceful`. Did not add
+`--force-with-lease`: it is a distinct flag and adding it widens what the guard blocks beyond
+what was asked — documented in the README as a one-line opt-in instead.
+
+**Impact / Risk:** The guard now denies force pushes it previously waved through, so anyone
+relying on `git push -f` will start hitting the consult protocol — the intended behaviour, but a
+visible workflow change. No version re-bump: 1.0.1 from Entry 45 is still uncommitted, so this
+ships as part of the same change.
+**Outcome:** 20/20 targeted cases pass (6 force-push spellings deny, 6 near-miss branch names
+allow, 8 regressions unchanged); validate.py passes.
