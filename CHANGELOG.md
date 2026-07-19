@@ -5,6 +5,75 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.21.0] — 2026-07-19
+
+`ceh-agent-coding-contract` gains a **usage-limit handoff**: a guard hook watches the 5-hour
+rate-limit percentage and, once it crosses the threshold, tells the agent to stop starting new
+work and hand off cleanly rather than getting cut off mid-task.
+
+Alongside it, the three hooks that carry logic — the `ceh-advisor` destructive-command guard and
+failure watch, and the new usage-limit watch — move from bash + `jq` to **stdlib Python**. `jq` is
+not shipped with Git for Windows, and all three degraded to inert without it, which meant the
+advisor's destructive-command protection was silently off on any Windows machine that lacked it.
+The six static-payload hooks stay bash deliberately: they are pure `cat` heredocs with no logic,
+and a shell is more universally present than Python.
+
+**Requires `python3` on `PATH`** for `ceh-advisor` and `ceh-agent-coding-contract`. The advisor
+guard fails closed, so without it destructive commands are blocked rather than waved through.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.8.1 |
+| `ceh-advisor` | v1.0.2 |
+
+### Added
+
+- **`ceh-agent-coding-contract` / `usage-limit-handoff`** — new skill plus a `PostToolUse` guard
+  hook. The hook reads the 5-hour `used_percentage` relayed by a statusline export to
+  `~/.claude/statusline/<project-dir>/<session_id>.jsonl` (Claude Code exposes `rate_limits` only
+  to the statusline, not to hooks, hence the relay) and fires at `CEH_USAGE_LIMIT_THRESHOLD`
+  (default 95%). The skill then stops new work, reports done vs. open, and ends the turn. Ignored
+  warnings escalate every 5 further points instead of repeating on every tool call.
+- **Prerequisites section** in the root README covering the new `python3` requirement.
+
+### Changed
+
+- **`ceh-advisor`, `ceh-agent-coding-contract` / hooks** — the three logic hooks are now stdlib
+  Python (`ceh-advisor-guard.py`, `ceh-advisor-failure-watch.py`, `usage-limit-watch.py`),
+  replacing bash + `jq`. This drops `jq`, GNU `stat -c`, GNU `date -d`, and a hardcoded `/tmp` in
+  favour of `json`, `os.stat`, `datetime`, and `tempfile.gettempdir()`, giving identical behaviour
+  on Linux, macOS, and Windows. Verified at 21/21 allow/deny parity against the shell originals.
+  On Windows the port is also ~5x faster per call, since Git Bash's fork emulation made the old
+  multi-`jq` pipeline expensive.
+- **`ceh-advisor` / guard failure semantics** — the guard fails **closed**. Deny is signalled the
+  documented way (JSON on stdout, exit 0) so it always carries a readable reason, and an
+  unparseable payload denies rather than allowing. `hooks.json` appends `|| exit 2` because Claude
+  Code treats only exit 2 as blocking — without it a missing interpreter (127) or a crash (1)
+  would fail *open* exactly when the guard is most broken. The two advisory `PostToolUse` hooks
+  fail **open** instead: one line to stderr and exit 1, never blocking a tool call.
+- **`ceh-advisor` / README** — documents explicitly that no code ever writes the ack file (the
+  model writes its own permission slip — the intended honest-agent assumption, previously
+  understated), and that an ack is a blanket pass for the full TTL rather than scoped to the
+  command that was reviewed.
+
+### Fixed
+
+- **`ceh-advisor` / `git push -f` bypass** — the guard never matched a bare
+  `git push -f origin main`. The old pattern required whitespace before `-f` that the preceding
+  `git push\s` had already consumed, so the flag was only caught in non-first position. Force
+  pushes that previously sailed through are now gated. Branch names like `hotfix-f` and
+  `feature-force` remain allowed (20/20 targeted cases).
+- **`ceh-advisor` / subagent deadlock** — a subagent that tripped the guard was told to "invoke
+  the ceh-advisor subagent via the Task tool", which no subagent can do (none have `Task` in their
+  tools), leaving it stuck with no path forward. The guard now branches on the `agent_id` hook
+  field and tells subagents to stop and report to their caller instead. It still denies rather
+  than skipping — skipping would turn delegation into a universal bypass — and a fresh ack written
+  by the caller before delegating still unlocks it.
+
+---
+
 ## [3.20.0] — 2026-07-18
 
 `ceh-agent-coding-contract` gains **retroactive refactoring**: the write-less-code standard,
