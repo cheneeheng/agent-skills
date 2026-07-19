@@ -834,3 +834,36 @@ file. Confirmed by grep — the only writes are the README smoke-test snippet an
 text. The model writes its own permission slip. This is the documented honest-agent assumption;
 README now states it explicitly, along with the fact that an ack is a blanket pass for the full
 TTL rather than scoped to the reviewed command.
+
+### Entry 48
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-19T16:55:38+0200
+**Task:** Rework the usage-limit guard from statusline-percentage watching to preemptive stop-and-handoff
+
+**Context:** The guard's sensor was believed unreliable because account quota is shared across
+claude.ai web, desktop, mobile and Claude Code. Alternatives considered and rejected: polling a
+small API call (an API key reports the *org API* rate limits, a different pool from the Pro/Max
+subscription; the OAuth usage endpoint needs credentials read from a hook, is undocumented, and the
+probe consumes the quota it measures) and resume-side reconstruction from transcripts (transcripts
+carry only the after-the-fact `apiErrorStatus: 429`, not a running percentage, and reading a long
+transcript to summarize costs the most exactly when quota is scarcest).
+
+**Decision:** Keep the statusline export as the sensor — verified as the only local surface
+carrying live account-wide quota — and fix its reliability instead of replacing it: read the newest
+record across all sessions/projects, guard staleness, warn once when absent rather than no-op
+silently, and take the worst of *all* rate-limit windows by iterating the dict rather than
+hardcoding `five_hour` (this is what surfaced `seven_day` at 72% during testing). Threshold lowered
+95 → 90 so the summary is written while context is hot. An earlier design that maintained a handoff
+file every turn was rejected by the user as too much bookkeeping; one write at the trigger point is
+cheaper and produces a richer summary.
+
+**Impact / Risk:** Still inert without the statusline export, but now says so. Subagents share the
+parent `session_id`, so the escalation band is session-wide by design; a subagent that trips the
+guard reports upward rather than writing an artifact, since exit 2 reaches the subagent's loop and
+its final report is never shown to the user.
+
+**Outcome:** All paths dry-run against live statusline data: below-threshold silence, main-session
+fire (exit 2), subagent-variant fire, band-based re-fire suppression, and the warn-once
+missing-sensor path (exit 1). `validate.py` passes.
