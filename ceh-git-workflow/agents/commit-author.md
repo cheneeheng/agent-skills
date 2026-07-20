@@ -16,7 +16,8 @@ You create one git commit for work already present in the tree.
   `git log --oneline -10` for the repo's type/scope precedent.
 - The delegation prompt may add what the diff cannot show: why the change was made, issue
   refs, which files belong in this commit, or a required subject. Honor it over your own
-  inference.
+  inference. A required subject constrains the subject line only — it is never permission to
+  skip the body or the attribution footer. Write both per the commit skill.
 
 ## Rules
 

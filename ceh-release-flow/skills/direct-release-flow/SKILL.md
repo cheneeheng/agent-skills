@@ -27,15 +27,41 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 | 4 | Write the vX.Y.Z changelog entry | "update the changelog" → `ceh-documentation:update-changelog` | Section written and semver-validated |
 | 5 | Refresh the README if the change is user-facing | "update the readme" → `ceh-documentation:update-readme` | Updated, or "no update needed" recorded |
 | 6 | Update CLAUDE.md if project facts/structure changed | surgical edit (or `revise-claude-md` if that plugin is installed) | CLAUDE.md matches reality, or skip logged |
-| 7 | Commit the bump + docs straight to `main` | "commit" → `ceh-git-workflow:commit` | Subject `chore: release vX.Y.Z`, tree clean, pushed to `main` |
+| 7 | Commit the bump + docs straight to `main` | "commit" → `ceh-git-workflow:commit` | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean, pushed to `main` |
 | 8 | Tag and publish the release on `main` | "cut a release" → `ceh-git-workflow:release` | Tag pushed, release created |
+
+## Step 7 detail — the release commit is not subject-only
+
+`chore: release vX.Y.Z` is the **subject**, not the whole message. A release commit is the one
+place where the diff is least self-explanatory: it shows version strings and changelog prose, but
+not what actually shipped or why the bump is that level. With no PR in this flow, the commit
+message is the *only* durable narrative of the release — write it in full:
+
+```
+chore: release vX.Y.Z
+
+<1–3 sentences: what this release ships, in the same terms as the changelog
+entry — the user-visible change, not "bumped files".>
+
+- Bump: <PATCH|MINOR|MAJOR> — <the change that forces this level>
+- Manifests: <which ones moved, old -> new>
+- Docs: <changelog / README / CLAUDE.md updated, or "no update needed" and why>
+
+<attribution footer exactly as configured in settings — see the commit skill>
+```
+
+That is a multi-line message: write it to a temp file and `git commit -F`, never `-m`. Omit the
+attribution footer only when settings supply none.
 
 ## Delegating steps 7–8 to subagents
 
 Steps 7–8 are mechanical once the docs are written. When the `ceh-git-workflow` agents are
 installed, dispatch them to the subagent that owns each — `commit-author` (7, tell it the commit
-goes straight to `main` and must be pushed) and `release-cutter` (8, pass "tag-only" plus the
-changelog notes file) — to keep the main session lean. Dispatch each on the model and effort
+goes straight to `main` and must be pushed, and pass **the body content above**) and
+`release-cutter` (8, pass "tag-only" plus the changelog notes file) — to keep the main session
+lean. A subagent handed only `chore: release vX.Y.Z` will commit exactly that and nothing more; it
+cannot recover the release's rationale from a diff of version strings. Pass the body text, or pass
+the changelog section and tell it to summarize from there. Dispatch each on the model and effort
 declared in its frontmatter: **Claude Sonnet at medium reasoning effort** for both. These steps
 write to `main` — do not downgrade to a smaller model or lower effort. The gates stay **here**: check each step's
 gate on the agent's report before dispatching the next. Steps 1–6 stay in the main session — they
