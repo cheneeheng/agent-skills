@@ -867,3 +867,34 @@ its final report is never shown to the user.
 **Outcome:** All paths dry-run against live statusline data: below-threshold silence, main-session
 fire (exit 2), subagent-variant fire, band-based re-fire suppression, and the warn-once
 missing-sensor path (exit 1). `validate.py` passes.
+
+---
+
+### Entry 49
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-06-29
+**Task:** Run the ceh-release-flow:release-flow skill in this repo to release the auto-merge git-workflow changes.
+
+**Context:** The release-flow skill prescribes cutting a `chore/release-vX.Y.Z` branch from `main`, but the session's standing instruction is to develop only on `claude/git-auto-merge-workflow-ne8we4` and never push to a different branch without explicit permission. The feature changes and plugin version bumps already live on that feature branch.
+**Decision:** Treat the existing `claude/git-auto-merge-workflow-ne8we4` branch as the release-carrying branch rather than creating a separate `chore/release-` branch. This honors the dev-branch constraint and keeps the version bumps, changelog, and feature changes in one PR. Repo git tag bumped PATCH (v3.13.3 → v3.13.4) because the changes are skill-content only (no new skills or agents), per the repo's two-layer versioning rule in CLAUDE.md.
+**Impact / Risk:** PR carries both feature and release-bump commits together (acceptable for this repo). GitHub Release object cannot be created with the available MCP tools (no create-release tool) — the annotated tag can be pushed via git, but the Release page must be created manually or confirmed separately.
+**Outcome:** Pending merge + tag. Merged into this log on 2026-07-20 from a stray `docs/claude_logs/DECISION_LOG.md` (that session wrote to the default convention path instead of `.agents_workspace/`); appended with the next sequential ID rather than inserted in date order, so IDs stay monotonic and the original timestamp carries the chronology.
+
+---
+
+### Entry 50
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-20T00:00:00+0200
+**Task:** Load `ceh-fabled:fabled-voice` via a SessionStart hook the way `ceh-agent-coding-contract` loads the contract.
+
+**Context:** Two forks the request left open. (1) Hook ordering: both plugins would emit a SessionStart directive, and cross-plugin hook execution order is not guaranteed, so a second "MANDATORY FIRST ACTION" payload would contend with the contract's for the first tool call. (2) `disable-model-invocation: true` looked attractive for a now-hook-loaded skill, but a hook only injects text — the model still makes the Skill call, and that flag removes the skill from the model-visible listing, so setting it would break the very path being built.
+
+**Decision:** Word the payload as `REQUIRED SETUP ACTION` (not `MANDATORY FIRST ACTION`) and have it defer explicitly to the contract directive when both are pending, resolving order in prose rather than relying on hook sequencing. Left model invocation enabled. Bumped `ceh-fabled` MINOR (1.2.0 → 1.3.0) — a hook is a new component, matching the repo's "MINOR for new skills or agents" rule. Kept the hook pure-bash so `ceh-fabled` gains no `python3` dependency.
+
+**Impact / Risk:** fable's response style becomes unconditional in every session and repo where the plugin is installed, including ones where a more conventional register would suit better; opting out means disabling the plugin's hooks. If a future session sets `disable-model-invocation` on `fabled-voice`, the hook silently degrades to a failed Skill call.
+
+**Outcome:** `validate.py` passes; hook payload parses as JSON and emits the expected directive. Not yet observed firing — requires a fresh session after the plugin cache picks up 1.3.0.
