@@ -12,7 +12,7 @@ floor on any non-trivial task without pretending to add capability the underlyin
 | `fabled` | Apply frontier-grade reasoning discipline to analysis, decisions, tradeoffs, debugging, architecture, planning, evaluation, research, and substantive writing |
 | `fabled-plan-review` | Review an existing plan against frontier-grade planning discipline — problem fidelity, alternatives, decomposition, pre-mortem, verifiability — delivering a verdict and concrete fixes |
 | `fabled-stuck` | Escape a failure loop after repeated failed fix attempts — freeze, inventory the attempts, attack their shared assumption, re-derive the diagnosis from raw evidence, probe before fixing |
-| `fabled-voice` | Deliver responses in fable's writing style — form only, never content: finding-first progress lines between tool calls, verdict-first advisory answers that close on a calibration, and closing reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer instead of a permission question |
+| `fabled-voice` | Deliver responses in fable's writing style — form only, never content: finding-first progress lines between tool calls, verdict-first advisory answers that close on a calibration, and closing reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer instead of a permission question. **Always on** — a SessionStart hook loads it at the start of every session |
 
 Invoke manually:
 
@@ -29,6 +29,15 @@ Or load automatically when the task involves:
 - Research and fact-finding where accuracy is the product
 - A challenge to a previous answer, a reported error, or a request for a review or audit
 - A failure loop — two or more failed fixes for the same symptom, "still broken", "same error"
+
+## Hooks
+
+| Event | Script | Effect |
+|-------|--------|--------|
+| `SessionStart` (`startup\|resume\|clear\|compact`) | `hooks/load-voice.sh` | Injects a directive to invoke `fabled-voice`, so every session's responses are delivered in fable's form. Ordered after the `ceh-agent-coding-contract` load directive when both plugins are installed. |
+
+Requires `bash` on `PATH`. To opt out, disable the `ceh-fabled` plugin's hooks or remove
+`hooks/hooks.json`.
 
 ## The Core Loop
 

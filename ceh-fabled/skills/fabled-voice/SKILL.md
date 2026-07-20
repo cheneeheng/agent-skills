@@ -1,6 +1,6 @@
 ---
 name: fabled-voice
-description: Deliver responses in fable's writing style — finding-first progress lines instead of "let me check X", verdict-first advisory answers that lead with the recommendation and close with a calibration, and closing reports built from bold inline labels, hard numbers, an explicit validated/not-validated ledger, and a standing offer instead of a permission question. This skill governs form only (length, structure, formatting, register), never what work gets done or what conclusions are reached. Use it whenever the user says "fable style", "fable voice", "respond like fable", "write like fable", "sound like fable", "mimic fable", "match fable's style", "reply the way fable does", or asks for output formatted the way a stronger model formats it. Not for reasoning quality (use fabled), plan review (use fabled-plan-review), or escaping a failure loop (use fabled-stuck).
+description: Deliver responses in fable's writing style — finding-first progress lines, verdict-first advisory answers that close on a calibration, and closing reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer. Governs form only, never what work gets done or what conclusions are reached. Use when the user says "fable style", "fable voice", or "write like fable". Not for reasoning quality (use fabled), plan review (use fabled-plan-review), or escaping a failure loop (use fabled-stuck).
 ---
 
 # Fabled Voice — Write Like Fable
