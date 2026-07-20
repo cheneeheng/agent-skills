@@ -332,6 +332,28 @@ for tasks it can't trivially handle alone …").
 
 ---
 
+## Release-commit message block (step 7 detail)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-release-flow/skills/release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | canonical |
+| `ceh-release-flow/skills/direct-release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | near-verbatim copy |
+
+**What is shared:** the rule that `chore: release vX.Y.Z` is the subject and not the whole message,
+the commit-message template (what shipped / `Bump:` / `Manifests:` / `Docs:` / attribution footer),
+the `git commit -F` requirement, and the delegation warning that a subagent handed only the subject
+will commit exactly that.
+
+**What diverges:** the direct variant adds one sentence — with no PR, the commit message is the only
+durable narrative of the release. Related but *not* duplicated: `ceh-git-workflow/skills/release/SKILL.md`
+step 1 states the same "always multi-line, body required" rule in its own command-block comment, and
+`ceh-git-workflow/agents/commit-author.md` states that a required subject constrains the subject line
+only. Keep all four consistent in intent when the rule changes.
+
+---
+
 ## Update Protocol
 
 When changing a shared block:

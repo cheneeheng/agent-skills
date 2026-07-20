@@ -27,10 +27,32 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 | 4 | Write the vX.Y.Z changelog entry | "update the changelog" → `ceh-documentation:update-changelog` | Section written and semver-validated |
 | 5 | Refresh the README if the change is user-facing | "update the readme" → `ceh-documentation:update-readme` | Updated, or "no update needed" recorded |
 | 6 | Update CLAUDE.md if project facts/structure changed | surgical edit (or `revise-claude-md` if that plugin is installed) | CLAUDE.md matches reality, or skip logged |
-| 7 | Commit the bump + docs | "commit" → `ceh-git-workflow:commit` | Subject `chore: release vX.Y.Z`, tree clean |
+| 7 | Commit the bump + docs | "commit" → `ceh-git-workflow:commit` | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean |
 | 8 | Open the PR — on repos that allow auto-merge, `open-pr` already queues it here | "open a PR" → `ceh-git-workflow:open-pr` | PR open, self-review + definition-of-done passed |
 | 9 | Merge and delete the branch — if step 8 queued auto-merge, this just confirms it lands; otherwise prefer `--auto` (or a direct merge once green). Don't poll CI by hand | "merge the PR" → `ceh-git-workflow:merge` (auto-merge probe) | CI green, approvals met, merged to `main` |
 | 10 | Tag and publish the release on `main` | "cut a release" → `ceh-git-workflow:release` | Tag pushed, release created |
+
+## Step 7 detail — the release commit is not subject-only
+
+`chore: release vX.Y.Z` is the **subject**, not the whole message. A release commit is the one
+place where the diff is least self-explanatory: it shows version strings and changelog prose, but
+not what actually shipped or why the bump is that level. Write the full message:
+
+```
+chore: release vX.Y.Z
+
+<1–3 sentences: what this release ships, in the same terms as the changelog
+entry — the user-visible change, not "bumped files".>
+
+- Bump: <PATCH|MINOR|MAJOR> — <the change that forces this level>
+- Manifests: <which ones moved, old -> new>
+- Docs: <changelog / README / CLAUDE.md updated, or "no update needed" and why>
+
+<attribution footer exactly as configured in settings — see the commit skill>
+```
+
+That is a multi-line message: write it to a temp file and `git commit -F`, never `-m`. Omit the
+attribution footer only when settings supply none.
 
 ## Delegating steps 7–10 to subagents
 
@@ -41,7 +63,12 @@ owns it — `commit-author` (7), `pr-opener` (8), `branch-merger` (9), `release-
 model and effort declared in its frontmatter: **Claude Sonnet at medium reasoning effort** for all
 four. The steps are mechanical but write to `main` — do not downgrade to a smaller model or lower
 effort. Each agent preloads its owning skill and derives what changed from git itself; pass only
-what the diff cannot show (the vX.Y.Z, issue refs, the changelog notes file for step 10). The gates stay **here**: check
+what the diff cannot show (the vX.Y.Z, issue refs, the changelog notes file for step 10). For step
+7 that emphatically includes **the body content above** — what shipped, the bump level and its
+justification, which manifests and docs moved. A subagent handed only `chore: release vX.Y.Z` will
+commit exactly that and nothing more; it cannot recover the release's rationale from a diff of
+version strings. Pass the body text, or pass the changelog section and tell it to summarize from
+there. The gates stay **here**: check
 each step's gate on the agent's report before dispatching the next. Steps 1–6 stay in the main
 session — they need the session's context (what changed and why) to write correct docs. Without
 the agents, delegate to the skills by trigger phrase as in the table.

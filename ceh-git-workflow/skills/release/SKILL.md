@@ -42,8 +42,12 @@ The annotated tag message (step 2) takes no attribution — keep it to `v<X.Y.Z>
 ```bash
 # 1. Bump the version in this project's manifest(s) — whatever the project uses
 #    (pyproject.toml, package.json, plugin.json, marketplace.json, Cargo.toml, ...), commit.
-#    A footer means a multi-line message: write it to msg.txt and use -F, never inline -m.
+#    Always multi-line — the subject alone does not say what shipped or why the bump is
+#    that level, and the diff only shows version strings. Write msg.txt, use -F, never -m.
 #      chore: bump version to v<X.Y.Z>
+#
+#      <what this release ships, 1-3 sentences, matching the changelog entry>
+#      <bump level and the change that forces it; which manifests moved>
 #
 #      <attribution footer exactly as configured in settings>
 git add <manifest files>

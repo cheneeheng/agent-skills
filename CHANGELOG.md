@@ -5,6 +5,53 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.22.1] — 2026-07-20
+
+Release commits produced by the release flows were arriving as a bare `chore: release vX.Y.Z`
+subject with no body and no attribution footer. The cause was not a single bad instruction but
+three specifications that each independently permitted it: the flows' step-7 gate defined the
+message *as* the subject line, the subagent delegation note said to pass "only what the diff cannot
+show" and then listed only the version number, and `commit-author` treats a caller-supplied subject
+as authoritative over its own inference. The attribution footer disappeared as a side effect —
+a subject-only message goes out through `git commit -m`, and the footer is only ever assembled on
+the multi-line `-F` path.
+
+A release commit is the worst case for inferring intent from a diff: it shows version strings and
+changelog prose, but not what shipped or why the bump is that level. In the direct (PR-less) flow
+it is the only durable narrative of the release at all. All four specifications now say so.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.2.4 |
+| `ceh-release-flow` | v1.1.6 |
+
+### Fixed
+
+- **`ceh-release-flow` / `release-flow`, `direct-release-flow`** — the step-7 gate now requires a
+  body and an attribution footer, not just the subject. A new "Step 7 detail" section states that
+  `chore: release vX.Y.Z` is the subject rather than the whole message and gives the template:
+  one to three sentences on what shipped in the changelog's terms, then `Bump:` with the change
+  that forces the level, `Manifests:` with what moved, `Docs:` with what was updated or why it was
+  not, then the configured attribution footer — written to a temp file and committed with `-F`.
+  The subagent delegation notes now name that body content as something the caller must pass,
+  since an agent handed only the subject commits exactly that and cannot recover the rationale
+  from a diff of version strings.
+- **`ceh-git-workflow` / `release`** — the step-1 version-bump commit template gained body lines
+  and now reads "always multi-line" rather than "a footer means a multi-line message".
+- **`ceh-git-workflow` / `commit-author`** — a caller-supplied required subject now explicitly
+  constrains the subject line only, and is never permission to skip the body or the attribution
+  footer.
+
+### Changed
+
+- **`CROSS_REFERENCES.md`** — registers the near-verbatim "Step 7 detail" block shared by the two
+  release flows, and records the two `ceh-git-workflow` files that state the same rule in their own
+  words so all four stay consistent in intent.
+
+---
+
 ## [3.22.0] — 2026-07-20
 
 `ceh-fabled` gains a **style** skill to sit beside its three reasoning skills. `fabled` raises the
