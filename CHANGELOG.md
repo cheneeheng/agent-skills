@@ -5,6 +5,50 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.23.0] — 2026-07-20
+
+`fabled-voice` becomes always-on. A SessionStart hook now loads it at the start of every session,
+the same mechanism `ceh-agent-coding-contract` uses to load the contract — so the response style
+applies without the user asking for it, rather than waiting on a description match.
+
+The mechanism has one non-obvious constraint worth recording. A hook cannot invoke a skill; it can
+only inject text, and the model still makes the `Skill` call. Setting
+`disable-model-invocation: true` on a hook-loaded skill therefore breaks it — the flag removes the
+skill from the model-visible listing, so the hook fires, the directive lands, and the call fails.
+`fabled-voice` stays model-invocable for that reason. Cross-plugin hook ordering is likewise not
+guaranteed, so the payload resolves precedence in prose instead of relying on sequencing.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-fabled` | v1.3.0 |
+
+### Added
+
+- **`ceh-fabled` / hooks** — a `SessionStart` hook (`startup|resume|clear|compact`) injecting a
+  directive to invoke `fabled-voice` before responding. Pure bash, so the plugin gains no `python3`
+  dependency. The payload is worded `REQUIRED SETUP ACTION` rather than `MANDATORY FIRST ACTION`
+  and defers explicitly to the `ceh-agent-coding-contract` directive when both are pending, so the
+  two SessionStart hooks do not contend for the first tool call.
+
+### Changed
+
+- **`ceh-fabled` / `fabled-voice`** — description tightened: the style specifics stay, the
+  trigger-phrase list drops to three phrases now that the hook carries the loading. The frontmatter
+  does not mention the hook; the READMEs document it.
+- **`README.md`, `ceh-fabled/README.md`, `CLAUDE.md`** — record the skill as always-on, add a hooks
+  table to the plugin README, and note that this hook needs only `bash` while the `ceh-advisor` and
+  `ceh-agent-coding-contract` hooks need `python3`.
+
+### Removed
+
+- **`docs/`** — deleted. It held a stray `DECISION_LOG.md` written to the contract's default
+  convention path instead of `.agents_workspace/`, plus a `.gitkeep`. The entry was merged into
+  `.agents_workspace/DECISION_LOG.md` as Entry 49 with its original timestamp intact.
+
+---
+
 ## [3.22.1] — 2026-07-20
 
 Release commits produced by the release flows were arriving as a bare `chore: release vX.Y.Z`

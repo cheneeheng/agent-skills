@@ -898,3 +898,20 @@ missing-sensor path (exit 1). `validate.py` passes.
 **Impact / Risk:** fable's response style becomes unconditional in every session and repo where the plugin is installed, including ones where a more conventional register would suit better; opting out means disabling the plugin's hooks. If a future session sets `disable-model-invocation` on `fabled-voice`, the hook silently degrades to a failed Skill call.
 
 **Outcome:** `validate.py` passes; hook payload parses as JSON and emits the expected directive. Not yet observed firing — requires a fresh session after the plugin cache picks up 1.3.0.
+
+---
+
+### Entry 51
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-20T00:00:00+0200
+**Task:** Release v3.23.0 via the ceh-release-flow:release-flow skill.
+
+**Context:** The flow's step 2 prescribes cutting `chore/release-vX.Y.Z` from latest `main`, but the `ceh-fabled` 1.3.0 bump and the hook itself were already committed and pushed on `feat/fabled-voice-hook`, with no PR open yet. Following step 2 literally would mean merging the feature PR first, then a second branch and PR carrying only a changelog entry.
+
+**Decision:** Release from the existing `feat/fabled-voice-hook` branch — add the changelog entry there, open one PR, merge, then tag `v3.23.0` on `main` at the merge commit. Repo tag bumped MINOR (v3.22.1 → v3.23.0) because `ceh-fabled` gained a new component (a hook), per the repo's two-layer versioning rule. Steps 3, 5 and 6 were already satisfied by the feature commit (manifests bumped, READMEs and CLAUDE.md updated), so only step 4 needed work. Same call as Entry 49, which faced the identical mismatch.
+
+**Impact / Risk:** The PR carries the feature and the release bump together — acceptable for this repo and consistent with prior releases. Step 10's "tag the merge commit on `main`" rule is unaffected and still enforced.
+
+**Outcome:** Changelog written; steps 7–10 delegated to the `ceh-git-workflow` subagents.
