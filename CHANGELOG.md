@@ -5,6 +5,44 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.22.0] — 2026-07-20
+
+`ceh-fabled` gains a **style** skill to sit beside its three reasoning skills. `fabled` raises the
+quality of the thinking; `fabled-voice` governs only how the result is written — length, structure,
+formatting, register — and explicitly changes neither the conclusions nor the work that produced
+them.
+
+The rules are derived from paired transcripts rather than impression: 247 messages from a stronger
+model against 495 from a weaker one, working the same two repositories, compared on measurable
+axes. The largest single discriminator is narration of intent — "let me check X" opens 41% of the
+weaker model's mid-task lines and 18% of the stronger one's, which states the finding it just got
+instead. The rest follow the same pattern: fewer headings (2% of messages vs 10%), lighter bold
+(1.8 vs 2.2 emphases per 1000 characters), an explicit "not validated" clause at roughly four times
+the rate, and standing offers in place of permission questions ("Want me to…" 4 occurrences vs 20).
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-fabled` | v1.2.0 |
+
+### Added
+
+- **`ceh-fabled` / `fabled-voice`** — new skill: deliver responses in the stronger model's writing
+  style, form only. Defines three message shapes and the rules for each. **Progress lines** lead
+  with the finding rather than the intention, stay under three sentences, and take a colon
+  terminator when a write follows. **Advisory answers** put the verdict in the first clause, name
+  the load-bearing reason as such, argue one counterpoint, and close on a calibration stating
+  confidence and the most likely way the answer is wrong. **Closing reports** open verdict-first
+  with the numbers in the sentence, use bold inline labels instead of markdown headings, carry an
+  explicit validated/not-validated ledger naming the command that was not run, and end on a
+  standing offer plus any risk flag. Includes a table of the eight recurring report labels and a
+  do/don't table of the weaker model's habits with the replacement for each.
+
+A closing section pins the skill to form: it does not license skipping a tool call to keep a
+message short, manufacturing numbers to fill the verdict sentence, or converting a Stop Condition
+into an offer. The honest sentence names what was not measured.
+
 ## [3.21.2] — 2026-07-19
 
 `ceh-git-workflow`'s commit skill hardcoded an attribution footer. Skill bodies load **after** the

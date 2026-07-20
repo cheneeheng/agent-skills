@@ -113,6 +113,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-fabled` | Fabled | `/ceh-fabled:fabled` | Any non-trivial task with more than one plausible answer — deliberate reasoning, alternatives, adversarial self-review, verification, and calibrated conviction |
 | `ceh-fabled` | Fabled Plan Review | `/ceh-fabled:fabled-plan-review` | Review an existing plan against frontier-grade planning discipline — problem fidelity, alternatives, decomposition, pre-mortem, verifiability — verdict plus concrete fixes |
 | `ceh-fabled` | Fabled Stuck | `/ceh-fabled:fabled-stuck` | Escape a failure loop after repeated failed fixes — freeze, inventory attempts, attack their shared assumption, re-derive the diagnosis from evidence, probe before fixing |
+| `ceh-fabled` | Fabled Voice | `/ceh-fabled:fabled-voice` | Deliver in fable's writing style — finding-first progress lines, verdict-first advisory answers closing on a calibration, and reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer |
 
 ---
 

@@ -12,6 +12,7 @@ floor on any non-trivial task without pretending to add capability the underlyin
 | `fabled` | Apply frontier-grade reasoning discipline to analysis, decisions, tradeoffs, debugging, architecture, planning, evaluation, research, and substantive writing |
 | `fabled-plan-review` | Review an existing plan against frontier-grade planning discipline — problem fidelity, alternatives, decomposition, pre-mortem, verifiability — delivering a verdict and concrete fixes |
 | `fabled-stuck` | Escape a failure loop after repeated failed fix attempts — freeze, inventory the attempts, attack their shared assumption, re-derive the diagnosis from raw evidence, probe before fixing |
+| `fabled-voice` | Deliver responses in fable's writing style — form only, never content: finding-first progress lines between tool calls, verdict-first advisory answers that close on a calibration, and closing reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer instead of a permission question |
 
 Invoke manually:
 
@@ -19,6 +20,7 @@ Invoke manually:
 /ceh-fabled:fabled
 /ceh-fabled:fabled-plan-review
 /ceh-fabled:fabled-stuck
+/ceh-fabled:fabled-voice
 ```
 
 Or load automatically when the task involves:
