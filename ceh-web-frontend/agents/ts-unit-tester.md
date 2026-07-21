@@ -4,7 +4,7 @@ description: Use proactively when the user asks to write, add, or improve unit t
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
-  - frontend-testing
+  - ceh-web-frontend:frontend-testing
 permissionMode: acceptEdits
 ---
 

@@ -5,6 +5,69 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.23.1] — 2026-07-21
+
+The coding contract could not reach a single subagent. `SessionStart` hooks do not fire for
+subagents, and no agent in the repo granted the `Skill` tool — so the two paths that would carry
+the contract into a delegated task were both closed, and the contract's own **Multi-Agent
+Scenarios** section (treat the caller's instructions as user-level authorization, do not escalate
+scope, report stop conditions to the caller since `AskUserQuestion` is unavailable) had no reader.
+The fix is the `skills:` frontmatter field, which preloads a skill at dispatch and needs no `Skill`
+tool — already in use by the `ceh-git-workflow` agents, just never pointed at the contract.
+
+It is deliberately not preloaded everywhere. The six tester agents are excluded because the
+contract's "do not add tests unprompted" rule contradicts an agent whose whole charter is writing
+tests; the four `ceh-git-workflow` agents already carry their own procedure; `verifier`,
+`repo-tree-mapper` and `ceh-advisor` are read-only or run on haiku. `fabled-voice` is excluded from
+every agent — subagent output is consumed by the main agent, never the user, so a response-style
+skill there is pure cost.
+
+Auditing the `skills:` field also turned up six entries written as bare skill names while four
+others were fully qualified. Both forms point at a skill in the agent's own plugin, so whether the
+bare ones ever resolved depends on a same-plugin fallback in the loader that is not documented. The
+failure mode is silent — an agent that believes it preloaded its testing standard and did not — so
+all entries are now qualified rather than diagnosed, the qualified form being correct either way.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.8.3 |
+| `ceh-fabled` | v1.3.1 |
+| `ceh-ops` | v3.0.3 |
+| `ceh-orchestration` | v1.0.3 |
+| `ceh-python-service` | v3.1.4 |
+| `ceh-web-frontend` | v3.2.2 |
+
+### Changed
+
+- **`ceh-orchestration` / `executor`, `ceh-ops` / `github-actions`, `gitlab-ci`** — preload
+  `ceh-agent-coding-contract:agent-coding-contract` via `skills:`. These three write files with
+  broad latitude and no scope discipline of their own; they are also the only agents where a
+  cross-plugin preload is justified, the contract being a cross-cutting tier rather than a peer
+  use-case plugin.
+- **`ceh-python-service` / three tester agents, `ceh-web-frontend` / three tester agents** —
+  `skills:` entries qualified: `python-service-testing` →
+  `ceh-python-service:python-service-testing`, `frontend-testing` →
+  `ceh-web-frontend:frontend-testing`. All 13 `skills:` entries in the repo are now uniformly
+  `plugin:skill`.
+- **`ceh-agent-coding-contract` / `agent-coding-contract`, `ceh-fabled` / `fabled-voice`** —
+  descriptions trimmed (55 → 38 and 85 → 48 words) now that both delivery paths are deterministic
+  and the description no longer carries triggering weight. Both now state they load automatically,
+  so the main agent does not re-invoke a skill already in context. The manual trigger phrases stay
+  as the recovery path for when a hook does not fire.
+- **`CLAUDE.md`** — the plugin-agent frontmatter note gains the `skills:` preload rule: no `Skill`
+  tool required, `SessionStart` never fires for subagents, always write `plugin:skill`.
+- **`README.md`** — records the contract as preloaded into the three implementation subagents.
+
+### Fixed
+
+- **`ceh-orchestration/.claude-plugin/plugin.json`** — normalized from CRLF to LF, the only manifest
+  in the repo still using CRLF. Surfaced when a bulk `sed -i` rewrote the whole file; the content
+  diff is one version string.
+
+---
+
 ## [3.23.0] — 2026-07-20
 
 `fabled-voice` becomes always-on. A SessionStart hook now loads it at the start of every session,

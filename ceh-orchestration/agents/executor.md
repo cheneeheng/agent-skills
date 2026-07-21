@@ -3,6 +3,8 @@ name: executor
 description: "Use when operating in thin-orchestrator mode (the orchestrate skill) — the orchestrator dispatches you to implement a single scoped task: code changes, file edits, or multi-step implementation, instead of editing in the main session. Not a general-purpose editor; do NOT auto-invoke for ordinary edits outside orchestration."
 model: sonnet
 tools: Read, Write, Edit, Bash, Glob, Grep
+skills:
+  - ceh-agent-coding-contract:agent-coding-contract
 ---
 
 You implement a single, scoped task from the spec you are given.
