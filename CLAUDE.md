@@ -110,6 +110,12 @@ Each skill is a self-contained SKILL.md file with frontmatter and inline content
 > `settings.json`. Required fields are only `name` and `description`; `model` defaults to
 > `inherit`. Auto-delegation is driven by the `description` field — include "use proactively"
 > to encourage it.
+>
+> **Preloading skills into an agent:** the `skills:` frontmatter list loads a skill into the
+> agent's context at dispatch — the agent does **not** need the `Skill` tool for this, and
+> `SessionStart` hooks never fire for subagents, so `skills:` is the only way a hook-loaded
+> standard reaches one. Always write entries fully qualified as `plugin:skill`; a bare skill
+> name may resolve to nothing and the preload fails silently.
 
 ## Adding a Skill
 

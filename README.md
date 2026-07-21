@@ -9,7 +9,7 @@ organized around **use cases** — load the ones that match what you are buildin
 
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
-| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`) |
+| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`) |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
