@@ -4,7 +4,7 @@ description: Use proactively when the user creates or modifies a Python function
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
-  - python-service-testing
+  - ceh-python-service:python-service-testing
 permissionMode: acceptEdits
 ---
 

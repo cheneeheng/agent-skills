@@ -4,7 +4,7 @@ description: Use proactively when the user wants to test how multiple Python mod
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
-  - python-service-testing
+  - ceh-python-service:python-service-testing
 permissionMode: acceptEdits
 ---
 

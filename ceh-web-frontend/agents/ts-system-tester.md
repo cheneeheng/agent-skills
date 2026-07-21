@@ -4,7 +4,7 @@ description: Use proactively when the user asks to write end-to-end tests, E2E t
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
-  - frontend-testing
+  - ceh-web-frontend:frontend-testing
 permissionMode: acceptEdits
 ---
 

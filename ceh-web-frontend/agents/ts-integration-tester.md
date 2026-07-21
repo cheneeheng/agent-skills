@@ -4,7 +4,7 @@ description: Use proactively when the user asks to write integration tests for f
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
-  - frontend-testing
+  - ceh-web-frontend:frontend-testing
 permissionMode: acceptEdits
 ---
 
