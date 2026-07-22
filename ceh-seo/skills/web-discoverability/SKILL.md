@@ -22,6 +22,9 @@ Every indexable page ships with:
   under multiple URLs (trailing slash, query params, www).
 - **Open Graph + Twitter card** — `og:title`, `og:description`, `og:image` (1200×630),
   `og:type`; `twitter:card` = `summary_large_image`. Every shared link renders through these.
+  The `og:image` file must actually exist and be a real 1200×630 PNG or JPG — link-preview
+  crawlers render SVG inconsistently, and a dangling image reference silently kills every
+  share card.
 - **Robots meta only to exclude** — `noindex` on thin, duplicate, or gated pages. Absence
   means index; never add an empty or permissive robots meta out of habit.
 - **No `<meta keywords>`** — dead surface; adding it only signals template cargo-culting.
