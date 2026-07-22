@@ -5,6 +5,42 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.24.0] — 2026-07-22
+
+SEO/GEO had no home in the plugin catalog: the technical half (meta tags, structured data,
+sitemaps) would have landed in `ceh-web-frontend`, the content half (README pitches, package
+descriptions) in `ceh-blog` — while a SaaS marketing site or a published library touches both
+with neither plugin loaded. `ceh-seo` closes that as a use-case-workflow plugin for anything
+exposed to the internet: public web pages, repo READMEs, package listings, landing copy. Its two
+skills split on surface mechanics, where trigger moments and file types are disjoint — the same
+rule that keeps `sveltekit` and `react-vite` in one plugin.
+
+The plugin shipped through a behavioral evaluation (`ceh-evaluation:evaluate-skill`, run-001,
+gate 4/6 user-accepted with triggering waived): against hermetic no-skill baselines, with-skill
+runs cleared every discriminating assertion — verbatim one-liner consistency across
+README/pyproject/GitHub 2/2 vs 0/2, title/description length discipline 2/2 vs 0/2 — locating
+the plugin's measured value in its limits and prohibitions rather than checklist items models
+already know. One eval finding fed straight back into content: the og:image asset-integrity rule
+(real 1200×630 PNG/JPG, no SVG, no dangling references).
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-seo` | v1.0.0 |
+
+### Added
+
+- **`ceh-seo` (new plugin)** — SEO/GEO discoverability standards for anything internet-exposed.
+- **`ceh-seo` / `web-discoverability`** — fires when shipping a public web page/route: per-page
+  head checklist (title/description/canonical/OG with asset-integrity rule), site-level surfaces
+  (sitemap, robots, `llms.txt`, real-404 rule), JSON-LD by page type, SSR/prerender requirement,
+  GEO citation rules (answer-first sections, extractable facts).
+- **`ceh-seo` / `text-discoverability`** — fires when writing public repo/package text: the
+  excerpt rule (category noun + audience + differentiator in ~160 chars), the verbatim one-liner
+  across surfaces, per-surface checklist (GitHub/PyPI/npm/marketplaces), facts-over-adjectives.
+  Boundary drawn against `ceh-documentation:update-readme`: findability vs post-change accuracy.
+
 ## [3.23.1] — 2026-07-21
 
 The coding contract could not reach a single subagent. `SessionStart` hooks do not fire for

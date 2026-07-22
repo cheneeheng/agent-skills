@@ -915,3 +915,19 @@ missing-sensor path (exit 1). `validate.py` passes.
 **Impact / Risk:** The PR carries the feature and the release bump together — acceptable for this repo and consistent with prior releases. Step 10's "tag the merge commit on `main`" rule is unaffected and still enforced.
 
 **Outcome:** Changelog written; steps 7–10 delegated to the `ceh-git-workflow` subagents.
+
+### Entry 53
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-22T22:45:00+02:00
+**Task:** Release v3.24.0 via release-flow
+
+**Context:** release-flow step 2 prescribes a fresh `chore/release-vX.Y.Z` branch off main, but
+the entire release content (the new ceh-seo plugin) sits unmerged on `feat/seo-plugin` with no PR.
+**Decision:** Ride the release on `feat/seo-plugin` — changelog + release commit land on the
+feature branch, one PR carries feature and release together. A separate release branch would
+require merging the feature first for no reviewable difference.
+**Impact / Risk:** Single PR mixes feature and release-bookkeeping commits; acceptable since the
+release IS the feature. Tag still lands on the merge commit on main per the hard rule.
+**Outcome:** (pending merge)
