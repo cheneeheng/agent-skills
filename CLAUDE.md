@@ -25,7 +25,7 @@ Plugins fall into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor` |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin (agents only). Categorization rules of thumb:
@@ -70,6 +70,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-scaffolding` | Per-project-type setup: directory layout + config + .gitignore |
 | `ceh-git-workflow` | Commits, branching, PRs, merging, releases, code review |
 | `ceh-ops` | Deploy pipeline, incidents, rollback; CI agents |
+| `ceh-seo` | SEO/GEO discoverability for anything internet-exposed: public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |
