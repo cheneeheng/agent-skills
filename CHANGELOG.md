@@ -5,6 +5,34 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.25.1] — 2026-07-24
+
+The usage-limit guard fired the handoff on the first tool call *after* a 5-hour window reset — the
+one moment the quota is most available. The hook read `used_percentage` off the newest statusline
+record and checked only its age, so a record written minutes before a reset stayed inside the
+15-minute freshness window while describing a window that no longer exists. The reading said ~90%,
+the account was actually at 0%, and the session stopped starting new work until an API round-trip
+happened to refresh the export.
+
+The age check alone cannot catch this: the record is genuinely recent, it is the *window* that is
+gone. `worst_window` now drops any window whose `resets_at` is already in the past, since such a
+reading predates the restart by construction. A window carrying no `resets_at`, or an unparseable
+one, is still considered — the guard is advisory and fails open, so an unreadable timestamp must
+not silently disable it.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.8.4 |
+
+### Fixed
+
+- **`ceh-agent-coding-contract` / `usage-limit-watch.py`** — windows past their `resets_at` are
+  excluded from the worst-window scan. Previously the first tool call after a quota reset could
+  trigger `usage-limit-handoff` off a pre-reset reading that was recent enough to pass the
+  `CEH_USAGE_STALE_MINUTES` check.
+
 ## [3.25.0] — 2026-07-24
 
 The plan-build-review loop had no home for a change made *after* a version shipped. A one-line

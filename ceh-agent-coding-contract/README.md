@@ -60,7 +60,9 @@ subagent sees only its own slice of the work.
 > `rate_limits` only to the statusline, not to hooks, hence the relay. Without the export the guard
 > warns once per session that it is inactive, rather than failing silently — everything else in the
 > plugin works unchanged. Readings older than `CEH_USAGE_STALE_MINUTES` (default 15) are treated as
-> unknown for the same reason: a stale low number reads as safety that is not there.
+> unknown for the same reason: a stale low number reads as safety that is not there. A window whose
+> `resets_at` has already passed is skipped regardless of the record's age — the reading predates
+> the reset, so a high number there describes a window that no longer exists.
 >
 > The hook needs `python3` on PATH (stdlib only, no packages), which is what makes it behave the
 > same on Linux, macOS, and Windows; it replaced a bash+`jq` version that needed a POSIX shell and
