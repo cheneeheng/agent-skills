@@ -5,6 +5,45 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.25.0] — 2026-07-24
+
+The plan-build-review loop had no home for a change made *after* a version shipped. A one-line
+copy fix or a tightened validation either drifted silently from the frozen `SKELETON`/`ITER` plan
+or got over-ceremonied into a full iteration — and "everything post-MVP" sat ambiguous between the
+two. `patch-built-version` closes that, and it draws the line at §02: a change touching the data
+model or API surface (or adding an entity, route, or screen) is a feature and routes back to
+`plan-fullstack-app-iteratively`; anything smaller is recorded as an `ITER_NN.md` carrying
+`patch: true` and implemented in scope. The patch marker is the only artifact allowed past the MVP
+terminator, and the SemVer PATCH bump is handed to `ceh-git-workflow:release` rather than
+duplicated here.
+
+The schema change rippled to three lockstep consumer copies (`implement-from-plan`,
+`review-against-plan`, and the new skill's own); `implement-from-plan` learned to exclude patch
+ITERs from a default full-sequence run; the duplication is registered in `CROSS_REFERENCES.md`.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-plan-build-review` | v1.1.0 |
+
+### Added
+
+- **`ceh-plan-build-review` / `patch-built-version`** — fires when patching an already-built
+  version with a small, non-feature change (bug fix, copy/config tweak, validation change, small
+  post-MVP polish). Routing gate: a §02 change (data model / API surface) or a new
+  entity/route/screen is a feature and routes to `plan-fullstack-app-iteratively`; anything smaller
+  becomes a `patch: true` `ITER_NN.md` implemented in scope, with the PATCH bump handed to
+  `ceh-git-workflow:release`.
+
+### Changed
+
+- **Plan document schema** — added the `patch` frontmatter marker; a patch `ITER_NN.md` is the
+  only artifact allowed past the `mvp: true` terminator. Propagated to all three lockstep
+  `plan-schema.md` consumer copies and registered in `CROSS_REFERENCES.md`.
+- **`ceh-plan-build-review` / `implement-from-plan`** — patch ITERs are excluded from the default
+  full-sequence run and implemented only when named explicitly.
+
 ## [3.24.0] — 2026-07-22
 
 SEO/GEO had no home in the plugin catalog: the technical half (meta tags, structured data,
