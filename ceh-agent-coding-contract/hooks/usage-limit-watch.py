@@ -77,13 +77,27 @@ def latest_reading():
     return best
 
 
-def worst_window(limits):
-    """(name, window, pct) for the window closest to its cap."""
-    usable = {
-        name: win
-        for name, win in limits.items()
-        if isinstance(win, dict) and win.get("used_percentage") is not None
-    }
+def worst_window(limits, now):
+    """(name, window, pct) for the window closest to its cap.
+
+    Windows whose resets_at has already passed are excluded: the reading was
+    taken before that reset, so its used_percentage reflects the spent window,
+    not the fresh one that has since started. Without this, a record written
+    just before a reset keeps reporting ~90% and fires the handoff on the first
+    tool call after the limit restarts - before any API round-trip refreshes it.
+    """
+    usable = {}
+    for name, win in limits.items():
+        if not isinstance(win, dict) or win.get("used_percentage") is None:
+            continue
+        resets_at = win.get("resets_at")
+        if resets_at is not None:
+            try:
+                if float(resets_at) <= now:
+                    continue
+            except (ValueError, TypeError):
+                pass
+        usable[name] = win
     if not usable:
         return None
     name, win = max(usable.items(), key=lambda kv: float(kv[1]["used_percentage"]))
@@ -124,7 +138,7 @@ def main() -> None:
         )
         return
 
-    worst = worst_window(limits)
+    worst = worst_window(limits, time.time())
     if worst is None:
         return
     name, window, pct = worst
