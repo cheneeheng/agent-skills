@@ -62,6 +62,14 @@ body block listing the features and concerns consciously deferred from this MVP.
 block as scope boundary, not as work to implement. Every non-terminal iteration **omits** the
 `mvp` key entirely (absence means false).
 
+A **patch** is a small, non-feature change made to a version *after* it was implemented (bug fix,
+copy/config tweak, validation change, small post-MVP polish). It rides as an ordinary `ITER_NN.md`
+that continues the family counter and carries `patch: true` in its frontmatter. A patch ITER is the
+**only** artifact allowed past the terminator — it depends on the terminator (or a prior patch) and
+never carries `mvp`. Because it stays within the existing architecture, its `sections_changed`
+touches implementation sections (§04/§05), not §02; a change that touches §02 (data model or API
+surface) is a feature iteration, not a patch. The patch skill produces these.
+
 **Key field rules:**
 - `depends_on` (ITER only) — prior artifacts this iteration relies on, named by stem. Within a
   family it is the same-sequence chain (e.g. `[SKELETON_v2, ITER_01_v2]`); the first iteration of
@@ -71,9 +79,14 @@ block as scope boundary, not as work to implement. Every non-terminal iteration 
 - Skeletons carry no `depends_on` — a skeleton is fresh scaffolding, and a versioned skeleton is
   assumed to build on the prior family.
 - `mvp` (terminator ITER only) — present and `true` exactly once per family, on the final
-  iteration. It marks where the plan stops; nothing is planned past it. All other iterations
-  omit the key.
+  iteration. It marks where the plan stops; nothing is *planned* past it except patches. All
+  other iterations omit the key.
 - `mvp_target` (terminator ITER only) — one line stating the MVP this family reaches.
+- `patch` (patch ITER only) — present and `true` on an iteration that patches an already-built
+  version. Continues the family `NN` counter, `depends_on` the terminator or a prior patch, never
+  carries `mvp`, and may follow the terminator. `sections_changed` stays within implementation
+  sections (§04/§05); a §02 change means it is a feature iteration, not a patch. All non-patch
+  iterations omit the key.
 
 > **The MVP terminator may be absent.** Not every plan declares one — iteratively-planned
 > families often have no terminator yet. When no iteration carries `mvp: true`, do not infer one

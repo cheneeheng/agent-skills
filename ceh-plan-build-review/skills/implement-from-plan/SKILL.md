@@ -29,9 +29,12 @@ starting. The section table, pointer rules, and resolution order there are autho
      `depends_on` (the prior artifacts whose content this iteration relies on — its dependency chain)
    - For SKELETON: `sections` (implement all listed sections)
 4. By default the target is the whole sequence up to and including the `mvp: true` iteration:
-   implement the SKELETON, then each ITER_NN in `depends_on` order. Never implement past the mvp
-   terminator. If the user named a single iteration, target only that one and use its `depends_on`
-   chain to resolve unchanged sections for context.
+   implement the SKELETON, then each ITER_NN in `depends_on` order. Never sweep past the mvp
+   terminator in a default full-sequence run. If the user named a single iteration, target only
+   that one and use its `depends_on` chain to resolve unchanged sections for context.
+   **Patch ITERs** (frontmatter `patch: true`) sit past the terminator and are excluded from the
+   default run — implement one only when it is the named target, on its own; produced by the
+   `patch-built-version` skill.
 
 ## Step 2 — Resolve Pointers Before Starting
 

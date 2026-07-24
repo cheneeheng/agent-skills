@@ -16,6 +16,7 @@ are directly consumable by the implement and review skills.
 | `plan-fullstack-app-to-mvp` | You want the complete build plan to a working MVP in one session | Produces the skeleton plus every iteration to MVP upfront; a complexity gate hands off to the iterative planner when upfront planning is unsafe. |
 | `implement-from-plan` | You point at a plan and ask to build it | Implements a `SKELETON.md` / `ITER_NN.md` section by section in scope order (§01–§06), resolving iteration pointers to the authoritative spec. |
 | `review-against-plan` | You ask to audit a plan against the code | Checks each in-scope section against the spec, finds gaps/deviations/errors, then fixes them. |
+| `patch-built-version` | You have a small, non-feature change to a version that is already built | Routes features out to the iterative planner; otherwise records the change as a `patch: true` `ITER_NN.md` and implements only the touched sections. Hands the PATCH bump to `ceh-git-workflow:release`. |
 
 **Manual triggers**
 
@@ -23,17 +24,20 @@ are directly consumable by the implement and review skills.
 - `plan-fullstack-app-to-mvp` — `"plan this whole app to MVP"`, `"plan everything upfront"`, `"lay out all the iterations"`.
 - `implement-from-plan` — `"implement from plan"`, `"build from the plan"`, or point at a `SKELETON.md` / `ITER_NN.md` and ask to build it.
 - `review-against-plan` — `"review against plan"`, `"verify the plan is implemented"`, or point at a plan file and ask to audit it.
+- `patch-built-version` — `"patch this version"`, `"small change to the shipped version"`, `"non-feature fix"`, or describe a small post-build change that adds no feature.
 
 ## The loop
 
 ```
 plan-fullstack-app-iteratively ──┐
                                  ├──► SKELETON.md / ITER_NN.md ──► implement-from-plan ──► review-against-plan
-plan-fullstack-app-to-mvp ───────┘
+plan-fullstack-app-to-mvp ───────┘                                                              │
+                                          small non-feature change after a version ships ──► patch-built-version
+                                          (feature? → back to plan-fullstack-app-iteratively)
 ```
 
 The plan document schema is defined in `skills/implement-from-plan/references/plan-schema.md`
-(consumed by `implement-from-plan` and `review-against-plan`); the two planning skills carry
+(consumed by `implement-from-plan`, `review-against-plan`, and `patch-built-version`); the two planning skills carry
 their own `references/section-specs.md` describing the same artifact format from the
 producer side.
 
