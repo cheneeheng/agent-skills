@@ -1,7 +1,13 @@
 ---
 name: direct-release-flow
 disable-model-invocation: true
-description: "Ship a complete project release in one pass directly on main, with no PR and no merge — bump the version, update the changelog/README/CLAUDE.md, commit straight to main, then tag and publish the release. This skill only sequences the steps and gates between them; it delegates each step to the skill that owns it (update-changelog, update-readme, commit, release). For the PR-gated variant use ceh-release-flow:release-flow; for tagging alone use ceh-git-workflow:release; for an urgent production fix use ceh-git-workflow:hotfix."
+description: >-
+  Ship a complete project release in one pass directly on main, with no PR and no merge — bump the
+  version, update the changelog/README/CLAUDE.md, commit straight to main, then tag and publish the
+  release. This skill only sequences the steps and gates between them; it delegates each step to the
+  skill that owns it (update-changelog, update-readme, commit, release). For the PR-gated variant
+  use ceh-release-flow:release-flow; for tagging alone use ceh-git-workflow:release; for an urgent
+  production fix use ceh-git-workflow:hotfix.
 argument-hint: '[version]'
 ---
 

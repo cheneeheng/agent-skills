@@ -1,6 +1,12 @@
 ---
 name: add-plugin-component
-description: The checklist for adding or changing a skill, agent, hook, or script in this plugin repo — which plugin it belongs in, the frontmatter it needs, and every registration chore that must land in the same commit (README tables, CROSS_REFERENCES.md, plugin.json + marketplace.json version bumps, validate.py). Load whenever a new SKILL.md or agents/*.md is being created, an existing one is being renamed or moved between plugins, or the user says "add a skill", "add an agent", "new plugin component", or asks why validate.py is failing.
+description: >-
+  The checklist for adding or changing a skill, agent, hook, or script in this plugin repo — which
+  plugin it belongs in, the frontmatter it needs, and every registration chore that must land in the
+  same commit (README tables, CROSS_REFERENCES.md, plugin.json + marketplace.json version bumps,
+  validate.py). Load whenever a new SKILL.md or agents/*.md is being created, an existing one is
+  being renamed or moved between plugins, or the user says "add a skill", "add an agent", "new
+  plugin component", or asks why validate.py is failing.
 argument-hint: '[skill-or-agent-name]'
 ---
 
@@ -31,6 +37,20 @@ inline; `references/` is only for schemas and templates shared across skills.
 
 **Agent** — `ceh-<plugin>/agents/<name>.md`. Required frontmatter is only `name` and `description`;
 auto-delegation is driven entirely by `description` (include "use proactively" to encourage it).
+
+**`description` is always a folded block scalar (`>-`)** — never quoted, never plain. `validate.py`
+rejects anything else.
+
+```yaml
+description: >-
+  Load this skill when doing X: the colon is literal here, as are "quotes" and 'apostrophes'.
+  Wrap at ~98 chars with a uniform 2-space indent and no blank lines.
+```
+
+It is the only style with no escaping burden. A plain scalar cannot contain `: `, single-quoted
+needs `''` doubling, double-quoted needs `\` and `"` escaping — all three have silently produced
+invalid YAML in this repo. Keep the indent uniform (a more-indented line becomes a literal newline
+instead of folding) and avoid blank lines. Any *other* key containing `: ` gets single quotes.
 
 Frontmatter worth reaching for before writing prose that does the same job:
 

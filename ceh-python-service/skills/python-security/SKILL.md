@@ -1,6 +1,11 @@
 ---
 name: python-security
-description: 'Load this skill when handling secrets, configuring CORS, applying rate limiting, validating external input, or reviewing Python service code for security issues: adding environment variable loading, configuring allowed origins, protecting mutation endpoints, or setting up input validation with Pydantic. Auto-load whenever secrets management, CORS config, rate limiting, or authentication/authorization code is written or reviewed. Not for frontend secret handling.'
+description: >-
+  Load this skill when handling secrets, configuring CORS, applying rate limiting, validating
+  external input, or reviewing Python service code for security issues: adding environment variable
+  loading, configuring allowed origins, protecting mutation endpoints, or setting up input
+  validation with Pydantic. Auto-load whenever secrets management, CORS config, rate limiting, or
+  authentication/authorization code is written or reviewed. Not for frontend secret handling.
 ---
 
 # Python Security Baseline

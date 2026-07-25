@@ -1,6 +1,11 @@
 ---
 name: postgresql
-description: 'Load this skill when designing or modifying a PostgreSQL schema: defining tables and columns, choosing column types (TIMESTAMPTZ, JSONB), adding indexes, or naming conventions. Auto-load whenever a table or column is added or a schema is designed. For query, transaction, connection-pool, and tenant-isolation code use the asyncpg skill; for migration tooling and safety use the alembic skill.'
+description: >-
+  Load this skill when designing or modifying a PostgreSQL schema: defining tables and columns,
+  choosing column types (TIMESTAMPTZ, JSONB), adding indexes, or naming conventions. Auto-load
+  whenever a table or column is added or a schema is designed. For query, transaction,
+  connection-pool, and tenant-isolation code use the asyncpg skill; for migration tooling and safety
+  use the alembic skill.
 ---
 
 # PostgreSQL Schema Design

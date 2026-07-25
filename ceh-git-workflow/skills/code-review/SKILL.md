@@ -1,6 +1,10 @@
 ---
 name: code-review
-description: "Load this skill when reviewing a pull request or leaving code review comments: deciding whether a comment is blocking or advisory, prioritizing what to review first, or structuring review feedback. Auto-load whenever a PR review is being written, review comments are being left, or a PR is being assessed for approval."
+description: >-
+  Load this skill when reviewing a pull request or leaving code review comments: deciding whether a
+  comment is blocking or advisory, prioritizing what to review first, or structuring review
+  feedback. Auto-load whenever a PR review is being written, review comments are being left, or a PR
+  is being assessed for approval.
 disallowed-tools: Edit Write
 ---
 

@@ -1,6 +1,11 @@
 ---
 name: update-changelog
-description: "Load this skill when generating a changelog, updating CHANGELOG.md, documenting recent changes, writing release notes, or summarizing what changed between versions or commits. Trigger on \"update the changelog\", \"generate a changelog\", \"document this release\", \"write release notes\", \"what changed since the last release\". Follows Semantic Versioning and the Keep a Changelog format. Not for tagging or publishing the release itself (use ceh-git-workflow:release)."
+description: >-
+  Load this skill when generating a changelog, updating CHANGELOG.md, documenting recent changes,
+  writing release notes, or summarizing what changed between versions or commits. Trigger on "update
+  the changelog", "generate a changelog", "document this release", "write release notes", "what
+  changed since the last release". Follows Semantic Versioning and the Keep a Changelog format. Not
+  for tagging or publishing the release itself (use ceh-git-workflow:release).
 allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/../../scripts/check-semver.py *)
 ---
 

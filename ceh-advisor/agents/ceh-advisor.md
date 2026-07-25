@@ -1,6 +1,13 @@
 ---
 name: ceh-advisor
-description: Use this agent PROACTIVELY before committing to an architectural or design decision, after 2+ failed attempts at fixing the same issue, before running an irreversible or destructive action, or before declaring a complex task complete. Also invoked explicitly by name for an on-demand second opinion. Do NOT use for routine implementation work, trivial choices, or questions answerable by reading docs. See "When to invoke" in the agent body for worked scenarios. When invoking, you MUST include a handoff block (Situation / Options considered / Leaning toward / Relevant files) in the Task prompt — this agent cannot see the main conversation.
+description: >-
+  Use this agent PROACTIVELY before committing to an architectural or design decision, after 2+
+  failed attempts at fixing the same issue, before running an irreversible or destructive action, or
+  before declaring a complex task complete. Also invoked explicitly by name for an on-demand second
+  opinion. Do NOT use for routine implementation work, trivial choices, or questions answerable by
+  reading docs. See "When to invoke" in the agent body for worked scenarios. When invoking, you MUST
+  include a handoff block (Situation / Options considered / Leaning toward / Relevant files) in the
+  Task prompt — this agent cannot see the main conversation.
 model: opus
 effort: xhigh
 color: cyan

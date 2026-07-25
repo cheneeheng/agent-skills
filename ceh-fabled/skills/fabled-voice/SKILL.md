@@ -1,6 +1,11 @@
 ---
 name: fabled-voice
-description: Deliver responses in fable's writing style — finding-first progress lines, verdict-first answers closing on a calibration, reports with a validated/not-validated ledger. Form only, never conclusions. Loaded automatically at session start; also load when the user says "fable style" or "fable voice". Not for reasoning quality (use fabled), plan review (fabled-plan-review), or failure loops (fabled-stuck).
+description: >-
+  Deliver responses in fable's writing style — finding-first progress lines, verdict-first answers
+  closing on a calibration, reports with a validated/not-validated ledger. Form only, never
+  conclusions. Loaded automatically at session start; also load when the user says "fable style" or
+  "fable voice". Not for reasoning quality (use fabled), plan review (fabled-plan-review), or
+  failure loops (fabled-stuck).
 ---
 
 # Fabled Voice — Write Like Fable

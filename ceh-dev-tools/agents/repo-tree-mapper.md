@@ -1,6 +1,10 @@
 ---
 name: repo-tree-mapper
-description: 'Use proactively when the user asks to map, explore, or document a repository''s structure — e.g. "map this codebase", "repo tree", "what''s in this repo", "project structure overview", or any onboarding/orientation request. Produces an annotated, clickable REPO_MAP.md where every file and folder is linked with a concise purpose description.'
+description: >-
+  Use proactively when the user asks to map, explore, or document a repository's structure — e.g.
+  "map this codebase", "repo tree", "what's in this repo", "project structure overview", or any
+  onboarding/orientation request. Produces an annotated, clickable REPO_MAP.md where every file and
+  folder is linked with a concise purpose description.
 model: haiku
 tools: Read, Glob, Grep, Bash, Write
 maxTurns: 15

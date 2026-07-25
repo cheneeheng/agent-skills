@@ -1,6 +1,15 @@
 ---
 name: fabled
-description: Apply frontier-grade reasoning discipline (deep deliberate thinking, adversarial self-review, verification, calibrated conviction) to any non-trivial task. Use this skill whenever the task involves analysis, decisions, tradeoffs, debugging, architecture, planning, evaluation, research, fact-finding, substantive writing, or anything where a shallow first-pass answer risks being wrong or generic — even if the user doesn't ask you to "think hard." Also use it when the user challenges a previous answer, reports an error, or asks for a review or audit, and whenever the user says "as fable", "fable mode", "think like fable", "do this as fable", or asks for the answer a stronger model would give. If the task has more than one plausible answer or approach, use this skill.
+description: >-
+  Apply frontier-grade reasoning discipline (deep deliberate thinking, adversarial self-review,
+  verification, calibrated conviction) to any non-trivial task. Use this skill whenever the task
+  involves analysis, decisions, tradeoffs, debugging, architecture, planning, evaluation, research,
+  fact-finding, substantive writing, or anything where a shallow first-pass answer risks being wrong
+  or generic — even if the user doesn't ask you to "think hard." Also use it when the user
+  challenges a previous answer, reports an error, or asks for a review or audit, and whenever the
+  user says "as fable", "fable mode", "think like fable", "do this as fable", or asks for the answer
+  a stronger model would give. If the task has more than one plausible answer or approach, use this
+  skill.
 effort: max
 ---
 

@@ -1,6 +1,13 @@
 ---
 name: text-discoverability
-description: "Load this skill when writing or revising the public-facing text of a repo, package, or product — the README first screen, GitHub repo description and topics, package description and keywords in pyproject.toml or package.json, marketplace listings, landing-page copy. Trigger on \"make this repo findable\", \"improve the pitch\", \"package description\", \"GitHub topics\", \"keywords\", \"SEO for the README\", or when publishing a repo, library, or plugin for the first time. Not for keeping the README accurate after code changes (use ceh-documentation:update-readme) and not for HTML page markup (use web-discoverability)."
+description: >-
+  Load this skill when writing or revising the public-facing text of a repo, package, or product —
+  the README first screen, GitHub repo description and topics, package description and keywords in
+  pyproject.toml or package.json, marketplace listings, landing-page copy. Trigger on "make this
+  repo findable", "improve the pitch", "package description", "GitHub topics", "keywords", "SEO for
+  the README", or when publishing a repo, library, or plugin for the first time. Not for keeping the
+  README accurate after code changes (use ceh-documentation:update-readme) and not for HTML page
+  markup (use web-discoverability).
 ---
 
 # Text Discoverability

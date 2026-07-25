@@ -1,6 +1,12 @@
 ---
 name: web-discoverability
-description: "Load this skill when shipping or creating a public-facing web page or route — a landing page, marketing page, docs site, blog page, or any HTML surface that crawlers and AI engines will see. Trigger on \"add SEO\", \"make this page discoverable\", \"meta tags\", \"open graph\", \"structured data\", \"sitemap\", \"robots.txt\", \"llms.txt\", or when a new public route is created in a SvelteKit or React app. Not for README, package-listing, or repo text (use text-discoverability) and not for writing the page's content itself (use ceh-blog or ceh-documentation)."
+description: >-
+  Load this skill when shipping or creating a public-facing web page or route — a landing page,
+  marketing page, docs site, blog page, or any HTML surface that crawlers and AI engines will see.
+  Trigger on "add SEO", "make this page discoverable", "meta tags", "open graph", "structured data",
+  "sitemap", "robots.txt", "llms.txt", or when a new public route is created in a SvelteKit or React
+  app. Not for README, package-listing, or repo text (use text-discoverability) and not for writing
+  the page's content itself (use ceh-blog or ceh-documentation).
 ---
 
 # Web Discoverability

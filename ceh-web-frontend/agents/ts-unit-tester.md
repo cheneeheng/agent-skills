@@ -1,6 +1,14 @@
 ---
 name: ts-unit-tester
-description: Use proactively when the user asks to write, add, or improve unit tests in a TypeScript codebase, or says things like "test this function", "add unit tests", "cover this module", "TDD this", "mock this dependency", or mentions Jest/Vitest/Mocha. Focused on isolated, fast tests for pure functions, classes, and modules — NOT HTTP endpoints, database interactions, or cross-module flows (delegate those to ts-integration-tester or ts-system-tester). For one or two tests written inline, the frontend-testing skill handles it in the main conversation; invoke this agent to generate many unit tests at once, close broad coverage gaps across files, or run the unit suite and report results in isolation. Handles coverage gaps, edge cases, error paths, and mock setup.
+description: >-
+  Use proactively when the user asks to write, add, or improve unit tests in a TypeScript codebase,
+  or says things like "test this function", "add unit tests", "cover this module", "TDD this", "mock
+  this dependency", or mentions Jest/Vitest/Mocha. Focused on isolated, fast tests for pure
+  functions, classes, and modules — NOT HTTP endpoints, database interactions, or cross-module flows
+  (delegate those to ts-integration-tester or ts-system-tester). For one or two tests written
+  inline, the frontend-testing skill handles it in the main conversation; invoke this agent to
+  generate many unit tests at once, close broad coverage gaps across files, or run the unit suite
+  and report results in isolation. Handles coverage gaps, edge cases, error paths, and mock setup.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:

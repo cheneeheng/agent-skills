@@ -1,6 +1,14 @@
 ---
 name: fabled-stuck
-description: Escape a failure loop — when two or more attempts to fix the same problem have failed, stop patching and re-derive the diagnosis from raw evidence. Use this skill the moment a second fix attempt fails for the same symptom, when the user says "still broken", "still failing", "didn't work", "same error", "you're going in circles", "we've tried this already", or "I've tried everything", or when you notice yourself about to retry a variation of an approach that already failed — in debugging, failing builds or CI, config that won't take effect, or any repeated-failure loop. Not for the first attempt at a bug (that is ordinary hypothesis-driven debugging) and not for tasks that are hard but not looping.
+description: >-
+  Escape a failure loop — when two or more attempts to fix the same problem have failed, stop
+  patching and re-derive the diagnosis from raw evidence. Use this skill the moment a second fix
+  attempt fails for the same symptom, when the user says "still broken", "still failing", "didn't
+  work", "same error", "you're going in circles", "we've tried this already", or "I've tried
+  everything", or when you notice yourself about to retry a variation of an approach that already
+  failed — in debugging, failing builds or CI, config that won't take effect, or any
+  repeated-failure loop. Not for the first attempt at a bug (that is ordinary hypothesis-driven
+  debugging) and not for tasks that are hard but not looping.
 effort: xhigh
 ---
 

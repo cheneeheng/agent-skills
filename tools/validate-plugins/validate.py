@@ -11,8 +11,10 @@ Checks:
   skills     - every skills/<name>/SKILL.md has name + description frontmatter, name == dir,
                description <= 1024 chars.
   agents     - every agents/<name>.md has name + description frontmatter, description <= 1024 chars.
-  references - `references/...` mentions and `${CLAUDE_PLUGIN_ROOT}/scripts/...` mentions
-               in SKILL.md/agent files resolve to a real file.
+  scalars    - `description` uses the folded block scalar `>-`; no other frontmatter key is a
+               plain scalar containing ': ' (which strict YAML rejects).
+  references - `references/...`, `${CLAUDE_PLUGIN_ROOT}/scripts/...` and `${CLAUDE_SKILL_DIR}/...`
+               mentions in SKILL.md/agent files resolve to a real file.
   skill-refs - `plugin:component` references resolve to a real skill or agent.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
 """
@@ -134,12 +136,16 @@ def check_manifests() -> dict[str, str]:
 
 # --- skills & agents -------------------------------------------------------
 
-def check_plain_scalars(path: Path) -> None:
-    """Flag unquoted frontmatter values containing ': '.
+def check_scalar_style(path: Path) -> None:
+    """Enforce the repo's frontmatter scalar conventions.
 
-    A plain YAML scalar cannot contain a colon-space — a strict parser reads it as a
-    nested mapping and rejects the block. Claude Code's parser is lenient today, so
-    these load anyway, but the file is not valid YAML. Quote the value.
+    `description` must be a folded block scalar (`>-`). It is the only style with no
+    escaping burden: ':', '"', "'", '\\' and '#' are all literal inside it, so no
+    description can break the block, and '-' strips the trailing newline. Every other
+    style needs escaping that has silently broken files here before.
+
+    Any other key must not be a plain scalar containing ': ' — a strict YAML parser
+    reads that as a nested mapping and rejects the block. Quote those values.
     """
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---"):
@@ -147,14 +153,21 @@ def check_plain_scalars(path: Path) -> None:
     lines = text.splitlines()
     end = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
     for line in lines[1:end or 1]:
-        m = re.match(r"^([A-Za-z0-9_-]+):[ \t]+(.*)$", line)
-        if m and not m.group(2).startswith(("'", '"', ">", "|")) and ": " in m.group(2):
-            fail(rel(path), f"'{m.group(1)}' is an unquoted scalar containing ': ' - quote it")
+        m = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.*)$", line)
+        if not m:
+            continue
+        key, value = m.group(1), m.group(2).strip()
+        if key == "description":
+            if value != ">-":
+                fail(rel(path), "'description' must use the folded block scalar '>-' "
+                                f"(found {value[:12]!r}...) - see CLAUDE.md")
+        elif value and not value.startswith(("'", '"', ">", "|")) and ": " in value:
+            fail(rel(path), f"'{key}' is an unquoted scalar containing ': ' - quote it")
 
 
 def check_frontmatter_doc(path: Path, expected_name: str | None) -> None:
     where = rel(path)
-    check_plain_scalars(path)
+    check_scalar_style(path)
     fm = parse_frontmatter(path)
     if fm is None:
         fail(where, "missing YAML frontmatter block")

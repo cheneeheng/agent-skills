@@ -1,16 +1,16 @@
 ---
 name: shrink-diff
-description: >
+description: >-
   Retroactively simplify what a feature branch added: after the work is done, apply the
-  write-less-code standard to the accumulated diff against main — across however many commits
-  or sessions produced it. Finds duplication the branch introduced against existing code,
-  wrappers left with one caller, code the changes made dead, and custom code a smaller ladder
-  rung (stdlib, native feature, installed dependency, one line) replaces. Load when a branch is
-  functionally complete and its diff should get smaller before review, and whenever the user
-  says "shrink the diff", "consolidate the branch", "simplify what I changed", "can this diff
-  be smaller", "master refactor", or "simplify the branch before the PR". Not for
-  whole-codebase cleanup (use refactor-repo), write-time minimalism (use write-less-code), or
-  reviewing a PR (use ceh-git-workflow:code-review).
+  write-less-code standard to the accumulated diff against main — across however many commits or
+  sessions produced it. Finds duplication the branch introduced against existing code, wrappers left
+  with one caller, code the changes made dead, and custom code a smaller ladder rung (stdlib, native
+  feature, installed dependency, one line) replaces. Load when a branch is functionally complete and
+  its diff should get smaller before review, and whenever the user says "shrink the diff",
+  "consolidate the branch", "simplify what I changed", "can this diff be smaller", "master
+  refactor", or "simplify the branch before the PR". Not for whole-codebase cleanup (use
+  refactor-repo), write-time minimalism (use write-less-code), or reviewing a PR (use
+  ceh-git-workflow:code-review).
 argument-hint: '[base-branch]'
 ---
 

@@ -1,6 +1,12 @@
 ---
 name: update-readme
-description: "Load this skill when keeping README.md accurate after a significant change — shipping a new feature, adding a command/script/endpoint, changing install or setup steps, adding or removing dependencies, introducing environment variables, or changing the public API surface. Trigger on \"update the readme\", \"refresh the docs\", \"document this feature\", \"I just shipped X — update docs\". Not for bug fixes, refactors, or any change that does not affect how someone installs, runs, or configures the project; not for changelogs (use update-changelog)."
+description: >-
+  Load this skill when keeping README.md accurate after a significant change — shipping a new
+  feature, adding a command/script/endpoint, changing install or setup steps, adding or removing
+  dependencies, introducing environment variables, or changing the public API surface. Trigger on
+  "update the readme", "refresh the docs", "document this feature", "I just shipped X — update
+  docs". Not for bug fixes, refactors, or any change that does not affect how someone installs,
+  runs, or configures the project; not for changelogs (use update-changelog).
 ---
 
 # Update README

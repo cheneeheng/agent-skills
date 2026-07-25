@@ -1,6 +1,12 @@
 ---
 name: domain-modeling
-description: 'Load this skill when designing or modifying domain entities and their boundaries: defining new entity IDs, choosing identifier formats, creating or extending status fields, designing state transition rules, modelling ownership and relationships, or setting layer boundaries between route handlers, services, and the database layer. Auto-load whenever a new entity type is introduced, a status enum is added or changed, an ID field is defined, or a service/route/db responsibility split is decided.'
+description: >-
+  Load this skill when designing or modifying domain entities and their boundaries: defining new
+  entity IDs, choosing identifier formats, creating or extending status fields, designing state
+  transition rules, modelling ownership and relationships, or setting layer boundaries between route
+  handlers, services, and the database layer. Auto-load whenever a new entity type is introduced, a
+  status enum is added or changed, an ID field is defined, or a service/route/db responsibility
+  split is decided.
 ---
 
 # Domain Modeling

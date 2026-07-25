@@ -89,6 +89,33 @@ Each skill is a self-contained SKILL.md file with frontmatter and inline content
 `references/` subdirectory is reserved for schemas and templates shared across multiple skills
 (e.g. `plan-schema.md` in `implement-from-plan`) — not for general reference material.
 
+## Frontmatter Conventions
+
+**`description` is always a folded block scalar (`>-`), never quoted and never plain.** Enforced
+by `validate.py`.
+
+```yaml
+---
+name: my-skill
+description: >-
+  Load this skill when doing X: the colon here is literal, as are "quotes",
+  'apostrophes', backslashes and # hashes. Wrap at ~98 chars, 2-space indent.
+---
+```
+
+`>-` is the only style with **no escaping burden** — every character is literal inside the block,
+and `-` strips the trailing newline so the value has no stray `\n`. The alternatives each have a
+rule that has already broken files here: a plain scalar cannot contain `: ` (strict YAML reads it
+as a nested mapping), single-quoted needs `''` doubling, double-quoted needs `\` and `"` escaping.
+Descriptions in this repo run 500–1000 characters, so the block form is also the readable one.
+
+Two mechanical rules keep folding lossless: **uniform 2-space indent** on every continuation line
+(a more-indented line suppresses folding and becomes a literal newline), and **no blank lines**
+inside the block. Folding joins lines with a single space, so never rely on a double space.
+
+Every **other** frontmatter key that contains `: ` must be quoted — single quotes are the default
+(`argument-hint: '[plan-file]'`). Short values that need no quoting stay bare (`effort: max`).
+
 ## Adding a Component
 
 The repo-local skill `.claude/skills/add-plugin-component/` carries the full checklist for both

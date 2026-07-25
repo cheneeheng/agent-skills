@@ -1,6 +1,10 @@
 ---
 name: scaffold-web-frontend
-description: 'Load this skill when starting or scaffolding a new web frontend (SvelteKit or React + Vite): creating the source layout, $lib/api client boundary, test folders, and .gitignore. Trigger when the user says "start/scaffold a Svelte app", "scaffold a React app", or sets up a fresh frontend repo. For the backend use scaffold-python-service.'
+description: >-
+  Load this skill when starting or scaffolding a new web frontend (SvelteKit or React + Vite):
+  creating the source layout, $lib/api client boundary, test folders, and .gitignore. Trigger when
+  the user says "start/scaffold a Svelte app", "scaffold a React app", or sets up a fresh frontend
+  repo. For the backend use scaffold-python-service.
 ---
 
 # Scaffold a Web Frontend
