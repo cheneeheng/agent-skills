@@ -1,6 +1,11 @@
 ---
 name: python-library-environment
-description: Load this skill when setting up or configuring the Python environment for a library: installing dependencies with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions, or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command is run, or a question arises about code style, type annotations, or import ordering. For web service environment (uvicorn/asyncpg) use ceh-python-service instead.
+description: >-
+  Load this skill when setting up or configuring the Python environment for a library: installing
+  dependencies with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming
+  conventions, or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command
+  is run, or a question arises about code style, type annotations, or import ordering. For web
+  service environment (uvicorn/asyncpg) use ceh-python-service instead.
 ---
 
 # Python Environment (Library)

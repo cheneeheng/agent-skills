@@ -1,7 +1,14 @@
 ---
 name: orchestrate
 disable-model-invocation: true
-description: Enter thin-orchestrator mode for a large, multi-step task with several heterogeneous or investigation-heavy parts — decompose and delegate rather than execute directly, capping context/token cost by keeping the main session lean and pushing all file I/O and execution into cheap isolated subagents. Not for mechanical single-pass changes where a scripted edit plus a typecheck is cheaper than delegating (e.g. a repo-wide rename), nor for a single one-off subagent dispatch. Stays in effect for the rest of the session once entered.
+description: >-
+  Enter thin-orchestrator mode for a large, multi-step task with several heterogeneous or
+  investigation-heavy parts — decompose and delegate rather than execute directly, capping
+  context/token cost by keeping the main session lean and pushing all file I/O and execution into
+  cheap isolated subagents. Not for mechanical single-pass changes where a scripted edit plus a
+  typecheck is cheaper than delegating (e.g. a repo-wide rename), nor for a single one-off subagent
+  dispatch. Stays in effect for the rest of the session once entered.
+argument-hint: '[goal]'
 ---
 
 # Orchestrate
@@ -62,6 +69,39 @@ these):
   implementation. Use instead of editing in the main session.
 - **verifier** (Haiku) — checking an executor's output against acceptance
   criteria. Dispatch after every executor run.
+
+> Gotcha: subagents run in the **background by default**, and a background
+> subagent keeps only these built-in tools — `Read`, `Grep`, `Glob`, `Bash`,
+> `PowerShell`, `Edit`, `Write`, `NotebookEdit`, `WebFetch`, `WebSearch`,
+> `TodoWrite`, `Skill`, `ToolSearch`, `EnterWorktree`, `ExitWorktree`, `Monitor`,
+> `TaskStop`, `SendMessage`, `Artifact`. Everything else is stripped whether
+> inherited or named in `tools:`, and the removal is silent. `AskUserQuestion` is
+> removed from *every* subagent, foreground or background, so a worker can never
+> stop to ask you something — put the answer in the spec or keep that step in
+> this session.
+
+## Resuming a worker vs. dispatching a fresh one
+
+A completed worker can be resumed with `SendMessage` (its ID or name as `to`); it
+auto-resumes in the background with its full prior context and needs no new
+`Agent` call. This is a real lever, but it is **conditional, not a default** —
+resuming re-sends the worker's entire accumulated transcript as input.
+
+- **Resume** when the follow-up genuinely continues that worker's task *and* its
+  context was expensive to build (wide exploration, many files read), and it
+  finished recently enough that the prompt cache is likely still warm. On a cache
+  hit this is overwhelmingly the cheaper path.
+- **Dispatch fresh** when the next task is independent, or when the worker's
+  transcript has grown large relative to what the next step actually needs. On a
+  cache miss you pay full input price for that whole transcript, which can exceed
+  the cost of a fresh worker's much smaller prefix. Repeated resumes compound,
+  since each one re-sends everything before it.
+- **Never** resume merely to save re-reading one file — a cheap fresh worker is
+  correct there.
+
+`Explore` and `Plan` are one-shot: they return no agent ID and cannot be resumed.
+Use `executor` or a custom agent when you expect to continue the work. A worker
+also needs `SendMessage` in its `tools:` to message a sibling.
 
 ## Model routing
 

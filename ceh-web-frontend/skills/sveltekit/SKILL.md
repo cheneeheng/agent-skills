@@ -1,6 +1,14 @@
 ---
 name: sveltekit
-description: Load this skill when adding or modifying SvelteKit routes, writing load functions, managing Svelte stores, or building components. Auto-load whenever a +page.svelte, +page.server.ts, +page.ts, store, or component file is created or modified.
+description: >-
+  Load this skill when adding or modifying SvelteKit routes, writing load functions, managing Svelte
+  stores, or building components. Auto-load whenever a +page.svelte, +page.server.ts, +page.ts,
+  store, or component file is created or modified.
+paths:
+  - "**/*.svelte"
+  - "**/+page*.ts"
+  - "**/+layout*.ts"
+  - "**/+server.ts"
 ---
 
 # SvelteKit Conventions

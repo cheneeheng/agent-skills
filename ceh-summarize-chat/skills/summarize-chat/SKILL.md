@@ -1,7 +1,10 @@
 ---
 name: summarize-chat
 disable-model-invocation: true
-description: Summarize the current conversation into a structured markdown document for LLM handoff.
+description: >-
+  Summarize the current conversation into a structured markdown document for LLM handoff.
+context: fork
+background: false
 ---
 
 # Chat History Summarizer

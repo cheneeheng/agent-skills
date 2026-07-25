@@ -26,6 +26,18 @@ are directly consumable by the implement and review skills.
 - `review-against-plan` — `"review against plan"`, `"verify the plan is implemented"`, or point at a plan file and ask to audit it.
 - `patch-built-version` — `"patch this version"`, `"small change to the shipped version"`, `"non-feature fix"`, or describe a small post-build change that adds no feature.
 
+## Plan mode is for the research *before* these skills, not for running them
+
+Claude Code's built-in plan mode (`Shift+Tab`, or `/plan` on a single prompt) allows reads and
+classifier-approved commands only — **file writes are blocked until you approve a plan**. Every
+skill here except `review-against-plan` produces or edits a file: a `SKELETON.md`, an `ITER_NN.md`,
+or the implementation itself. Running them inside plan mode blocks the deliverable.
+
+Use plan mode for the step *before*: exploring an unfamiliar codebase to decide what to plan.
+Then leave plan mode and invoke the planning skill, which needs write access to emit its artifact.
+
+Do not set `"defaultMode": "plan"` in a repo where these skills are the main workflow.
+
 ## The loop
 
 ```

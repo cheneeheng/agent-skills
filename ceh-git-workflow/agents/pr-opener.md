@@ -1,6 +1,13 @@
 ---
 name: pr-opener
-description: "Use to push the current branch and open a pull request in an isolated subagent instead of the main session — it derives the PR title and What/Why/How/Testing body from git log/diff against main itself, so the caller passes only what the diff cannot show (the why, issue refs, what was tested, draft vs ready). Dispatch when the user asks to open the PR in a subagent/background, when an orchestrating flow (e.g. the release flow) delegates its open-PR step, or to keep PR mechanics out of the main context. Not for merging (that is branch-merger); for in-session PR creation just use the open-pr skill."
+description: >-
+  Use to push the current branch and open a pull request in an isolated subagent instead of the main
+  session — it derives the PR title and What/Why/How/Testing body from git log/diff against main
+  itself, so the caller passes only what the diff cannot show (the why, issue refs, what was tested,
+  draft vs ready). Dispatch when the user asks to open the PR in a subagent/background, when an
+  orchestrating flow (e.g. the release flow) delegates its open-PR step, or to keep PR mechanics out
+  of the main context. Not for merging (that is branch-merger); for in-session PR creation just use
+  the open-pr skill.
 model: sonnet
 effort: medium
 tools: Read, Grep, Glob, Bash, Write

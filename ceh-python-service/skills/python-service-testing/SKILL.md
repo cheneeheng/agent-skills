@@ -1,6 +1,14 @@
 ---
 name: python-service-testing
-description: Load this skill when writing Python tests: adding unit tests, integration tests, test fixtures, or mocks. Auto-load whenever a test file is created or modified, a pytest fixture is written, or a decision is made about what to mock vs what to test against a real dependency.
+description: >-
+  Load this skill when writing Python tests: adding unit tests, integration tests, test fixtures, or
+  mocks. Auto-load whenever a test file is created or modified, a pytest fixture is written, or a
+  decision is made about what to mock vs what to test against a real dependency.
+paths:
+  - "**/test_*.py"
+  - "**/*_test.py"
+  - "**/tests/**"
+  - "**/conftest.py"
 ---
 
 # Python Testing

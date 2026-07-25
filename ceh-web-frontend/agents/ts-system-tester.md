@@ -1,11 +1,17 @@
 ---
 name: ts-system-tester
-description: Use proactively when the user asks to write end-to-end tests, E2E tests, system tests, smoke tests, or says things like "test the whole app", "test in a real browser", "Playwright test", "Cypress test", "test against staging", "test the full user journey", or mentions black-box testing a deployed service. Handles tests that exercise the whole system from the outside — UI flows, full API journeys across services, smoke tests against deployed environments — NOT single units (delegate to ts-unit-tester) and NOT in-process multi-module tests (delegate to ts-integration-tester).
+description: >-
+  Use proactively when the user asks to write end-to-end tests, E2E tests, system tests, smoke
+  tests, or says things like "test the whole app", "test in a real browser", "Playwright test",
+  "Cypress test", "test against staging", "test the full user journey", or mentions black-box
+  testing a deployed service. Handles tests that exercise the whole system from the outside — UI
+  flows, full API journeys across services, smoke tests against deployed environments — NOT single
+  units (delegate to ts-unit-tester) and NOT in-process multi-module tests (delegate to
+  ts-integration-tester).
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
   - ceh-web-frontend:frontend-testing
-permissionMode: acceptEdits
 ---
 
 # TypeScript System Tester

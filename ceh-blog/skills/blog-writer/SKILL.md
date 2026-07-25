@@ -1,7 +1,10 @@
 ---
 name: blog-writer
 disable-model-invocation: true
-description: Draft a complete blog post straight from raw material — notes, bullets, an outline, or fragments — with no interview. For a bare topic or a repo use blog-interviewer; for existing prose use blog-editor.
+description: >-
+  Draft a complete blog post straight from raw material — notes, bullets, an outline, or fragments —
+  with no interview. For a bare topic or a repo use blog-interviewer; for existing prose use
+  blog-editor.
 ---
 
 # Blog Writer Skill

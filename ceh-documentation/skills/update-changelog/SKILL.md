@@ -1,6 +1,12 @@
 ---
 name: update-changelog
-description: "Load this skill when generating a changelog, updating CHANGELOG.md, documenting recent changes, writing release notes, or summarizing what changed between versions or commits. Trigger on \"update the changelog\", \"generate a changelog\", \"document this release\", \"write release notes\", \"what changed since the last release\". Follows Semantic Versioning and the Keep a Changelog format. Not for tagging or publishing the release itself (use ceh-git-workflow:release)."
+description: >-
+  Load this skill when generating a changelog, updating CHANGELOG.md, documenting recent changes,
+  writing release notes, or summarizing what changed between versions or commits. Trigger on "update
+  the changelog", "generate a changelog", "document this release", "write release notes", "what
+  changed since the last release". Follows Semantic Versioning and the Keep a Changelog format. Not
+  for tagging or publishing the release itself (use ceh-git-workflow:release).
+allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/../../scripts/check-semver.py *)
 ---
 
 # Update Changelog
@@ -88,10 +94,10 @@ Add comparison links at the bottom (infer repo URL from `git remote get-url orig
 
 ### 5. Validate
 
-Run the bundled validator, which ships at `scripts/check-semver.py` under the plugin root (two directories above this skill's base directory):
+Run the bundled validator. `${CLAUDE_SKILL_DIR}` is substituted with this skill's own directory, so the path resolves wherever the plugin is installed:
 
 ```bash
-python3 "<plugin-root>/scripts/check-semver.py" CHANGELOG.md
+python3 "${CLAUDE_SKILL_DIR}/../../scripts/check-semver.py" CHANGELOG.md
 ```
 
 If the script cannot be located, scan `CHANGELOG.md` manually: verify all version headers match `MAJOR.MINOR.PATCH` (with optional `-prerelease` or `+build`), dates are `YYYY-MM-DD`, versions are newest-first, no duplicates.

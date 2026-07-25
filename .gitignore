@@ -22,6 +22,12 @@ build/
 # Local settings
 .claude/settings.local.json
 
+# Subagent auto-memory (ceh-advisor uses `memory: local`) — machine-local, never committed
+.claude/agent-memory-local/
+
+# Worktrees Claude Code creates for --worktree sessions and isolated subagents
+.claude/worktrees/
+
 # # Agent skill session artifacts (DECISION_LOG.md, LESSONS_LEARNED.md, etc.)
 # .agents_workspace/
 

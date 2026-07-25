@@ -11,8 +11,10 @@ Checks:
   skills     - every skills/<name>/SKILL.md has name + description frontmatter, name == dir,
                description <= 1024 chars.
   agents     - every agents/<name>.md has name + description frontmatter, description <= 1024 chars.
-  references - `references/...` mentions and `${CLAUDE_PLUGIN_ROOT}/scripts/...` mentions
-               in SKILL.md/agent files resolve to a real file.
+  scalars    - `description` uses the folded block scalar `>-`; no other frontmatter key is a
+               plain scalar containing ': ' (which strict YAML rejects).
+  references - `references/...`, `${CLAUDE_PLUGIN_ROOT}/scripts/...` and `${CLAUDE_SKILL_DIR}/...`
+               mentions in SKILL.md/agent files resolve to a real file.
   skill-refs - `plugin:component` references resolve to a real skill or agent.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
 """
@@ -134,8 +136,38 @@ def check_manifests() -> dict[str, str]:
 
 # --- skills & agents -------------------------------------------------------
 
+def check_scalar_style(path: Path) -> None:
+    """Enforce the repo's frontmatter scalar conventions.
+
+    `description` must be a folded block scalar (`>-`). It is the only style with no
+    escaping burden: ':', '"', "'", '\\' and '#' are all literal inside it, so no
+    description can break the block, and '-' strips the trailing newline. Every other
+    style needs escaping that has silently broken files here before.
+
+    Any other key must not be a plain scalar containing ': ' — a strict YAML parser
+    reads that as a nested mapping and rejects the block. Quote those values.
+    """
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---"):
+        return
+    lines = text.splitlines()
+    end = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
+    for line in lines[1:end or 1]:
+        m = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.*)$", line)
+        if not m:
+            continue
+        key, value = m.group(1), m.group(2).strip()
+        if key == "description":
+            if value != ">-":
+                fail(rel(path), "'description' must use the folded block scalar '>-' "
+                                f"(found {value[:12]!r}...) - see CLAUDE.md")
+        elif value and not value.startswith(("'", '"', ">", "|")) and ": " in value:
+            fail(rel(path), f"'{key}' is an unquoted scalar containing ': ' - quote it")
+
+
 def check_frontmatter_doc(path: Path, expected_name: str | None) -> None:
     where = rel(path)
+    check_scalar_style(path)
     fm = parse_frontmatter(path)
     if fm is None:
         fail(where, "missing YAML frontmatter block")
@@ -184,6 +216,9 @@ def check_references() -> None:
     # segment) so example paths like `docs/references/...` are not matched.
     ref_pat = re.compile(r"(?<![\w./-])references/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+")
     script_pat = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/(scripts/[A-Za-z0-9_./-]+)")
+    # ${CLAUDE_SKILL_DIR} is substituted by Claude Code with the skill's own directory,
+    # so these resolve relative to the SKILL.md, not the plugin root.
+    skill_dir_pat = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/([A-Za-z0-9_./-]+)")
     for doc in doc_files():
         where = rel(doc)
         # SKILL.md -> ceh-<plugin>/skills/<name>/SKILL.md ; agent -> ceh-<plugin>/agents/<name>.md
@@ -196,6 +231,9 @@ def check_references() -> None:
         for rec in dict.fromkeys(script_pat.findall(text)):
             if not (plugin_root / rec).exists():
                 fail(where, f"script reference '{rec}' not found")
+        for rec in dict.fromkeys(skill_dir_pat.findall(text)):
+            if not (base_dir / rec).resolve().exists():
+                fail(where, f"skill-dir reference '{rec}' not found")
 
 
 # --- skill references (plugin:component) -----------------------------------

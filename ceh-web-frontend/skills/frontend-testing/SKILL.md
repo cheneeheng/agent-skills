@@ -1,6 +1,16 @@
 ---
 name: frontend-testing
-description: Load this skill when writing Vitest unit tests, Testing Library component tests, MSW mocks, or Playwright E2E tests for any web frontend. Auto-load whenever a .test.ts, .test.tsx, or .spec.ts file is created or modified, or MSW handlers are being written. Framework-agnostic — Vitest, Testing Library, MSW, and Playwright serve SvelteKit and React alike.
+description: >-
+  Load this skill when writing Vitest unit tests, Testing Library component tests, MSW mocks, or
+  Playwright E2E tests for any web frontend. Auto-load whenever a .test.ts, .test.tsx, or .spec.ts
+  file is created or modified, or MSW handlers are being written. Framework-agnostic — Vitest,
+  Testing Library, MSW, and Playwright serve SvelteKit and React alike.
+paths:
+  - "**/*.test.{ts,tsx}"
+  - "**/*.spec.{ts,tsx}"
+  - "**/e2e/**"
+  - "**/playwright.config.ts"
+  - "**/mocks/**"
 ---
 
 # Frontend Testing

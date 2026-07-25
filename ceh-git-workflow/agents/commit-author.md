@@ -1,6 +1,12 @@
 ---
 name: commit-author
-description: "Use to create a git commit in an isolated subagent instead of the main session — it derives what changed from git status/diff itself, so the caller passes only what the diff cannot show (the why, issue refs, which files are in scope, a required subject). Dispatch when the user asks to commit in a subagent/background, when an orchestrating flow (e.g. the release flow) delegates its commit step, or to keep commit mechanics out of the main context. Not for deciding whether or what to commit — the caller decides that; for in-session commits just use the commit skill."
+description: >-
+  Use to create a git commit in an isolated subagent instead of the main session — it derives what
+  changed from git status/diff itself, so the caller passes only what the diff cannot show (the why,
+  issue refs, which files are in scope, a required subject). Dispatch when the user asks to commit
+  in a subagent/background, when an orchestrating flow (e.g. the release flow) delegates its commit
+  step, or to keep commit mechanics out of the main context. Not for deciding whether or what to
+  commit — the caller decides that; for in-session commits just use the commit skill.
 model: sonnet
 effort: medium
 tools: Read, Grep, Glob, Bash, Write

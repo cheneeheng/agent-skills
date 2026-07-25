@@ -1,7 +1,9 @@
 ---
 name: blog-editor
 disable-model-invocation: true
-description: Diagnose and revise an existing blog draft — polish, tighten, or fix structure while preserving the author's voice. For notes or a bare topic use blog-writer or blog-interviewer instead.
+description: >-
+  Diagnose and revise an existing blog draft — polish, tighten, or fix structure while preserving
+  the author's voice. For notes or a bare topic use blog-writer or blog-interviewer instead.
 ---
 
 # Blog Editor Skill

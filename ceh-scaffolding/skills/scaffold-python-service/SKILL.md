@@ -1,6 +1,10 @@
 ---
 name: scaffold-python-service
-description: Load this skill when starting or scaffolding a new Python (FastAPI) web service: creating the initial directory layout, layer boundaries, base config, and .gitignore. Trigger when the user says "start/scaffold a FastAPI service", "new Python backend project", or sets up a fresh service repo. For a library use scaffold-python-library; for the frontend use scaffold-web-frontend.
+description: >-
+  Load this skill when starting or scaffolding a new Python (FastAPI) web service: creating the
+  initial directory layout, layer boundaries, base config, and .gitignore. Trigger when the user
+  says "start/scaffold a FastAPI service", "new Python backend project", or sets up a fresh service
+  repo. For a library use scaffold-python-library; for the frontend use scaffold-web-frontend.
 ---
 
 # Scaffold a Python Service
@@ -36,6 +40,20 @@ project/
 
 - `pyproject.toml` with uv, ruff, mypy, pytest config — see `ceh-python-service:python-service-environment`.
 - Web service deps: `fastapi`, `uvicorn[standard]`, `pydantic-settings`, `asyncpg`, `alembic`, `structlog`.
+
+## Agent instruction file
+
+Claude Code reads `CLAUDE.md`, **not** `AGENTS.md`. If the repo already has an `AGENTS.md` for
+other coding agents, do not duplicate it — create a `CLAUDE.md` that imports it, so both tools
+read one source:
+
+```markdown
+@AGENTS.md
+```
+
+Add any Claude-specific instructions below the import. A symlink also works, but on Windows it
+needs Administrator or Developer Mode, so prefer the import. If there is no `AGENTS.md`, just
+write `CLAUDE.md` directly.
 
 ## .gitignore
 

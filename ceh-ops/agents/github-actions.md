@@ -1,6 +1,15 @@
 ---
 name: github-actions
-description: "Use proactively when the user mentions GitHub Actions, GitHub workflows, or anything in .github/workflows/. Trigger phrases: \"add a workflow\", \"set up GitHub CI\", \"fix my GitHub pipeline\", \"why did the GitHub build fail\", \"add a deploy job to GitHub\", \"cache dependencies in Actions\", \"matrix build\", \"reusable workflow\", \"workflow_dispatch\", \"OIDC to AWS/GCP/Azure in GitHub\", \"pin action SHA\", \"review my workflow\", \"migrate to GitHub Actions\", \"add secrets to GitHub\", \"speed up GitHub Actions\", \"composite action\", \"GitHub environment\", \"branch protection\", \"required status checks\". Also invoke for any task touching actions/, needs:, permissions:, runs-on:, job artifacts, GitHub-hosted runners, self-hosted runners, or supply-chain security in GitHub workflows."
+description: >-
+  Use proactively when the user mentions GitHub Actions, GitHub workflows, or anything in
+  .github/workflows/. Trigger phrases: "add a workflow", "set up GitHub CI", "fix my GitHub
+  pipeline", "why did the GitHub build fail", "add a deploy job to GitHub", "cache dependencies in
+  Actions", "matrix build", "reusable workflow", "workflow_dispatch", "OIDC to AWS/GCP/Azure in
+  GitHub", "pin action SHA", "review my workflow", "migrate to GitHub Actions", "add secrets to
+  GitHub", "speed up GitHub Actions", "composite action", "GitHub environment", "branch protection",
+  "required status checks". Also invoke for any task touching actions/, needs:, permissions:,
+  runs-on:, job artifacts, GitHub-hosted runners, self-hosted runners, or supply-chain security in
+  GitHub workflows.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch
 skills:

@@ -1,6 +1,11 @@
 ---
 name: environment
-description: Load this skill when setting up a web frontend project, running scripts, managing dependencies, writing TypeScript, or configuring linting and formatting in a Bun + Vite project (SvelteKit or React). Auto-load whenever bun install/add/run or package.json scripts are used, a .ts/.tsx/.svelte file is written, or eslint.config.js / .prettierrc / tsconfig.json is created or modified.
+description: >-
+  Load this skill when setting up a web frontend project, running scripts, managing dependencies,
+  writing TypeScript, or configuring linting and formatting in a Bun + Vite project (SvelteKit or
+  React). Auto-load whenever bun install/add/run or package.json scripts are used, a
+  .ts/.tsx/.svelte file is written, or eslint.config.js / .prettierrc / tsconfig.json is created or
+  modified.
 ---
 
 # Environment, TypeScript Style, and Linting

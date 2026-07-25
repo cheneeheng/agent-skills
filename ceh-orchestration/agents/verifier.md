@@ -1,6 +1,9 @@
 ---
 name: verifier
-description: Use when operating in thin-orchestrator mode (the orchestrate skill) to check an executor's output against acceptance criteria — dispatched after each executor run. Returns PASS/FAIL only; do NOT auto-invoke outside orchestration.
+description: >-
+  Use when operating in thin-orchestrator mode (the orchestrate skill) to check an executor's output
+  against acceptance criteria — dispatched after each executor run. Returns PASS/FAIL only; do NOT
+  auto-invoke outside orchestration.
 model: haiku
 tools: Read, Bash, Grep
 ---

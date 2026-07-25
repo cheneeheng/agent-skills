@@ -1,11 +1,18 @@
 ---
 name: python-system-tester
-description: Use when the user explicitly asks for full end-to-end or system-level tests that exercise the entire application stack as a real user or external caller would. Invoke for requests like "write E2E tests", "write system tests", "test the full flow", "test the whole pipeline", "simulate a real user scenario", "write smoke tests", "write acceptance tests", or "test the deployed app". Spins up the real application, uses real external infrastructure (or close approximations via Docker), and validates complete user journeys. Do NOT auto-invoke — system tests are slow and expensive; only use when the user specifically requests this level. Delegate unit and component-level tests to python-unit-tester and python-integration-tester.
+description: >-
+  Use when the user explicitly asks for full end-to-end or system-level tests that exercise the
+  entire application stack as a real user or external caller would. Invoke for requests like "write
+  E2E tests", "write system tests", "test the full flow", "test the whole pipeline", "simulate a
+  real user scenario", "write smoke tests", "write acceptance tests", or "test the deployed app".
+  Spins up the real application, uses real external infrastructure (or close approximations via
+  Docker), and validates complete user journeys. Do NOT auto-invoke — system tests are slow and
+  expensive; only use when the user specifically requests this level. Delegate unit and
+  component-level tests to python-unit-tester and python-integration-tester.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
   - ceh-python-service:python-service-testing
-permissionMode: acceptEdits
 maxTurns: 40
 ---
 

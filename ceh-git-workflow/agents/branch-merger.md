@@ -1,6 +1,13 @@
 ---
 name: branch-merger
-description: "Use to merge a PR or a local branch into main and clean up afterward in an isolated subagent instead of the main session — it checks the pre-merge gate (CI, approvals, rebase state) itself via gh/git, so the caller passes only the PR number or branch name plus anything non-obvious (a merge-commit body, whether to wait via auto-merge). Dispatch when the user asks to merge in a subagent/background, when an orchestrating flow (e.g. the release flow) delegates its merge step, or to keep merge mechanics out of the main context. Not for opening the PR (that is pr-opener) or tagging (that is release-cutter); for in-session merges just use the merge skill."
+description: >-
+  Use to merge a PR or a local branch into main and clean up afterward in an isolated subagent
+  instead of the main session — it checks the pre-merge gate (CI, approvals, rebase state) itself
+  via gh/git, so the caller passes only the PR number or branch name plus anything non-obvious (a
+  merge-commit body, whether to wait via auto-merge). Dispatch when the user asks to merge in a
+  subagent/background, when an orchestrating flow (e.g. the release flow) delegates its merge step,
+  or to keep merge mechanics out of the main context. Not for opening the PR (that is pr-opener) or
+  tagging (that is release-cutter); for in-session merges just use the merge skill.
 model: sonnet
 effort: medium
 tools: Read, Grep, Glob, Bash, Write

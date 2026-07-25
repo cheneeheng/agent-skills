@@ -9,6 +9,7 @@ description: >-
   them on refactor/ branches under a behavior-preservation gate, mechanical transforms only
   where tests are missing. Not for simplifying one branch's diff before a PR (use shrink-diff)
   or write-time minimalism (use write-less-code).
+argument-hint: '[module-or-path]'
 ---
 
 # Refactor Repo

@@ -1,6 +1,14 @@
 ---
 name: release-cutter
-description: "Use to cut a release in an isolated subagent instead of the main session — tag main and publish the GitHub release, plus the version-bump commit when the bump has not already landed. It reads the version from the project manifests and the release notes from the changelog itself, so the caller passes only what the repo cannot show (the target vX.Y.Z if ambiguous, tag-only vs bump+tag, a notes file). Dispatch when the user asks to cut the release in a subagent/background or when an orchestrating flow (e.g. the release flow) delegates its tag-and-release step. Not for merging the release PR (that is branch-merger); for in-session releases just use the release skill."
+description: >-
+  Use to cut a release in an isolated subagent instead of the main session — tag main and publish
+  the GitHub release, plus the version-bump commit when the bump has not already landed. It reads
+  the version from the project manifests and the release notes from the changelog itself, so the
+  caller passes only what the repo cannot show (the target vX.Y.Z if ambiguous, tag-only vs
+  bump+tag, a notes file). Dispatch when the user asks to cut the release in a subagent/background
+  or when an orchestrating flow (e.g. the release flow) delegates its tag-and-release step. Not for
+  merging the release PR (that is branch-merger); for in-session releases just use the release
+  skill.
 model: sonnet
 effort: medium
 tools: Read, Grep, Glob, Bash, Write

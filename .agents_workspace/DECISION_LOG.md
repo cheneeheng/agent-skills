@@ -931,3 +931,42 @@ require merging the feature first for no reviewable difference.
 **Impact / Risk:** Single PR mixes feature and release-bookkeeping commits; acceptable since the
 release IS the feature. Tag still lands on the merge commit on main per the hard rule.
 **Outcome:** (pending merge)
+
+### Entry 54
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-25T00:00:00Z
+**Task:** Modernize plugin frontmatter against current Claude Code capabilities (Claude 5 family)
+
+**Context:** The review proposed applying several newly-available frontmatter fields broadly.
+Verifying each against the live docs showed the proposed scope was wrong in three places, and
+narrowing was decided per-field rather than applying the original plan as approved.
+
+**Decision:**
+- `paths:` on 6 skills, not the ~17 originally scoped. `paths` **narrows** auto-loading rather
+  than adding to it, so applying it to skills with genuine non-file triggers ("a `uv` command is
+  run", "a publish is prepared") would have silently removed working triggers. Applied only where
+  the file trigger is the whole trigger.
+- `isolation: worktree` dropped entirely. Subagent worktrees branch from the repo's **default
+  branch** (not the parent `HEAD`) unless `worktree.baseRef: "head"` is set in settings, and
+  their changes stay in the worktree. Under this repo's feature-branch rule that hands an agent a
+  copy of `main` without the user's work, and a tester agent's output would never reach the
+  checkout. Recorded as a deliberate non-use in `CLAUDE.md`.
+- `context: fork` on 2 skills (`summarize-chat`, `lessons-learned`), not the heavyweight manual
+  set. Forks inherit the transcript and skip both subagent tool filters, so they suit skills that
+  act *on* the conversation; the rest are interactive (`AskUserQuestion` is stripped from plain
+  subagents) or must run in the main session (`orchestrate`).
+- `effort:` only where it differs from the `high` default (`max`/`xhigh`), never `effort: high`,
+  which would be dead config.
+- `disallowed-tools` on `code-review` only. `review-against-plan`, `fabled-plan-review`, and
+  `evaluate-skill-lite` all write files despite reading as review skills.
+- Plan mode dropped from the planning skills: it blocks writes, and those skills' deliverable is
+  a file. Reduced to a README note about the research step before planning.
+
+**Impact / Risk:** The 6 `paths:` skills no longer auto-load outside their globs — intended, but
+it is a behavior change for anyone relying on description-based matching. `ceh-advisor` gains
+Read/Write/Edit as a side effect of `memory: local`; its instructions confine writes to the memory
+directory, which is instruction-level, not enforced.
+
+**Outcome:** `python tools/validate-plugins/validate.py` passes; 17 plugins bumped PATCH.
