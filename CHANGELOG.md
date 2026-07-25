@@ -5,6 +5,52 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.26.0] — 2026-07-25
+
+Orienting in an unfamiliar repo had one tool here — the `repo-tree-mapper` agent — and it answers
+"what is in this repo", one line per path. It does not answer "what is actually happening in it".
+`explain-codebase` fills that: a component-level walk that says what each part is responsible for,
+what it connects to, and what will bite you before you change it, plus the end-to-end flows that
+turn a list of parts into an explanation.
+
+Two choices shape it. It explains at **component/module level by default** and drops to per-file
+entries only when explicitly asked — on a large repo the per-file view multiplies the reading and
+orients worse, so it is opt-in rather than the default nobody wanted. And its output is a
+**regenerable local artifact**, written to `.agents_workspace/CODEBASE_EXPLAINED.md` and kept
+untracked via `.git/info/exclude` rather than a tracked `.gitignore`, so no teammate inherits the
+rule and no repo file changes. What replaces per-file coverage is an accounting requirement: every
+file lands in an explained component, an explicit group rule, or a named exclusion — anything
+unassigned is reported as a gap rather than dropped quietly.
+
+It is the first skill in `ceh-dev-tools`, which drops the "agents only" qualifier it carried in
+`README.md` and `CLAUDE.md`. Since it shares onboarding-shaped triggers with `repo-tree-mapper`,
+both its description and body disambiguate explicitly against the mapper, against
+`ceh-architecture:document-architecture` (diagrams and decisions), and against
+`ceh-documentation:user-operator-guide` (docs for people who use the product).
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-dev-tools` | v1.2.0 |
+
+### Added
+
+- **`ceh-dev-tools` / `explain-codebase`** — fires on "go through the repo and explain what is
+  happening", "explain this codebase", "document what each module does", or before the first
+  change to an inherited repo. Writes `.agents_workspace/CODEBASE_EXPLAINED.md`: what the repo is,
+  a Mermaid overview, a section per component using a fixed four-part shape (what it is / what's
+  inside / how it connects / before you change it), 1–3 key flows, gaps, and an accounting table.
+  Component-level by default; per-file only on an explicit ask. Adds itself to
+  `.git/info/exclude`, and untracks the file first if an earlier run committed it.
+
+### Changed
+
+- **`ceh-dev-tools`** — no longer agents-only; plugin description, both README tables, and the
+  `CLAUDE.md` plugin table updated to cover the skill alongside `repo-tree-mapper`.
+- **`.gitignore`** — Claude-related ignore rules moved out of the repo file into the global
+  gitignore.
+
 ## [3.25.2] — 2026-07-25
 
 An audit of all 21 plugins against the live Claude Code docs found the plugins were not *broken*
