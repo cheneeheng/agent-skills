@@ -20,7 +20,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Ops | `ceh-ops` | Incident response, rollback, deploy pipeline; CI agents |
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
-| Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation agents |
+| Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation — explain a whole repo component by component into `.agents_workspace/CODEBASE_EXPLAINED.md`, or map its structure into `REPO_MAP.md` |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
 | Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README maintenance |
 | SEO | `ceh-seo` | SEO/GEO discoverability for anything internet-exposed — public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
@@ -42,7 +42,7 @@ into three tiers:
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
-`ceh-dev-tools` is a standalone tooling plugin (agents only). Each plugin is self-contained: a
+`ceh-dev-tools` is a standalone tooling plugin. Each plugin is self-contained: a
 foundational standard needed by more than one plugin is duplicated into each rather than extracted
 into a shared base, so one plugin per use case is all you load.
 
@@ -106,6 +106,7 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-documentation` | User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
 | `ceh-documentation` | Update Changelog | `/ceh-documentation:update-changelog` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
 | `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
+| `ceh-dev-tools` | Explain Codebase | `/ceh-dev-tools:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and key flows into git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` (per-file detail only on request) |
 | `ceh-seo` | Web Discoverability | `/ceh-seo:web-discoverability` | Shipping a public web page/route — head checklist, sitemap/robots/llms.txt, JSON-LD, SSR/prerender, GEO citation rules |
 | `ceh-seo` | Text Discoverability | `/ceh-seo:text-discoverability` | Writing public-facing repo/package text — README first screen, one-liner, GitHub topics, PyPI/npm descriptions and keywords |
 | `ceh-orchestration` | Orchestrate | `/ceh-orchestration:orchestrate` | Decompose and delegate a big multi-step task — plan/delegate-only main session, cheap isolated workers, to cap context/token cost |

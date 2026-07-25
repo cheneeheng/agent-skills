@@ -28,7 +28,7 @@ Plugins fall into three tiers:
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
-`ceh-dev-tools` is a standalone tooling plugin (agents only). Categorization rules of thumb:
+`ceh-dev-tools` is a standalone tooling plugin. Categorization rules of thumb:
 
 - **Framework variants do not split into separate plugins** when their skills trigger on disjoint
   file types (e.g. `sveltekit` on `.svelte`, `react-vite` on `.tsx` both live in `ceh-web-frontend`).
@@ -73,7 +73,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-seo` | SEO/GEO discoverability for anything internet-exposed: public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
-| `ceh-dev-tools` | Repository exploration and codebase orientation agents (agents only — no skills) |
+| `ceh-dev-tools` | Repository exploration and codebase orientation: `explain-codebase` writes a component-level explanation of a whole repo into a git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md`; the `repo-tree-mapper` agent writes an annotated structure map |
 | `ceh-blog` | Interview-driven blog post writing |
 | `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; changelog & README maintenance |
 | `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) for cost-optimized multi-step work |

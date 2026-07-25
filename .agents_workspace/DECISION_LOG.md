@@ -970,3 +970,32 @@ Read/Write/Edit as a side effect of `memory: local`; its instructions confine wr
 directory, which is instruction-level, not enforced.
 
 **Outcome:** `python tools/validate-plugins/validate.py` passes; 17 plugins bumped PATCH.
+
+### Entry 55
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-25T00:00:00Z
+**Task:** Add a skill that walks a repo and writes a file-by-file explanation.
+
+**Context:** Two plugins could plausibly host it. `ceh-documentation` owns docs, but its use case
+is end-user/operator-facing output. `ceh-dev-tools` owns "repository exploration and codebase
+orientation" — the same use case — but was documented as agents-only, and it already ships
+`repo-tree-mapper`, which produces a one-line-per-path `REPO_MAP.md` and overlaps in triggering
+("what's in this repo", onboarding requests).
+
+**Decision:** Placed `explain-codebase` in `ceh-dev-tools` as its first skill. Use case beats the
+agents-only convention: splitting the map and its deeper sibling across two plugins would force a
+user orienting in a codebase to load two plugins, which the self-containment rule exists to
+prevent. Dropped "(agents only — no skills)" from `CLAUDE.md` and `README.md`. Disambiguated
+against `repo-tree-mapper`, `document-architecture` and `user-operator-guide` with a "Not the same
+as" table in the skill body and a description that names each alternative, so the deeper skill and
+the cheap map do not fight over the same prompts.
+
+**Impact / Risk:** Trigger overlap with `repo-tree-mapper` remains — an orientation request could
+match either. The mapper's description is structure/map-flavored and the skill's is
+explain/every-file-flavored, but this is description-level disambiguation, not enforced. Worth
+watching if the mapper starts firing on "explain the codebase".
+
+**Outcome:** `python tools/validate-plugins/validate.py` passes; `ceh-dev-tools` bumped 1.1.4 →
+1.2.0 (MINOR, new skill) in both manifests.
