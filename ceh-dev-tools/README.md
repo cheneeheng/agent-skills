@@ -1,6 +1,28 @@
 # ceh-dev-tools
 
-Developer productivity agents for repository exploration and codebase orientation.
+Developer productivity tooling for repository exploration and codebase orientation.
+
+## Skills
+
+| Skill | Invoke as | When to use |
+|-------|-----------|-------------|
+| Explain Codebase | `/ceh-dev-tools:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and the key end-to-end flows into `.agents_workspace/CODEBASE_EXPLAINED.md` |
+
+### `explain-codebase`
+
+**Auto-triggers on:** "go through the repo and explain what is happening", "explain this codebase", "document what each module does", "walk me through this project", "onboarding doc for this repo".
+
+**Output:** `.agents_workspace/CODEBASE_EXPLAINED.md` (or a user-specified path) containing:
+- What the repo is and a Mermaid diagram of how it fits together
+- A section per component with the four-part shape: what it is, what's inside, how it connects, what to know before changing it
+- **Key flows** — 1–3 end-to-end paths naming the components and files each step passes through
+- **Accounting** — every file assigned to a component, folded into a named group rule, or excluded with a reason
+
+**Granularity:** component/module level by default. Per-file entries only when you explicitly ask ("per file", "file by file", "every file") — on a large repo the per-file view is longer and orients worse.
+
+**Not tracked:** the doc is a regenerable local artifact. The skill adds it to `.git/info/exclude` if it is not already ignored, so nothing is committed and no tracked `.gitignore` changes.
+
+**Relation to `repo-tree-mapper`:** the agent gives one line per path for fast orientation; this skill explains what the code actually does and why. Run the agent first if you want a cheap inventory to explain against.
 
 ## Agents
 
