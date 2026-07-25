@@ -5,6 +5,78 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.25.2] — 2026-07-25
+
+An audit of all 21 plugins against the live Claude Code docs found the plugins were not *broken*
+by the Claude 5 model family — no stale model IDs, no dead tool names — but several were written
+before frontmatter fields existed that the runtime now provides natively, so behaviour was being
+asked for in prose instead of declared.
+
+Dropped `permissionMode: acceptEdits` from the 7 agents that carried it — Claude Code ignores
+`permissionMode`, `hooks`, and `mcpServers` on plugin subagents, so it never took effect; the
+files are now honest about what actually applies. Added, scoped per field after checking each
+skill individually: `paths:` on 6 file-type-triggered skills (not applied broadly, since `paths`
+*narrows* auto-loading and would drop non-file triggers like "a uv command is run"); `effort:`
+only where it differs from the `high` default; `disallowed-tools: Edit Write` on `code-review`
+only, since sibling review skills genuinely write files; `context: fork` + `background: false` on
+`summarize-chat` and `lessons-learned`, which act on the conversation itself; `argument-hint` on
+12 manual-only skills; and `memory: local` on `ceh-advisor` so it stops re-deriving the same
+verdicts across sessions. Fixed a real path bug in `update-changelog`, which told the model to run
+a literal placeholder path by hand — now `${CLAUDE_SKILL_DIR}`, which Claude Code substitutes.
+
+Separately, all 83 skill and agent `description` fields — previously split across five competing
+YAML styles, two of which had already produced invalid YAML in this repo — were standardized on
+the folded block scalar (`>-`), the only style with no escaping burden. `validate.py` now enforces
+both fixes: it rejects any `description` not in `>-` form, and it resolves `${CLAUDE_SKILL_DIR}`
+so path-bug regressions are caught at validation time rather than at runtime.
+
+### Plugin versions
+
+20 plugins bumped PATCH (content-only frontmatter and description changes; no skills or agents
+added or removed).
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-advisor` | v1.0.4 |
+| `ceh-agent-coding-contract` | v2.8.6 |
+| `ceh-architecture` | v3.1.3 |
+| `ceh-blog` | v1.0.9 |
+| `ceh-business-plan` | v1.0.2 |
+| `ceh-dev-tools` | v1.1.4 |
+| `ceh-documentation` | v1.1.4 |
+| `ceh-evaluation` | v1.1.5 |
+| `ceh-fabled` | v1.3.3 |
+| `ceh-git-workflow` | v3.2.6 |
+| `ceh-lessons-learned` | v2.0.7 |
+| `ceh-ops` | v3.0.5 |
+| `ceh-orchestration` | v1.0.5 |
+| `ceh-plan-build-review` | v1.1.2 |
+| `ceh-python-library` | v1.2.3 |
+| `ceh-python-service` | v3.1.6 |
+| `ceh-release-flow` | v1.1.8 |
+| `ceh-scaffolding` | v1.0.3 |
+| `ceh-seo` | v1.0.1 |
+| `ceh-summarize-chat` | v2.0.6 |
+| `ceh-web-frontend` | v3.2.4 |
+
+### Changed
+
+- **All plugins** — modernized agent/skill frontmatter to use native Claude Code fields
+  (`paths`, `effort`, `disallowed-tools`, `context: fork`, `argument-hint`, `memory: local`)
+  instead of prose instructions; dropped the inert `permissionMode: acceptEdits` from 7 agents.
+- **`ceh-documentation` / `update-changelog`** — replaced a literal placeholder script path with
+  `${CLAUDE_SKILL_DIR}`, which Claude Code substitutes at runtime.
+- **All skill and agent `description` fields (83 total)** — standardized on the `>-` folded block
+  scalar, the only YAML style with no escaping burden for `:`, `"`, `'`, `\`, and `#`.
+- **`tools/validate-plugins/validate.py`** — now enforces `description: >-` on every skill/agent
+  and resolves `${CLAUDE_SKILL_DIR}` references during path validation.
+
+### Fixed
+
+- **21 skill/agent files** — unquoted `description:` values containing `: ` were invalid YAML
+  under a strict parser (Claude Code's own parser is lenient, so nothing broke at runtime, but the
+  files were non-conformant); now quoted or converted to the `>-` block form.
+
 ## [3.25.1] — 2026-07-24
 
 The usage-limit guard fired the handoff on the first tool call *after* a 5-hour window reset — the
