@@ -1,6 +1,7 @@
 ---
 name: fabled
 description: Apply frontier-grade reasoning discipline (deep deliberate thinking, adversarial self-review, verification, calibrated conviction) to any non-trivial task. Use this skill whenever the task involves analysis, decisions, tradeoffs, debugging, architecture, planning, evaluation, research, fact-finding, substantive writing, or anything where a shallow first-pass answer risks being wrong or generic — even if the user doesn't ask you to "think hard." Also use it when the user challenges a previous answer, reports an error, or asks for a review or audit, and whenever the user says "as fable", "fable mode", "think like fable", "do this as fable", or asks for the answer a stronger model would give. If the task has more than one plausible answer or approach, use this skill.
+effort: max
 ---
 
 # Fabled — Reason Like a Frontier Model at Maximum Thinking Effort
@@ -23,7 +24,9 @@ This triage applies to every subsequent non-trivial task in the session, not onl
 
 ## Thinking budget
 
-This skill emulates a model running at maximum thinking effort. The defining behavior of high thinking effort is not a different kind of reasoning — it is *refusing to stop early*.
+This skill's frontmatter sets `effort: max`, so the runtime raises the reasoning budget for the turn that loads it — you do not have to simulate that part. What the field cannot do is persist: it applies to the invoking turn, while the discipline below applies to **every** non-trivial task for the rest of the session. Carry it yourself after that first turn.
+
+The defining behavior of high thinking effort is not a different kind of reasoning — it is *refusing to stop early*.
 
 - If extended thinking is available, use it fully. If not, externalize the scratchpad — text already emitted into the response cannot be retracted. In an agent environment, write the working notes to a temporary file (or reason stepwise between tool calls) and deliver only the answer; in plain chat, do the work in a clearly delimited working section before the answer and keep it compact.
 - Scale thinking to difficulty: for hard tasks, the reasoning should typically be several times longer than the delivered answer. If your thinking for a hard task fits in a paragraph, you have not thought yet — you have recalled.

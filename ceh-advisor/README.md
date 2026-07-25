@@ -13,9 +13,20 @@ independence.
 
 ### `ceh-advisor`
 
-Verdict-first senior reviewer (Opus, high effort, read-only: Read/Grep/Glob). States the
+Verdict-first senior reviewer (Opus, `xhigh` effort, Read/Grep/Glob on your code). States the
 conclusion in line 1, justifies from files it read itself, deliberately steelmans the rejected
 options before confirming the chosen one, and refuses to guess on thin context.
+
+**Persistent memory.** The agent runs with `memory: local`, so it keeps notes across sessions at
+`.claude/agent-memory-local/ceh-advisor/` (gitignored) — a past verdict, a diagnosis that turned
+out wrong, a repo constraint that is not obvious from the code. Ask it to consult its memory
+("check your memory for patterns you've seen here") and to update it once it has answered.
+
+Enabling memory grants the agent Read, Write, and Edit so it can maintain those files, so it is
+no longer tool-restricted to read-only. Its instructions confine writes to its own memory
+directory; it does not edit your codebase. If you would rather keep it strictly read-only, drop
+`memory: local` from `agents/ceh-advisor.md`. Memory also depends on auto memory being enabled —
+with `autoMemoryEnabled: false` or `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` the field does nothing.
 
 **Invoke:** `@"ceh-advisor:ceh-advisor (agent)"`
 

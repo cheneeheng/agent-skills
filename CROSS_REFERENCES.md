@@ -356,6 +356,43 @@ only. Keep all four consistent in intent when the rule changes.
 
 ---
 
+## Implementation gotchas (planning skills)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/implementation-gotchas.md` | entire file | **canonical** — the all-at-once planner's copy |
+| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/implementation-gotchas.md` | entire file | copy — byte-for-byte identical |
+
+**What is shared:** the whole file. Both planning skills fold the same gotchas into the artifacts
+they emit, and each skill folder carries its own copy so the skill stays self-contained.
+
+**What diverges:** nothing. These two files are byte-identical and must stay that way — if a gotcha
+becomes producer-specific, split it out explicitly rather than letting the copies drift.
+
+---
+
+## AGENTS.md interop at scaffold time
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-scaffolding/skills/scaffold-python-service/SKILL.md` | "Agent instruction file" | **canonical** |
+| `ceh-scaffolding/skills/scaffold-python-library/SKILL.md` | "Agent instruction file" | copy — identical |
+| `ceh-scaffolding/skills/scaffold-web-frontend/SKILL.md` | "Agent instruction file" | copy — identical |
+
+**What is shared:** Claude Code reads `CLAUDE.md` and not `AGENTS.md`; when a repo already has an
+`AGENTS.md`, write a `CLAUDE.md` whose first line is `@AGENTS.md` rather than duplicating content;
+Claude-specific instructions go below the import; a symlink works but needs Administrator or
+Developer Mode on Windows, so the import is preferred.
+
+**What diverges:** nothing — the rule is project-type agnostic. `scaffold-fullstack-web` carries no
+copy: it composes the service and frontend skills, which each state the rule.
+
+---
+
 ## Update Protocol
 
 When changing a shared block:

@@ -9,6 +9,7 @@ description: >-
   assumption, revise the plan — until a product-market-fit readiness gate passes and the user is
   satisfied. Not for the technical build plan of the app itself (use ceh-plan-build-review) and not
   for a marketing blog post (use ceh-blog).
+argument-hint: '[plan-or-idea]'
 ---
 
 # Develop Business Plan

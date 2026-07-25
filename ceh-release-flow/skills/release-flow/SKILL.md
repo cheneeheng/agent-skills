@@ -2,6 +2,7 @@
 name: release-flow
 disable-model-invocation: true
 description: "Ship a complete project release in one pass — bump the version, update the changelog/README/CLAUDE.md, open a PR, merge it, then tag and publish the release. This skill only sequences the steps and gates between them; it delegates each step to the skill that owns it (branch, update-changelog, update-readme, commit, open-pr, merge, release). Not for tagging alone (use ceh-git-workflow:release) or an urgent production fix (use ceh-git-workflow:hotfix)."
+argument-hint: '[version]'
 ---
 
 # Release Flow

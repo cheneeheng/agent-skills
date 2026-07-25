@@ -2,6 +2,8 @@
 name: lessons-learned
 disable-model-invocation: true
 description: Extract lessons learned from the current conversation — reviewing the session for moments that went wrong or required rework — and append them to LESSONS_LEARNED.md.
+context: fork
+background: false
 ---
 
 # Lessons Learned Extractor

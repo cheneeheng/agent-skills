@@ -5,7 +5,6 @@ model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
   - ceh-python-service:python-service-testing
-permissionMode: acceptEdits
 maxTurns: 40
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: Load this skill when shipping a release to a running environment: building and tagging Docker images, promoting through staging to production, running post-deploy health and metric checks, or classifying a change as internal, user-visible, or breaking. Auto-load whenever a deploy pipeline is being run, a staging-to-production promotion is planned, or post-deploy verification is needed. Not for git tagging mechanics (see ceh-git-workflow/release) or incident rollback (see rollback).
+description: 'Load this skill when shipping a release to a running environment: building and tagging Docker images, promoting through staging to production, running post-deploy health and metric checks, or classifying a change as internal, user-visible, or breaking. Auto-load whenever a deploy pipeline is being run, a staging-to-production promotion is planned, or post-deploy verification is needed. Not for git tagging mechanics (see ceh-git-workflow/release) or incident rollback (see rollback).'
 ---
 
 # Deploy Pipeline

@@ -11,6 +11,7 @@ description: >
   be smaller", "master refactor", or "simplify the branch before the PR". Not for
   whole-codebase cleanup (use refactor-repo), write-time minimalism (use write-less-code), or
   reviewing a PR (use ceh-git-workflow:code-review).
+argument-hint: '[base-branch]'
 ---
 
 # Shrink Diff

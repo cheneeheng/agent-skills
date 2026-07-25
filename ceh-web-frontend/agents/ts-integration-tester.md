@@ -1,11 +1,10 @@
 ---
 name: ts-integration-tester
-description: Use proactively when the user asks to write integration tests for frontend code: testing how components work together, testing a component with real store state, testing a form submission or data-loading flow end-to-end within the browser environment, or says things like "test this page component", "test the full form flow", "test with real MSW handlers", "test store + component together", or "test this feature without mocking the store". Handles tests that wire real Svelte stores, real MSW network handlers, and multiple components together in a single jsdom/happy-dom environment. For one or two tests written inline, the frontend-testing skill handles it in the main conversation; invoke this agent to build out an integration suite across many flows or run integration tests and report results in isolation — NOT isolated single-component or pure-function tests (delegate to ts-unit-tester) and NOT full browser E2E tests against a running server (delegate to ts-system-tester).
+description: 'Use proactively when the user asks to write integration tests for frontend code: testing how components work together, testing a component with real store state, testing a form submission or data-loading flow end-to-end within the browser environment, or says things like "test this page component", "test the full form flow", "test with real MSW handlers", "test store + component together", or "test this feature without mocking the store". Handles tests that wire real Svelte stores, real MSW network handlers, and multiple components together in a single jsdom/happy-dom environment. For one or two tests written inline, the frontend-testing skill handles it in the main conversation; invoke this agent to build out an integration suite across many flows or run integration tests and report results in isolation — NOT isolated single-component or pure-function tests (delegate to ts-unit-tester) and NOT full browser E2E tests against a running server (delegate to ts-system-tester).'
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
   - ceh-web-frontend:frontend-testing
-permissionMode: acceptEdits
 ---
 
 # TypeScript Frontend Integration Tester

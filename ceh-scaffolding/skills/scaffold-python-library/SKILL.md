@@ -1,6 +1,6 @@
 ---
 name: scaffold-python-library
-description: Load this skill when starting or scaffolding a new distributable Python library: creating the src/ layout, build metadata, type marker, tests, and .gitignore. Trigger when the user says "start/scaffold a Python library", "new Python package/SDK", or sets up a publishable package. For a web service use scaffold-python-service.
+description: 'Load this skill when starting or scaffolding a new distributable Python library: creating the src/ layout, build metadata, type marker, tests, and .gitignore. Trigger when the user says "start/scaffold a Python library", "new Python package/SDK", or sets up a publishable package. For a web service use scaffold-python-service.'
 ---
 
 # Scaffold a Python Library
@@ -26,6 +26,20 @@ your-library/
 - `pyproject.toml` with an explicit build backend (hatchling), uv, ruff, mypy, pytest config —
   see `ceh-python-library:packaging` and `ceh-python-library:python-library-environment`.
 - Keep `dependencies = []` minimal; no web-service deps. Define `__all__` in `__init__.py` from the start.
+
+## Agent instruction file
+
+Claude Code reads `CLAUDE.md`, **not** `AGENTS.md`. If the repo already has an `AGENTS.md` for
+other coding agents, do not duplicate it — create a `CLAUDE.md` that imports it, so both tools
+read one source:
+
+```markdown
+@AGENTS.md
+```
+
+Add any Claude-specific instructions below the import. A symlink also works, but on Windows it
+needs Administrator or Developer Mode, so prefer the import. If there is no `AGENTS.md`, just
+write `CLAUDE.md` directly.
 
 ## .gitignore
 

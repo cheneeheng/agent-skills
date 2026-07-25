@@ -1,6 +1,6 @@
 ---
 name: scaffold-web-frontend
-description: Load this skill when starting or scaffolding a new web frontend (SvelteKit or React + Vite): creating the source layout, $lib/api client boundary, test folders, and .gitignore. Trigger when the user says "start/scaffold a Svelte app", "scaffold a React app", or sets up a fresh frontend repo. For the backend use scaffold-python-service.
+description: 'Load this skill when starting or scaffolding a new web frontend (SvelteKit or React + Vite): creating the source layout, $lib/api client boundary, test folders, and .gitignore. Trigger when the user says "start/scaffold a Svelte app", "scaffold a React app", or sets up a fresh frontend repo. For the backend use scaffold-python-service.'
 ---
 
 # Scaffold a Web Frontend
@@ -32,6 +32,20 @@ frontend/
 - `package.json` scripts for dev/build/test/lint/typecheck — see `ceh-web-frontend:environment`.
 - `tsconfig.json` with `strict: true`; ESLint + Prettier configured.
 - Components are presentational; all `fetch` goes through `src/lib/api`.
+
+## Agent instruction file
+
+Claude Code reads `CLAUDE.md`, **not** `AGENTS.md`. If the repo already has an `AGENTS.md` for
+other coding agents, do not duplicate it — create a `CLAUDE.md` that imports it, so both tools
+read one source:
+
+```markdown
+@AGENTS.md
+```
+
+Add any Claude-specific instructions below the import. A symlink also works, but on Windows it
+needs Administrator or Developer Mode, so prefer the import. If there is no `AGENTS.md`, just
+write `CLAUDE.md` directly.
 
 ## .gitignore
 

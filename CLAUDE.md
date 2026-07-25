@@ -89,6 +89,13 @@ Each skill is a self-contained SKILL.md file with frontmatter and inline content
 `references/` subdirectory is reserved for schemas and templates shared across multiple skills
 (e.g. `plan-schema.md` in `implement-from-plan`) — not for general reference material.
 
+## Adding a Component
+
+The repo-local skill `.claude/skills/add-plugin-component/` carries the full checklist for both
+of the sections below — plugin choice, frontmatter fields worth reaching for (and their traps),
+both README tables, `CROSS_REFERENCES.md`, the two-manifest version bump, and the validator. It
+auto-loads when a `SKILL.md` or `agents/*.md` is being created. The condensed versions follow.
+
 ## Adding an Agent
 
 1. Identify the correct plugin for the agent's domain.
@@ -106,11 +113,26 @@ Each skill is a self-contained SKILL.md file with frontmatter and inline content
 > **Plugin-agent frontmatter gotcha:** Claude Code ignores `permissionMode`, `hooks`, and
 > `mcpServers` on plugin subagents (security restriction — see the
 > [subagents docs](https://code.claude.com/docs/en/sub-agents#choose-the-subagent-scope)).
-> Every agent in this repo is a plugin agent, so `permissionMode: acceptEdits` is a no-op —
-> do not rely on it. To grant edit/write permissions, use session `permissions.allow` in
-> `settings.json`. Required fields are only `name` and `description`; `model` defaults to
-> `inherit`. Auto-delegation is driven by the `description` field — include "use proactively"
-> to encourage it.
+> Every agent in this repo is a plugin agent, so these fields are never set here — do not
+> add them back. To avoid edit prompts, put the session in `acceptEdits` before dispatching
+> (a parent `acceptEdits`/`bypassPermissions` takes precedence and is inherited) or use
+> `permissions.allow` in `settings.json`. Required fields are only `name` and `description`;
+> `model` defaults to `inherit`. Auto-delegation is driven by the `description` field —
+> include "use proactively" to encourage it.
+>
+> **Background tool filter:** subagents run in the background by default, and a background
+> subagent keeps only these built-in tools — `Read`, `Grep`, `Glob`, `Bash`, `PowerShell`,
+> `Edit`, `Write`, `NotebookEdit`, `WebFetch`, `WebSearch`, `TodoWrite`, `Skill`,
+> `ToolSearch`, `EnterWorktree`, `ExitWorktree`, `Monitor`, `TaskStop`, `SendMessage`,
+> `Artifact`. Everything else is stripped whether inherited or named in `tools:`, and the
+> removal is silent. Check any new agent's `tools:` against that list. `AskUserQuestion` is
+> removed from *every* subagent, foreground or background — an agent can never stop to ask.
+>
+> **`isolation: worktree` is deliberately unused.** Subagent worktrees branch from the
+> repository's **default branch**, not the parent session's `HEAD`, unless
+> `worktree.baseRef: "head"` is set in `settings.json` — and their changes stay in the
+> worktree rather than landing in your checkout. With this repo's feature-branch rule that
+> would hand an agent a copy of `main` without your work, so no agent sets it.
 >
 > **Preloading skills into an agent:** the `skills:` frontmatter list loads a skill into the
 > agent's context at dispatch — the agent does **not** need the `Skill` tool for this, and

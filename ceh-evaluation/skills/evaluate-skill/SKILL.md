@@ -9,6 +9,8 @@ description: >-
   you confirm. Self-contained: uses skill-creator and plugin-dev only as optional cross-checks,
   never required. Not for writing a skill from scratch (use authoring) or general app code review
   (use ceh-git-workflow:code-review).
+effort: xhigh
+argument-hint: '[skill-or-plugin-path]'
 ---
 
 # Evaluate Skill

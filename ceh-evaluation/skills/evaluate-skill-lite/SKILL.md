@@ -10,6 +10,7 @@ description: >-
   the full evidence-based verdict with behavioral lift before shipping, use
   ceh-evaluation:evaluate-skill instead. Not for writing a skill from scratch (that is authoring) and
   not for general code review of an application.
+argument-hint: '[skill-or-plugin-path]'
 ---
 
 # Evaluate Skill — Lite

@@ -1,6 +1,6 @@
 ---
 name: scaffold-fullstack-web
-description: Load this skill when starting or scaffolding a new fullstack web app (Python service + web frontend in one repo): laying out the backend and frontend trees side by side and writing a combined .gitignore. Trigger when the user says "start/scaffold a fullstack web app" or sets up a monorepo with both a FastAPI backend and a Svelte/React frontend.
+description: 'Load this skill when starting or scaffolding a new fullstack web app (Python service + web frontend in one repo): laying out the backend and frontend trees side by side and writing a combined .gitignore. Trigger when the user says "start/scaffold a fullstack web app" or sets up a monorepo with both a FastAPI backend and a Svelte/React frontend.'
 ---
 
 # Scaffold a Fullstack Web App

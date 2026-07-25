@@ -1,6 +1,6 @@
 ---
 name: public-api
-description: Load this skill when defining or changing a library's public API: deciding what to export in __init__.py / __all__, marking internals private, deprecating a symbol, or classifying a change as patch/minor/major for semver. Auto-load whenever __init__.py or __all__ is edited, a public function signature changes, or a version bump must be classified for a distributable library.
+description: 'Load this skill when defining or changing a library''s public API: deciding what to export in __init__.py / __all__, marking internals private, deprecating a symbol, or classifying a change as patch/minor/major for semver. Auto-load whenever __init__.py or __all__ is edited, a public function signature changes, or a version bump must be classified for a distributable library.'
 ---
 
 # Public API Surface and Semantic Versioning

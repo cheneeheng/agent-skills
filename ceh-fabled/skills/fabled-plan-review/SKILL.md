@@ -1,6 +1,7 @@
 ---
 name: fabled-plan-review
 description: Review an existing plan (implementation plan, project plan, plan-mode output, migration plan, design doc) and raise it to the standard a frontier model at maximum thinking effort would have produced. Use this skill whenever a plan has just been drafted or received and needs review before execution — trigger on "review this plan", "check my plan", "is this plan any good", "harden this plan", "poke holes in this plan", "pre-mortem this plan", "review the plan as fable", "fable-review this plan", or before approving/executing any non-trivial plan. Not for creating a plan from scratch (draft it first, then review with this skill) and not for reviewing code (use code review).
+effort: xhigh
 ---
 
 # Fabled Plan Review — Make the Plan Read Like Fable 5 Wrote It

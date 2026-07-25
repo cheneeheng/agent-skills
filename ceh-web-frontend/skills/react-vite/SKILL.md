@@ -1,6 +1,9 @@
 ---
 name: react-vite
-description: Load this skill when adding or modifying React components, hooks, routing, or data fetching in a Vite project: building a component, writing a custom hook, wiring React Router, managing state, or configuring Vite env vars. Auto-load whenever a .tsx file or vite.config.ts is created or modified. For SvelteKit projects use the sveltekit skill instead.
+description: 'Load this skill when adding or modifying React components, hooks, routing, or data fetching in a Vite project: building a component, writing a custom hook, wiring React Router, managing state, or configuring Vite env vars. Auto-load whenever a .tsx file or vite.config.ts is created or modified. For SvelteKit projects use the sveltekit skill instead.'
+paths:
+  - "**/*.tsx"
+  - "**/vite.config.ts"
 ---
 
 # React + Vite Conventions

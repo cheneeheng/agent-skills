@@ -127,10 +127,19 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 > **Plugin-agent limitation:** every agent here ships inside a plugin. Claude Code
 > **ignores** the `permissionMode`, `hooks`, and `mcpServers` frontmatter fields on
-> plugin subagents (for security reasons). So `permissionMode: acceptEdits` in an agent
-> file is a no-op — these agents still prompt for edit/write permissions. To grant them,
-> use session `permissions.allow` in `settings.json`, not agent frontmatter. See the
-> [subagents docs](https://code.claude.com/docs/en/sub-agents#choose-the-subagent-scope).
+> plugin subagents (for security reasons), so no agent in this repo sets them. These
+> agents inherit the permission context of your session and prompt for edit/write
+> permissions accordingly. To avoid the prompts, put the session in `acceptEdits`
+> (`Shift+Tab`) before dispatching — a parent `acceptEdits` or `bypassPermissions` takes
+> precedence and is inherited — or add `permissions.allow` rules in `settings.json`. See
+> the [subagents docs](https://code.claude.com/docs/en/sub-agents#choose-the-subagent-scope).
+>
+> **Background tool filter:** subagents run in the background by default, and a background
+> subagent keeps only `Read`, `Grep`, `Glob`, `Bash`, `PowerShell`, `Edit`, `Write`,
+> `NotebookEdit`, `WebFetch`, `WebSearch`, `TodoWrite`, `Skill`, `ToolSearch`,
+> `EnterWorktree`, `ExitWorktree`, `Monitor`, `TaskStop`, `SendMessage`, and `Artifact`.
+> Anything else is stripped silently, even when named in `tools:`. `AskUserQuestion` is
+> removed from every subagent, so no agent here can stop to ask you a question.
 
 | Plugin | Agent | Invoke as | When to use |
 |--------|-------|-----------|-------------|

@@ -1,6 +1,6 @@
 ---
 name: fastapi
-description: Load this skill when designing or writing FastAPI endpoints, services, or middleware: defining URL paths, choosing HTTP methods and status codes, shaping error responses, adding a new endpoint, wiring up dependency injection, configuring lifespan startup/shutdown, registering exception handlers, or defining the custom exception hierarchy. Auto-load whenever a route handler is written, an HTTP status code is chosen, an error response shape is defined, a FastAPI dependency is defined, or a domain exception is added.
+description: 'Load this skill when designing or writing FastAPI endpoints, services, or middleware: defining URL paths, choosing HTTP methods and status codes, shaping error responses, adding a new endpoint, wiring up dependency injection, configuring lifespan startup/shutdown, registering exception handlers, or defining the custom exception hierarchy. Auto-load whenever a route handler is written, an HTTP status code is chosen, an error response shape is defined, a FastAPI dependency is defined, or a domain exception is added.'
 ---
 
 # FastAPI Conventions

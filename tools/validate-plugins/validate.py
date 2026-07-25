@@ -134,8 +134,27 @@ def check_manifests() -> dict[str, str]:
 
 # --- skills & agents -------------------------------------------------------
 
+def check_plain_scalars(path: Path) -> None:
+    """Flag unquoted frontmatter values containing ': '.
+
+    A plain YAML scalar cannot contain a colon-space — a strict parser reads it as a
+    nested mapping and rejects the block. Claude Code's parser is lenient today, so
+    these load anyway, but the file is not valid YAML. Quote the value.
+    """
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---"):
+        return
+    lines = text.splitlines()
+    end = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
+    for line in lines[1:end or 1]:
+        m = re.match(r"^([A-Za-z0-9_-]+):[ \t]+(.*)$", line)
+        if m and not m.group(2).startswith(("'", '"', ">", "|")) and ": " in m.group(2):
+            fail(rel(path), f"'{m.group(1)}' is an unquoted scalar containing ': ' - quote it")
+
+
 def check_frontmatter_doc(path: Path, expected_name: str | None) -> None:
     where = rel(path)
+    check_plain_scalars(path)
     fm = parse_frontmatter(path)
     if fm is None:
         fail(where, "missing YAML frontmatter block")
@@ -184,6 +203,9 @@ def check_references() -> None:
     # segment) so example paths like `docs/references/...` are not matched.
     ref_pat = re.compile(r"(?<![\w./-])references/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+")
     script_pat = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/(scripts/[A-Za-z0-9_./-]+)")
+    # ${CLAUDE_SKILL_DIR} is substituted by Claude Code with the skill's own directory,
+    # so these resolve relative to the SKILL.md, not the plugin root.
+    skill_dir_pat = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/([A-Za-z0-9_./-]+)")
     for doc in doc_files():
         where = rel(doc)
         # SKILL.md -> ceh-<plugin>/skills/<name>/SKILL.md ; agent -> ceh-<plugin>/agents/<name>.md
@@ -196,6 +218,9 @@ def check_references() -> None:
         for rec in dict.fromkeys(script_pat.findall(text)):
             if not (plugin_root / rec).exists():
                 fail(where, f"script reference '{rec}' not found")
+        for rec in dict.fromkeys(skill_dir_pat.findall(text)):
+            if not (base_dir / rec).resolve().exists():
+                fail(where, f"skill-dir reference '{rec}' not found")
 
 
 # --- skill references (plugin:component) -----------------------------------

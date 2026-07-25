@@ -5,7 +5,6 @@ model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
   - ceh-python-service:python-service-testing
-permissionMode: acceptEdits
 ---
 
 You are a Python integration test specialist. Write pytest integration tests that verify
