@@ -4,10 +4,12 @@ description: >-
   Load this skill when deciding which inputs and scenarios a test should cover — not how to wire the
   runner. Supplies the input-selection ladder: equivalence partitions, the boundary checklist,
   decision tables for interacting flags, state-transition and invalid-transition cases, pairwise for
-  large config spaces, property-based tests for rules that hold over all inputs, and forced failure
-  of every dependency. Trigger on "write tests for this", "what should I test", "add test cases",
-  "cover the edge cases", "is this tested enough", "property-based", "hypothesis", "fast-check", or
-  when a test file has only a happy path. Pairs with the stack testing skills, which own the runner,
+  large config spaces, property-based tests for rules that hold over all inputs, metamorphic
+  relations when no expected output can be written down, fuzzing for anything parsing untrusted
+  input, and forced failure of every dependency. Trigger on "write tests for this", "what should I
+  test", "add test cases", "cover the edge cases", "is this tested enough", "property-based",
+  "hypothesis", "fast-check", "fuzz this", "how do I test something with no correct answer", or when
+  a test file has only a happy path. Pairs with the stack testing skills, which own the runner,
   fixtures, and mocking library.
 ---
 
@@ -128,7 +130,56 @@ money and date arithmetic, sanitizers, diffing, pagination math.
 Record any failing case the generator finds as its own explicit test — generators are not
 guaranteed to produce it again.
 
-### 7. Force every dependency to fail
+### 7. Metamorphic relations — when there is no expected output
+
+Rung 6 needs you to know what the answer should be. Search ranking, recommendations, LLM output,
+pricing engines with a hundred rules, image and audio processing, simulations, aggregation
+pipelines — for these nobody can write the expected value down, so they end up tested with one
+snapshot and a hope.
+
+Assert instead how the output must **change when the input changes**. You never need to know the
+answer, only the relationship:
+
+| Relation | Example |
+|----------|---------|
+| Permutation invariance | reordering the query terms must not change the result set |
+| Monotonicity | adding a matching document must not lower an existing document's rank; adding an item must not lower the cart total |
+| Scaling / units | prices in cents and in dollars must produce the same ordering; a resized image must classify the same |
+| Additivity | `total(a + b) == total(a) + total(b)` for a linear fee |
+| Irrelevant-input insensitivity | appending whitespace, a trailing newline, or an unused field must not change the output |
+| Consistency between paths | the batch endpoint and N single calls must agree |
+
+```python
+@given(st.lists(st.text(min_size=1), min_size=1))
+def test_ranking_ignores_term_order(terms):
+    assert ids(search(" ".join(terms))) == ids(search(" ".join(reversed(terms))))
+```
+
+These are the highest-value tests available for any component whose output you cannot predict, and
+they are usually the only ones that survive a model or ruleset being swapped out.
+
+### 8. Fuzz whatever parses untrusted input
+
+Rung 6 asserts a rule; fuzzing asserts only that the code **does not crash, hang, or corrupt state**
+on input nobody would think to write. That weak oracle is enough when the input is attacker- or
+user-controlled: file uploads, request bodies, query strings, cookies, webhook payloads, config
+files, protocol frames, anything `pickle`/`yaml.load`/`eval` touches.
+
+```python
+@given(st.binary())                          # or st.text(), st.from_regex(...)
+def test_parse_header_never_raises_unexpectedly(data):
+    try:
+        parse_header(data)
+    except HeaderError:                      # the one type callers handle
+        pass                                 # anything else — MemoryError, IndexError, hang — is the bug
+```
+
+Same generators as rung 6 (`hypothesis`, `fast-check`); for a native or long-lived parser worth
+sustained fuzzing, that is `atheris` / `libFuzzer` territory and a decision to raise, not to make
+silently. Assert the failure **mode**, not just the absence of failure: a rejected input must leave
+no partial write, no unbounded allocation, and no unclosed handle.
+
+### 9. Force every dependency to fail
 
 Mocks that only ever return success leave every `except` / `catch` branch unexecuted. This is the
 most under-tested region of agent-written code.

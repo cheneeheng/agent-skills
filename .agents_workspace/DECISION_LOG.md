@@ -1049,3 +1049,70 @@ found and fixed while sanity-checking the skill content: the assertion-audit sni
 `audit-test-suite` matched on `ast.dump()` text, which contains the function's own name, so a test
 named `test_assertion_shape` was silently treated as asserting; rewritten to match on `ast.Assert`
 and call-node shape, and verified against a fixture.
+
+---
+
+### Entry 57
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-29T00:00:00Z
+**Task:** Audit `ceh-testing` against a full software-testing-technique taxonomy, and resolve the
+organizing-axis deviation recorded in Entry 56.
+
+**Context:** Two forks. (1) A taxonomy sweep (design, structural, level-based, non-functional,
+process, specialized) found nine techniques absent from the plugin; each needed a keep-or-exclude
+call, since Entry 56 had already excluded Tier C techniques for having no trigger moment. (2) Entry
+56 self-described `ceh-testing` as "the one deviation from the use-case-only axis" and the user asked
+whether the deviation can be avoided.
+
+**Decision (1) — taxonomy gaps.** Added five techniques inline, no new skills: metamorphic relations
+and fuzzing as rungs 7 and 8 of `design-test-cases` (dependency failure moved to rung 9); `git
+bisect` on the reproducer in `test-a-bug-fix`; `--cov-branch` in `audit-test-suite`; and a fifth
+risk class, migration and rollout compatibility, in `close-test-risk-gaps`, plus a consumer-driven
+contract paragraph in its contract-drift class. All five fire on moments the plugin already claims,
+so folding them in beat adding skills that would compete for the same prompts.
+
+Metamorphic testing was the largest genuine gap: it is the only answer to "how do I test output
+nobody can predict", which now covers every LLM, ranking, and pricing-engine feature. Migration
+testing was the second: `ceh-python-service:alembic` carried one bullet ("test against a copy of
+production data") and the stack-agnostic technique — down path, backfill idempotency, expand/contract
+across a rolling deploy — was absent repo-wide.
+
+Deliberately excluded, now recorded in a "Deliberately out of scope" table in the plugin README so a
+future reader sees a decision rather than an oversight: load/stress/soak/capacity, chaos and infra
+fault injection, canary/shadow/post-deploy smoke (all `ceh-ops`), SAST/DAST/SCA/pen testing
+(`ceh-python-service:python-security`, `ceh-git-workflow:dependency-management`), continuous fuzzing
+infrastructure, MC/DC and def-use coverage, model-based/exploratory/usability/localization/
+compatibility testing.
+
+**Decision (2) — the deviation is a mislabel, not a structure problem; reframed rather than
+restructured.** Two restructurings were considered and rejected. Duplicating the five technique
+skills into the three stack plugins produces fifteen byte-identical files, which is precisely the
+case the Shared-Standards Duplication Policy does *not* cover (it pays for drift only when copies
+genuinely differ) — and it would still leave the technique unavailable to any repo with no stack
+plugin loaded. Moving the three stack testing skills into `ceh-testing` would make it a complete
+use-case plugin, but breaks the stack plugins' self-containment in the other direction and is a
+large move for a labelling problem.
+
+What is actually true: `ceh-testing` is structurally identical to `ceh-git-workflow` — a
+cross-cutting discipline that applies whatever is being built, loaded alongside a use-case plugin.
+Nobody calls `ceh-git-workflow` a deviation, and `ceh-python-service` owns commit conventions no
+more than it owns test design. The use-case axis governs the use-case-workflow and stack/build
+tiers; the cross-cutting tier is orthogonal by construction. Only the word "testing" appearing in
+both plugin families made it look like an overlap, and `CROSS_REFERENCES.md` already confirms the
+two share no content. `CLAUDE.md` rule 4 was rewritten accordingly, and the placement test made
+explicit: a skill belongs in a cross-cutting plugin iff its content would be byte-identical across
+stacks.
+
+**Impact / Risk:** The reframe removes the "exception" framing that invited future exceptions, but
+it widens what the cross-cutting tier may absorb — the byte-identical test is the guard, and the
+review question is now "would this be identical in Python and TypeScript", not "is this testing".
+`close-test-risk-gaps` grew from four classes to five; a sixth would make it a checklist rather than
+a triage gate, which is the shape the skill exists to avoid. `design-test-cases` grew from seven
+rungs to nine and is now the longest skill in the plugin — the "stop when the remaining rungs have
+no trigger" instruction carries more weight than before.
+
+**Outcome:** `python tools/validate-plugins/validate.py` passes; `ceh-testing` bumped 1.0.0 → 1.0.1
+(PATCH — content only, no new skills or agents) in both manifests. Root `README.md`, plugin
+`README.md`, and `CLAUDE.md` updated. No test was run — this repo ships markdown only.

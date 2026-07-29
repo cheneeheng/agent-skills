@@ -38,15 +38,22 @@ Plugins fall into three tiers:
   extracted into a shared base plugin — see the Shared-Standards Duplication Policy below.
 - **App-specific patterns are not standards.** Anything bound to one application's schema or design
   is removed rather than kept as a niche plugin.
-- **Technique may split from tooling when the technique is genuinely stack-agnostic.** `ceh-testing`
-  is the one deviation from the use-case-only axis: choosing test inputs, auditing whether a green
-  suite catches defects, and proving a refactor changed nothing are identical in Python and
-  TypeScript, while the runner, fixtures, and mocking library are not. Duplicating the technique
-  into `ceh-python-service`, `ceh-python-library`, and `ceh-web-frontend` would have created three
-  copies of the same standard with nothing stack-specific to justify the divergence — the exact
-  drift the duplication policy is willing to pay for only when the copies actually differ. The three
-  stack testing skills keep the runner/fixtures/mocking; `ceh-testing` is loaded alongside them.
-  Reconsider this if a technique skill ever grows stack-specific branches.
+- **The use-case axis governs the use-case-workflow and stack/build tiers; the cross-cutting tier is
+  orthogonal by construction.** A cross-cutting plugin holds a discipline that applies whatever you
+  are building — agent behavior, git, reasoning, second opinions, testing technique — so it is
+  loaded *alongside* a use-case plugin, never instead of one. That is not an exception to the axis;
+  it is what the tier is for. `ceh-testing` sits there for exactly the reason `ceh-git-workflow`
+  does: a Python service has commits and it has test design, and `ceh-python-service` owns neither.
+- **Technique splits from tooling when the technique is genuinely stack-agnostic.** This is the test
+  for putting a skill in a cross-cutting plugin rather than a stack one: **would the content be
+  byte-identical across stacks?** Choosing test inputs, auditing whether a green suite catches
+  defects, and proving a refactor changed nothing are identical in Python and TypeScript — so they
+  live in `ceh-testing`. The runner, fixtures, mocking library, and coverage thresholds are not — so
+  they stay in the three stack testing skills. Duplicating the technique into `ceh-python-service`,
+  `ceh-python-library`, and `ceh-web-frontend` would have created three copies with nothing
+  stack-specific to justify the divergence, which is the drift the duplication policy is willing to
+  pay for only when the copies actually differ. Revisit the placement if a technique skill ever
+  grows stack-specific branches — that is the signal it was tooling all along.
 
 ## Structure
 
@@ -91,7 +98,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix/re-run until a readiness gate passes; skill-creator and plugin-dev are optional cross-checks only |
 | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task: deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction; plus plan review against that standard, failure-loop escape after repeated failed fixes, and `fabled-voice` for delivering in fable's response style (form only, always-on via SessionStart hook) |
 | `ceh-advisor` | Stronger-model second-opinion subagent (agent + hooks, no skills): consulted at decision points, failure loops, irreversible actions, and pre-completion gates; ships a destructive-command guard and a consecutive-failure watch hook |
-| `ceh-testing` | Stack-agnostic testing *technique* (not tooling): reproduce-first bug fixes, test-case design (partitions, boundaries, decision tables, pairwise, properties), suite audits (assertions, mutation, flakiness), behavior-preservation for refactors, and a pre-completion risk gate (concurrency, contract drift, perf, authz) |
+| `ceh-testing` | Stack-agnostic testing *technique* (not tooling): reproduce-first bug fixes and bisection, test-case design (partitions, boundaries, decision tables, pairwise, properties, metamorphic relations, fuzzing), suite audits (assertions, mutation, flakiness, branch coverage), behavior-preservation for refactors, and a pre-completion risk gate (concurrency, contract drift, perf, authz, migrations) |
 
 ## Skills
 

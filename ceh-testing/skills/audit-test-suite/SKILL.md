@@ -137,12 +137,21 @@ will not localize.
 ## 6. Coverage — used correctly
 
 ```bash
-pytest --cov=app --cov-report=term-missing
+pytest --cov=app --cov-branch --cov-report=term-missing     # branch, not line
+vitest run --coverage                                       # v8/istanbul report branches by default
 ```
+
+**Always pass `--cov-branch`.** The default is line coverage, which counts an `if` with no `else` as
+fully covered when only the true side ever ran — so the report is green exactly where the untested
+half lives. Branch coverage is the cheapest upgrade available in this list.
 
 Use it to find **files and branches at zero**, which are genuine blind spots. Do not use it as a
 score to raise: coverage rises fastest by executing code without asserting on it, so a chased target
 actively rewards worthless tests. Mutation survivors (check 3) are the metric with teeth.
+
+Stronger structural criteria exist — condition coverage, MC/DC, def-use path coverage — and they are
+not worth reaching for here: they cost far more to satisfy than diff-scoped mutation testing and
+find less. Use them only under an external mandate (DO-178C, IEC 61508 and similar).
 
 ## Reporting
 

@@ -30,7 +30,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Evaluation | `ceh-evaluation` | Evaluate a skill or plugin you just wrote — derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a readiness gate passes |
 | Fabled | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
 | Advisor | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
-| Testing | `ceh-testing` | Stack-agnostic testing technique — reproduce-first bug fixes, systematic test-case design, suite audits (assertions, mutation, flakiness), behavior-preservation checks for refactors, and a pre-completion risk gate |
+| Testing | `ceh-testing` | Stack-agnostic testing technique — reproduce-first bug fixes and bisection, systematic test-case design (partitions, boundaries, properties, metamorphic, fuzzing), suite audits (assertions, mutation, flakiness), behavior-preservation checks for refactors, and a pre-completion risk gate |
 
 ### Categorization
 
@@ -45,7 +45,9 @@ into three tiers:
 
 `ceh-dev-tools` is a standalone tooling plugin. Each plugin is self-contained: a
 foundational standard needed by more than one plugin is duplicated into each rather than extracted
-into a shared base, so one plugin per use case is all you load.
+into a shared base, so one plugin per use case is all you load. Cross-cutting plugins are the
+orthogonal tier — they hold a discipline that applies whatever you are building, so they load
+*alongside* a use-case plugin rather than instead of one.
 
 ---
 
@@ -119,11 +121,11 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-fabled` | Fabled | `/ceh-fabled:fabled` | Any non-trivial task with more than one plausible answer — deliberate reasoning, alternatives, adversarial self-review, verification, and calibrated conviction |
 | `ceh-fabled` | Fabled Plan Review | `/ceh-fabled:fabled-plan-review` | Review an existing plan against frontier-grade planning discipline — problem fidelity, alternatives, decomposition, pre-mortem, verifiability — verdict plus concrete fixes |
 | `ceh-fabled` | Fabled Stuck | `/ceh-fabled:fabled-stuck` | Escape a failure loop after repeated failed fixes — freeze, inventory attempts, attack their shared assumption, re-derive the diagnosis from evidence, probe before fixing |
-| `ceh-testing` | Test a Bug Fix | `/ceh-testing:test-a-bug-fix` | Fixing a bug, crash, regression, or incident — reproduce-first: failing test before the fix, then prove the test is coupled to it |
-| `ceh-testing` | Design Test Cases | `/ceh-testing:design-test-cases` | Choosing which inputs and scenarios to cover — partitions, boundaries, decision tables, state transitions, pairwise, properties, forced dependency failure |
-| `ceh-testing` | Audit Test Suite | `/ceh-testing:audit-test-suite` | Deciding whether a passing suite would actually catch a defect — assertion audit, delete-the-code check, mutation testing on the diff, flakiness |
+| `ceh-testing` | Test a Bug Fix | `/ceh-testing:test-a-bug-fix` | Fixing a bug, crash, regression, or incident — reproduce-first: failing test before the fix, prove the test is coupled to it, bisect on it when the behavior used to work |
+| `ceh-testing` | Design Test Cases | `/ceh-testing:design-test-cases` | Choosing which inputs and scenarios to cover — partitions, boundaries, decision tables, state transitions, pairwise, properties, metamorphic relations, fuzzing, forced dependency failure |
+| `ceh-testing` | Audit Test Suite | `/ceh-testing:audit-test-suite` | Deciding whether a passing suite would actually catch a defect — assertion audit, delete-the-code check, mutation testing on the diff, flakiness, branch coverage |
 | `ceh-testing` | Verify Behavior Preserved | `/ceh-testing:verify-behavior-preserved` | Before a no-behavior-change edit (refactor, extraction, dependency/runtime upgrade, port) — characterization tests, golden files, differential run |
-| `ceh-testing` | Close Test Risk Gaps | `/ceh-testing:close-test-risk-gaps` | Pre-completion gate — triage concurrency/idempotency, contract drift, performance regression, and authorization; skip each class explicitly when its trigger does not fire |
+| `ceh-testing` | Close Test Risk Gaps | `/ceh-testing:close-test-risk-gaps` | Pre-completion gate — triage concurrency/idempotency, contract drift, performance regression, authorization, and migration/rolling-deploy compatibility; skip each class explicitly when its trigger does not fire |
 | `ceh-fabled` | Fabled Voice | `/ceh-fabled:fabled-voice` | Always-on via SessionStart hook — deliver in fable's writing style — finding-first progress lines, verdict-first advisory answers closing on a calibration, and reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer |
 
 ---

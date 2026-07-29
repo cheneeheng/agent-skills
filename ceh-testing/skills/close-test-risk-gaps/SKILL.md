@@ -2,20 +2,22 @@
 name: close-test-risk-gaps
 description: >-
   Load this skill as a pre-completion gate when a feature is functionally working and about to be
-  called done — it triages the four failure classes a passing functional suite structurally cannot
+  called done — it triages the five failure classes a passing functional suite structurally cannot
   catch: concurrency and non-idempotent retries, contract drift across a process boundary,
-  performance regression, and broken authorization. Each has a trigger test and one minimal test to
-  add; classes whose trigger does not fire are skipped explicitly. Trigger on "is this ready",
-  "anything else to test", "before I open the PR", "did I miss anything", "race condition",
-  "idempotency", "webhook retries", "N+1 query", "authorization test", or "the tests pass but I am
-  not confident".
+  performance regression, broken authorization, and migration or rolling-deploy incompatibility.
+  Each has a trigger condition and one minimal test to add; classes whose trigger does not fire are
+  skipped explicitly. Trigger on "is this ready", "anything else to test", "before I open the PR",
+  "did I miss anything", "race condition", "idempotency", "webhook retries", "N+1 query",
+  "authorization test", "is this migration safe", "backfill", or "the tests pass but I am not
+  confident".
 ---
 
 # Close Test Risk Gaps
 
 Unit, integration, and E2E tests all ask the same question: given this input, is the output right?
-Four important failure classes are invisible to that question — they depend on *timing*, on *who is
-asking*, on *what a different process expects*, or on *how long it took*.
+Five important failure classes are invisible to that question — they depend on *timing*, on *who is
+asking*, on *what a different process expects*, on *how long it took*, or on *what data and which
+code version were already there*.
 
 This is a triage gate, not a checklist to complete. Run it when a feature is working and about to be
 called done. **For each class: does the trigger fire? If no, skip it and say so.** Adding tests
@@ -80,6 +82,13 @@ quietly updating the schema.
 For messages and events, pin one real payload per event type as a fixture and validate it. A
 consumer that deserializes strictly will break on a producer's "harmless" rename.
 
+When the consumer is a service you also own, the schema check upgrades to a **consumer-driven
+contract**: the consumer's expectations are the fixture, and the producer's suite runs against them,
+so the producer's CI goes red rather than the consumer's production. Contribute the consumer's
+recorded payload to the producer's test fixtures — that captures most of the value without adopting
+a broker (Pact, Spring Cloud Contract), which is a tooling decision to raise rather than make
+silently.
+
 ---
 
 ## 3. Performance regression
@@ -140,9 +149,51 @@ Add one matrix per resource type, not per endpoint.
 
 ---
 
+## 5. Migration and rollout compatibility
+
+**Trigger fires if:** the change ships a schema migration or a data backfill; a column is renamed,
+dropped, or made `NOT NULL`; a stored format or enum gains or loses a value; a cache key or
+serialized payload shape changes. The tests pass because they run against an empty database created
+by the migration itself, on one process, with no old code running.
+
+**The three tests:**
+
+```python
+def test_migration_round_trips(alembic_runner):
+    alembic_runner.migrate_up_one()
+    alembic_runner.migrate_down_one()      # the down path nobody runs until an incident
+    alembic_runner.migrate_up_one()
+
+def test_backfill_is_idempotent(seeded_db):     # it will be re-run after a timeout
+    run_backfill(); first = snapshot(seeded_db)
+    run_backfill()
+    assert snapshot(seeded_db) == first
+
+def test_old_code_still_reads_new_schema(seeded_db):
+    # during a rolling deploy both versions run at once
+    assert PreviousOrderModel.query_all(seeded_db)      # no exception, no missing column
+```
+
+Three rules the tests encode:
+
+- **Expand, then contract — in separate deploys.** Add the new column, backfill it, ship code writing
+  both, and only then drop the old one. A rename in a single migration breaks every instance still
+  running the previous release, which during a rolling deploy is half of them.
+- **Run it against prod-shaped data, not fixtures.** A restored copy or a generated table at
+  production row count is where the lock and the timeout appear. `ALTER TABLE` on 50M rows is a
+  different operation from the same statement on 50.
+- **Backfill in batches, and make it resumable.** Assert that a partial run followed by a full run
+  leaves the same state as one clean run — because that is what happens when the first attempt is
+  killed.
+
+If the migration is not reversible (a dropped column, a lossy type change), say so explicitly and
+name the recovery path — restore from backup is an answer, but only if someone has confirmed it.
+
+---
+
 ## Reporting the gate
 
-State the verdict for all four classes, including the skips — a silent skip is indistinguishable
+State the verdict for all five classes, including the skips — a silent skip is indistinguishable
 from an oversight:
 
 ```
@@ -150,7 +201,8 @@ Concurrency  — FIRES: /coupons/{id}/redeem decrements shared stock. Added 2 te
 Contract     — FIRES: OrderResponse dropped `legacy_total`. Breaking; needs v2, flagged not fixed.
 Performance  — FIRES: GET /orders loads customer per row. Added query-count test (was 51, now 3).
 Authorization— skipped: no user-supplied IDs, endpoint is unauthenticated and public.
+Migration    — skipped: no schema change, no backfill, no stored-format change.
 ```
 
-If nothing fires, say that explicitly. "All four skipped, none apply" is a legitimate and useful
+If nothing fires, say that explicitly. "All five skipped, none apply" is a legitimate and useful
 result — it means the risk was considered, not ignored.

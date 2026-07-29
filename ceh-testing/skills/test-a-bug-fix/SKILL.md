@@ -3,10 +3,11 @@ name: test-a-bug-fix
 description: >-
   Load this skill when a bug, defect, crash, regression, or incident is being fixed — before writing
   the fix. Enforces reproduce-first: write the smallest failing test, confirm it fails for the real
-  reason, fix, then prove the test goes red again without the fix. Trigger on "fix this bug", "this
-  is broken", "getting an error", "this returns the wrong value", "regression", "hotfix",
-  "postmortem action item", or a pasted stack trace or failing output. Also load when reviewing a
-  bug-fix PR that ships no test. Not for choosing inputs for new feature tests (use
+  reason, fix, then prove the test goes red again without the fix; and bisect on that reproducer
+  when the behavior used to be correct. Trigger on "fix this bug", "this is broken", "getting an
+  error", "this returns the wrong value", "regression", "this worked last week", "which commit broke
+  this", "git bisect", "hotfix", "postmortem action item", or a pasted stack trace or failing
+  output. Also load when reviewing a bug-fix PR that ships no test. Not for choosing inputs for new feature tests (use
   design-test-cases) or for judging an existing suite (use audit-test-suite).
 ---
 
@@ -68,6 +69,29 @@ Stop there. A bug fix is not a licence to test the whole module.
 ### 6. Ship the test with the fix
 
 Same commit. A bug-fix commit with no test is incomplete — flag it in review.
+
+## When it used to work — bisect on the reproducer
+
+A reproducer is not only a test; it is a decision procedure. If the behavior was correct at some
+earlier point, do not read the diff hoping to spot the cause — let git find the commit:
+
+```bash
+git bisect start HEAD <last-known-good-tag-or-sha>
+git bisect run pytest tests/unit/test_parse_duration.py::test_rejects_bare_number
+git bisect reset
+```
+
+`git bisect run` needs an exit code, so the reproducer must be runnable at every commit in the
+range — keep it in a file the bisect does not check out, or pass it via `--rootdir` / a stash-free
+copy. Bisecting on a manual "does it look wrong" judgement instead of a scripted test is where this
+technique goes wrong: dozens of steps, each one a chance to mark a commit incorrectly.
+
+The commit it names is where the behavior changed, which is not always where the bug is — a commit
+can expose a latent defect written months earlier. Fix the defect, not the commit.
+
+Two cases that need care: if the range spans a dependency or lockfile change, add `uv sync` (or the
+equivalent) to the run command, otherwise every commit is tested against today's dependencies; and
+mark commits that cannot build with `git bisect skip` rather than guessing good or bad.
 
 ## Naming
 
