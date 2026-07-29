@@ -393,6 +393,34 @@ copy: it composes the service and frontend skills, which each state the rule.
 
 ---
 
+## Test-suite audit findings report (skill / agent)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-testing/skills/audit-test-suite/SKILL.md` | "Reporting" | canonical — in-session report |
+| `ceh-testing/agents/test-suite-auditor.md` | "Output to Parent Session" | near-identical copy — subagent report handed back |
+
+**What is shared:** the worst-first ranked finding format (`SEVERITY  file:line  what`) and the five
+example rows covering the same defect classes — assertion-free test, expectation computed with the
+code's own formula, surviving mutants at a boundary, order-dependent failure under `--random-order`,
+and a slow unit test doing real I/O.
+
+**What diverges:**
+- the agent caps the list at ~15 findings and adds the commands-run / skipped-checks ledger, the
+  zero-coverage list, and a "bugs found in source, reported not fixed" section — it cannot ask the
+  parent anything, so the report has to stand alone.
+- the skill's version separates what was fixed from what needs a decision, because the main session
+  can act on findings immediately.
+
+Note that `ceh-testing` deliberately shares **no** content with the three stack testing skills
+(`python-service-testing`, `python-library-testing`, `frontend-testing`): those own runner,
+fixtures, and mocking; `ceh-testing` owns technique. Keep it that way — a technique block appearing
+in a stack skill is the signal that this boundary has slipped.
+
+---
+
 ## Update Protocol
 
 When changing a shared block:

@@ -999,3 +999,53 @@ watching if the mapper starts firing on "explain the codebase".
 
 **Outcome:** `python tools/validate-plugins/validate.py` passes; `ceh-dev-tools` bumped 1.1.4 →
 1.2.0 (MINOR, new skill) in both manifests.
+
+---
+
+### Entry 56
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-29T00:00:00Z
+**Task:** Close the testing-technique gaps found by a repo-wide survey of `ceh-*` testing coverage.
+
+**Context:** A survey confirmed by grep that property-based, mutation, fuzz, metamorphic,
+differential, fault-injection, chaos, load/soak, pairwise, flaky-detection, idempotency, race,
+contract (Pact) and canary testing are absent repo-wide. The three existing testing skills
+(`python-service-testing`, `python-library-testing`, `frontend-testing`) cover runner, fixtures,
+mocking and the test pyramid — tooling, not technique. Two forks were unresolved: where the
+technique content lives, and how finely to slice it.
+
+**Decision:** Created a new cross-cutting `ceh-testing` plugin holding five stack-agnostic technique
+skills plus one agent, rather than duplicating the technique into the three stack plugins. This is a
+deliberate deviation from the use-case-only organizing axis: choosing test inputs, auditing whether
+a green suite catches defects, and proving a refactor changed nothing are identical in Python and
+TypeScript, so triplicating them would produce three copies with nothing stack-specific to justify
+the divergence — the drift cost the duplication policy accepts only when copies genuinely differ.
+The rationale is recorded as a fourth categorization rule of thumb in `CLAUDE.md`.
+
+Sliced to five skills, not the ~12 the taxonomy suggests: A3/A4 (decision tables, state transitions)
+folded into `design-test-cases` as rungs of one input-selection ladder rather than standing alone,
+and B7-B10 (concurrency/idempotency, contract drift, performance regression, authorization) collapsed
+into `close-test-risk-gaps` as a single triage gate with explicit per-class skips. A skill triggers
+on a moment, and these share one moment each; separate skills would have competed for the same
+prompts and mostly never fired. Tier C techniques (fuzz, chaos, load/soak, canary, metamorphic) were
+left out — no trigger moment in this repo's use cases.
+
+**Impact / Risk:** `ceh-testing` must be loaded *alongside* a stack plugin, not instead of one —
+the boundary is stated in the plugin README and in `CROSS_REFERENCES.md`, but nothing enforces it.
+The real risk is boundary slippage: a technique block drifting into a stack testing skill, or a
+runner detail into `ceh-testing`. Trigger overlap is also possible between `verify-behavior-preserved`
+and `ceh-agent-coding-contract:shrink-diff` (both fire on "shrink the diff"); the skills cross-
+reference each other rather than compete, since shrink-diff carries no verification step of its own.
+
+Deliberately **not** done: cross-linking the new skills from the three stack testing skills and six
+tester agents. That edits nine existing files for discoverability the five skills already have
+through their own trigger moments.
+
+**Outcome:** `python tools/validate-plugins/validate.py` passes; `ceh-testing` added at 1.0.0 in
+both `ceh-testing/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`. One defect
+found and fixed while sanity-checking the skill content: the assertion-audit snippet in
+`audit-test-suite` matched on `ast.dump()` text, which contains the function's own name, so a test
+named `test_assertion_shape` was silently treated as asserting; rewritten to match on `ast.Assert`
+and call-node shape, and verified against a fixture.

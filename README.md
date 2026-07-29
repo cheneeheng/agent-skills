@@ -30,6 +30,7 @@ organized around **use cases** — load the ones that match what you are buildin
 | Evaluation | `ceh-evaluation` | Evaluate a skill or plugin you just wrote — derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a readiness gate passes |
 | Fabled | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
 | Advisor | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
+| Testing | `ceh-testing` | Stack-agnostic testing technique — reproduce-first bug fixes, systematic test-case design, suite audits (assertions, mutation, flakiness), behavior-preservation checks for refactors, and a pre-completion risk gate |
 
 ### Categorization
 
@@ -38,7 +39,7 @@ into three tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor` |
+| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -118,6 +119,11 @@ into a shared base, so one plugin per use case is all you load.
 | `ceh-fabled` | Fabled | `/ceh-fabled:fabled` | Any non-trivial task with more than one plausible answer — deliberate reasoning, alternatives, adversarial self-review, verification, and calibrated conviction |
 | `ceh-fabled` | Fabled Plan Review | `/ceh-fabled:fabled-plan-review` | Review an existing plan against frontier-grade planning discipline — problem fidelity, alternatives, decomposition, pre-mortem, verifiability — verdict plus concrete fixes |
 | `ceh-fabled` | Fabled Stuck | `/ceh-fabled:fabled-stuck` | Escape a failure loop after repeated failed fixes — freeze, inventory attempts, attack their shared assumption, re-derive the diagnosis from evidence, probe before fixing |
+| `ceh-testing` | Test a Bug Fix | `/ceh-testing:test-a-bug-fix` | Fixing a bug, crash, regression, or incident — reproduce-first: failing test before the fix, then prove the test is coupled to it |
+| `ceh-testing` | Design Test Cases | `/ceh-testing:design-test-cases` | Choosing which inputs and scenarios to cover — partitions, boundaries, decision tables, state transitions, pairwise, properties, forced dependency failure |
+| `ceh-testing` | Audit Test Suite | `/ceh-testing:audit-test-suite` | Deciding whether a passing suite would actually catch a defect — assertion audit, delete-the-code check, mutation testing on the diff, flakiness |
+| `ceh-testing` | Verify Behavior Preserved | `/ceh-testing:verify-behavior-preserved` | Before a no-behavior-change edit (refactor, extraction, dependency/runtime upgrade, port) — characterization tests, golden files, differential run |
+| `ceh-testing` | Close Test Risk Gaps | `/ceh-testing:close-test-risk-gaps` | Pre-completion gate — triage concurrency/idempotency, contract drift, performance regression, and authorization; skip each class explicitly when its trigger does not fire |
 | `ceh-fabled` | Fabled Voice | `/ceh-fabled:fabled-voice` | Always-on via SessionStart hook — deliver in fable's writing style — finding-first progress lines, verdict-first advisory answers closing on a calibration, and reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer |
 
 ---
@@ -151,6 +157,7 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | `ceh-web-frontend` | TS Unit Tester | `/ceh-web-frontend:ts-unit-tester` | Write isolated Vitest unit tests for functions, classes, and modules with mocked dependencies |
 | `ceh-web-frontend` | TS Integration Tester | `/ceh-web-frontend:ts-integration-tester` | Write tests wiring real stores, MSW handlers, and multiple components together |
 | `ceh-web-frontend` | TS System Tester | `/ceh-web-frontend:ts-system-tester` | Write Playwright E2E tests that exercise the full running stack as a real user would |
+| `ceh-testing` | Test Suite Auditor | `/ceh-testing:test-suite-auditor` | Run the slow, high-output suite audit out of session — mutation testing on the diff, flakiness and isolation runs — and hand back a ranked read-only report (Sonnet) |
 | `ceh-git-workflow` | Commit Author | `/ceh-git-workflow:commit-author` | Create one commit in an isolated subagent; derives the change from git diff, pass only the why (Sonnet, medium effort) |
 | `ceh-git-workflow` | PR Opener | `/ceh-git-workflow:pr-opener` | Push the branch and open the PR in an isolated subagent; queues auto-merge where allowed (Sonnet, medium effort) |
 | `ceh-git-workflow` | Branch Merger | `/ceh-git-workflow:branch-merger` | Merge a PR or local branch into `main` and clean up, gate-checked, in an isolated subagent (Sonnet, medium effort) |
@@ -208,6 +215,7 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-evaluation@ceh-plugins --scope user
 /plugin install ceh-fabled@ceh-plugins --scope user
 /plugin install ceh-advisor@ceh-plugins --scope user
+/plugin install ceh-testing@ceh-plugins --scope user
 ```
 
 Or install all at once using `--scope project` for project-specific installs.
@@ -254,7 +262,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/ceh-business-plan" },
     { "path": "~/agent-skills/ceh-evaluation" },
     { "path": "~/agent-skills/ceh-fabled" },
-    { "path": "~/agent-skills/ceh-advisor" }
+    { "path": "~/agent-skills/ceh-advisor" },
+    { "path": "~/agent-skills/ceh-testing" }
   ]
 }
 ```
