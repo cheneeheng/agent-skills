@@ -2,14 +2,16 @@
 name: close-test-risk-gaps
 description: >-
   Load this skill as a pre-completion gate when a feature is functionally working and about to be
-  called done — it triages the five failure classes a passing functional suite structurally cannot
-  catch: concurrency and non-idempotent retries, contract drift across a process boundary,
-  performance regression, broken authorization, and migration or rolling-deploy incompatibility.
-  Each has a trigger condition and one minimal test to add; classes whose trigger does not fire are
-  skipped explicitly. Trigger on "is this ready", "anything else to test", "before I open the PR",
-  "did I miss anything", "race condition", "idempotency", "webhook retries", "N+1 query",
-  "authorization test", "is this migration safe", "backfill", or "the tests pass but I am not
-  confident".
+  called done — it triages five failure classes a passing functional suite structurally cannot
+  catch: concurrency/non-idempotent retries, contract drift across a process boundary, performance
+  regression, broken authorization, and migration or rolling-deploy incompatibility. Each class has
+  a trigger condition and one minimal test; unfired classes are skipped explicitly. Trigger on "is
+  this ready", "anything else to test", "before I open the PR", "race condition", "idempotency",
+  "N+1 query", "authorization test", "is this migration safe", "backfill", "tests pass but I am not
+  confident", or unnamed: a shared stock/counter decrements, a retry could double-charge, a
+  caller-supplied ID could return someone else's data, or a column is renamed/backfilled. Not for
+  new-test selection (design-test-cases), suite trust (audit-test-suite), one bug (test-a-bug-fix),
+  or refactor safety (verify-behavior-preserved).
 ---
 
 # Close Test Risk Gaps

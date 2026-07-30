@@ -58,19 +58,19 @@ Plugins fall into three tiers:
 ## Structure
 
 ```
-.agents_workspace/            # Skill session artifacts (DECISION_LOG.md, LESSONS_LEARNED.md, ARCHITECTURE.md), plugin reorg plan, architecture docs, etc. — not a plugin
+.agents_workspace/            # Skill session artifacts — not a plugin. DECISION_LOG.md and PLUGIN_REORG_PLAN.md are tracked; skill-evals/<skill>/run-NNN/SKILL_EVAL.md holds ceh-evaluation output
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 ceh-<plugin-name>/
 ├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here
 ├── agents/                   # Optional — subagents for complex autonomous tasks
 ├── hooks/                    # Optional — hooks.json wiring hook scripts via ${CLAUDE_PLUGIN_ROOT} (e.g. ceh-advisor)
-├── scripts/                  # Optional — shell helpers and hook scripts (e.g. coverage, branch delete)
+├── scripts/                  # Optional — hook scripts and shell helpers (e.g. ceh-advisor guards, ceh-ops CI scaffolding, test/coverage runners)
 └── skills/
     └── <skill-name>/
         ├── SKILL.md               # Required — all content inline; frontmatter + full body
-        └── references/            # Sparingly — schemas and templates only (e.g. plan-schema.md)
+        └── references/            # Sparingly — shared schemas/templates (plan-schema.md) or a standards set too large to inline (fabled)
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
-└── <tool-name>/               # e.g. skills-sync — own README.md, no plugin.json
+└── <tool-name>/               # validate-plugins (the CI gate), skills-sync — own README.md, no plugin.json
 ```
 
 ## Plugins
@@ -102,9 +102,15 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 
 ## Skills
 
-Each skill is a self-contained SKILL.md file with frontmatter and inline content. The
-`references/` subdirectory is reserved for schemas and templates shared across multiple skills
-(e.g. `plan-schema.md` in `implement-from-plan`) — not for general reference material.
+Each skill is a self-contained SKILL.md file with frontmatter and inline content. Default to
+inlining everything; `references/` is for two cases only:
+
+- **A schema or template used by several skills** — `plan-schema.md` is shared by
+  `implement-from-plan`, `patch-built-version`, and `review-against-plan`.
+- **A standards set too large to inline** without making SKILL.md unreadable — `ceh-fabled:fabled`
+  splits six standards files out, `ceh-web-frontend:ui-design` keeps design-system examples there.
+
+Never for general reference material a model already knows.
 
 ## Frontmatter Conventions
 
@@ -231,6 +237,8 @@ This repo has two independent versioning layers:
 - Increments sequentially from the previous repo tag — MINOR bump when any plugin adds skills or agents, PATCH bump for content-only changes. Independent of individual plugin versions.
 - Purpose: deployment snapshot and changelog anchor. It does not drive auto-update.
 - Cut a new tag after bumping plugin versions: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+- Add a `CHANGELOG.md` entry under the new version: prose on what changed and why, a
+  `### Plugin versions` table listing every plugin bumped, then `### Added` / `### Changed` / `### Fixed`.
 
 Current plugin versions: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`.
 
@@ -242,6 +250,8 @@ Current plugin versions: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.cl
 | `.claude-plugin/marketplace.json` | Marketplace listing (all plugins) |
 | `README.md` | User-facing docs — skill and agent tables live here |
 | `CROSS_REFERENCES.md` | Tracks content duplicated across skills; lists canonical source and all copies per block |
+| `CHANGELOG.md` | Release notes per repo tag; each entry carries a `### Plugin versions` table |
+| `.agents_workspace/DECISION_LOG.md` | Agent decision log — **tracked in git here**, append-only, next sequential entry ID |
 
 ## Cross-Reference Rule
 

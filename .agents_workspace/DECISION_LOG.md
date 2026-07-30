@@ -1116,3 +1116,46 @@ no trigger" instruction carries more weight than before.
 **Outcome:** `python tools/validate-plugins/validate.py` passes; `ceh-testing` bumped 1.0.0 → 1.0.1
 (PATCH — content only, no new skills or agents) in both manifests. Root `README.md`, plugin
 `README.md`, and `CLAUDE.md` updated. No test was run — this repo ships markdown only.
+
+### Entry 58
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-30T00:00:00Z
+**Task:** Full ceh-evaluation:evaluate-skill run on the ceh-testing plugin (run-001)
+
+**Context:** Three genuine ambiguities came up running the evaluation skill's fixed process against
+a plugin-sized target (5 skills + 1 agent), where the skill's own instructions leave method open:
+(1) how to detect whether a skill actually "fired" inside a cold subagent when the rubric explicitly
+forbids asking the subagent to self-report skill usage, and no tool in this session exposes a
+subagent's raw tool-call trace to the caller; (2) how to right-size the trigger/behavioral battery
+for a plugin (the literally-scoped plan — 10+10 N=3 for the in-depth skill, 4+4 N=1 x5 for sampled
+skills, 3 behavioral tasks x N=2 — implies well over 100 subagent dispatches); (3) whether to apply
+a description fix directly or only recommend it.
+
+**Decision:** (1) Operationalized "fired" as *the skill's content was consulted and applied* —
+verbatim/near-verbatim idiom matches, explicit skill-path citation, or reproduction of the skill's
+own distinctive reporting structure — corroborated where possible by the `tool_uses` count returned
+with each subagent result (`tool_uses: 0` conclusively rules out any tool call, including `Skill`).
+Recorded as a methodology note (§00) in the report rather than silently assumed. (2) Used adaptive
+sampling instead of the literal uniform plan: ran full N=1 first across the 10-positive/10-negative
+battery for the in-depth skill, then re-ran only the ambiguous or failing prompts at N=2-3 to confirm
+stability, and treated the negative/collision battery's off-target hits as opportunistic sampling
+evidence for the other four skills instead of running a fully separate battery for each. (3) Applied
+the description fix directly (Autonomous Mode default: decide, document, continue) since the
+evaluation's own Phase 4 explicitly allows "you propose and apply the fix," re-validated with
+`tools/validate-plugins/validate.py`, and re-ran only the affected dimension before reporting back.
+
+**Impact / Risk:** (1) means criterion 2's measured trigger rate could be an overestimate of true
+auto-trigger propensity if some "fires" were actually filesystem discovery of the SKILL.md rather
+than the description-driven auto-trigger mechanism — flagged explicitly so it isn't read as a clean
+number. (2) trades statistical completeness for session feasibility; the four sampled skills'
+triggering is evidenced but not gate-scored to the same rigor as the in-depth skill. (3) means a real
+plugin file changed mid-evaluation (`ceh-testing/skills/close-test-risk-gaps/SKILL.md` description) —
+low risk (single-file, no CROSS_REFERENCES.md entries for this content, validator green both before
+and after) but is a production content edit made without a prior explicit go-ahead beyond the
+Phase-1 scope confirmation.
+
+**Outcome:** Positive trigger rate on `close-test-risk-gaps` moved 7/10 → 9/10 after the description
+fix, with false-positive rate holding at 0/13 across both iterations — gate moved 4/6 → 5/6. Full
+report: `.agents_workspace/skill-evals/ceh-testing/run-001/SKILL_EVAL.md`.
