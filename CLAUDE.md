@@ -141,70 +141,19 @@ Every **other** frontmatter key that contains `: ` must be quoted — single quo
 
 ## Adding a Component
 
-The repo-local skill `.claude/skills/add-plugin-component/` carries the full checklist for both
-of the sections below — plugin choice, frontmatter fields worth reaching for (and their traps),
-both README tables, `CROSS_REFERENCES.md`, the two-manifest version bump, and the validator. It
-auto-loads when a `SKILL.md` or `agents/*.md` is being created. The condensed versions follow.
+The repo-local skill `.claude/skills/add-plugin-component/` is the single checklist for adding or
+changing a skill, agent, hook, or script — plugin choice, frontmatter fields worth reaching for
+(and their traps), the plugin-agent gotchas, both README tables, `CROSS_REFERENCES.md`, the
+two-manifest version bump, and the validator. It auto-loads when a `SKILL.md` or `agents/*.md` is
+being created; load it explicitly if it has not.
 
-## Adding an Agent
+Whatever else gets skipped, these four land in the **same commit** or CI fails:
 
-1. Identify the correct plugin for the agent's domain.
-2. Create `ceh-<plugin>/agents/<name>.md` with frontmatter `name`, `description`, and `tools` fields.
-3. Update `README.md` agents tables:
-   - Add a row under the correct plugin group in the "Agents" section.
-   - If the plugin has no agents group yet, add a new `### <Plugin> (`ceh-<plugin>`)` subsection.
-4. Bump version in both:
-   - `ceh-<plugin>/.claude-plugin/plugin.json`
-   - `.claude-plugin/marketplace.json`
-5. Validate before committing: `python tools/validate-plugins/validate.py`
-   (checks manifest/marketplace sync, semver, and skill/agent frontmatter — the same
-   gate CI runs via `.github/workflows/validate.yml`).
-
-> **Plugin-agent frontmatter gotcha:** Claude Code ignores `permissionMode`, `hooks`, and
-> `mcpServers` on plugin subagents (security restriction — see the
-> [subagents docs](https://code.claude.com/docs/en/sub-agents#choose-the-subagent-scope)).
-> Every agent in this repo is a plugin agent, so these fields are never set here — do not
-> add them back. To avoid edit prompts, put the session in `acceptEdits` before dispatching
-> (a parent `acceptEdits`/`bypassPermissions` takes precedence and is inherited) or use
-> `permissions.allow` in `settings.json`. Required fields are only `name` and `description`;
-> `model` defaults to `inherit`. Auto-delegation is driven by the `description` field —
-> include "use proactively" to encourage it.
->
-> **Background tool filter:** subagents run in the background by default, and a background
-> subagent keeps only these built-in tools — `Read`, `Grep`, `Glob`, `Bash`, `PowerShell`,
-> `Edit`, `Write`, `NotebookEdit`, `WebFetch`, `WebSearch`, `TodoWrite`, `Skill`,
-> `ToolSearch`, `EnterWorktree`, `ExitWorktree`, `Monitor`, `TaskStop`, `SendMessage`,
-> `Artifact`. Everything else is stripped whether inherited or named in `tools:`, and the
-> removal is silent. Check any new agent's `tools:` against that list. `AskUserQuestion` is
-> removed from *every* subagent, foreground or background — an agent can never stop to ask.
->
-> **`isolation: worktree` is deliberately unused.** Subagent worktrees branch from the
-> repository's **default branch**, not the parent session's `HEAD`, unless
-> `worktree.baseRef: "head"` is set in `settings.json` — and their changes stay in the
-> worktree rather than landing in your checkout. With this repo's feature-branch rule that
-> would hand an agent a copy of `main` without your work, so no agent sets it.
->
-> **Preloading skills into an agent:** the `skills:` frontmatter list loads a skill into the
-> agent's context at dispatch — the agent does **not** need the `Skill` tool for this, and
-> `SessionStart` hooks never fire for subagents, so `skills:` is the only way a hook-loaded
-> standard reaches one. Always write entries fully qualified as `plugin:skill`; a bare skill
-> name may resolve to nothing and the preload fails silently.
-
-## Adding a Skill
-
-1. Identify the correct plugin for the skill's domain.
-2. Create `ceh-<plugin>/skills/<name>/SKILL.md` with frontmatter `name` and `description` fields.
-3. Write all content inline in the SKILL.md body — no separate reference files unless it is a
-   schema or template shared across multiple skills (e.g. a plan document schema).
-4. Update `README.md` skills tables:
-   - Add a row under the correct plugin group in the "Skills" section of the root README.
-   - Add a row to the plugin's own README.md skills table.
-5. Bump version in both:
-   - `ceh-<plugin>/.claude-plugin/plugin.json`
-   - `.claude-plugin/marketplace.json`
-6. Validate before committing: `python tools/validate-plugins/validate.py`
-   (checks manifest/marketplace sync, semver, and skill/agent frontmatter — the same
-   gate CI runs via `.github/workflows/validate.yml`).
+1. A row in the root `README.md` table (Skills or Agents).
+2. A row in `ceh-<plugin>/README.md`.
+3. A version bump in **both** `ceh-<plugin>/.claude-plugin/plugin.json` and
+   `.claude-plugin/marketplace.json` — PATCH for content, MINOR for a new skill or agent.
+4. `python tools/validate-plugins/validate.py` green.
 
 ## Commands
 

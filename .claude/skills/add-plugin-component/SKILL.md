@@ -35,8 +35,9 @@ use case, so each must be self-contained.
 **Skill** — `ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. All content
 inline; `references/` is only for schemas and templates shared across skills.
 
-**Agent** — `ceh-<plugin>/agents/<name>.md`. Required frontmatter is only `name` and `description`;
-auto-delegation is driven entirely by `description` (include "use proactively" to encourage it).
+**Agent** — `ceh-<plugin>/agents/<name>.md`. Required frontmatter is only `name` and `description`
+(`model` defaults to `inherit`); auto-delegation is driven entirely by `description` (include "use
+proactively" to encourage it).
 
 **`description` is always a folded block scalar (`>-`)** — never quoted, never plain. `validate.py`
 rejects anything else.
@@ -66,12 +67,22 @@ Frontmatter worth reaching for before writing prose that does the same job:
 
 **Plugin-agent gotchas** — Claude Code ignores `permissionMode`, `hooks`, and `mcpServers` on
 plugin agents (security restriction). Do not add them; they read as working config and are not.
-Grant edit permissions via session `permissions.allow` in `settings.json` instead. `skills:`
-entries must be fully qualified as `plugin:skill` or the preload fails silently. Subagents run in
+Grant edit permissions via session `permissions.allow` in `settings.json` instead. Subagents run in
 the **background by default**, and background subagents keep only a reduced built-in tool set — if
 an agent needs a tool outside `Read/Grep/Glob/Bash/PowerShell/Edit/Write/NotebookEdit/WebFetch/
 WebSearch/TodoWrite/Skill/ToolSearch/EnterWorktree/ExitWorktree/Monitor/TaskStop/SendMessage/
-Artifact`, it will be stripped silently.
+Artifact`, it will be stripped silently. `AskUserQuestion` is stripped from *every* subagent,
+foreground or background — an agent can never stop to ask.
+
+`skills:` entries must be fully qualified as `plugin:skill` or the preload fails silently. The
+preload is also the only route a hook-loaded standard has into an agent: `SessionStart` hooks never
+fire for subagents.
+
+**`isolation: worktree` is deliberately unused in this repo.** Subagent worktrees branch from the
+repository's **default branch**, not the parent session's `HEAD`, unless `worktree.baseRef: "head"`
+is set in `settings.json` — and their changes stay in the worktree rather than landing in your
+checkout. Under this repo's feature-branch rule that hands an agent a copy of `main` without your
+work, so no agent sets it.
 
 ## 3. Update both README tables
 
