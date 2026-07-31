@@ -82,6 +82,11 @@ A refactor changes shape, never behavior:
   before-run is a finding to report, not a license to proceed.
 - Where no tests cover it, apply only mechanical transforms (delete provably-dead code, inline,
   rename, extract) and flag anything riskier instead of applying it.
+- For anything past a mechanical transform — an extraction across files, an implementation swap, a
+  dependency or runtime upgrade — pin current behavior first with
+  `ceh-testing:verify-behavior-preserved` (characterization tests, golden files, differential run)
+  and commit those pins on their own before touching the code. A green existing suite is the weaker
+  check: it only proves what it already covered.
 - Commit refactors with the `refactor:` type, separate from any other change.
 
 ## Phase 4 — Report

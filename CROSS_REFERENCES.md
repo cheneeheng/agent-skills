@@ -304,7 +304,7 @@ digest in sync with the skill when either changes.
 | `ceh-agent-coding-contract/skills/shrink-diff/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | canonical — branch-diff-scoped application |
 | `ceh-agent-coding-contract/skills/refactor-repo/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | word-for-word copy — campaign-wide application |
 
-**What is shared:** the six-rung retroactive ladder (delete outright → stdlib → native platform feature → installed dependency → one line → keep as the minimum, collapsing single-implementation abstractions / single-caller wrappers / config-for-a-constant) and the behavior-preservation rules (never mix a behavior change into a refactor; tests before and after where coverage exists, red-before is a finding not a license; mechanical transforms only without coverage; `refactor:` commits separate from any other change).
+**What is shared:** the six-rung retroactive ladder (delete outright → stdlib → native platform feature → installed dependency → one line → keep as the minimum, collapsing single-implementation abstractions / single-caller wrappers / config-for-a-constant) and the behavior-preservation rules (never mix a behavior change into a refactor; tests before and after where coverage exists, red-before is a finding not a license; mechanical transforms only without coverage; pin behavior with `ceh-testing:verify-behavior-preserved` before anything past a mechanical transform; `refactor:` commits separate from any other change).
 
 **What diverges:**
 - `shrink-diff` applies both blocks to the branch's seed set in one pass; `refactor-repo` applies them per approved cluster in Phase 3, with skip-and-report emphasized for uncovered areas.
