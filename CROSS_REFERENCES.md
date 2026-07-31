@@ -304,7 +304,7 @@ digest in sync with the skill when either changes.
 | `ceh-agent-coding-contract/skills/shrink-diff/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | canonical — branch-diff-scoped application |
 | `ceh-agent-coding-contract/skills/refactor-repo/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | word-for-word copy — campaign-wide application |
 
-**What is shared:** the six-rung retroactive ladder (delete outright → stdlib → native platform feature → installed dependency → one line → keep as the minimum, collapsing single-implementation abstractions / single-caller wrappers / config-for-a-constant) and the behavior-preservation rules (never mix a behavior change into a refactor; tests before and after where coverage exists, red-before is a finding not a license; mechanical transforms only without coverage; `refactor:` commits separate from any other change).
+**What is shared:** the six-rung retroactive ladder (delete outright → stdlib → native platform feature → installed dependency → one line → keep as the minimum, collapsing single-implementation abstractions / single-caller wrappers / config-for-a-constant) and the behavior-preservation rules (never mix a behavior change into a refactor; tests before and after where coverage exists, red-before is a finding not a license; mechanical transforms only without coverage; pin behavior with `ceh-testing:verify-behavior-preserved` before anything past a mechanical transform; `refactor:` commits separate from any other change).
 
 **What diverges:**
 - `shrink-diff` applies both blocks to the branch's seed set in one pass; `refactor-repo` applies them per approved cluster in Phase 3, with skip-and-report emphasized for uncovered areas.
@@ -390,6 +390,34 @@ Developer Mode on Windows, so the import is preferred.
 
 **What diverges:** nothing — the rule is project-type agnostic. `scaffold-fullstack-web` carries no
 copy: it composes the service and frontend skills, which each state the rule.
+
+---
+
+## Test-suite audit findings report (skill / agent)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-testing/skills/audit-test-suite/SKILL.md` | "Reporting" | canonical — in-session report |
+| `ceh-testing/agents/test-suite-auditor.md` | "Output to Parent Session" | near-identical copy — subagent report handed back |
+
+**What is shared:** the worst-first ranked finding format (`SEVERITY  file:line  what`) and the five
+example rows covering the same defect classes — assertion-free test, expectation computed with the
+code's own formula, surviving mutants at a boundary, order-dependent failure under `--random-order`,
+and a slow unit test doing real I/O.
+
+**What diverges:**
+- the agent caps the list at ~15 findings and adds the commands-run / skipped-checks ledger, the
+  zero-coverage list, and a "bugs found in source, reported not fixed" section — it cannot ask the
+  parent anything, so the report has to stand alone.
+- the skill's version separates what was fixed from what needs a decision, because the main session
+  can act on findings immediately.
+
+Note that `ceh-testing` deliberately shares **no** content with the three stack testing skills
+(`python-service-testing`, `python-library-testing`, `frontend-testing`): those own runner,
+fixtures, and mocking; `ceh-testing` owns technique. Keep it that way — a technique block appearing
+in a stack skill is the signal that this boundary has slipped.
 
 ---
 

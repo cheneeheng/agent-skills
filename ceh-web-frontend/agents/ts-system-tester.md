@@ -12,6 +12,7 @@ model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
   - ceh-web-frontend:frontend-testing
+  - ceh-testing:design-test-cases
 ---
 
 # TypeScript System Tester

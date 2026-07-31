@@ -999,3 +999,191 @@ watching if the mapper starts firing on "explain the codebase".
 
 **Outcome:** `python tools/validate-plugins/validate.py` passes; `ceh-dev-tools` bumped 1.1.4 →
 1.2.0 (MINOR, new skill) in both manifests.
+
+---
+
+### Entry 56
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-29T00:00:00Z
+**Task:** Close the testing-technique gaps found by a repo-wide survey of `ceh-*` testing coverage.
+
+**Context:** A survey confirmed by grep that property-based, mutation, fuzz, metamorphic,
+differential, fault-injection, chaos, load/soak, pairwise, flaky-detection, idempotency, race,
+contract (Pact) and canary testing are absent repo-wide. The three existing testing skills
+(`python-service-testing`, `python-library-testing`, `frontend-testing`) cover runner, fixtures,
+mocking and the test pyramid — tooling, not technique. Two forks were unresolved: where the
+technique content lives, and how finely to slice it.
+
+**Decision:** Created a new cross-cutting `ceh-testing` plugin holding five stack-agnostic technique
+skills plus one agent, rather than duplicating the technique into the three stack plugins. This is a
+deliberate deviation from the use-case-only organizing axis: choosing test inputs, auditing whether
+a green suite catches defects, and proving a refactor changed nothing are identical in Python and
+TypeScript, so triplicating them would produce three copies with nothing stack-specific to justify
+the divergence — the drift cost the duplication policy accepts only when copies genuinely differ.
+The rationale is recorded as a fourth categorization rule of thumb in `CLAUDE.md`.
+
+Sliced to five skills, not the ~12 the taxonomy suggests: A3/A4 (decision tables, state transitions)
+folded into `design-test-cases` as rungs of one input-selection ladder rather than standing alone,
+and B7-B10 (concurrency/idempotency, contract drift, performance regression, authorization) collapsed
+into `close-test-risk-gaps` as a single triage gate with explicit per-class skips. A skill triggers
+on a moment, and these share one moment each; separate skills would have competed for the same
+prompts and mostly never fired. Tier C techniques (fuzz, chaos, load/soak, canary, metamorphic) were
+left out — no trigger moment in this repo's use cases.
+
+**Impact / Risk:** `ceh-testing` must be loaded *alongside* a stack plugin, not instead of one —
+the boundary is stated in the plugin README and in `CROSS_REFERENCES.md`, but nothing enforces it.
+The real risk is boundary slippage: a technique block drifting into a stack testing skill, or a
+runner detail into `ceh-testing`. Trigger overlap is also possible between `verify-behavior-preserved`
+and `ceh-agent-coding-contract:shrink-diff` (both fire on "shrink the diff"); the skills cross-
+reference each other rather than compete, since shrink-diff carries no verification step of its own.
+
+Deliberately **not** done: cross-linking the new skills from the three stack testing skills and six
+tester agents. That edits nine existing files for discoverability the five skills already have
+through their own trigger moments.
+
+**Outcome:** `python tools/validate-plugins/validate.py` passes; `ceh-testing` added at 1.0.0 in
+both `ceh-testing/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`. One defect
+found and fixed while sanity-checking the skill content: the assertion-audit snippet in
+`audit-test-suite` matched on `ast.dump()` text, which contains the function's own name, so a test
+named `test_assertion_shape` was silently treated as asserting; rewritten to match on `ast.Assert`
+and call-node shape, and verified against a fixture.
+
+---
+
+### Entry 57
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-29T00:00:00Z
+**Task:** Audit `ceh-testing` against a full software-testing-technique taxonomy, and resolve the
+organizing-axis deviation recorded in Entry 56.
+
+**Context:** Two forks. (1) A taxonomy sweep (design, structural, level-based, non-functional,
+process, specialized) found nine techniques absent from the plugin; each needed a keep-or-exclude
+call, since Entry 56 had already excluded Tier C techniques for having no trigger moment. (2) Entry
+56 self-described `ceh-testing` as "the one deviation from the use-case-only axis" and the user asked
+whether the deviation can be avoided.
+
+**Decision (1) — taxonomy gaps.** Added five techniques inline, no new skills: metamorphic relations
+and fuzzing as rungs 7 and 8 of `design-test-cases` (dependency failure moved to rung 9); `git
+bisect` on the reproducer in `test-a-bug-fix`; `--cov-branch` in `audit-test-suite`; and a fifth
+risk class, migration and rollout compatibility, in `close-test-risk-gaps`, plus a consumer-driven
+contract paragraph in its contract-drift class. All five fire on moments the plugin already claims,
+so folding them in beat adding skills that would compete for the same prompts.
+
+Metamorphic testing was the largest genuine gap: it is the only answer to "how do I test output
+nobody can predict", which now covers every LLM, ranking, and pricing-engine feature. Migration
+testing was the second: `ceh-python-service:alembic` carried one bullet ("test against a copy of
+production data") and the stack-agnostic technique — down path, backfill idempotency, expand/contract
+across a rolling deploy — was absent repo-wide.
+
+Deliberately excluded, now recorded in a "Deliberately out of scope" table in the plugin README so a
+future reader sees a decision rather than an oversight: load/stress/soak/capacity, chaos and infra
+fault injection, canary/shadow/post-deploy smoke (all `ceh-ops`), SAST/DAST/SCA/pen testing
+(`ceh-python-service:python-security`, `ceh-git-workflow:dependency-management`), continuous fuzzing
+infrastructure, MC/DC and def-use coverage, model-based/exploratory/usability/localization/
+compatibility testing.
+
+**Decision (2) — the deviation is a mislabel, not a structure problem; reframed rather than
+restructured.** Two restructurings were considered and rejected. Duplicating the five technique
+skills into the three stack plugins produces fifteen byte-identical files, which is precisely the
+case the Shared-Standards Duplication Policy does *not* cover (it pays for drift only when copies
+genuinely differ) — and it would still leave the technique unavailable to any repo with no stack
+plugin loaded. Moving the three stack testing skills into `ceh-testing` would make it a complete
+use-case plugin, but breaks the stack plugins' self-containment in the other direction and is a
+large move for a labelling problem.
+
+What is actually true: `ceh-testing` is structurally identical to `ceh-git-workflow` — a
+cross-cutting discipline that applies whatever is being built, loaded alongside a use-case plugin.
+Nobody calls `ceh-git-workflow` a deviation, and `ceh-python-service` owns commit conventions no
+more than it owns test design. The use-case axis governs the use-case-workflow and stack/build
+tiers; the cross-cutting tier is orthogonal by construction. Only the word "testing" appearing in
+both plugin families made it look like an overlap, and `CROSS_REFERENCES.md` already confirms the
+two share no content. `CLAUDE.md` rule 4 was rewritten accordingly, and the placement test made
+explicit: a skill belongs in a cross-cutting plugin iff its content would be byte-identical across
+stacks.
+
+**Impact / Risk:** The reframe removes the "exception" framing that invited future exceptions, but
+it widens what the cross-cutting tier may absorb — the byte-identical test is the guard, and the
+review question is now "would this be identical in Python and TypeScript", not "is this testing".
+`close-test-risk-gaps` grew from four classes to five; a sixth would make it a checklist rather than
+a triage gate, which is the shape the skill exists to avoid. `design-test-cases` grew from seven
+rungs to nine and is now the longest skill in the plugin — the "stop when the remaining rungs have
+no trigger" instruction carries more weight than before.
+
+**Outcome:** `python tools/validate-plugins/validate.py` passes; `ceh-testing` bumped 1.0.0 → 1.0.1
+(PATCH — content only, no new skills or agents) in both manifests. Root `README.md`, plugin
+`README.md`, and `CLAUDE.md` updated. No test was run — this repo ships markdown only.
+
+### Entry 58
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-30T00:00:00Z
+**Task:** Full ceh-evaluation:evaluate-skill run on the ceh-testing plugin (run-001)
+
+**Context:** Three genuine ambiguities came up running the evaluation skill's fixed process against
+a plugin-sized target (5 skills + 1 agent), where the skill's own instructions leave method open:
+(1) how to detect whether a skill actually "fired" inside a cold subagent when the rubric explicitly
+forbids asking the subagent to self-report skill usage, and no tool in this session exposes a
+subagent's raw tool-call trace to the caller; (2) how to right-size the trigger/behavioral battery
+for a plugin (the literally-scoped plan — 10+10 N=3 for the in-depth skill, 4+4 N=1 x5 for sampled
+skills, 3 behavioral tasks x N=2 — implies well over 100 subagent dispatches); (3) whether to apply
+a description fix directly or only recommend it.
+
+**Decision:** (1) Operationalized "fired" as *the skill's content was consulted and applied* —
+verbatim/near-verbatim idiom matches, explicit skill-path citation, or reproduction of the skill's
+own distinctive reporting structure — corroborated where possible by the `tool_uses` count returned
+with each subagent result (`tool_uses: 0` conclusively rules out any tool call, including `Skill`).
+Recorded as a methodology note (§00) in the report rather than silently assumed. (2) Used adaptive
+sampling instead of the literal uniform plan: ran full N=1 first across the 10-positive/10-negative
+battery for the in-depth skill, then re-ran only the ambiguous or failing prompts at N=2-3 to confirm
+stability, and treated the negative/collision battery's off-target hits as opportunistic sampling
+evidence for the other four skills instead of running a fully separate battery for each. (3) Applied
+the description fix directly (Autonomous Mode default: decide, document, continue) since the
+evaluation's own Phase 4 explicitly allows "you propose and apply the fix," re-validated with
+`tools/validate-plugins/validate.py`, and re-ran only the affected dimension before reporting back.
+
+**Impact / Risk:** (1) means criterion 2's measured trigger rate could be an overestimate of true
+auto-trigger propensity if some "fires" were actually filesystem discovery of the SKILL.md rather
+than the description-driven auto-trigger mechanism — flagged explicitly so it isn't read as a clean
+number. (2) trades statistical completeness for session feasibility; the four sampled skills'
+triggering is evidenced but not gate-scored to the same rigor as the in-depth skill. (3) means a real
+plugin file changed mid-evaluation (`ceh-testing/skills/close-test-risk-gaps/SKILL.md` description) —
+low risk (single-file, no CROSS_REFERENCES.md entries for this content, validator green both before
+and after) but is a production content edit made without a prior explicit go-ahead beyond the
+Phase-1 scope confirmation.
+
+**Outcome:** Positive trigger rate on `close-test-risk-gaps` moved 7/10 → 9/10 after the description
+fix, with false-positive rate holding at 0/13 across both iterations — gate moved 4/6 → 5/6. Full
+report: `.agents_workspace/skill-evals/ceh-testing/run-001/SKILL_EVAL.md`.
+
+### Entry 59
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-31T00:00:00Z
+**Task:** Revise `ceh-testing:design-test-cases` after run-002's "no measurable behavioral lift" finding.
+
+**Context:** run-002 measured zero lift for this skill against a strong baseline on both behavioral
+tasks. Two forks the user's "fix the skill" did not resolve: (a) whether to touch the frontmatter
+description, and (b) whether "no lift" means delete-or-shrink.
+
+**Decision:** Body only — frontmatter left byte-identical. The description scored 10/10 positive and
+0/10 false-positive triggering in run-002; editing it risks the one thing measurably working. Body
+cut 223 → 158 lines: removed the hypothesis/fast-check and dependency-failure code blocks (syntax a
+capable model writes from memory), compressed rungs 1/2/6/8, kept every checklist table. Added the
+finding the eval could not see — its assertions were one-directional (coverage only), so a baseline
+that over-generates scores full marks. Reframed the opening around two failure modes (too few /
+**too many**), added a per-rung trigger table so skipping is explicit, and made duplication a defect
+rather than a safety margin in the sufficiency section. Rungs 3/5/7/9 (the differentiators run-002
+never exercised) kept intact and given their triggers.
+
+**Impact / Risk:** Frontmatter unchanged, so trigger behavior should be unaffected — but the
+restraint framing is unvalidated. A run-003 needs a negative assertion (test count vs. what the spec
+warrants) to measure it; the current battery structurally cannot.
+
+**Outcome:** `validate.py` passes. Plugin bumped 1.0.1 → 1.0.2 in both manifests. README rows
+unchanged (ladder rungs and stop rule already described accurately).

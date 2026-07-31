@@ -24,7 +24,7 @@ Plugins fall into three tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor` |
+| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -38,23 +38,39 @@ Plugins fall into three tiers:
   extracted into a shared base plugin — see the Shared-Standards Duplication Policy below.
 - **App-specific patterns are not standards.** Anything bound to one application's schema or design
   is removed rather than kept as a niche plugin.
+- **The use-case axis governs the use-case-workflow and stack/build tiers; the cross-cutting tier is
+  orthogonal by construction.** A cross-cutting plugin holds a discipline that applies whatever you
+  are building — agent behavior, git, reasoning, second opinions, testing technique — so it is
+  loaded *alongside* a use-case plugin, never instead of one. That is not an exception to the axis;
+  it is what the tier is for. `ceh-testing` sits there for exactly the reason `ceh-git-workflow`
+  does: a Python service has commits and it has test design, and `ceh-python-service` owns neither.
+- **Technique splits from tooling when the technique is genuinely stack-agnostic.** This is the test
+  for putting a skill in a cross-cutting plugin rather than a stack one: **would the content be
+  byte-identical across stacks?** Choosing test inputs, auditing whether a green suite catches
+  defects, and proving a refactor changed nothing are identical in Python and TypeScript — so they
+  live in `ceh-testing`. The runner, fixtures, mocking library, and coverage thresholds are not — so
+  they stay in the three stack testing skills. Duplicating the technique into `ceh-python-service`,
+  `ceh-python-library`, and `ceh-web-frontend` would have created three copies with nothing
+  stack-specific to justify the divergence, which is the drift the duplication policy is willing to
+  pay for only when the copies actually differ. Revisit the placement if a technique skill ever
+  grows stack-specific branches — that is the signal it was tooling all along.
 
 ## Structure
 
 ```
-.agents_workspace/            # Skill session artifacts (DECISION_LOG.md, LESSONS_LEARNED.md, ARCHITECTURE.md), plugin reorg plan, architecture docs, etc. — not a plugin
+.agents_workspace/            # Skill session artifacts — not a plugin. DECISION_LOG.md and PLUGIN_REORG_PLAN.md are tracked; skill-evals/<skill>/run-NNN/SKILL_EVAL.md holds ceh-evaluation output
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 ceh-<plugin-name>/
 ├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here
 ├── agents/                   # Optional — subagents for complex autonomous tasks
 ├── hooks/                    # Optional — hooks.json wiring hook scripts via ${CLAUDE_PLUGIN_ROOT} (e.g. ceh-advisor)
-├── scripts/                  # Optional — shell helpers and hook scripts (e.g. coverage, branch delete)
+├── scripts/                  # Optional — hook scripts and shell helpers (e.g. ceh-advisor guards, ceh-ops CI scaffolding, test/coverage runners)
 └── skills/
     └── <skill-name>/
         ├── SKILL.md               # Required — all content inline; frontmatter + full body
-        └── references/            # Sparingly — schemas and templates only (e.g. plan-schema.md)
+        └── references/            # Sparingly — shared schemas/templates (plan-schema.md) or a standards set too large to inline (fabled)
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
-└── <tool-name>/               # e.g. skills-sync — own README.md, no plugin.json
+└── <tool-name>/               # validate-plugins (the CI gate), skills-sync — own README.md, no plugin.json
 ```
 
 ## Plugins
@@ -82,12 +98,19 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix/re-run until a readiness gate passes; skill-creator and plugin-dev are optional cross-checks only |
 | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task: deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction; plus plan review against that standard, failure-loop escape after repeated failed fixes, and `fabled-voice` for delivering in fable's response style (form only, always-on via SessionStart hook) |
 | `ceh-advisor` | Stronger-model second-opinion subagent (agent + hooks, no skills): consulted at decision points, failure loops, irreversible actions, and pre-completion gates; ships a destructive-command guard and a consecutive-failure watch hook |
+| `ceh-testing` | Stack-agnostic testing *technique* (not tooling): reproduce-first bug fixes and bisection, test-case design (partitions, boundaries, decision tables, pairwise, properties, metamorphic relations, fuzzing), suite audits (assertions, mutation, flakiness, branch coverage), behavior-preservation for refactors, and a pre-completion risk gate (concurrency, contract drift, perf, authz, migrations) |
 
 ## Skills
 
-Each skill is a self-contained SKILL.md file with frontmatter and inline content. The
-`references/` subdirectory is reserved for schemas and templates shared across multiple skills
-(e.g. `plan-schema.md` in `implement-from-plan`) — not for general reference material.
+Each skill is a self-contained SKILL.md file with frontmatter and inline content. Default to
+inlining everything; `references/` is for two cases only:
+
+- **A schema or template used by several skills** — `plan-schema.md` is shared by
+  `implement-from-plan`, `patch-built-version`, and `review-against-plan`.
+- **A standards set too large to inline** without making SKILL.md unreadable — `ceh-fabled:fabled`
+  splits six standards files out, `ceh-web-frontend:ui-design` keeps design-system examples there.
+
+Never for general reference material a model already knows.
 
 ## Frontmatter Conventions
 
@@ -214,6 +237,8 @@ This repo has two independent versioning layers:
 - Increments sequentially from the previous repo tag — MINOR bump when any plugin adds skills or agents, PATCH bump for content-only changes. Independent of individual plugin versions.
 - Purpose: deployment snapshot and changelog anchor. It does not drive auto-update.
 - Cut a new tag after bumping plugin versions: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+- Add a `CHANGELOG.md` entry under the new version: prose on what changed and why, a
+  `### Plugin versions` table listing every plugin bumped, then `### Added` / `### Changed` / `### Fixed`.
 
 Current plugin versions: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`.
 
@@ -225,6 +250,9 @@ Current plugin versions: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.cl
 | `.claude-plugin/marketplace.json` | Marketplace listing (all plugins) |
 | `README.md` | User-facing docs — skill and agent tables live here |
 | `CROSS_REFERENCES.md` | Tracks content duplicated across skills; lists canonical source and all copies per block |
+| `CHANGELOG.md` | Release notes per repo tag; each entry carries a `### Plugin versions` table |
+| `TESTING_WORKFLOW.md` | Cross-plugin guide: how `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
+| `.agents_workspace/DECISION_LOG.md` | Agent decision log — **tracked in git here**, append-only, next sequential entry ID |
 
 ## Cross-Reference Rule
 
