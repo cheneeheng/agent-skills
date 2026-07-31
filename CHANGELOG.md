@@ -5,6 +5,52 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.27.1] — 2026-07-31
+
+`CLAUDE.md` and the repo-local `add-plugin-component` skill had been carrying the same checklist
+since the skill was written: pick the plugin, write the frontmatter, update both README tables,
+register the duplication, bump both manifests, run the validator. Two copies of one checklist is
+exactly the drift this repo's own duplication policy accepts only when the copies genuinely
+differ — and these did not. `CLAUDE.md` simply held the older, less complete version.
+
+The 67 lines of `## Adding a Component` / `## Adding an Agent` / `## Adding a Skill` collapse to a
+13-line pointer. What stays behind is the half a silent skill-load failure would actually cost: the
+four registration chores that fail CI — a row in the root README, a row in the plugin README, a
+bump in both `plugin.json` and `marketplace.json`, and a green `validate.py`. The agent gotchas are
+deliberately not in the stub, because a green validator never caught them anyway.
+
+Four facts lived only in `CLAUDE.md` and were ported into the skill before the deletion: that
+`isolation: worktree` is deliberately unused here (subagent worktrees branch from the default
+branch rather than the parent session's `HEAD` unless `worktree.baseRef: "head"` is set, which
+under this repo's feature-branch rule hands an agent a copy of `main` without your work); that
+`SessionStart` hooks never fire for subagents, making `skills:` preload the only route a
+hook-loaded standard has into one; that `AskUserQuestion` is stripped from *every* subagent rather
+than only background ones; and that `model` defaults to `inherit`.
+
+No plugin changed, so no plugin version moved. `CLAUDE.md` and `.claude/skills/` are repo-level
+contributor documentation — they ship in neither the marketplace nor any plugin.
+
+### Plugin versions
+
+None. This release touches repo-level documentation only.
+
+### Changed
+
+- `CLAUDE.md` — the three `## Adding …` sections replaced by one `## Adding a Component` section
+  that points at `.claude/skills/add-plugin-component/` and lists the four CI-failing registration
+  chores. The file drops from 277 to 226 lines.
+- `.claude/skills/add-plugin-component/SKILL.md` — absorbed the `isolation: worktree` policy, the
+  `SessionStart`-hooks rationale behind `skills:` preload, the every-subagent scope of the
+  `AskUserQuestion` strip, and the `model: inherit` default.
+
+### Removed
+
+- The `acceptEdits` note on avoiding edit prompts (the skill already directs permission grants
+  through `permissions.allow` in `settings.json`) and the link to the subagents docs — both dropped
+  rather than ported, as session mechanics rather than component-authoring rules.
+
+---
+
 ## [3.27.0] — 2026-07-31
 
 Testing was split across three stack plugins that each owned a runner, and nothing owned the
