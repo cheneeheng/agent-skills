@@ -5,6 +5,91 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.27.0] — 2026-07-31
+
+Testing was split across three stack plugins that each owned a runner, and nothing owned the
+question those runners cannot answer: *which* inputs, and whether a green suite would catch
+anything. `ceh-testing` takes that half. The split test is whether the content would be
+byte-identical across stacks — equivalence partitions, boundary analysis, mutation testing, and
+characterization tests are; `asyncio_mode` and MSW handlers are not. Duplicating the technique into
+`ceh-python-service`, `ceh-python-library`, and `ceh-web-frontend` would have produced three copies
+with nothing stack-specific to justify their divergence, so it sits in the cross-cutting tier
+alongside `ceh-git-workflow`: a Python service has commits and it has test design, and the stack
+plugin owns neither.
+
+Its five skills fire on moments rather than topics — a bug is being fixed, inputs are being chosen,
+a suite is being distrusted, a refactor is about to start, a feature is about to be called done. Two
+of them were reshaped by evaluation runs before release: `close-test-risk-gaps` had triggers that
+only fired on vocabulary the user would have to already know (so it now also fires on the unnamed
+situations — a shared counter decrements, a retry could double-charge), and `design-test-cases` was
+reframed around over-testing, since the failure mode in practice is a suite padded past the point
+where any test adds information, not one that is too small.
+
+The plugin then had to actually reach the work. Delegated test writing was losing the technique
+layer entirely: `SessionStart` hooks do not fire for subagents, so a stack skill named in `skills:`
+was the only standard reaching the six tester agents — they knew pytest and MSW but not boundaries,
+decision tables, or the assertion rules. All six now preload `design-test-cases`, as a soft
+dependency that resolves to nothing silently when `ceh-testing` is not installed. In the same vein,
+`shrink-diff` and `refactor-repo` now point at `verify-behavior-preserved` for anything past a
+mechanical transform; the pointer previously ran one way only, and a green existing suite proves
+only what it already covered.
+
+`TESTING_WORKFLOW.md` documents what no single plugin can: the routing between them — which of the
+three load mechanisms fires when, what a given request triggers end to end, and where two skills
+share a trigger and in which order they must run.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-testing` | v1.0.2 (new) |
+| `ceh-agent-coding-contract` | v2.8.7 |
+| `ceh-python-service` | v3.1.7 |
+| `ceh-web-frontend` | v3.2.5 |
+
+### Added
+
+- **`ceh-testing`** — new cross-cutting plugin for stack-agnostic testing technique, with five
+  skills and one agent:
+  - `test-a-bug-fix` — reproduce-first: the smallest failing test before any source edit, read the
+    failure to confirm it fails for the real reason, then revert the fix and prove the test goes red
+    again; the reproducer doubles as the `git bisect run` predicate.
+  - `design-test-cases` — a nine-rung input-selection ladder (partitions, boundaries, decision
+    tables, state transitions including illegal ones, pairwise, properties, metamorphic relations,
+    fuzzing, forced dependency failure) with an explicit stopping criterion instead of a coverage
+    percentage.
+  - `audit-test-suite` — six checks cheapest-first: assertion audit, delete-the-code, mutation
+    testing scoped to the diff, flakiness and order dependence, level and speed, branch coverage
+    last and never as a headline.
+  - `verify-behavior-preserved` — baseline before the edit: characterization tests, golden files,
+    and a differential run of old versus new over the same inputs.
+  - `close-test-risk-gaps` — a pre-completion triage gate over five classes a functional suite
+    structurally misses (concurrency/idempotency, contract drift, performance, authorization,
+    migration and rolling deploy); unfired classes are skipped explicitly and the skips reported.
+  - `test-suite-auditor` agent — runs the slow, high-output half of the audit out of session,
+    read-only, scoped to the diff, and hands back a ranked report.
+- **`TESTING_WORKFLOW.md`** — repo guide to the routing between `ceh-testing`, the three stack
+  testing skills, and the tester agents: load mechanisms, a trigger table, six scenario
+  walkthroughs, the coverage stance, and the known overlaps. Linked from `README.md` and
+  `ceh-testing/README.md`.
+
+### Changed
+
+- **`ceh-python-service` / `ceh-web-frontend`** — all six tester agents (`python-unit`,
+  `python-integration`, `python-system`, `ts-unit`, `ts-integration`, `ts-system`) preload
+  `ceh-testing:design-test-cases` alongside their stack testing skill.
+- **`ceh-agent-coding-contract`** — the shared `Behavior preservation` block in `shrink-diff` and
+  `refactor-repo` now requires pinning current behavior with `ceh-testing:verify-behavior-preserved`
+  before anything past a mechanical transform; `CROSS_REFERENCES.md` updated to match.
+
+### Fixed
+
+- **`ceh-testing` / `close-test-risk-gaps`** — triggers no longer require the user to already know
+  the vocabulary; the gate also fires on the unnamed situations (shared stock decrements, a retry
+  that could double-charge, a caller-supplied ID that could return someone else's data).
+- **`ceh-testing` / `design-test-cases`** — reframed around over-testing, with duplication treated
+  as a defect rather than a safety margin.
+
 ## [3.26.0] — 2026-07-25
 
 Orienting in an unfamiliar repo had one tool here — the `repo-tree-mapper` agent — and it answers

@@ -251,6 +251,7 @@ Current plugin versions: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.cl
 | `README.md` | User-facing docs — skill and agent tables live here |
 | `CROSS_REFERENCES.md` | Tracks content duplicated across skills; lists canonical source and all copies per block |
 | `CHANGELOG.md` | Release notes per repo tag; each entry carries a `### Plugin versions` table |
+| `TESTING_WORKFLOW.md` | Cross-plugin guide: how `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
 | `.agents_workspace/DECISION_LOG.md` | Agent decision log — **tracked in git here**, append-only, next sequential entry ID |
 
 ## Cross-Reference Rule
