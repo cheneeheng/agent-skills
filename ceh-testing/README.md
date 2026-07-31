@@ -106,6 +106,10 @@ missing tests is delegated to the stack's own tester agents.
 | Did this refactor change behavior | `verify-behavior-preserved` |
 | What does a passing suite still miss | `close-test-risk-gaps` |
 
+End-to-end routing between this plugin, the stack testing skills, and the tester agents — trigger
+phrases, sequencing, and the overlaps — is documented in the repo's
+[`TESTING_WORKFLOW.md`](../TESTING_WORKFLOW.md).
+
 ## Deliberately out of scope
 
 These are real techniques left out on purpose — either they belong to another plugin, or nothing in
