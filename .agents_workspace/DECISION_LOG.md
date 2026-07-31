@@ -1159,3 +1159,31 @@ Phase-1 scope confirmation.
 **Outcome:** Positive trigger rate on `close-test-risk-gaps` moved 7/10 → 9/10 after the description
 fix, with false-positive rate holding at 0/13 across both iterations — gate moved 4/6 → 5/6. Full
 report: `.agents_workspace/skill-evals/ceh-testing/run-001/SKILL_EVAL.md`.
+
+### Entry 59
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-07-31T00:00:00Z
+**Task:** Revise `ceh-testing:design-test-cases` after run-002's "no measurable behavioral lift" finding.
+
+**Context:** run-002 measured zero lift for this skill against a strong baseline on both behavioral
+tasks. Two forks the user's "fix the skill" did not resolve: (a) whether to touch the frontmatter
+description, and (b) whether "no lift" means delete-or-shrink.
+
+**Decision:** Body only — frontmatter left byte-identical. The description scored 10/10 positive and
+0/10 false-positive triggering in run-002; editing it risks the one thing measurably working. Body
+cut 223 → 158 lines: removed the hypothesis/fast-check and dependency-failure code blocks (syntax a
+capable model writes from memory), compressed rungs 1/2/6/8, kept every checklist table. Added the
+finding the eval could not see — its assertions were one-directional (coverage only), so a baseline
+that over-generates scores full marks. Reframed the opening around two failure modes (too few /
+**too many**), added a per-rung trigger table so skipping is explicit, and made duplication a defect
+rather than a safety margin in the sufficiency section. Rungs 3/5/7/9 (the differentiators run-002
+never exercised) kept intact and given their triggers.
+
+**Impact / Risk:** Frontmatter unchanged, so trigger behavior should be unaffected — but the
+restraint framing is unvalidated. A run-003 needs a negative assertion (test count vs. what the spec
+warrants) to measure it; the current battery structurally cannot.
+
+**Outcome:** `validate.py` passes. Plugin bumped 1.0.1 → 1.0.2 in both manifests. README rows
+unchanged (ladder rungs and stop rule already described accurately).

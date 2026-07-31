@@ -20,30 +20,50 @@ The runner, fixtures, and mocking library belong to your stack's testing skill
 `ceh-web-frontend:frontend-testing`). This skill answers the question those do not: **which inputs,
 and which scenarios.**
 
-The default failure mode is one happy path plus a null check. That suite passes on code that is
-wrong in every way a real caller will discover.
+## Two failure modes, not one
+
+- **Too few:** one happy path plus a null check. Passes on code that is wrong in every way a real
+  caller will discover.
+- **Too many:** thirty variations of the same equivalence class, a reference implementation written
+  in the test file to check the function against, a performance budget nobody asked for. Volume
+  reads as diligence and is not — it is the same coverage at several times the maintenance cost,
+  and each redundant test is another thing that breaks on a legitimate change.
+
+The second is the one you are more likely to produce. The ladder below exists as much to tell you
+**where to stop** as where to start.
 
 ## The ladder
 
-Walk it in order. Stop when the remaining rungs have no trigger — most functions need 1, 2, and 6.
+Walk it in order. **Each rung has a trigger; if the trigger is absent, skip the rung and say so.**
+Most functions need 1, 2, and 6 — reaching rung 7 or 9 on a pure helper is over-testing, not thoroughness.
+
+| Rung | Trigger — reach for it only when |
+|---|---|
+| 1 Partitions | always |
+| 2 Boundaries | always |
+| 3 Decision table | two or more flags/enums combine to pick the outcome |
+| 4 State transitions | the thing has a lifecycle |
+| 5 Pairwise | the config grid exceeds ~8 live rows |
+| 6 Properties | the function is pure and total |
+| 7 Metamorphic | no expected output can be written down |
+| 8 Fuzzing | the input is attacker- or user-controlled |
+| 9 Dependency failure | the code calls something that can fail |
 
 ### 1. Partition the input space
 
-Group inputs into classes where every member is expected to take the same path. **One test per
-class, not per value.** Three tests for `5`, `7`, and `12` are one test wearing three hats.
+Group inputs into classes where every member takes the same path. **One test per class, not per
+value.** Three tests for `5`, `7`, and `12` are one test wearing three hats — delete two.
 
-For `discount(order_total, customer_tier)`: the classes are the tier values × {below threshold, at
-threshold, above threshold} — not a list of amounts.
+For `discount(order_total, customer_tier)` the classes are tier values × {below, at, above
+threshold} — not a list of amounts.
 
 Write the classes down before the tests. If you cannot name a class's expected behavior in a
 sentence, you do not yet understand the requirement.
 
 ### 2. Boundaries — where the bugs actually are
 
-Every partition has edges, and the edge is where off-by-one lives. Test **the boundary and one step
-either side**, never the middle of a range.
-
-Run this checklist against every parameter:
+Test **the boundary and one step either side**, never the middle of a range. Run this checklist
+against every parameter, and take only the rows that apply:
 
 | Kind | Cases |
 |------|-------|
@@ -55,12 +75,11 @@ Run this checklist against every parameter:
 | Pagination | page 0, page 1, last page, page past the end, limit 0, limit above max |
 
 "At the limit" and "one over the limit" are the two highest-yield cases in the table. Include them
-whenever a limit exists.
+whenever a limit exists; a row whose kind is not in the signature is not a gap.
 
 ### 3. Decision tables — when flags interact
 
-Two or more booleans/enums that combine to pick an outcome. Enumerate the grid, strike the
-impossible rows, test what remains:
+Enumerate the grid, strike the impossible rows, test what remains:
 
 | `is_member` | `has_coupon` | `cart ≥ $50` | Expected |
 |---|---|---|---|
@@ -70,8 +89,9 @@ impossible rows, test what remains:
 | T | F | T | member rate + free shipping |
 | … | | | |
 
-This is how you find the combination nobody implemented. If the grid exceeds ~8 live rows, go to
-rung 5.
+This is how you find the combination nobody implemented — the highest-yield rung against real
+feature code, and the one least likely to be reached without being prompted. If the grid exceeds
+~8 live rows, go to rung 5.
 
 ### 4. State transitions — including the illegal ones
 
@@ -87,35 +107,14 @@ once, then spend your effort on:
 
 Six independent booleans is 64 combinations; nobody writes 64 tests, so most people write two.
 Covering all *pairs* catches the large majority of interaction bugs in a fraction of the cases.
-Generate the set (`allpairspy` in Python, `@fast-check/…` or a table in TS) rather than picking by
-hand — hand-picked sets cluster around the defaults, which is exactly where bugs are not.
+Generate the set (`allpairspy` in Python, a table in TS) rather than picking by hand — hand-picked
+sets cluster around the defaults, which is exactly where bugs are not.
 
 ### 6. Properties — rules that hold for every input
 
-When you can state a rule that must always be true, assert the **rule** instead of guessing inputs.
-The generator picks inputs your imagination would not, and shrinks a failure to a minimal case.
-
-```python
-from hypothesis import given, strategies as st
-
-@given(st.text())
-def test_encode_decode_round_trips(s):
-    assert decode(encode(s)) == s              # round-trip
-
-@given(st.lists(st.integers()))
-def test_sort_preserves_multiset(xs):
-    assert sorted(sort(xs)) == sorted(xs)      # invariant
-```
-
-```ts
-import fc from 'fast-check';
-
-it('normalizes idempotently', () => {
-  fc.assert(fc.property(fc.string(), s => normalize(normalize(s)) === normalize(s)));
-});
-```
-
-The four shapes worth reaching for:
+When you can state a rule that must always be true, assert the **rule** instead of guessing inputs
+(`hypothesis` in Python, `fast-check` in TS). The generator picks inputs your imagination would not,
+and shrinks a failure to a minimal case.
 
 | Shape | Assertion |
 |-------|-----------|
@@ -126,6 +125,11 @@ The four shapes worth reaching for:
 
 Reach for this whenever a function is pure and total: parsers, formatters, serializers, sorting,
 money and date arithmetic, sanitizers, diffing, pagination math.
+
+One property replaces a dozen example tests — delete the examples it subsumes, keeping only the
+boundary cases from rung 2. Do **not** write an oracle by re-implementing the function in the test
+file unless a genuinely independent reference already exists: a re-implementation shares your
+misreading of the spec and doubles what has to change when the spec moves.
 
 Record any failing case the generator finds as its own explicit test — generators are not
 guaranteed to produce it again.
@@ -149,14 +153,8 @@ answer, only the relationship:
 | Irrelevant-input insensitivity | appending whitespace, a trailing newline, or an unused field must not change the output |
 | Consistency between paths | the batch endpoint and N single calls must agree |
 
-```python
-@given(st.lists(st.text(min_size=1), min_size=1))
-def test_ranking_ignores_term_order(terms):
-    assert ids(search(" ".join(terms))) == ids(search(" ".join(reversed(terms))))
-```
-
 These are the highest-value tests available for any component whose output you cannot predict, and
-they are usually the only ones that survive a model or ruleset being swapped out.
+usually the only ones that survive a model or ruleset being swapped out.
 
 ### 8. Fuzz whatever parses untrusted input
 
@@ -165,40 +163,24 @@ on input nobody would think to write. That weak oracle is enough when the input 
 user-controlled: file uploads, request bodies, query strings, cookies, webhook payloads, config
 files, protocol frames, anything `pickle`/`yaml.load`/`eval` touches.
 
-```python
-@given(st.binary())                          # or st.text(), st.from_regex(...)
-def test_parse_header_never_raises_unexpectedly(data):
-    try:
-        parse_header(data)
-    except HeaderError:                      # the one type callers handle
-        pass                                 # anything else — MemoryError, IndexError, hang — is the bug
-```
+Same generators as rung 6, with the widest strategy available (`st.binary()`, `st.text()`) and a
+`try`/`except` that passes on the one error type callers handle and fails on everything else —
+`MemoryError`, `IndexError`, a hang. Assert the failure **mode**, not just the absence of failure:
+a rejected input must leave no partial write, no unbounded allocation, and no unclosed handle.
 
-Same generators as rung 6 (`hypothesis`, `fast-check`); for a native or long-lived parser worth
-sustained fuzzing, that is `atheris` / `libFuzzer` territory and a decision to raise, not to make
-silently. Assert the failure **mode**, not just the absence of failure: a rejected input must leave
-no partial write, no unbounded allocation, and no unclosed handle.
+Sustained fuzzing of a native or long-lived parser is `atheris` / `libFuzzer` territory — a decision
+to raise, not to make silently.
 
 ### 9. Force every dependency to fail
 
 Mocks that only ever return success leave every `except` / `catch` branch unexecuted. This is the
-most under-tested region of agent-written code.
+most under-tested region of agent-written code, and it is skipped far more often than it is
+overdone.
 
-For each external dependency, make it fail once:
-
-- raises the library's real exception type (not bare `Exception`)
-- times out
-- returns a malformed / empty / partial payload
-- returns success but with a field missing
-- fails **after** a partial write — assert the state left behind is consistent
-
-```python
-def test_charge_failure_leaves_order_unpaid(mocker, order):
-    mocker.patch("app.billing.stripe.charge", side_effect=stripe.error.APIConnectionError("boom"))
-    with pytest.raises(PaymentUnavailable):
-        pay(order)
-    assert order.status == "pending"        # assert the state, not just the raise
-```
+For each external dependency, make it fail once: raises the library's real exception type (not bare
+`Exception`), times out, returns a malformed / empty / partial payload, returns success with a field
+missing, and fails **after** a partial write. In every case assert the state left behind, not only
+that the call raised — `order.status == "pending"` is the assertion that catches the real bug.
 
 ## Assertion rules
 
@@ -216,7 +198,11 @@ Not a coverage percentage. Coverage tells you which lines ran, never whether an 
 have noticed them being wrong.
 
 The suite is sufficient when: **every partition once, every boundary once, every live decision-table
-row once, every invalid transition once, every dependency-failure path once.** Anything past that is
-duplication; anything short of it is a gap you can name.
+row once, every invalid transition once, every dependency-failure path once.** Anything short of
+that is a gap you can name. Anything past it is duplication — and duplication is a defect, not a
+safety margin, so cut it before you hand the suite over.
+
+Say which rungs you skipped and why. A test file that states "no lifecycle, so no rung 4; grid is
+2 rows, so no pairwise" is reviewable; one that silently covers everything is not.
 
 To find out whether those tests would actually catch a defect, use `audit-test-suite`.
