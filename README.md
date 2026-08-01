@@ -34,6 +34,7 @@ testing skills route between each other, with the trigger phrases and sequence f
 | Fabled | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
 | Advisor | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
 | Testing | `ceh-testing` | Stack-agnostic testing technique — reproduce-first bug fixes and bisection, systematic test-case design (partitions, boundaries, properties, metamorphic, fuzzing), suite audits (assertions, mutation, flakiness), behavior-preservation checks for refactors, and a pre-completion risk gate |
+| Usability Audit | `ceh-usability-audit` | Measure whether a non-expert can actually use what you built — cold persona-constrained walkthroughs (`novice-walker`), a five-question interface audit across web UI/CLI/library/app surfaces, error-message rewrites, and a plain-language pass |
 
 ### Categorization
 
@@ -43,7 +44,7 @@ into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin. Each plugin is self-contained: a
@@ -129,6 +130,10 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-testing` | Audit Test Suite | `/ceh-testing:audit-test-suite` | Deciding whether a passing suite would actually catch a defect — assertion audit, delete-the-code check, mutation testing on the diff, flakiness, branch coverage |
 | `ceh-testing` | Verify Behavior Preserved | `/ceh-testing:verify-behavior-preserved` | Before a no-behavior-change edit (refactor, extraction, dependency/runtime upgrade, port) — characterization tests, golden files, differential run |
 | `ceh-testing` | Close Test Risk Gaps | `/ceh-testing:close-test-risk-gaps` | Pre-completion gate — triage concurrency/idempotency, contract drift, performance regression, authorization, and migration/rolling-deploy compatibility; skip each class explicitly when its trigger does not fire |
+| `ceh-usability-audit` | First-Run Walkthrough | `/ceh-usability-audit:first-run-walkthrough` | Can a stranger reach first success — install, sign-up, setup, onboarding; cold persona walkers, ranked by observed stalls, looped to a 5-point gate |
+| `ceh-usability-audit` | Audit Interface | `/ceh-usability-audit:audit-interface` | They are already in — the five questions every web UI/CLI/API/screen must answer unasked, a reject-on-sight anti-pattern sweep, the naming test, and the persona battery |
+| `ceh-usability-audit` | Audit Error Messages | `/ceh-usability-audit:audit-error-messages` | Anything a user reads when something goes wrong — the three-part rule (what happened, what was wrong, what to do next) over every user-reachable string |
+| `ceh-usability-audit` | Plain Language Pass | `/ceh-usability-audit:plain-language-pass` | Labels, help text, empty states, confirmation dialogs, onboarding copy — vocabulary floor, sentence rules, and an explicit never-simplify list |
 | `ceh-fabled` | Fabled Voice | `/ceh-fabled:fabled-voice` | Always-on via SessionStart hook — deliver in fable's writing style — finding-first progress lines, verdict-first advisory answers closing on a calibration, and reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer |
 
 ---
@@ -171,6 +176,7 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | `ceh-ops` | GitLab CI | `/ceh-ops:gitlab-ci` | Create or fix `.gitlab-ci.yml` pipelines, DAG stages, rules, protected variables, runners |
 | `ceh-orchestration` | Executor | `/ceh-orchestration:executor` | Implement a single scoped task: code changes, edits, multi-step work (Sonnet) |
 | `ceh-orchestration` | Verifier | `/ceh-orchestration:verifier` | Check an executor's output against acceptance criteria — PASS/FAIL only (Haiku) |
+| `ceh-usability-audit` | Novice Walker | `/ceh-usability-audit:novice-walker` | Walk a target cold under one persona toward one goal and report where it stalled — may not use what it already knows about how such tools usually work (Sonnet, read-only) |
 | `ceh-advisor` | Advisor | `/ceh-advisor:ceh-advisor` | Verdict-first second opinion before an architectural commit, after 2+ failed fixes, before an irreversible action, or before declaring a complex task done (Opus, high effort); requires a handoff block — also hard-triggered by the plugin's hooks on destructive commands and failure streaks |
 
 ---
@@ -221,6 +227,7 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-fabled@ceh-plugins --scope user
 /plugin install ceh-advisor@ceh-plugins --scope user
 /plugin install ceh-testing@ceh-plugins --scope user
+/plugin install ceh-usability-audit@ceh-plugins --scope user
 ```
 
 Or install all at once using `--scope project` for project-specific installs.

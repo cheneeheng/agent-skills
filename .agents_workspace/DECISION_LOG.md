@@ -1187,3 +1187,46 @@ warrants) to measure it; the current battery structurally cannot.
 
 **Outcome:** `validate.py` passes. Plugin bumped 1.0.1 → 1.0.2 in both manifests. README rows
 unchanged (ladder rungs and stop rule already described accurately).
+
+### Entry 60
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-01T00:00:00Z
+**Task:** Build `ceh-usability-audit` — a plugin for auditing whether a non-expert can use a project.
+
+**Context:** Four forks the request left open. (a) The target span was given as
+"app/webui/library/..." — wide enough that one skill per surface was plausible. (b) The persona set
+and severity scale are needed by two skills, which under repo convention could be a shared
+`references/` file. (c) Nothing in the repo evaluates product usability, but `ui-design` and
+`accessibility` are adjacent enough that the boundary had to be drawn explicitly. (d) The whole
+plugin risked being a restatement of Nielsen/Krug heuristics the model already knows, which
+`CLAUDE.md` names as the failure mode for topic-shaped skills.
+
+**Decision:**
+- (a) One surface-branch table inside `audit-interface` rather than four near-identical skills.
+  Four skills would have duplicated the personas, severity scale, and report format four ways for a
+  difference that is one table row wide.
+- (b) Inlined both shared blocks in both skills and registered the duplication in
+  `CROSS_REFERENCES.md` instead of adding `references/`. `CLAUDE.md` reserves `references/` for
+  standards sets too large to inline; a five-row and a four-row table are not that. Severity wording
+  was normalized across all four copies so the block is genuinely verbatim and a diff proves drift.
+- (c) `ceh-usability-audit` owns comprehension only. WCAG mechanics delegate to
+  `ceh-web-frontend:accessibility`, build-time visual decisions to `ceh-web-frontend:ui-design`;
+  both skills carry an explicit delegation note and the report format has a `Delegated` section.
+- (d) The plugin's content is a measurement protocol, not a heuristics list: severity is assignable
+  only from an observed walker stall, and anything the auditor merely noticed is demoted to an
+  unranked `Hypotheses` list that cannot affect the gate. `novice-walker` runs on Sonnet
+  deliberately — a stronger reader bridges gaps a newcomer would fall into, so the weaker model is
+  the more honest instrument as well as the cheaper one.
+
+**Impact / Risk:** The Hypotheses rule will feel wrong on a real violation nobody happened to stall
+on, and will suppress true findings when too few personas are run — accepted, because the
+alternative is a report ranked by auditor preference. The persona/severity block now lives in four
+files; `CROSS_REFERENCES.md` is the only thing preventing drift. `novice-walker` cannot drive a
+browser (subagents lose the Chrome tools), so live web-UI walks stay in the main session and lose
+the cold-context guarantee that makes the method work — this is stated in the skill, the README, and
+the agent, but it is a real hole in the strongest surface for this plugin.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. Not committed; not evaluated — the
+user said they would evaluate it themselves.

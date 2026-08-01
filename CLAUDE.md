@@ -25,7 +25,7 @@ Plugins fall into three tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 `ceh-dev-tools` is a standalone tooling plugin. Categorization rules of thumb:
@@ -98,6 +98,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix/re-run until a readiness gate passes; skill-creator and plugin-dev are optional cross-checks only |
 | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task: deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction; plus plan review against that standard, failure-loop escape after repeated failed fixes, and `fabled-voice` for delivering in fable's response style (form only, always-on via SessionStart hook) |
 | `ceh-advisor` | Stronger-model second-opinion subagent (agent + hooks, no skills): consulted at decision points, failure loops, irreversible actions, and pre-completion gates; ships a destructive-command guard and a consecutive-failure watch hook |
+| `ceh-usability-audit` | Whether a non-expert can actually use the thing: cold persona-constrained walkthroughs of first-run (`first-run-walkthrough`) and of an interface already entered (`audit-interface`), the three-part error-message rule (`audit-error-messages`), a plain-language pass over in-product copy (`plain-language-pass`), and the `novice-walker` agent they all dispatch. Owns the *comprehension* layer only — the WCAG floor stays in `ceh-web-frontend:accessibility`, build-time visual design in `ceh-web-frontend:ui-design` |
 | `ceh-testing` | Stack-agnostic testing *technique* (not tooling): reproduce-first bug fixes and bisection, test-case design (partitions, boundaries, decision tables, pairwise, properties, metamorphic relations, fuzzing), suite audits (assertions, mutation, flakiness, branch coverage), behavior-preservation for refactors, and a pre-completion risk gate (concurrency, contract drift, perf, authz, migrations) |
 
 ## Skills
