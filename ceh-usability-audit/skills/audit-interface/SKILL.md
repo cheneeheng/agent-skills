@@ -105,12 +105,24 @@ Two corollaries worth checking explicitly:
 The three passes above find the failures you can see. The personas find the ones you cannot, because
 they constrain what the reader is allowed to know. Dispatch
 `ceh-usability-audit:novice-walker` per persona with a concrete in-product goal (not "explore" —
-**"change the account email"**), the surface's entry point, and an explicit allowlist of what they
-may read.
+**"change the account email"**), the surface's entry point, an explicit allowlist of what they may
+read, and two things without which the battery misreports:
+
+- **An audience baseline** — one line naming what this product's intended audience already knows
+  ("a developer who has used a terminal, but has never seen this tool"). Without it, `Blank Slate`
+  stalls on "terminal" and "browser tab" and returns a Blocker on every target that has ever
+  existed. Everything inside the baseline is free; everything about *this* product is not.
+- **An action budget for the goal** — the number of steps the interface's own affordances imply.
+  A walker who reaches the goal in triple that has found a real defect that no stall would catch.
+
+Web UI reminder: **the walkers cannot drive a browser** — subagents lose the Chrome tools. For a
+live web UI, either hold each persona yourself in the main session (accepting that you already know
+too much) or hand the walker screenshots and page text instead of a URL. Say in the report which you
+did.
 
 | Persona | Holds this constraint the whole way | Catches |
 |---|---|---|
-| **Blank Slate** | No domain vocabulary and no prior product knowledge. Reads only what is on the screen or page. Assumes nothing is safe to click until told. *(the 5-year-old proxy)* | Undefined jargon, invisible affordances, "obvious" next steps that are not, assumed prerequisites |
+| **Blank Slate** | Knows the audience baseline and nothing beyond it — no domain vocabulary, no prior knowledge of this product. Reads only what is on the screen or page. Assumes nothing is safe to click until told. *(the 5-year-old proxy)* | Undefined jargon, invisible affordances, "obvious" next steps that are not, assumed prerequisites |
 | **Cautious Returner** | Will not take any action whose outcome is not stated in advance. Needs to see what happened after every action. Afraid of losing work. *(the 95-year-old proxy)* | Missing confirmation, silent success, irreversible actions, no undo, no way to check state |
 | **Interrupted** | Leaves for ten minutes mid-task and may close the tab or terminal. Comes back and must resume. | Lost state, expired sessions/tokens, multi-step flows with no progress marker or resume path |
 | **Wrong Turn** | Does the wrong thing first — wrong button, wrong value, skips a required step — then tries to recover. | Dead ends, unrecoverable errors, blame copy, no back, validation that fires too late |
@@ -131,6 +143,10 @@ is what keeps the report from becoming a list of preferences.
 | **Friction** | Completed it, but with avoidable doubt — "did that work?" |
 | **Polish** | No effect on any walker's completion |
 
+A walker that ran out of turns produced no result at all — re-dispatch it over a narrower goal, and
+never read turn exhaustion as a failure to complete. Overrunning the action budget is a **Detour**
+(a **Blocker** past 2×), which keeps "technically possible but absurdly long" from passing as clean.
+
 An anti-pattern you spotted that no walker stalled on is a **Hypothesis**, not a finding. It is
 listed separately, unranked, and does not count against the gate. This will feel too strict on a
 real violation — keep it anyway; the alternative is a report where the loud items are the ones the
@@ -145,7 +161,8 @@ in that folder.
 ```markdown
 # Interface Audit — <target> (<surface>)
 
-**Goal(s) walked:** <the concrete in-product tasks>
+**Goal(s) walked:** <the concrete in-product tasks, with the action budget for each>
+**Audience baseline:** <verbatim — what the intended audience already knows>
 **Allowlist:** <what walkers were permitted to read>
 **Walkers:** <personas run> (<skipped, and why>)
 **Method:** cold persona-constrained agents — proxy for a user test, not a user test

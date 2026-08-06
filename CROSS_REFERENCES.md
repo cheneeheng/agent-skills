@@ -438,6 +438,10 @@ Small Screen) with their constraints and the failure class each catches; the fou
 comes from an observed walker outcome, with anything unobserved demoted to an unranked `Hypotheses`
 list. Adding, removing, or renaming a persona or severity means editing all four files.
 
+`Blank Slate` is scoped by the **audience baseline** declared at dispatch, in all four copies —
+without that qualifier the persona stalls on "terminal" and returns a Blocker on every target. If
+the baseline wording changes anywhere, change it everywhere.
+
 **What diverges:**
 - `first-run-walkthrough` adds the actions-to-success and external-lookups measurements, which are
   first-run-specific (external lookups are meaningless once the user is already inside).

@@ -122,6 +122,22 @@ Severity is **whether the reader can act on the message**, not how ugly it is.
 Fix every Blocker before any Polish, and prefer the systemic fix (the shared handler) over the
 thirty individual ones.
 
+### 4. Write the triage table down before rewriting
+
+A whole-codebase harvest does not survive in a chat log, and a reviewer reading the diff sees
+thirty string changes with no rationale. Write the table to
+`.agents_workspace/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.md` — the same run-folder convention
+the walkthrough skills use, zero-padded index so a re-run never overwrites the previous evidence.
+Create missing parents.
+
+Then apply the rewrites, and record in the file which rows you changed and which you left. A row
+left alone with a stated reason ("the vague wording is deliberate — auth") is a result; a row that
+silently vanished between the table and the diff is not.
+
+Two counts belong at the top, because they are what tells you whether the next pass is worth
+running: **messages harvested** and **how many satisfied all three parts before you touched
+anything**. The second number is the one that moves when a codebase gets better.
+
 ## Writing the replacement
 
 - Sentence case, no terminal period on short UI strings, no exclamation marks, no "Oops".

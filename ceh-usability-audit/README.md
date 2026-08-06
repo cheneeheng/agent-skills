@@ -46,10 +46,25 @@ frustration. Every report this plugin writes says so, and none of them say "vali
 intuitive", or before shipping a README, install guide, or sign-up flow.
 
 Freezes the artifact set a newcomer actually receives, dispatches one cold `novice-walker` per
-persona, and records where each stopped. Two measurements make the ranking reproducible: **actions
-to success** (the spread across personas is where the design is ambiguous) and **external lookups**
-(anything above zero is a Detour by definition, and the missing information names its own fix).
-Loops fix → re-run until a 5-point gate passes.
+persona, and records where each stopped. Three measurements make the ranking reproducible:
+**actions per milestone against a budget declared before the walk**, **external lookups** (anything
+above zero is a Detour by definition, and the missing information names its own fix), and **machine
+wait** — the real seconds a human spends watching an install. Loops fix → re-run until a 5-point
+gate passes.
+
+**The budget is what stops "technically possible" from passing.** Without it a README that takes
+forty steps scores as clean, because nobody stalled outright — and length is the most common
+usability failure after an outright blocker. So the goal is split into two to four milestones, each
+gets a maximum action count written down *before* dispatch, and an overrun is a Detour (a Blocker
+past 2×). When there is no basis for a number, the budget is the step count the documentation itself
+prescribes: a walker needing materially more means the doc omits steps reality requires.
+
+**On time specifically:** walker wall-clock is a fact about model throughput, not about your
+product, and the skill still refuses to record it. What it reports instead is the action count
+(reproducible, a property of the design) translated through a **fixed, published cost model** —
+15s to read a line, 30s to choose between two options, 90s to create an account — and printed as
+`estimated ~6 min (model, not measured)`. Machine wait is the one genuine clock and is measured for
+real. Never "users take N minutes".
 
 ### `audit-interface`
 
@@ -104,6 +119,21 @@ never mentioned — and that inference is exactly the gap a newcomer falls into.
 not in the allowlist, that is a stall, not something to work out. Runs on Sonnet deliberately: a
 weaker reader is a more honest novice proxy, and cheaper to run five of.
 
+The rule has exactly one exception, the **audience baseline** — one line naming what the intended
+audience already knows, passed in at dispatch. Without it the rule eats itself: a walker told to
+assume nothing stalls on "terminal", "clone", and "browser tab", so it returns a Blocker on every
+target and the gate can never pass. The baseline covers general background only, never the product
+itself. It is recorded verbatim in the report, because two audits under different baselines are not
+comparable.
+
+It also distinguishes three ways a walk can end — reached the goal, hit a stall, **ran out of
+turns** — and the third is an instrument failure, never a finding. Scoring turn exhaustion as "could
+not complete the goal" manufactures a Blocker out of the agent's own limits.
+
+**Parallelism depends on what the walk touches.** Five read-only walkers run at once safely. Five
+walkers each running `npm install` in the same checkout corrupt each other's transcripts, so a walk
+that writes to the working tree runs one persona at a time or gives each its own copy.
+
 **Browser limit:** subagents lose the Chrome tools, so it cannot drive a live web UI. Web walks stay
 in the main session, or the agent is handed screenshots and page text instead of a URL.
 
@@ -113,7 +143,7 @@ Five constraints, each catching a distinct failure class. Shared by both audit s
 
 | Persona | Constraint | Catches |
 |---|---|---|
-| **Blank Slate** | No domain vocabulary, no prior product knowledge *(the 5-year-old proxy)* | Undefined jargon, invisible affordances, assumed prerequisites |
+| **Blank Slate** | Knows the declared audience baseline and nothing past it *(the 5-year-old proxy)* | Undefined jargon, invisible affordances, assumed prerequisites |
 | **Cautious Returner** | Will not act without knowing the outcome; needs feedback after every action *(the 95-year-old proxy)* | Missing confirmation, silent success, irreversible actions, no undo |
 | **Interrupted** | Leaves mid-task, comes back | Lost state, expired sessions, no progress marker or resume path |
 | **Wrong Turn** | Does the wrong thing first, then tries to recover | Dead ends, unrecoverable errors, blame copy, late validation |
@@ -137,9 +167,10 @@ care about.
 
 ## Output
 
-`.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md`, with walker transcripts and any
-screenshots beside it. A zero-padded sequential run index means a re-run never overwrites prior
-evidence. A finding without its transcript is an opinion.
+`.agents_workspace/ux-audits/<target>/run-<NNN>/` — `UX_AUDIT.md` from the two walkthrough skills,
+`ERROR_MESSAGES.md` from the error triage, with walker transcripts and any screenshots beside them.
+A zero-padded sequential run index means a re-run never overwrites prior evidence. A finding without
+its transcript is an opinion.
 
 ## Known weak points — check these two first when evaluating
 
@@ -164,6 +195,11 @@ avoid.
 using a goal that does not route through it. If it lands in `Hypotheses` and the gate still passes,
 decide whether that trade is acceptable to you. The tunable is the number of personas and the number
 of distinct goals walked, not the rule.
+
+**Partly mitigated since v1.0.1:** the action budget catches a class this rule used to miss
+entirely — a flow nobody stalls on but everybody suffers through. Overrun is scored from measured
+actions, so it feeds the gate without reintroducing auditor taste. It does nothing for a defect
+that is off the walked path, which remains the open half of this weakness.
 
 ### 2. `novice-walker` cannot drive a browser
 
