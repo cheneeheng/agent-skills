@@ -5,6 +5,116 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.28.0] — 2026-08-06
+
+Every plugin here asks whether the thing is correct. None asked whether anyone outside the team
+could use it. `ceh-usability-audit` takes that question, and its whole design follows from one
+admission: **you cannot run this audit on yourself.** You already know the answers, and every gap a
+newcomer would fall into gets silently bridged by what you know. So the method is not a checklist —
+it is a way of constraining who does the looking. Cold subagents get exactly what a newcomer
+actually receives (a frozen artifact set: README, landing page, `--help` — never the source, never
+this conversation), hold one persona constraint the whole way, and stop at the first thing they
+cannot get past.
+
+The framing is a five-year-old and a ninety-five-year-old, which is a pair of constraints rather
+than sentiment. The five-year-old has no vocabulary and no prior model of what this is; the
+ninety-five-year-old will not act without knowing the consequence and needs to see what happened
+after every step. Nearly everything that makes software unusable fails one of those two.
+
+Severity is the load-bearing rule and the one most likely to be wrong: it is assignable **only from
+an observed stall**. Something the auditor merely noticed — a real anti-pattern, an obviously bad
+label — is demoted to an unranked `Hypotheses` list and cannot affect the gate. That under-reports,
+and the README says so plainly under a `Known weak points` heading that also names the second
+weakness: subagents lose the Chrome tools, so live web-UI walks fall back to the main session and
+forfeit the cold-context guarantee that makes the method work. Both are documented as attack
+surfaces for whoever evaluates this next, because the alternative — a report ranked by whatever the
+auditor happened to care about — is the failure mode of every usability checklist ever written.
+
+Scenario traces over the four skills then found three defects that would have broken real runs, and
+one gap the design never covered.
+
+`Blank Slate` was unfalsifiable. Specified as "no domain vocabulary and no prior product knowledge —
+any word you would have to already know is a stall the moment you meet it", read literally by a
+walker it stalls on "clone", "terminal", and "browser tab" at line one of any README ever written.
+It therefore returned a Blocker on 100% of targets and gate criterion 1 was unreachable. The fix is
+an **audience baseline** declared before dispatch — one line naming what the intended audience
+already knows, inside which everything is free and outside which everything about *this* product
+still is not. `plain-language-pass` already carried the idea as a stop condition ("establish who the
+reader is"); the walkthrough skills did not.
+
+Turn exhaustion was manufacturing Blockers. The walk report only had `Reached goal: yes | no`, so a
+walker that hit `maxTurns` reported `no`, which the severity table reads as "could not complete the
+goal" — a finding invented out of the instrument's own ceiling. There are three ways a walk ends and
+the report now names which.
+
+And five walkers were dispatched in parallel while permitted to run any non-global install, which
+puts five concurrent `uv sync` runs in one shared checkout. Parallelism now keys on whether the walk
+writes.
+
+The gap was length. Nothing bounded a walk, so a README taking forty steps passed as clean because
+nobody stalled outright — and length is the most common usability failure after an outright blocker.
+The bound is in **actions, not minutes**: walker wall-clock measures model throughput rather than
+the product, so that ban stands. The goal splits into milestones, each budgeted before dispatch
+(declared up front it is a prediction; declared afterwards it is a rationalization), and overrun
+feeds the existing severities instead of adding an axis. Where no number is defensible the budget is
+the step count the documentation itself prescribes — which turns "the doc omits steps reality
+requires" from a complaint into a measurement. Minutes are still reported, but only as a translation
+through a fixed published cost model and labelled `(model, not measured)`. Machine wait — the real
+seconds spent watching an install — is carved out as the one genuine clock and measured.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-usability-audit` | v1.0.1 (new) |
+
+### Added
+
+- **`ceh-usability-audit`** — new use-case-workflow plugin for the comprehension layer, with four
+  skills and one agent:
+  - `first-run-walkthrough` — can a stranger get from "just arrived" to first real success. Freezes
+    the artifact set, declares an audience baseline and per-milestone action budgets, dispatches one
+    cold walker per persona, ranks stalls by observed outcome, loops to a 5-point gate.
+  - `audit-interface` — they are already in: the five questions every surface must answer unasked, a
+    twelve-item reject-on-sight anti-pattern sweep, the naming test, and the persona battery, branched
+    by surface (web UI, CLI, library API, app screen).
+  - `audit-error-messages` — the three-part rule (what happened, what specifically was wrong with the
+    offending value quoted, what to do next) over every user-reachable string, plus nine rules the
+    three parts do not cover, placement, and a rewrite table.
+  - `plain-language-pass` — a vocabulary floor, swap table, seven sentence rules, define-on-first-use,
+    and an explicit **never simplify** list covering legal wording, destructive consequences, auth
+    failure detail, and exact identifiers.
+  - `novice-walker` agent — walks a target cold under one persona toward one goal and reports where it
+    stalled. Read-only. Runs on Sonnet deliberately: a weaker reader is a more honest novice proxy.
+- Milestones with a declared **action budget** in `first-run-walkthrough`, plus a fixed cost model
+  translating actions into an estimated newcomer time-to-first-success, and real measurement of
+  machine wait.
+- An **audience baseline** as a required dispatch input, recorded verbatim in every report — two
+  audits of one target under different baselines are not comparable.
+- `ERROR_MESSAGES.md` in the shared run folder, so `audit-error-messages` writes its triage table
+  down like its three siblings instead of leaving it in a chat log.
+
+### Changed
+
+- `Blank Slate` is now scoped by the audience baseline in all four places the persona table is
+  duplicated, registered in `CROSS_REFERENCES.md`.
+- Gate criterion 5 of `first-run-walkthrough` replaced. It compared actions-to-success across
+  personas, which differ by construction — `Wrong Turn` takes a wrong turn first — so the spread
+  always had an instrument explanation. It now checks conformance to the declared budget.
+- `novice-walker` `maxTurns` 25 → 35, and the walk report gained a stop-reason field, a per-milestone
+  table, and a machine-wait column.
+
+### Fixed
+
+- Turn exhaustion is no longer scored as a Blocker. Re-dispatch advice is a narrower goal rather than
+  a higher `maxTurns`, since a caller cannot override agent frontmatter per dispatch.
+- Parallel walkers no longer share one mutable checkout: a walk that writes to the working tree runs
+  one persona at a time, or gives each its own copy.
+- `audit-interface` restates the browser limitation at the point of dispatch, not only in a table cell
+  three sections earlier.
+
+---
+
 ## [3.27.1] — 2026-07-31
 
 `CLAUDE.md` and the repo-local `add-plugin-component` skill had been carrying the same checklist
