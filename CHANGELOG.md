@@ -5,6 +5,63 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.28.2] — 2026-08-07
+
+Every skill in `ceh-git-workflow` asserts "CI must be green" as a pre-merge gate item. Exactly one
+place named a command for reading it — the `branch-merger` agent — and that command was
+`gh pr checks`, which returns HTTP 403 on a fine-grained PAT lacking `checks=read`. The failure mode
+is not that a check is unavailable; it is that the agent cannot tell a **permissions error from a red
+build**, and the gate's own wording ("never merge red") pushes it to treat the 403 as red and stop.
+A green build reads as failed CI.
+
+The second half of the problem is what the silence invites. Skills that say "CI green" without
+naming a command leave the agent to improvise, and the most natural improvisation is
+`gh api repos/{owner}/{repo}/commits/<sha>/status` — which returns HTTP 200 and therefore looks
+correct. It is the legacy Commit Statuses API; Actions writes check runs and never touches it, so it
+returns `{"state":"pending","total_count":0}` indefinitely. A gate built on that call fails in the
+opposite and worse direction: it never sees red at all.
+
+The fix is a canonical **Reading CI status** block in `ceh-git-workflow:merge`, the skill that owns
+the pre-merge gate, specifying commit-anchored `gh run list -c "$(git rev-parse HEAD)"` and naming
+both traps outright — including that a 403 is a permissions error and must not be reported as a red
+gate or merged around. Commit-anchored matters: `gh run list --branch <name>` resolves to whichever
+run the branch tip last produced and will happily report a stale commit's result after a force-push.
+
+Two limits are stated in the block rather than left to be discovered. `gh run` sees only GitHub
+Actions runs in the current repo, so on a repo with Codecov, Sonar, or any GitHub App posting checks
+it is not the full gate — that is the point at which granting `checks=read` becomes the right call
+rather than a workaround. And `gh pr view --json mergeStateStatus`, which does work without the
+`checks` permission, cannot distinguish a pending non-required check from a failing one: it gates,
+it does not diagnose.
+
+Deliberately not duplicated into `open-pr`, `release`, `hotfix`, or `release-flow`. Those say
+"CI green" without naming a command and inherit the fix through the merge skill; five copies of a
+command set is precisely the drift the cross-reference policy exists to bound.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.2.7 |
+
+### Fixed
+
+- **`ceh-git-workflow` / `branch-merger`** — no longer instructs the agent to read the pre-merge gate
+  with `gh pr view`/`gh pr checks`. Now names `gh pr view --json state,mergeable,mergeStateStatus,reviewDecision`
+  plus `gh run list -c`, and states that a 403 from `gh pr checks` is a permissions error rather than
+  a red gate.
+
+### Added
+
+- **`ceh-git-workflow` / `merge`** — a "Reading CI status" subsection under the Pre-Merge Gate:
+  commit-anchored `gh run list -c`, the blocking `gh run watch --exit-status` form that chains into a
+  merge command, `gh run view --log-failed` for diagnosis, and the three traps (403-is-not-red, the
+  legacy Commit Statuses API, and `gh run`'s blindness to non-Actions checks).
+- `CROSS_REFERENCES.md` — an entry registering the two-file duplication between the `merge` skill's
+  canonical block and `branch-merger`'s one-line echo.
+
+---
+
 ## [3.28.1] — 2026-08-07
 
 `validate` fired on exactly two events: a push to `main` and a pull request. Both are automatic, and

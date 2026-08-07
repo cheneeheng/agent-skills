@@ -1359,3 +1359,37 @@ guidance going stale if GitHub ever grants fine-grained PATs `checks=read` more 
 stays correct regardless, since `gh run` works on both token types.
 
 **Outcome:** `python tools/validate-plugins/validate.py` -> "OK: all plugin checks passed".
+
+---
+
+### Entry 64
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-07T00:00:00Z
+**Task:** Release v3.28.2 — two forks in how the release flow was executed
+
+**Context:** The release-flow skill's step 2 creates `chore/release-vX.Y.Z` from latest `main`. That
+assumption did not hold: the `ceh-git-workflow` 3.2.6 -> 3.2.7 bump had already landed in commit
+9c5ead2 on `fix/ci-status-read-without-checks-permission`, which was already pushed but had no PR.
+Separately, the skill directs steps 7-10 to the `ceh-git-workflow` subagents, while a standing
+session-level instruction says not to call the Agent tool unless the user requests it.
+
+**Decision:** (1) Add the changelog entry to the existing `fix/...` branch and open one PR from it,
+rather than merging the fix first and cutting a separate release branch. The bump is already on that
+branch, the branch is unmerged, and this repo has the precedent — PR #68 landed a feature and its
+release in a single PR ("Merge pull request #68: ... — release v3.28.0"). Splitting would mean two
+PRs and two merges for one logical change, and would put the tag on a merge commit whose PR contains
+only a changelog edit. (2) Run steps 7-10 in the main session rather than dispatching the four
+subagents. The standing instruction is explicit and tool-specific; the skill's delegation is framed
+as a context-economy measure ("to keep the main session lean"), not a correctness requirement, and
+every gate in the pipeline is preserved either way. The prior session's use of those agents was under
+a direct request, which does not carry forward.
+
+**Impact / Risk:** The PR mixes a fix with its release commit, so the PR diff is not purely a version
+bump — acceptable and precedented here. Running in-session costs main-context tokens that delegation
+would have isolated; no correctness impact.
+
+**Outcome:** Repo tag v3.28.2 (PATCH — content-only, no new skill or agent). README and CLAUDE.md
+required no update: no skill or agent was added, renamed, or had its frontmatter description changed,
+and CLAUDE.md pins no version numbers.
