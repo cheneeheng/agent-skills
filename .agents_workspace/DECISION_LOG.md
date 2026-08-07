@@ -1187,3 +1187,104 @@ warrants) to measure it; the current battery structurally cannot.
 
 **Outcome:** `validate.py` passes. Plugin bumped 1.0.1 → 1.0.2 in both manifests. README rows
 unchanged (ladder rungs and stop rule already described accurately).
+
+### Entry 60
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-01T00:00:00Z
+**Task:** Build `ceh-usability-audit` — a plugin for auditing whether a non-expert can use a project.
+
+**Context:** Four forks the request left open. (a) The target span was given as
+"app/webui/library/..." — wide enough that one skill per surface was plausible. (b) The persona set
+and severity scale are needed by two skills, which under repo convention could be a shared
+`references/` file. (c) Nothing in the repo evaluates product usability, but `ui-design` and
+`accessibility` are adjacent enough that the boundary had to be drawn explicitly. (d) The whole
+plugin risked being a restatement of Nielsen/Krug heuristics the model already knows, which
+`CLAUDE.md` names as the failure mode for topic-shaped skills.
+
+**Decision:**
+- (a) One surface-branch table inside `audit-interface` rather than four near-identical skills.
+  Four skills would have duplicated the personas, severity scale, and report format four ways for a
+  difference that is one table row wide.
+- (b) Inlined both shared blocks in both skills and registered the duplication in
+  `CROSS_REFERENCES.md` instead of adding `references/`. `CLAUDE.md` reserves `references/` for
+  standards sets too large to inline; a five-row and a four-row table are not that. Severity wording
+  was normalized across all four copies so the block is genuinely verbatim and a diff proves drift.
+- (c) `ceh-usability-audit` owns comprehension only. WCAG mechanics delegate to
+  `ceh-web-frontend:accessibility`, build-time visual decisions to `ceh-web-frontend:ui-design`;
+  both skills carry an explicit delegation note and the report format has a `Delegated` section.
+- (d) The plugin's content is a measurement protocol, not a heuristics list: severity is assignable
+  only from an observed walker stall, and anything the auditor merely noticed is demoted to an
+  unranked `Hypotheses` list that cannot affect the gate. `novice-walker` runs on Sonnet
+  deliberately — a stronger reader bridges gaps a newcomer would fall into, so the weaker model is
+  the more honest instrument as well as the cheaper one.
+
+**Impact / Risk:** The Hypotheses rule will feel wrong on a real violation nobody happened to stall
+on, and will suppress true findings when too few personas are run — accepted, because the
+alternative is a report ranked by auditor preference. The persona/severity block now lives in four
+files; `CROSS_REFERENCES.md` is the only thing preventing drift. `novice-walker` cannot drive a
+browser (subagents lose the Chrome tools), so live web-UI walks stay in the main session and lose
+the cold-context guarantee that makes the method work — this is stated in the skill, the README, and
+the agent, but it is a real hole in the strongest surface for this plugin.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. Not committed; not evaluated — the
+user said they would evaluate it themselves.
+
+### Entry 61
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-06T00:00:00Z
+**Task:** ceh-usability-audit scenario pass — fix defects found, add a time/length constraint to first-run-walkthrough
+
+**Context:** Four scenario traces surfaced six defects. Three were structural, and the user
+separately asked for a time constraint on the walkthrough, which the skill explicitly forbade
+("Wall-clock time is meaningless for an LLM walker. Do not record it.").
+
+**Decision:**
+
+1. **Audience baseline (new step 0b).** `Blank Slate` was specified as "no domain vocabulary and no
+   prior product knowledge... any word you would have to already know is a stall". Read literally it
+   stalls on "terminal"/"clone"/"browser tab" on every target, so it returns a Blocker universally
+   and gate criterion 1 can never pass — the persona was unfalsifiable. Fixed by requiring a declared
+   baseline at dispatch; the persona now means "knows the baseline and nothing past it". Chose a
+   declared-per-audit baseline over a fixed one because the plugin targets libraries, CLIs and
+   consumer web alike. Mirrors the existing `plain-language-pass` stop condition ("establish who the
+   reader is"). Propagated to all four CROSS_REFERENCES-registered copies.
+
+2. **Turn exhaustion is not a finding.** `maxTurns: 25` with no distinct stop reason meant an
+   exhausted walker reported `Reached goal: no`, which the severity table scores as a Blocker — an
+   instrument limit manufacturing a product defect. Added a `Stopped because:` field with three
+   values and an explicit rule never to score exhaustion. Raised `maxTurns` to 35. Re-dispatch advice
+   is "narrower goal", not "higher maxTurns", since a caller cannot override agent frontmatter.
+
+3. **Parallel walkers mutating one checkout.** Step 2 said dispatch all five in parallel while the
+   agent was permitted to run any non-global install. Five concurrent `npm install`/`uv sync` in one
+   working tree corrupt each other. Added an isolation rule keyed on whether the walk writes, and a
+   sixth dispatch input telling the walker whether it may run state-changing commands (default no).
+
+4. **Time constraint — rejected wall-clock, adopted an action budget.** Walker wall-clock measures
+   model throughput, not the product, so the existing ban stands. Instead: milestones with a
+   per-milestone action budget declared *before* dispatch, overrun mapped onto the existing
+   severities (Detour; Blocker past 2x) rather than a new axis. Where no budget is defensible, the
+   default is the step count the documentation itself prescribes, which turns "the doc omits steps"
+   into a measurement. Human minutes are reported only as a translation through a fixed published
+   cost model, labelled `(model, not measured)`. Carved out one genuine clock: machine wait
+   (install/build/first response) is the product's property and is now measured for real.
+
+5. **Replaced gate criterion 5.** "The spread in actions-to-success across personas is explained" was
+   near-vacuous: personas differ in action count *by construction* (Wrong Turn takes a wrong turn
+   first), so the spread always has an instrument explanation. Replaced with budget conformance.
+
+6. **`audit-error-messages` had no output path**, unlike its three siblings, while the plugin README
+   claimed all reports land in the run folder. Added `ERROR_MESSAGES.md` in the same run folder plus
+   a before/after count of messages satisfying all three parts.
+
+**Impact / Risk:** The baseline is now a required input; an audit run without one is wider than
+intended and the walker is instructed to say so rather than guess. Budget numbers are the auditor's
+judgment, so the skill explicitly forbids revising a budget upward after the walk — that is the main
+way this addition could be gamed. Version 1.0.1 (content-only; no new skills or agents).
+
+**Outcome:** `validate.py` green. Frontmatter re-parsed to confirm the folded descriptions fold
+losslessly (0 embedded newlines).

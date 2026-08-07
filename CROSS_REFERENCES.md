@@ -421,6 +421,39 @@ in a stack skill is the signal that this boundary has slipped.
 
 ---
 
+## Usability persona set + severity scale
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-usability-audit/skills/first-run-walkthrough/SKILL.md` | "The personas" + "Score by observed outcome, not by appearance" | canonical — the five-row persona table and the four-row severity table |
+| `ceh-usability-audit/skills/audit-interface/SKILL.md` | "Run the persona battery" + "Rank by observed outcome" | verbatim copy of both tables |
+| `ceh-usability-audit/README.md` | "The personas" + "Severity — assigned by outcome, not by appearance" | condensed copies for the reader; column wording differs, the five personas and four severities must not |
+| `ceh-usability-audit/agents/novice-walker.md` | "Holding the persona" | the same five personas restated as **second-person instructions to the walker**, not as a table |
+
+**What is shared:** the five personas (Blank Slate, Cautious Returner, Interrupted, Wrong Turn,
+Small Screen) with their constraints and the failure class each catches; the four severities
+(Blocker, Detour, Friction, Polish) with their assignment conditions; and the rule that severity
+comes from an observed walker outcome, with anything unobserved demoted to an unranked `Hypotheses`
+list. Adding, removing, or renaming a persona or severity means editing all four files.
+
+`Blank Slate` is scoped by the **audience baseline** declared at dispatch, in all four copies —
+without that qualifier the persona stalls on "terminal" and returns a Blocker on every target. If
+the baseline wording changes anywhere, change it everywhere.
+
+**What diverges:**
+- `first-run-walkthrough` adds the actions-to-success and external-lookups measurements, which are
+  first-run-specific (external lookups are meaningless once the user is already inside).
+- `audit-interface` keeps the persona table but supplies an in-product goal instead of a setup goal.
+- `novice-walker` phrases each persona as a rule the agent obeys ("take no action whose outcome was
+  not stated") rather than a constraint it is described by — it never sees the severity scale at
+  all, deliberately: the walker reports stalls, the caller ranks them.
+- Both skills append the same delegation note sending WCAG mechanics to
+  `ceh-web-frontend:accessibility`; `Small Screen` covers environment, never conformance.
+
+---
+
 ## Update Protocol
 
 When changing a shared block:
