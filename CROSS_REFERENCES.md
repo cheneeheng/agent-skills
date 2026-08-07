@@ -87,6 +87,23 @@ notes live in the detailed entries referenced below.
 
 ---
 
+## Reading CI status (gh run, not gh pr checks)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `ceh-git-workflow/skills/merge/SKILL.md` | "Reading CI status" under "Pre-Merge Gate" | canonical — full command set plus the three traps |
+| `ceh-git-workflow/agents/branch-merger.md` | "Inputs" bullet | one-line echo of the working commands + the `gh pr checks` prohibition, pointing back at the skill |
+
+**What is shared:** read the gate with `gh run list -c "$(git rev-parse HEAD)"` (commit-anchored, Actions API); never `gh pr checks` or `gh pr view --json statusCheckRollup`, which return 403 on a fine-grained PAT lacking `checks=read` — a permissions error, not a red gate.
+
+**What diverges:**
+- `merge` adds `gh run watch --exit-status`, `gh run view --log-failed`, the legacy-Commit-Statuses trap (`commits/<sha>/status` returns 200 with `total_count: 0` forever), the third-party-checks blind spot, and the `mergeStateStatus` gate-vs-diagnose distinction.
+- `branch-merger` carries only the prohibition and the two commands it needs, since it preloads the merge skill via frontmatter.
+
+---
+
 ## PR Checklist Items
 
 **Files:**

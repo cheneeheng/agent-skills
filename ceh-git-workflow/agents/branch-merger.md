@@ -20,7 +20,11 @@ You merge one PR or one local branch into `main`, then clean up.
 ## Inputs
 
 - The delegation prompt names the PR number or branch. Verify state yourself:
-  `gh pr view`/`gh pr checks` for the gate, `git log` for history cleanliness.
+  `gh pr view <N> --json state,mergeable,mergeStateStatus,reviewDecision` plus
+  `gh run list -c "$(git rev-parse HEAD)"` for the gate, `git log` for history cleanliness.
+  Never `gh pr checks` or `--json statusCheckRollup` — both 403 on a fine-grained PAT without
+  `checks=read`, and that 403 is a permissions error, not a red gate. See the merge skill's
+  "Reading CI status" for the full command set and its traps.
 - The prompt may add a merge-commit body line or say whether to queue auto-merge vs merge
   now. Honor it.
 

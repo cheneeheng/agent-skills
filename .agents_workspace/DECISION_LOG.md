@@ -1316,3 +1316,80 @@ correctness risk, gates are identical. (2) Anyone tracking plugin versions sees 
 movement for v3.28.1 — correct, since no plugin changed.
 
 **Outcome:** `validate.py` green; released as v3.28.1.
+
+---
+
+### Entry 63
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-07T00:00:00Z
+**Task:** Fix the CI-status-reading guidance that made `gh pr checks` 403s look like red CI
+
+**Context:** A real release session hit `GraphQL: Resource not accessible by personal access token`
+from `gh pr checks`. The token was a fine-grained PAT without `checks=read`. Across this repo only
+one place named a command for the "CI green" pre-merge gate — `ceh-git-workflow/agents/branch-merger.md`
+— and it named exactly the two calls that 403 on such a token (`gh pr checks`,
+`gh pr view --json statusCheckRollup`). Every other skill said "CI must be green" without saying how,
+leaving the agent to improvise; the plausible improvisation
+(`gh api repos/{owner}/{repo}/commits/<sha>/status`) returns HTTP 200 with `total_count: 0` forever
+because Actions writes check runs, not commit statuses — a gate that can never see red.
+
+**Decision:** Put a canonical "Reading CI status" block under the Pre-Merge Gate in
+`ceh-git-workflow:merge` — the skill that owns the gate — specifying commit-anchored
+`gh run list -c "$(git rev-parse HEAD)"`, `gh run watch --exit-status`, and `gh run view --log-failed`,
+plus the three traps (the 403-is-not-red distinction, the legacy Commit Statuses API, and `gh run`'s
+blindness to non-Actions checks). `branch-merger.md` gets a one-line echo pointing back at the skill
+since it preloads it. Registered in `CROSS_REFERENCES.md`.
+
+Two alternatives rejected. (1) Telling users to widen the PAT with `checks=read`: it buys one command
+that duplicates a signal already readable, and would not have helped diagnose the failure — that needs
+`gh run view --log-failed` either way. (2) Recommending `allow_auto_merge` to sidestep reading CI at
+all: the user rejected this for their repo on sound grounds (a PyPI version number is irreversible, so
+a CI pass must not be able to trigger a release unattended), and it is repo policy rather than
+something a skill should push.
+
+Scope was held to the two files that actually name commands. `open-pr`, `release`, `hotfix`,
+`release-flow`, and `ceh-ops` were left alone — they either say "CI green" without naming a command
+(so they inherit the fix through the merge skill) or already use `gh run` correctly
+(`ceh-ops/agents/github-actions.md`, `gh-analyze-failure.sh`).
+
+**Impact / Risk:** Content-only; `ceh-git-workflow` 3.2.6 -> 3.2.7 in both manifests. Risk is the
+guidance going stale if GitHub ever grants fine-grained PATs `checks=read` more broadly — the block
+stays correct regardless, since `gh run` works on both token types.
+
+**Outcome:** `python tools/validate-plugins/validate.py` -> "OK: all plugin checks passed".
+
+---
+
+### Entry 64
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-07T00:00:00Z
+**Task:** Release v3.28.2 — two forks in how the release flow was executed
+
+**Context:** The release-flow skill's step 2 creates `chore/release-vX.Y.Z` from latest `main`. That
+assumption did not hold: the `ceh-git-workflow` 3.2.6 -> 3.2.7 bump had already landed in commit
+9c5ead2 on `fix/ci-status-read-without-checks-permission`, which was already pushed but had no PR.
+Separately, the skill directs steps 7-10 to the `ceh-git-workflow` subagents, while a standing
+session-level instruction says not to call the Agent tool unless the user requests it.
+
+**Decision:** (1) Add the changelog entry to the existing `fix/...` branch and open one PR from it,
+rather than merging the fix first and cutting a separate release branch. The bump is already on that
+branch, the branch is unmerged, and this repo has the precedent — PR #68 landed a feature and its
+release in a single PR ("Merge pull request #68: ... — release v3.28.0"). Splitting would mean two
+PRs and two merges for one logical change, and would put the tag on a merge commit whose PR contains
+only a changelog edit. (2) Run steps 7-10 in the main session rather than dispatching the four
+subagents. The standing instruction is explicit and tool-specific; the skill's delegation is framed
+as a context-economy measure ("to keep the main session lean"), not a correctness requirement, and
+every gate in the pipeline is preserved either way. The prior session's use of those agents was under
+a direct request, which does not carry forward.
+
+**Impact / Risk:** The PR mixes a fix with its release commit, so the PR diff is not purely a version
+bump — acceptable and precedented here. Running in-session costs main-context tokens that delegation
+would have isolated; no correctness impact.
+
+**Outcome:** Repo tag v3.28.2 (PATCH — content-only, no new skill or agent). README and CLAUDE.md
+required no update: no skill or agent was added, renamed, or had its frontmatter description changed,
+and CLAUDE.md pins no version numbers.
