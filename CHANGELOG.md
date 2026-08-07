@@ -5,6 +5,39 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.28.1] — 2026-08-07
+
+`validate` fired on exactly two events: a push to `main` and a pull request. Both are automatic, and
+neither has a manual counterpart — so when a PR's check failed to fire at all, there was no run to
+re-run and no button to press. The repo's only CI gate was unreachable by hand.
+
+The distinction that makes this a real gap rather than a duplicate of the Actions UI: `gh run rerun`
+needs a run to exist. It is the right tool for a run that fired and failed spuriously, and it
+re-executes in the original PR context. It has nothing to offer when the trigger itself never
+matched — a skipped event, a workflow edit that landed after the push, a PR opened while Actions was
+degraded. `workflow_dispatch` is the native trigger for that case, and it is one line.
+
+Two limits are worth stating rather than discovering. GitHub only exposes the Run workflow button —
+and only accepts `gh workflow run` — once a workflow carrying `workflow_dispatch` exists on the
+**default branch**, so this does nothing for the PR that introduces it and takes effect from the
+merge onward. And a dispatch runs against a branch ref, not the PR's merge ref, so it validates the
+branch as it stands rather than the merge result. For this repo's validator, which reads manifests
+and skill files off the checkout, that difference is immaterial.
+
+No plugin changed. The workflow is repo infrastructure and ships in neither the marketplace nor any
+plugin.
+
+### Plugin versions
+
+None. This release touches repo-level CI configuration only.
+
+### Added
+
+- `.github/workflows/validate.yml` — a `workflow_dispatch` trigger, so `validate` can be started by
+  hand from the Actions tab or with `gh workflow run validate.yml --ref <branch>`.
+
+---
+
 ## [3.28.0] — 2026-08-06
 
 Every plugin here asks whether the thing is correct. None asked whether anyone outside the team

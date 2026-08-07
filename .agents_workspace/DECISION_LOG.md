@@ -1288,3 +1288,31 @@ way this addition could be gamed. Version 1.0.1 (content-only; no new skills or 
 
 **Outcome:** `validate.py` green. Frontmatter re-parsed to confirm the folded descriptions fold
 losslessly (0 embedded newlines).
+
+### Entry 62
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-07T00:00:00Z
+**Task:** Release v3.28.1 — manual CI trigger (`workflow_dispatch` on `validate.yml`)
+
+**Context:** Two forks. (1) `release-flow` steps 7–10 prescribe dispatching the
+`ceh-git-workflow` subagents (`commit-author`, `pr-opener`, `branch-merger`,
+`release-cutter`), but this session carries an explicit standing instruction not to
+call the Agent tool unless the user asks. (2) The change is CI-only: no plugin
+content moved, so it was unclear whether any `plugin.json` / `marketplace.json`
+version should be bumped.
+
+**Decision:** (1) Ran steps 7–10 inline in the main session using the owning skills'
+standards by trigger phrase — the skill's own documented fallback ("Without the
+agents, delegate to the skills by trigger phrase"), which preserves every gate. The
+standing no-subagent instruction is user-level and outranks the skill. (2) No plugin
+version bumped; repo tag only, `### Plugin versions: None` in the changelog. Precedent
+is v3.27.1, also a repo-level-only release. `.github/` ships in neither the marketplace
+nor any plugin, so a bump would advertise a change no plugin consumer receives.
+
+**Impact / Risk:** (1) Main-session context is larger than a delegated run; no
+correctness risk, gates are identical. (2) Anyone tracking plugin versions sees no
+movement for v3.28.1 — correct, since no plugin changed.
+
+**Outcome:** `validate.py` green; released as v3.28.1.
