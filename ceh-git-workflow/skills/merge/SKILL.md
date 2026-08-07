@@ -33,6 +33,38 @@ Do not merge until all hold:
 - [ ] Rebased on latest `main`
 - [ ] History clean — fixup/WIP/debug commits squashed or dropped; every commit Conventional Commits format
 
+### Reading CI status
+
+Read the gate with `gh run` (Actions API), anchored to the **commit**, never to the branch:
+
+```bash
+gh run list -c "$(git rev-parse HEAD)"                    # runs for this exact commit
+gh run watch "$(gh run list -c "$(git rev-parse HEAD)" -L1 --json databaseId -q '.[0].databaseId')" --exit-status
+gh run view <run-id> --log-failed                          # why it went red
+```
+
+`gh run watch --exit-status` blocks until the run finishes and exits non-zero on failure, so it
+chains with `&&` into the merge command.
+
+Three traps, all of which make a red build look green or a green build look broken:
+
+- **`gh pr checks` and `gh pr view --json statusCheckRollup` fail with a fine-grained PAT** that
+  lacks the `checks=read` permission — HTTP 403, named in the response's
+  `X-Accepted-Github-Permissions` header. That is a *permissions* error, not a red gate. Do not
+  report it as CI failure and do not merge around it; use `gh run` instead. Other `gh pr view`
+  fields (`state`, `mergeable`, `mergeStateStatus`, `reviewDecision`) work fine.
+- **`gh api repos/{owner}/{repo}/commits/<sha>/status` is not a substitute.** It returns HTTP 200,
+  which makes it look usable, but it is the legacy Commit Statuses API and Actions never writes to
+  it — `{"state":"pending","total_count":0}` forever. Anything gating on it never sees red.
+- **`gh run` only sees GitHub Actions runs in this repo.** It is blind to checks posted by third
+  parties (Codecov, Sonar, any GitHub App). On a repo that has those, `gh run` alone is not the
+  full gate — either read the rollup (requires `checks=read` on the token) or check them by hand.
+
+`gh pr view <N> --json mergeStateStatus` does reflect check state without the `checks` permission
+(`CLEAN` / `UNSTABLE` / `BLOCKED`) and is a valid merge gate — but `UNSTABLE` cannot distinguish a
+pending non-required check from a failing one, so it diagnoses nothing. Use it to gate, `gh run`
+to diagnose.
+
 ## Merge Strategy
 
 **Merge commit only** — never squash, never rebase-merge. Commits land on `main` as written
