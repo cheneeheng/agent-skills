@@ -77,7 +77,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 
 | Plugin directory | Domain |
 |-----------------|--------|
-| `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism reflex; retroactive refactoring (`shrink-diff` on a branch's diff, `refactor-repo` campaign-wide); usage-limit guard hook + stop-and-summarize handoff (`usage-limit-handoff`) |
+| `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism reflex; retroactive refactoring (`shrink-diff` on a branch's diff, `refactor-repo` campaign-wide); usage-limit guard hook + stop-and-summarize handoff (`usage-limit-handoff`); explaining code to a person in-session until it lands (`explain-until-understood`) |
 | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app (iteratively or to MVP), implement from the plan, review against it, patch a shipped version with small non-feature changes |
 | `ceh-architecture` | Stack-agnostic design: living architecture docs (Mermaid diagrams + Key Decisions), domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |

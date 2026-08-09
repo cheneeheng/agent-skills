@@ -12,7 +12,7 @@ testing skills route between each other, with the trigger phrases and sequence f
 
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
-| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`) |
+| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`) |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
@@ -64,6 +64,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-agent-coding-contract` | Shrink Diff | `/ceh-agent-coding-contract:shrink-diff` | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main` |
 | `ceh-agent-coding-contract` | Refactor Repo | `/ceh-agent-coding-contract:refactor-repo` | Manual only — propose-then-apply refactor campaign over the whole repo or a named module |
 | `ceh-agent-coding-contract` | Usage Limit Handoff | `/ceh-agent-coding-contract:usage-limit-handoff` | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact for the next session, end the turn |
+| `ceh-agent-coding-contract` | Explain Until Understood | `/ceh-agent-coding-contract:explain-until-understood` | Manual only — explain a subsystem, design, or diff to the person in the session: foundations first, verified claims, ASCII for structure and time, and the escalation ladder when an explanation misses |
 | `ceh-plan-build-review` | Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning one release at a time — a greenfield skeleton or the next iteration |
 | `ceh-plan-build-review` | Plan Fullstack App to MVP | `/ceh-plan-build-review:plan-fullstack-app-to-mvp` | Planning the complete build to a working MVP in one session |
 | `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |

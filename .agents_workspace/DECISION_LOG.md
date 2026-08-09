@@ -1393,3 +1393,108 @@ would have isolated; no correctness impact.
 **Outcome:** Repo tag v3.28.2 (PATCH — content-only, no new skill or agent). README and CLAUDE.md
 required no update: no skill or agent was added, renamed, or had its frontmatter description changed,
 and CLAUDE.md pins no version numbers.
+
+### Entry 65
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-09T00:00:00Z
+**Task:** Add the `explain-until-understood` skill to `ceh-agent-coding-contract` from the
+`docs/new_skill.md` draft.
+
+**Context:** The user chose the skill name and the plugin home. Three forks in the draft were left
+to me. (1) Draft open question 3 asks whether the skill also owns persisting the explanation to a
+file — the source session slid from explaining into writing three markdown files. (2) The draft
+carries three sections of provenance (why each rule exists, why a skill and not CLAUDE.md, a worked
+example citing `docs/tracing-design.md` and `docs/v2-catchup.md`) that do not exist in this repo.
+(3) The new skill and `ceh-dev-tools:explain-codebase` compete for the same trigger phrases, and
+skill selection reads descriptions, not the in-body "Not the same as" tables.
+
+**Decision:** (1) The skill writes nothing by default; scratch notes under `.agents_workspace/` are
+in scope, and anything landing in `docs/` or a README hands off to the skill that owns it. A skill
+that both explains and writes repo files would fire its file-writing machinery on "I'm lost".
+(2) Provenance sections dropped from SKILL.md and left in `docs/new_skill.md`; the draft's Honesty
+section reduced to the one rule not already in the contract or global CLAUDE.md ("not documented"
+vs "I did not check" — grep first). Unreachable file paths in a skill teach the model to invent
+references. (3) The exclusion went into both descriptions, not only the body tables, and
+`explain-codebase` gave up the trigger phrase "walk me through this project" to the new skill,
+which is the phrase that most clearly means a person, not a file. Its description also had to be
+trimmed to stay under the validator's 1024-char limit once the exclusion was added.
+
+**Impact / Risk:** Cross-plugin edit — `ceh-dev-tools` 1.2.0 -> 1.2.1 alongside
+`ceh-agent-coding-contract` 2.8.7 -> 2.9.0. `explain-codebase` now advertises five fewer trigger
+words; if repo-wide requests start routing to the new skill instead, restore the phrase and cut
+elsewhere in that description. The `ceh-agent-coding-contract` plugin description was widened from
+"agent coding contract" to "agent behavior contract" to cover a skill that is not about writing
+code; this is the second such skill after `usage-limit-handoff`.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. No repo tag cut and no CHANGELOG
+entry — that is the release step, not this one.
+
+### Entry 66
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-09T00:00:00Z
+**Task:** Set `disable-model-invocation: true` on `explain-until-understood` (user instruction) and
+absorb the consequences.
+
+**Context:** Entry 65 chose `ceh-agent-coding-contract` over `ceh-dev-tools` on the argument that
+the skill's value was auto-firing on an unplanned "I'm lost". Manual-only invocation voids that
+argument. Two follow-on questions: whether the plugin home still holds, and what happens to the
+trigger phrase `explain-codebase` gave up to avoid competing with a skill that can no longer
+compete.
+
+**Decision:** (1) Keep the plugin home. The reason is weaker but still valid — a manual skill must
+still be installed and enabled to be typed, and `ceh-agent-coding-contract` is the plugin loaded in
+every session, so `/explain-until-understood` is always reachable. Moving it to `ceh-dev-tools` now
+would cost a cross-plugin rename for no gain. (2) Restored "walk me through this project" to
+`explain-codebase`, paid for by trimming its description elsewhere (dropped "never tracked" and
+"one-line-per-path", both stated in full in the body). (3) Kept the negative trigger in
+`explain-codebase` ("not for 'I'm lost' / 'still blurry'"), now marked as pointing at a manual
+skill. It no longer arbitrates between two auto-loading skills, but it still stops a repo-wide file
+write from firing on a conversational ask, which was always the more valuable half. (4) Rewrote the
+new skill's description in the `refactor-repo` shape: no trigger-phrase list, since nothing matches
+against it, and the text now describes what the skill does for a human reading a command list.
+
+**Impact / Risk:** The skill will not fire unless the user types it. Anyone who does not know it
+exists gets the model's default explaining behavior, which is the failure the skill was written to
+fix. Revisit if `/explain-until-understood` goes unused for a stretch — re-enabling auto-invocation
+means restoring the trigger phrases and re-checking them against `explain-codebase`.
+`explain-codebase` description is at 1015/1024 chars, so any further addition needs a matching cut.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. Version stays 2.9.0 — same
+uncommitted change set as entry 65, no second bump.
+
+### Entry 67
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-09T00:00:00Z
+**Task:** Reverse two calls from entries 65 and 66 on the user's challenge — `explain-codebase`
+frontmatter, and how the overlap with `explain-until-understood` is recorded.
+
+**Context:** The user asked why `explain-codebase`'s description was edited at all once the new
+skill stopped being model-invocable, and asked for the genuine overlap to be copied verbatim and
+registered in `CROSS_REFERENCES.md` rather than paraphrased apart.
+
+**Decision:** (1) Reverted `explain-codebase`'s description to its pre-session wording, byte for
+byte. The edit's whole justification was trigger competition between two auto-loading skills, and
+`disable-model-invocation: true` removed the competition. It was also lossy — fitting the exclusion
+under the 1024-char cap cost "never tracked" and "one-line-per-path". The residual benefit
+(advertising the manual command inside the description) does not pay for a lossy edit to another
+plugin. Entry 66's decisions 2 and 3 are void; the restore-the-trigger-phrase decision is moot
+because the phrase was never removed in the final state. (2) Kept the one-line "Not the same as"
+row in the `explain-codebase` body — zero risk, and it is where a reader already inside that skill
+learns the manual command exists. `ceh-dev-tools` stays at 1.2.1 for that one line. (3) Adopted
+three rules from `explain-codebase` verbatim into `explain-until-understood` ("Evidence over
+inference", "Don't paste code", "Describe what exists today") instead of writing near-duplicates,
+and registered the block in `CROSS_REFERENCES.md` with `explain-codebase` as canonical. Entry 65
+claimed no cross-reference entry was needed; that was true only because the wording had been
+deliberately kept apart, which is the drift the policy exists to prevent.
+
+**Impact / Risk:** `ceh-dev-tools`'s diff is now one added line plus the version bump. Three rules
+now exist in two files and must be edited together — the cost the duplication policy accepts, now
+registered so it is visible.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green.

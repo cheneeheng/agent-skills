@@ -16,6 +16,7 @@ contract automatically at session start, alongside the `write-less-code` minimal
 | `shrink-diff` | On demand — when a feature branch is functionally done and its diff should get smaller before review | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code. |
 | `refactor-repo` | Manual only (`/refactor-repo`) — never auto-fires | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate. |
 | `usage-limit-handoff` | When the usage-limit guard hook fires (5h or weekly window past threshold) | Stop-and-summarize protocol: close the current atomic step, start nothing new, write a durable handoff artifact to `.agents_workspace/handoff/` plus a line in the global `~/.claude/handoff/index.md`, end the turn. Subagents report upward instead of writing the artifact. |
+| `explain-until-understood` | Manual only (`/explain-until-understood`) — never auto-fires | How an explanation is built and what to do when it misses: read the real code (never a design doc), foundations before the specific case, verified output over described output, ASCII for structure and time, close on a transferable rule plus a self-test. Ships the escalation ladder — prose → steps → pictures → primitives — with the rule that a miss at pictures means a skipped foundation, not a missing detail. Writes no files. |
 
 **Manual triggers**
 
@@ -24,6 +25,7 @@ contract automatically at session start, alongside the `write-less-code` minimal
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
 - `usage-limit-handoff` — `/usage-limit-handoff`, or say `"wrap up the session"` / `"usage limit handoff"` / `"stop and summarize"`.
+- `explain-until-understood` — `/explain-until-understood [what to explain]` only (model auto-invocation is disabled by design).
 
 ## How the skills auto-load
 
