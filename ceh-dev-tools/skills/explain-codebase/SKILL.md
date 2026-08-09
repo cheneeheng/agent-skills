@@ -32,6 +32,7 @@ you report, not an omission you make quietly.
 | One line per path, clickable tree, fast orientation | `ceh-dev-tools:repo-tree-mapper` agent |
 | Diagrams of the system's shape + decision log | `ceh-architecture:document-architecture` |
 | Docs for people who *use* or *operate* the product | `ceh-documentation:user-operator-guide` |
+| Explain one subsystem to someone who is in the session and can say "still blurry" | `ceh-agent-coding-contract:explain-until-understood` |
 | Explain what is in the repo and how it works, component by component | **this skill** |
 
 Running the mapper first is cheap and gives a good inventory to explain against — but never required.

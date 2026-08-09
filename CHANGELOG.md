@@ -5,6 +5,69 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.29.0] — 2026-08-09
+
+A new skill in `ceh-agent-coding-contract`, `explain-until-understood`, for the moment when someone
+needs to understand code rather than change it. It comes out of a session where three attempts at
+explaining the same two concepts failed and the fourth worked. Every failed attempt had restated
+the previous one with more words; the one that worked opened by defining the primitives the earlier
+three had all assumed. That is the skill's content — establish foundations before the specific case,
+verify claims by running them rather than describing them, draw structure and time in ASCII, frame a
+subtle failure as "what you would wrongly conclude", and when an explanation misses, change the
+representation instead of restating it.
+
+The plugin choice was the argued part. `ceh-documentation` was wrong: every skill there produces a
+persisted artifact for a third party, and this one's output is a conversation. `ceh-dev-tools` is
+the closest sibling by content but is per-need tooling, so it is not loaded when someone says "I'm
+lost" mid-session. `ceh-agent-coding-contract` is the plugin loaded in every session, which is what
+makes the skill reachable at all. Its manifest description widened from "agent coding contract" to
+"agent behavior contract" to admit a second skill that is not about writing code — `usage-limit-handoff`
+was the first.
+
+`disable-model-invocation: true` is set, so the skill never auto-fires; it is typed, like
+`refactor-repo`. That removed any trigger competition with `ceh-dev-tools:explain-codebase` and let
+that skill's frontmatter stay exactly as it was. The two skills are genuinely different jobs — one
+writes a repo-wide file for an absent reader and has an accounting requirement, the other holds a
+conversation with a present reader and has an escalation ladder for when it misses — but three of
+their rules are identical, so those are now copied word for word and registered in
+`CROSS_REFERENCES.md` with `explain-codebase` as canonical.
+
+An audit against eight scenarios after the skill was written found five gaps, all fixed before
+release. Four were coverage: a release catch-up and an unfamiliar tool both fell outside "read the
+real code first", a cold invocation had no way to locate its rung on the escalation ladder, and
+nothing scaled the procedure down for a one-line question. The fifth was safety — "run the tool, the
+command, the throwaway script" authorized a state-changing command as an illustration, which the
+contract's Validation Policy requires be requested first.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.9.0 |
+| `ceh-dev-tools` | v1.2.1 |
+
+### Added
+
+- **`ceh-agent-coding-contract` / `explain-until-understood`** — manual-only skill for explaining a
+  subsystem, a design, a set of changes, or an unfamiliar tool to the person in the session. Seven
+  procedure steps, the prose → steps → pictures → primitives escalation ladder with the rule that a
+  miss at pictures means a skipped foundation, an explicit boundary on persisting the explanation
+  (nothing by default, `.agents_workspace/` scratch notes in scope, repo docs hand off), and a
+  scale-to-the-ask clause so a one-line question does not draw all seven steps. Writes no files.
+- `CROSS_REFERENCES.md` — an entry registering the three rules shared word for word between
+  `explain-codebase` (canonical) and `explain-until-understood`: "Evidence over inference", "Don't
+  paste code", and "Describe what exists today".
+
+### Changed
+
+- **`ceh-agent-coding-contract`** — manifest description widened from "agent coding contract:
+  autonomous execution mode and the five-step task workflow" to "agent behavior contract", covering
+  write-less-code minimalism and how the agent explains its work.
+- **`ceh-dev-tools` / `explain-codebase`** — one row added to its "Not the same as" table pointing at
+  the manual `explain-until-understood` command. Frontmatter unchanged.
+
+---
+
 ## [3.28.2] — 2026-08-07
 
 Every skill in `ceh-git-workflow` asserts "CI must be green" as a pre-merge gate item. Exactly one
