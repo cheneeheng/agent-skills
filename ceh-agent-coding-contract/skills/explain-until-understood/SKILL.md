@@ -2,15 +2,16 @@
 name: explain-until-understood
 disable-model-invocation: true
 description: >-
-  Explain a subsystem, a design, or a set of changes to the person in the session until they can
-  answer questions about it unaided: read the real code rather than a design doc, state the two to
-  four primitives the explanation rests on before using them, verify claims by running them, draw
-  structure and time in ASCII, show the tempting-but-wrong alternative, and close on a transferable
-  rule plus a short self-test. Carries the escalation ladder for an explanation that missed — prose,
-  then numbered steps, then pictures, then back to the primitives — on the rule that you change the
-  representation rather than restate it louder. Writes no files. Not for implementing, fixing, or
-  reviewing code, not for a repo-wide orientation file (use ceh-dev-tools:explain-codebase), and
-  not for user-facing documentation (ceh-documentation).
+  Explain a subsystem, a design, a set of changes, or an unfamiliar tool to the person in the
+  session until they can answer questions about it unaided: read the real thing rather than a
+  design doc or a changelog, state the two to four primitives the explanation rests on before using
+  them, verify claims with read-only runs, draw structure and time in ASCII, show the
+  tempting-but-wrong alternative, and close on a transferable rule plus a short self-test. Carries
+  the escalation ladder for an explanation that missed — prose, then numbered steps, then pictures,
+  then back to the primitives — on the rule that you change the representation rather than restate
+  it louder. Writes no files. Not for implementing, fixing, or reviewing code, not for a repo-wide
+  orientation file (use ceh-dev-tools:explain-codebase), and not for user-facing documentation
+  (ceh-documentation).
 argument-hint: '[what to explain]'
 ---
 
@@ -21,6 +22,11 @@ front of them** — not a reader who followed along. Following along is the fail
 like success, on both sides.
 
 The output is the conversation. This skill writes no files (see *Persisting* below).
+
+**Scale to the ask.** "What does this regex do" earns a sentence, and at most the wrong-conclusion
+framing from step 5. The full seven-step procedure is for something the reader has to hold in their
+head afterwards — a subsystem, a design, a release's worth of change. Running all seven on a
+one-line question is its own way of failing to explain.
 
 ## Not the same as
 
@@ -34,10 +40,12 @@ The output is the conversation. This skill writes no files (see *Persisting* bel
 
 ## Procedure
 
-1. **Read the real code first.** Never explain from memory, from a design doc, or from a summary —
-   including a design doc you wrote yourself earlier in the session. Open the modules, read the
-   docstrings, follow the call sites. A design doc says what the author decided; the code says
-   what is true today.
+1. **Read the real thing first.** Never explain from memory, from a design doc, or from a summary —
+   including a design doc you wrote yourself earlier in the session. What "the real thing" is
+   follows the ask: for repo code, open the modules, read the docstrings, follow the call sites;
+   for "what changed since `<tag>`", the diff and the commit messages, never the changelog; for an
+   unfamiliar tool, its own `--help` plus one run against a real fixture. A design doc says what
+   the author decided; the source says what is true today.
 
 2. **Establish foundations before the specific case.** Name the two to four primitives the whole
    explanation rests on, and state them plainly before using them. Writing "as you know", or
@@ -46,7 +54,9 @@ The output is the conversation. This skill writes no files (see *Persisting* bel
 
 3. **Verify by running.** Run the tool, the command, the throwaway script, and paste the real
    output. "semgrep found 2 hits, lines 22 and 23–27" beats "semgrep would flag the network call."
-   Where you cannot run it, say so in the same breath as the claim.
+   Read-only runs only — a command that changes state is not an illustration, and the contract
+   requires it be requested first. Where you cannot or may not run it, say so in the same breath as
+   the claim.
 
 4. **Draw structure and time; write everything else.** Prose is bad at nesting, ordering,
    before/after, and data flow — use a picture for those, a table or list for the rest. A diagram
@@ -69,7 +79,11 @@ The output is the conversation. This skill writes no files (see *Persisting* bel
 
 ## When it did not land
 
-Do not restate the same explanation with more words. Drop a level and change the representation:
+Do not restate the same explanation with more words. Drop a level and change the representation.
+
+Locate yourself on the ladder by the **form of the last attempt**, not by how many messages have
+passed — invoked cold after a miss, look at what the previous explanation actually was and take the
+next row down.
 
 | Attempt | Representation | If it still misses |
 |---|---|---|

@@ -1498,3 +1498,34 @@ now exist in two files and must be edited together — the cost the duplication 
 registered so it is visible.
 
 **Outcome:** `python tools/validate-plugins/validate.py` green.
+
+### Entry 68
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-09T00:00:00Z
+**Task:** Audit `explain-until-understood` against scenarios and fix what it missed.
+
+**Context:** Five gaps found by walking eight scenarios against the committed skill. Four were
+coverage gaps (a release catch-up and an unfamiliar tool both fell outside "read the real code
+first"; a cold invocation after a miss had no way to locate its rung on the ladder; a one-line
+question would have drawn all seven steps). One was a safety gap: "run the tool, the command, the
+throwaway script" authorized state-changing commands, which the contract's Validation Policy
+requires be requested first.
+
+**Decision:** Fixed all five in place rather than filing them. Each was one to five lines inside an
+existing section — step 1 now names the source per ask kind (code / diff+commits / `--help` plus a
+fixture run), step 3 is limited to read-only runs, the ladder gained a "locate yourself by the form
+of the last attempt" line, and the intro gained a scale-to-the-ask paragraph. No new sections; the
+file went 118 -> 131 lines. Did **not** bump `ceh-agent-coding-contract` past 2.9.0: the MINOR bump
+already on this branch covers "new skill", the skill has not been released or tagged, and a 2.9.1
+would advertise two shipped changes where a reader will find one.
+
+**Impact / Risk:** The scale-to-the-ask paragraph is the only change that can subtract behavior —
+an agent could use it to justify skipping the procedure on something that deserved it. It is scoped
+by example ("what does this regex do") rather than left as a general licence, but it is the clause
+to revisit if the skill starts under-delivering.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. Scenario coverage after the fixes:
+7 of 8 fully covered; "explain this PR before I review it" works through the diff path but sits next
+to `ceh-git-workflow:code-review`, and no boundary text was added for it.
