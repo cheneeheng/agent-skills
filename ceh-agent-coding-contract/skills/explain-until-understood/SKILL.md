@@ -60,7 +60,9 @@ an explanation. Pasted output is evidence, not narration.
    true today.
    The ban covers the *subject* only: a step 2 primitive may come from your own knowledge — say
    plainly that it does. If the subject itself has no artifact you can reach, say so before
-   explaining anything, and mark every claim that follows as unverified.
+   explaining anything, and mark every claim that follows as unverified. A subject that has no
+   artifact to reach in the first place — a protocol, a general technique — is a different case:
+   say once that it comes from knowledge, and do not label every line.
 
 2. **Establish foundations before the specific case.** Name the two to four primitives the whole
    explanation rests on, and state them plainly before using them. Writing "as you know", or
@@ -96,8 +98,8 @@ an explanation. Pasted output is evidence, not narration.
    re-listing the three call sites where it is passed. Follow it with two to five questions they
    should now be able to answer unaided. A wrong answer is the miss signal — go to the ladder
    below, but re-explain only the idea that answer got wrong rather than the whole subject, and a
-   wrong answer about a step 2 primitive goes straight to attempt 4. Silence is not a signal: it reads as "understood" as often as "lost", so end the turn
-   rather than re-explain unprompted.
+   wrong answer about a step 2 primitive goes straight to attempt 4. Silence is not a signal: it
+   reads as "understood" as often as "lost", so end the turn rather than re-explain unprompted.
 
 ## When it did not land
 
@@ -145,8 +147,8 @@ The contract's honesty rules apply unchanged. One addition specific to explainin
 
 **"Not documented" and "I did not check" are different answers.** "Not documented" is a claim, and
 only a grep earns it; with no grep the honest answer is "I did not check". Report which of the two
-you are giving. The same holds for "this path was never verified end to end" —
-often the single most valuable line in the whole explanation.
+you are giving. The same holds for "this path was never verified end to end" — often the single
+most valuable line in the whole explanation.
 
 ## Rules
 
