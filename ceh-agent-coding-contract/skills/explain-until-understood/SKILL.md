@@ -42,16 +42,22 @@ worth of change. Running all seven on a one-line question is its own way of fail
 
 ## Procedure
 
-Steps 1 and 3 are what *you* do. Steps 2 and 4–7 are what the *reply* contains, in that order. Do
-not narrate the doing: "I read the modules and ran the validator" is process, and the reader asked
-for an explanation.
+Step 1 is what *you* do; steps 2 and 4–7 are what the *reply* contains, in that order. Step 3 is
+both — you run the command, and its output goes in the reply next to the claim it supports. Do not
+narrate the doing: "I read the modules and ran the validator" is process, and the reader asked for
+an explanation. Pasted output is evidence, not narration.
 
 1. **Read the real thing first.** Never explain from memory, from a design doc, or from a summary —
    including a design doc you wrote yourself earlier in the session. What "the real thing" is
    follows the ask: for repo code, open the modules, read the docstrings, follow the call sites;
    for "what changed since `<tag>`", the diff — commit messages after it and labelled as claimed
    intent, never the changelog; for an unfamiliar tool, its own `--help` plus one run against a
-   real fixture. A design doc says what the author decided; the source says what is true today.
+   real fixture — read-only, per step 3. A tool with no read-only run is read, not run: say so, and
+   mark its behavior unverified. A design doc says what the author decided; the source says what is
+   true today.
+   The ban covers the *subject* only: a step 2 primitive may come from your own knowledge — say
+   plainly that it does. If the subject itself has no artifact you can reach, say so before
+   explaining anything, and mark every claim that follows as unverified.
 
 2. **Establish foundations before the specific case.** Name the two to four primitives the whole
    explanation rests on, and state them plainly before using them. Writing "as you know", or
@@ -66,8 +72,9 @@ for an explanation.
 
 4. **Draw structure and time; write everything else.** Prose is bad at nesting, ordering,
    before/after, and data flow — use a picture for those, a table or list for the rest. A diagram
-   of a list is noise. In the conversation, draw in ASCII: it renders in a terminal, Mermaid does
-   not. Mermaid is for a file that will be viewed rendered.
+   of a list is noise. In the conversation, draw in ASCII: it renders on every surface, while
+   Mermaid renders only where the reader's client draws it — a terminal does not. Mermaid is for a
+   file that will be viewed rendered.
 
 5. **Frame failure as "what you would wrongly conclude".** Not "this is a bug" but "you would read
    that as reconcile routing to verdict, and go debug the rule ladder — and the rule ladder is
@@ -80,19 +87,23 @@ for an explanation.
 7. **Close with the transferable rule, then a self-test.** One sentence the reader can apply to
    the next case — "pass context explicitly wherever someone else's scheduler owns the task" beats
    re-listing the three call sites where it is passed. Follow it with two to five questions they
-   should now be able to answer unaided. Their answers, or their silence, tell you whether step 2
-   held.
+   should now be able to answer unaided. A wrong answer is the miss signal — go to the ladder
+   below. Silence is not a signal: it reads as "understood" as often as "lost", so end the turn
+   rather than re-explain unprompted.
 
 ## When it did not land
 
 Do not restate the same explanation with more words. Drop a level and change the representation.
-Only the representation changes: a re-explanation still closes on step 7's rule and self-test,
-because the self-test is how you find out whether the new form landed.
+Only the representation changes: a re-explanation still closes on step 7's rule and self-test at
+the scale the first attempt was pitched at — one question is enough for a small ask — because the
+self-test is how you find out whether the new form landed.
 
 Locate yourself on the ladder by the **form of the last attempt**, not by how many messages have
 passed — invoked cold after a miss, look at what the previous explanation actually was and take the
 next row down. A table is attempt 1, not attempt 3: it lays out facts side by side but carries no
 structure, ordering, or flow, so a reader stuck on *how the parts connect* gains nothing from one.
+A prose explanation carrying one diagram is attempt 1 too — that is step 4 done right, not the
+ladder skipped ahead. Attempt 3 is the explanation rebuilt so that every step has its own picture.
 
 | Attempt | Representation | If it still misses |
 |---|---|---|

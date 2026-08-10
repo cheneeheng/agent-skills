@@ -1586,3 +1586,74 @@ still close a re-explanation. `validate.py` green. A fourth defect is left open 
 code" three-line ceiling loses the mechanism when a constant *is* the behavior; it is a
 `CROSS_REFERENCES.md` shared block with `ceh-dev-tools:explain-codebase`, so it needs a two-file
 change, not a one-word edit.
+
+---
+
+### Entry 71
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-10T22:30:00+02:00
+**Task:** Second scenario pass over `explain-until-understood`; fix what the scenarios broke
+
+**Context:** Four scenarios were walked against the skill text. Three hit a contradiction or a
+dead end, one was judged clean. The ambiguity worth recording is scenario 2: the escalation ladder
+says to locate yourself by "the form of the last attempt", but step 4 of the procedure tells the
+first explanation to draw structure in ASCII. A correct first attempt therefore contains a diagram,
+and the ladder's row 3 is "one ASCII diagram per step" — so an agent invoked cold after one good
+miss would place itself at row 3 and jump to rebuilding the primitives, skipping numbered steps
+entirely. The text already disambiguated the same trap for tables and not for diagrams.
+
+**Decision:** Treated the omission as the defect rather than the procedure. A prose explanation
+carrying one diagram is attempt 1; attempt 3 is the explanation rebuilt so every step has its own
+picture. The alternative — telling step 4 to hold diagrams back on the first pass — would trade a
+worse first explanation for a tidier ladder.
+
+**Impact / Risk:** The ladder now depends on a distinction of degree (one picture vs one per step).
+A borderline case may still be mis-located, but it lands one row off rather than two.
+
+**Outcome:** Two further fixes. Step 1's "never explain from memory" was scoped to the subject,
+because step 2 requires stating primitives that often come from knowledge, and because the ask may
+have no artifact within reach at all — that case now has a defined move (say so, mark the claims
+unverified) instead of dead-ending. The "When it did not land" carryover sentence, added in the
+previous pass, made step 7's rule and self-test unconditional and so contradicted "Scale to the
+ask"; it now scales to the pitch of the first attempt. `ceh-agent-coding-contract/README.md` still
+claimed "Writes no files", which the previous pass had already corrected in the SKILL.md but not
+the README row. Scenario 4 (a subsystem whose behavior *is* a constant table, against the "Don't
+paste code" ceiling — the defect left open in Entry 70) was re-examined and judged not a defect:
+step 4 already routes a constant table to a table, so no code paste is needed and no two-file
+`CROSS_REFERENCES.md` change is warranted. Plugin stays at 2.9.1 — the branch bump from 2.9.0
+already covers these content edits. `validate.py` green.
+
+---
+
+### Entry 72
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-10T22:30:00+02:00
+**Task:** Second scenario-based evaluation of `explain-until-understood`; fix defects found
+
+**Context:** Four scenarios exposed problems. Two were self-contradictions (step 3 classified as
+non-reply work while mandating pasted output; step 1 mandating a tool run with no read-only limit
+that step 3 imposes). One was an over-claim that invites bad behaviour (step 7 reading *silence* as
+evidence about comprehension, which licenses an unprompted re-explanation). One was a factual
+over-claim (step 4 asserting Mermaid does not render in "the conversation" — true in a terminal,
+false in the desktop/web/IDE clients, and the Anti-patterns line already stated it conditionally).
+Two further candidates were rejected: no handling for a bare `/explain-until-understood` with no
+argument (the agent takes the subject from context — no dead-end), and no sampling guidance for a
+very large diff (judgment, not a rule).
+
+**Decision:** Fixed all four in place, minimally. Step 3 is now labelled as both a doing step and a
+reply-content step, with "pasted output is evidence, not narration". Step 1's tool run is qualified
+"read-only, per step 3", with the no-read-only-run fallback stated. Step 7 wires a wrong answer to
+the ladder and rules silence out as a signal. Step 4 now conditions Mermaid on the reader's client,
+matching the Anti-patterns wording. No version bump: the plugin was already moved to 2.9.1 on this
+unmerged branch for the previous fix round. No `CROSS_REFERENCES.md` propagation: all four edits are
+in Procedure prose, not the shared "Rules" block.
+
+**Impact / Risk:** Text-only change to one skill. Risk is added length in the Procedure; each fix is
+one clause. The known-open item from Entry 71 (the "Don't paste code" three-line ceiling losing the
+mechanism when a constant *is* the behavior) is still open — it needs the two-file shared-block edit.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green.
