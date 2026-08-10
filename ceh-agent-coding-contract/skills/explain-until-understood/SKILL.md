@@ -29,6 +29,9 @@ framing from step 5. Step 1 is the one step that never scales away — the one-s
 only right because you opened the file. Everything else does: the full seven-step procedure is for
 something the reader has to hold in their head afterwards — a subsystem, a design, a release's
 worth of change. Running all seven on a one-line question is its own way of failing to explain.
+The other end has a limit too: when the subject is larger than one explanation can carry, name the
+slices, explain one, and say what the others are. A compressed tour of all of it leaves the reader
+able to answer nothing.
 
 ## Not the same as
 
@@ -67,8 +70,10 @@ an explanation. Pasted output is evidence, not narration.
 3. **Verify by running.** Run the tool, the command, the throwaway script, and paste the real
    output. "semgrep found 2 hits, lines 22 and 23–27" beats "semgrep would flag the network call."
    Read-only runs only — a command that changes state is not an illustration, and the contract
-   requires it be requested first. Where you cannot or may not run it, say so in the same breath as
-   the claim.
+   requires it be requested first. Cheap, too: a throwaway snippet or one targeted command needs no
+   permission, while a full test suite, a build, or a repo-wide lint stays contract-gated even
+   though it changes nothing — ask for it, or cite output that already exists. Where you cannot or
+   may not run it, say so in the same breath as the claim.
 
 4. **Draw structure and time; write everything else.** Prose is bad at nesting, ordering,
    before/after, and data flow — use a picture for those, a table or list for the rest. A diagram
@@ -78,7 +83,9 @@ an explanation. Pasted output is evidence, not narration.
 
 5. **Frame failure as "what you would wrongly conclude".** Not "this is a bug" but "you would read
    that as reconcile routing to verdict, and go debug the rule ladder — and the rule ladder is
-   fine." The wrong conclusion is what makes a subtle failure memorable.
+   fine." The wrong conclusion is what makes a subtle failure memorable. The step frames a failure
+   the code actually has — if reading it turned up none, say the path is straightforward and move
+   on. An invented failure mode breaks the evidence rule.
 
 6. **Show the tempting-but-wrong alternative.** For any non-obvious design, name the simpler thing
    a reader would reach for and show precisely where it breaks. This is what turns "the code does
@@ -88,7 +95,8 @@ an explanation. Pasted output is evidence, not narration.
    the next case — "pass context explicitly wherever someone else's scheduler owns the task" beats
    re-listing the three call sites where it is passed. Follow it with two to five questions they
    should now be able to answer unaided. A wrong answer is the miss signal — go to the ladder
-   below. Silence is not a signal: it reads as "understood" as often as "lost", so end the turn
+   below, but re-explain only the idea that answer got wrong rather than the whole subject, and a
+   wrong answer about a step 2 primitive goes straight to attempt 4. Silence is not a signal: it reads as "understood" as often as "lost", so end the turn
    rather than re-explain unprompted.
 
 ## When it did not land
@@ -109,7 +117,7 @@ ladder skipped ahead. Attempt 3 is the explanation rebuilt so that every step ha
 |---|---|---|
 | 1 | prose, tables, and code references | go to step-by-step |
 | 2 | numbered steps, one idea each | go to pictures |
-| 3 | one ASCII diagram per step | stop escalating — you skipped step 2 |
+| 3 | one ASCII diagram per step | stop adding pictures — go to attempt 4 |
 | 4 | define the primitives, then rebuild the explanation on them | ask which sentence broke |
 
 A miss at attempt 3 is almost never a missing detail. It is a foundation the first three attempts
@@ -135,15 +143,18 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 
 The contract's honesty rules apply unchanged. One addition specific to explaining:
 
-**"Not documented" and "I did not check" are different answers.** Grep before giving either, and
-report which one you are giving. The same holds for "this path was never verified end to end" —
+**"Not documented" and "I did not check" are different answers.** "Not documented" is a claim, and
+only a grep earns it; with no grep the honest answer is "I did not check". Report which of the two
+you are giving. The same holds for "this path was never verified end to end" —
 often the single most valuable line in the whole explanation.
 
 ## Rules
 
 - **Evidence over inference.** Unclear purpose is written as "purpose unclear — checked imports and
   call sites, no references found", never guessed at. Never invent a responsibility.
-- **Don't paste code.** A signature or a three-line snippet is the ceiling.
+- **Don't paste code.** A signature or a three-line snippet is the ceiling. A literal that *is* the
+  behavior — a constant, a threshold, a regex, a status string — is quoted verbatim and does not
+  count against that ceiling; paraphrasing a value loses the mechanism.
 - **Describe what exists today**, not what was planned or is half-built.
 
 ## Anti-patterns

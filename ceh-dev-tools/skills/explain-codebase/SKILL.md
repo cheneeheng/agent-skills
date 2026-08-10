@@ -194,6 +194,8 @@ and what was checked.
 - **Not a code review.** No quality verdicts, no refactor proposals. Problems you notice go into
   *Gaps and oddities* as facts.
 - **Describe what exists today**, not what was planned or is half-built.
-- **Don't paste code.** A signature or a three-line snippet is the ceiling.
+- **Don't paste code.** A signature or a three-line snippet is the ceiling. A literal that *is* the
+  behavior — a constant, a threshold, a regex, a status string — is quoted verbatim and does not
+  count against that ceiling; paraphrasing a value loses the mechanism.
 - **Depth follows weight.** Core components earn paragraphs; repo meta earns a clause.
 - **Regenerate, don't patch.** Re-run the skill and overwrite when the repo has moved on.
