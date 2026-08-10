@@ -1529,3 +1529,60 @@ to revisit if the skill starts under-delivering.
 **Outcome:** `python tools/validate-plugins/validate.py` green. Scenario coverage after the fixes:
 7 of 8 fully covered; "explain this PR before I review it" works through the diff path but sits next
 to `ceh-git-workflow:code-review`, and no boundary text was added for it.
+
+---
+
+### Entry 69
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-10T00:00:00Z
+**Task:** Fix four defects found evaluating `ceh-agent-coding-contract:explain-until-understood`
+
+**Context:** The routing defect was that no skill owns "a developer-facing explainer of one
+subsystem, written into `docs/`" — `user-operator-guide` targets product users, and
+`document-architecture` produces diagrams plus decision records. Two fixes were available:
+create a new skill to own the case, or document the gap inside the existing skill.
+
+**Decision:** Documented the gap. The user asked to fix defects in an existing skill, not to add a
+component; a new skill would have meant a MINOR bump, two README tables, and a new triggering
+surface competing with `document-architecture`. The skill now names the case as unowned and points
+at the nearest fit, stating what that skill will do to the material.
+
+**Impact / Risk:** The gap stays open. If it recurs, the right move is a real owner rather than
+more prose in this skill.
+
+**Outcome:** All four defects closed; `validate.py` green. Frontmatter description left unchanged
+(minimal diff) — it still describes the ladder accurately after the table clarification.
+
+---
+
+### Entry 70
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-10T00:00:00Z
+**Task:** Close three defects found running scenarios against `explain-until-understood`
+
+**Context:** Entry 69 documented the unowned case (a developer-facing explainer of one subsystem
+written into `docs/`) but named no exit — the skill told the agent to say the gap out loud and
+then stopped, while the bullet above it forbids writing anything into the repo. An agent hitting
+that case had no defined next move. Closing it required deciding whether the skill may ever write
+a repo path.
+
+**Decision:** Gave the skill one repo write, scoped to the unowned case and gated on the user
+still wanting the file after the gap is named. The alternative — refuse and let the user re-ask
+without the skill loaded — discards the explanation's shape, which is the only thing this skill
+produces. The two "writes no files" claims (frontmatter and body intro) were corrected to "by
+default", since the `.agents_workspace/` scratch-note exception already made them false.
+
+**Impact / Risk:** The no-files guarantee is now conditional, so the skill can create a repo file
+the user must review. Both exceptions are user-initiated and named in one place.
+
+**Outcome:** Also fixed: step 1 demoted commit messages to claimed intent read after the diff
+(they were listed as source while the changelog was banned for being author-authored), and the
+escalation ladder now states that only the representation changes, so step 7's rule and self-test
+still close a re-explanation. `validate.py` green. A fourth defect is left open — the "Don't paste
+code" three-line ceiling loses the mechanism when a constant *is* the behavior; it is a
+`CROSS_REFERENCES.md` shared block with `ceh-dev-tools:explain-codebase`, so it needs a two-file
+change, not a one-word edit.

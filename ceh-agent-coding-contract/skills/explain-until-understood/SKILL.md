@@ -9,9 +9,9 @@ description: >-
   tempting-but-wrong alternative, and close on a transferable rule plus a short self-test. Carries
   the escalation ladder for an explanation that missed — prose, then numbered steps, then pictures,
   then back to the primitives — on the rule that you change the representation rather than restate
-  it louder. Writes no files. Not for implementing, fixing, or reviewing code, not for a repo-wide
-  orientation file (use ceh-dev-tools:explain-codebase), and not for user-facing documentation
-  (ceh-documentation).
+  it louder. Writes no files by default. Not for implementing, fixing, or reviewing code, not for a
+  repo-wide orientation file (use ceh-dev-tools:explain-codebase), and not for user-facing
+  documentation (ceh-documentation).
 argument-hint: '[what to explain]'
 ---
 
@@ -21,12 +21,14 @@ The target is a reader who can answer questions about the system **without the e
 front of them** — not a reader who followed along. Following along is the failure mode that feels
 like success, on both sides.
 
-The output is the conversation. This skill writes no files (see *Persisting* below).
+The output is the conversation. By default this skill writes no files; the two exceptions are in
+*Persisting* below.
 
 **Scale to the ask.** "What does this regex do" earns a sentence, and at most the wrong-conclusion
-framing from step 5. The full seven-step procedure is for something the reader has to hold in their
-head afterwards — a subsystem, a design, a release's worth of change. Running all seven on a
-one-line question is its own way of failing to explain.
+framing from step 5. Step 1 is the one step that never scales away — the one-sentence answer is
+only right because you opened the file. Everything else does: the full seven-step procedure is for
+something the reader has to hold in their head afterwards — a subsystem, a design, a release's
+worth of change. Running all seven on a one-line question is its own way of failing to explain.
 
 ## Not the same as
 
@@ -40,12 +42,16 @@ one-line question is its own way of failing to explain.
 
 ## Procedure
 
+Steps 1 and 3 are what *you* do. Steps 2 and 4–7 are what the *reply* contains, in that order. Do
+not narrate the doing: "I read the modules and ran the validator" is process, and the reader asked
+for an explanation.
+
 1. **Read the real thing first.** Never explain from memory, from a design doc, or from a summary —
    including a design doc you wrote yourself earlier in the session. What "the real thing" is
    follows the ask: for repo code, open the modules, read the docstrings, follow the call sites;
-   for "what changed since `<tag>`", the diff and the commit messages, never the changelog; for an
-   unfamiliar tool, its own `--help` plus one run against a real fixture. A design doc says what
-   the author decided; the source says what is true today.
+   for "what changed since `<tag>`", the diff — commit messages after it and labelled as claimed
+   intent, never the changelog; for an unfamiliar tool, its own `--help` plus one run against a
+   real fixture. A design doc says what the author decided; the source says what is true today.
 
 2. **Establish foundations before the specific case.** Name the two to four primitives the whole
    explanation rests on, and state them plainly before using them. Writing "as you know", or
@@ -80,14 +86,17 @@ one-line question is its own way of failing to explain.
 ## When it did not land
 
 Do not restate the same explanation with more words. Drop a level and change the representation.
+Only the representation changes: a re-explanation still closes on step 7's rule and self-test,
+because the self-test is how you find out whether the new form landed.
 
 Locate yourself on the ladder by the **form of the last attempt**, not by how many messages have
 passed — invoked cold after a miss, look at what the previous explanation actually was and take the
-next row down.
+next row down. A table is attempt 1, not attempt 3: it lays out facts side by side but carries no
+structure, ordering, or flow, so a reader stuck on *how the parts connect* gains nothing from one.
 
 | Attempt | Representation | If it still misses |
 |---|---|---|
-| 1 | prose with code references | go to step-by-step |
+| 1 | prose, tables, and code references | go to step-by-step |
 | 2 | numbered steps, one idea each | go to pictures |
 | 3 | one ASCII diagram per step | stop escalating — you skipped step 2 |
 | 4 | define the primitives, then rebuild the explanation on them | ask which sentence broke |
@@ -104,6 +113,12 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
   re-read later.
 - **Anything that lands in the repo** — `docs/`, README, architecture notes — is a different job.
   Hand off to the skill that owns it (see *Not the same as*) rather than writing it here.
+- **One case has no owner:** a developer-facing explainer of a single subsystem, written into
+  `docs/`. It is neither a whole-repo orientation file, nor product documentation, nor a decision
+  record. Say that plainly instead of forcing a fit — `ceh-architecture:document-architecture` is
+  the nearest, and it will reshape the material into diagrams plus Key Decisions rather than
+  preserve the explanation you just gave. Having named the gap, write the file yourself if the user
+  still wants it, keeping the explanation's shape. This is the one repo path this skill may write.
 
 ## Honesty
 
