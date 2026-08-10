@@ -5,6 +5,70 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.29.1] — 2026-08-10
+
+Four more scenario passes over `explain-until-understood`, the skill v3.29.0 shipped. The eight-
+scenario audit before that release found gaps in what the skill *covered*; these passes found
+places where the text the skill already had either dead-ended, contradicted itself, or pushed the
+agent toward output it cannot honestly produce. That is a different class of defect, and it only
+shows up by walking a reader through the procedure rather than checking the procedure has a step
+for each case.
+
+The sharpest one was in the escalation ladder, the part of the skill that exists precisely for when
+an explanation has already failed. Attempt 3's next-step cell read "stop escalating — you skipped
+step 2", while attempt 4 is *defining the primitives*, which is step 2. An agent reading the table
+literally stopped one row short of the fix the prose underneath then prescribed. Two others were
+self-contradictions: "grep before giving either" made the grep erase one of the two answers it was
+meant to choose between, and step 3 gated state-changing commands while leaving a full test suite or
+build — read-only, expensive, and gated by the contract — allowed by its own wording.
+
+The remaining fixes are about what the skill demands of a reply. Step 5 is listed as required reply
+content, so an agent explaining straightforward code was pressed to produce a "what you would
+wrongly conclude" for code that has no subtle failure — a fabrication, against the skill's own
+evidence rule. Step 7 routed any wrong self-test answer into a full re-explanation, when a wrong
+answer localizes the miss and the rest landed. And step 1 had one branch for "no artifact", covering
+both a repo file behind a wall and a subject that has no artifact by nature, so explaining a
+protocol produced every sentence tagged unverified.
+
+One fix crosses plugins. The shared "Don't paste code" rule capped snippets at three lines with no
+exception, which made an agent paraphrase a constant, threshold, regex, or status string that *is*
+the behavior — and a paraphrased value loses the mechanism. Such a literal is now quoted verbatim
+outside the ceiling. That bullet is a `CROSS_REFERENCES.md` shared block, so the same wording landed
+in `explain-codebase` as canonical and the block description was updated with it.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.9.1 |
+| `ceh-dev-tools` | v1.2.2 |
+
+### Fixed
+
+- **`ceh-agent-coding-contract` / `explain-until-understood`** — escalation ladder no longer
+  dead-ends at attempt 3; the Honesty rule no longer makes a grep erase the answer it selects
+  between; step 3 now gates read-only-but-heavy runs (test suite, build, repo-wide lint) as the
+  contract does, not just state-changing ones; step 5 permits saying a path is straightforward
+  instead of inventing a failure mode; step 7 scopes a re-explanation to the idea the wrong answer
+  missed, and routes a wrong answer about a primitive straight to attempt 4; step 1 separates an
+  artifact you cannot reach (mark every claim unverified) from a subject that has none by nature
+  (say once that it comes from knowledge); *Scale to the ask* gains an upper bound — name the slices
+  and explain one rather than compressing a subject too large for a single explanation.
+- Earlier passes on the same branch: the *Persisting* section granted the one repo path it had
+  described as unowned and then forbidden, `git log` was ordered after the diff and labelled claimed
+  intent for a "what changed since `<tag>`" ask, the ladder stated what carries over between
+  attempts, step 3 was named as both what you do and what the reply contains, an unfamiliar tool
+  with no read-only run got a defined move, and silence after a self-test stopped reading as a miss
+  signal.
+
+### Changed
+
+- **`ceh-dev-tools` / `explain-codebase`** and **`explain-until-understood`** — the shared "Don't
+  paste code" rule now exempts a literal that *is* the behavior (a constant, threshold, regex, or
+  status string), quoted verbatim. `CROSS_REFERENCES.md` updated to match.
+
+---
+
 ## [3.29.0] — 2026-08-09
 
 A new skill in `ceh-agent-coding-contract`, `explain-until-understood`, for the moment when someone
