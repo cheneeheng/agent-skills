@@ -483,13 +483,14 @@ the baseline wording changes anywhere, change it everywhere.
 **What is shared:** three bullets, word for word — "Evidence over inference" (unclear purpose is
 written as "purpose unclear — checked imports and call sites, no references found", never guessed
 at; never invent a responsibility), "Don't paste code" (a signature or a three-line snippet is the
-ceiling), and "Describe what exists today, not what was planned or is half-built".
+ceiling, with a literal that *is* the behavior quoted verbatim outside that ceiling), and "Describe
+what exists today, not what was planned or is half-built".
 
 **What diverges:**
 - `explain-codebase` adds four rules bound to producing a file: not a code review, depth follows
   weight, regenerate rather than patch, and the accounting requirement over the whole inventory.
 - `explain-until-understood` adds the rule that has no meaning without a live reader: "not
-  documented" and "I did not check" are different answers, so grep before giving either.
+  documented" and "I did not check" are different answers, and only a grep earns the first.
 - The two skills also cross-link in prose (a "Not the same as" row each way) — that pointer is not
   a shared block and does not need mirroring when these rules change.
 

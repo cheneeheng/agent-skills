@@ -9,9 +9,9 @@ description: >-
   tempting-but-wrong alternative, and close on a transferable rule plus a short self-test. Carries
   the escalation ladder for an explanation that missed — prose, then numbered steps, then pictures,
   then back to the primitives — on the rule that you change the representation rather than restate
-  it louder. Writes no files. Not for implementing, fixing, or reviewing code, not for a repo-wide
-  orientation file (use ceh-dev-tools:explain-codebase), and not for user-facing documentation
-  (ceh-documentation).
+  it louder. Writes no files by default. Not for implementing, fixing, or reviewing code, not for a
+  repo-wide orientation file (use ceh-dev-tools:explain-codebase), and not for user-facing
+  documentation (ceh-documentation).
 argument-hint: '[what to explain]'
 ---
 
@@ -21,12 +21,17 @@ The target is a reader who can answer questions about the system **without the e
 front of them** — not a reader who followed along. Following along is the failure mode that feels
 like success, on both sides.
 
-The output is the conversation. This skill writes no files (see *Persisting* below).
+The output is the conversation. By default this skill writes no files; the two exceptions are in
+*Persisting* below.
 
 **Scale to the ask.** "What does this regex do" earns a sentence, and at most the wrong-conclusion
-framing from step 5. The full seven-step procedure is for something the reader has to hold in their
-head afterwards — a subsystem, a design, a release's worth of change. Running all seven on a
-one-line question is its own way of failing to explain.
+framing from step 5. Step 1 is the one step that never scales away — the one-sentence answer is
+only right because you opened the file. Everything else does: the full seven-step procedure is for
+something the reader has to hold in their head afterwards — a subsystem, a design, a release's
+worth of change. Running all seven on a one-line question is its own way of failing to explain.
+The other end has a limit too: when the subject is larger than one explanation can carry, name the
+slices, explain one, and say what the others are. A compressed tour of all of it leaves the reader
+able to answer nothing.
 
 ## Not the same as
 
@@ -40,12 +45,24 @@ one-line question is its own way of failing to explain.
 
 ## Procedure
 
+Step 1 is what *you* do; steps 2 and 4–7 are what the *reply* contains, in that order. Step 3 is
+both — you run the command, and its output goes in the reply next to the claim it supports. Do not
+narrate the doing: "I read the modules and ran the validator" is process, and the reader asked for
+an explanation. Pasted output is evidence, not narration.
+
 1. **Read the real thing first.** Never explain from memory, from a design doc, or from a summary —
    including a design doc you wrote yourself earlier in the session. What "the real thing" is
    follows the ask: for repo code, open the modules, read the docstrings, follow the call sites;
-   for "what changed since `<tag>`", the diff and the commit messages, never the changelog; for an
-   unfamiliar tool, its own `--help` plus one run against a real fixture. A design doc says what
-   the author decided; the source says what is true today.
+   for "what changed since `<tag>`", the diff — commit messages after it and labelled as claimed
+   intent, never the changelog; for an unfamiliar tool, its own `--help` plus one run against a
+   real fixture — read-only, per step 3. A tool with no read-only run is read, not run: say so, and
+   mark its behavior unverified. A design doc says what the author decided; the source says what is
+   true today.
+   The ban covers the *subject* only: a step 2 primitive may come from your own knowledge — say
+   plainly that it does. If the subject itself has no artifact you can reach, say so before
+   explaining anything, and mark every claim that follows as unverified. A subject that has no
+   artifact to reach in the first place — a protocol, a general technique — is a different case:
+   say once that it comes from knowledge, and do not label every line.
 
 2. **Establish foundations before the specific case.** Name the two to four primitives the whole
    explanation rests on, and state them plainly before using them. Writing "as you know", or
@@ -55,17 +72,22 @@ one-line question is its own way of failing to explain.
 3. **Verify by running.** Run the tool, the command, the throwaway script, and paste the real
    output. "semgrep found 2 hits, lines 22 and 23–27" beats "semgrep would flag the network call."
    Read-only runs only — a command that changes state is not an illustration, and the contract
-   requires it be requested first. Where you cannot or may not run it, say so in the same breath as
-   the claim.
+   requires it be requested first. Cheap, too: a throwaway snippet or one targeted command needs no
+   permission, while a full test suite, a build, or a repo-wide lint stays contract-gated even
+   though it changes nothing — ask for it, or cite output that already exists. Where you cannot or
+   may not run it, say so in the same breath as the claim.
 
 4. **Draw structure and time; write everything else.** Prose is bad at nesting, ordering,
    before/after, and data flow — use a picture for those, a table or list for the rest. A diagram
-   of a list is noise. In the conversation, draw in ASCII: it renders in a terminal, Mermaid does
-   not. Mermaid is for a file that will be viewed rendered.
+   of a list is noise. In the conversation, draw in ASCII: it renders on every surface, while
+   Mermaid renders only where the reader's client draws it — a terminal does not. Mermaid is for a
+   file that will be viewed rendered.
 
 5. **Frame failure as "what you would wrongly conclude".** Not "this is a bug" but "you would read
    that as reconcile routing to verdict, and go debug the rule ladder — and the rule ladder is
-   fine." The wrong conclusion is what makes a subtle failure memorable.
+   fine." The wrong conclusion is what makes a subtle failure memorable. The step frames a failure
+   the code actually has — if reading it turned up none, say the path is straightforward and move
+   on. An invented failure mode breaks the evidence rule.
 
 6. **Show the tempting-but-wrong alternative.** For any non-obvious design, name the simpler thing
    a reader would reach for and show precisely where it breaks. This is what turns "the code does
@@ -74,22 +96,30 @@ one-line question is its own way of failing to explain.
 7. **Close with the transferable rule, then a self-test.** One sentence the reader can apply to
    the next case — "pass context explicitly wherever someone else's scheduler owns the task" beats
    re-listing the three call sites where it is passed. Follow it with two to five questions they
-   should now be able to answer unaided. Their answers, or their silence, tell you whether step 2
-   held.
+   should now be able to answer unaided. A wrong answer is the miss signal — go to the ladder
+   below, but re-explain only the idea that answer got wrong rather than the whole subject, and a
+   wrong answer about a step 2 primitive goes straight to attempt 4. Silence is not a signal: it
+   reads as "understood" as often as "lost", so end the turn rather than re-explain unprompted.
 
 ## When it did not land
 
 Do not restate the same explanation with more words. Drop a level and change the representation.
+Only the representation changes: a re-explanation still closes on step 7's rule and self-test at
+the scale the first attempt was pitched at — one question is enough for a small ask — because the
+self-test is how you find out whether the new form landed.
 
 Locate yourself on the ladder by the **form of the last attempt**, not by how many messages have
 passed — invoked cold after a miss, look at what the previous explanation actually was and take the
-next row down.
+next row down. A table is attempt 1, not attempt 3: it lays out facts side by side but carries no
+structure, ordering, or flow, so a reader stuck on *how the parts connect* gains nothing from one.
+A prose explanation carrying one diagram is attempt 1 too — that is step 4 done right, not the
+ladder skipped ahead. Attempt 3 is the explanation rebuilt so that every step has its own picture.
 
 | Attempt | Representation | If it still misses |
 |---|---|---|
-| 1 | prose with code references | go to step-by-step |
+| 1 | prose, tables, and code references | go to step-by-step |
 | 2 | numbered steps, one idea each | go to pictures |
-| 3 | one ASCII diagram per step | stop escalating — you skipped step 2 |
+| 3 | one ASCII diagram per step | stop adding pictures — go to attempt 4 |
 | 4 | define the primitives, then rebuild the explanation on them | ask which sentence broke |
 
 A miss at attempt 3 is almost never a missing detail. It is a foundation the first three attempts
@@ -104,20 +134,29 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
   re-read later.
 - **Anything that lands in the repo** — `docs/`, README, architecture notes — is a different job.
   Hand off to the skill that owns it (see *Not the same as*) rather than writing it here.
+- **One case has no owner:** a developer-facing explainer of a single subsystem, written into
+  `docs/`. It is neither a whole-repo orientation file, nor product documentation, nor a decision
+  record. Say that plainly instead of forcing a fit — `ceh-architecture:document-architecture` is
+  the nearest, and it will reshape the material into diagrams plus Key Decisions rather than
+  preserve the explanation you just gave. Having named the gap, write the file yourself if the user
+  still wants it, keeping the explanation's shape. This is the one repo path this skill may write.
 
 ## Honesty
 
 The contract's honesty rules apply unchanged. One addition specific to explaining:
 
-**"Not documented" and "I did not check" are different answers.** Grep before giving either, and
-report which one you are giving. The same holds for "this path was never verified end to end" —
-often the single most valuable line in the whole explanation.
+**"Not documented" and "I did not check" are different answers.** "Not documented" is a claim, and
+only a grep earns it; with no grep the honest answer is "I did not check". Report which of the two
+you are giving. The same holds for "this path was never verified end to end" — often the single
+most valuable line in the whole explanation.
 
 ## Rules
 
 - **Evidence over inference.** Unclear purpose is written as "purpose unclear — checked imports and
   call sites, no references found", never guessed at. Never invent a responsibility.
-- **Don't paste code.** A signature or a three-line snippet is the ceiling.
+- **Don't paste code.** A signature or a three-line snippet is the ceiling. A literal that *is* the
+  behavior — a constant, a threshold, a regex, a status string — is quoted verbatim and does not
+  count against that ceiling; paraphrasing a value loses the mechanism.
 - **Describe what exists today**, not what was planned or is half-built.
 
 ## Anti-patterns
