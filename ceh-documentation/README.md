@@ -39,7 +39,22 @@ Markdown written under `docs/guide/` — a single `index.md` for a focused guide
 - Task-oriented structure — organized by what the reader is trying to do, not by feature
 - Numbered procedures where every step has a verifiable result
 - Prerequisites and warnings before the steps that need them
+- A fixed file-naming scheme — root-level pages keep plain names, subfolder pages are `<PREFIX>-<NN>-<name>.md` (`how-to/HT-01-reset-password.md`), numbered contiguously from `01` per subfolder
 - An **Open items** list of anything assumed or left unverified — never invented detail
+
+### File naming — two rules worth knowing
+
+**Numbers stay contiguous.** The number carries reading order, so there are never gaps. Appending a
+guide at the end takes the next number and renumbers nothing; inserting or deleting one renumbers
+the rest of that subfolder, and every link to a renamed file is updated in the same pass. The
+alternative — append-only numbers with gaps — was rejected because it turns the number into an
+arbitrary ID, at which point numbering earns nothing. Revisit only if these filenames become
+externally referenced (published URLs, tickets, support macros); stable IDs then beat reading order.
+
+**The scheme beats the docs system.** Docusaurus, MkDocs and mdBook derive nav order from filenames,
+which would otherwise compete with the prefix. It does not get to: nav order and page metadata are
+expressed in frontmatter (`sidebar_position`, `title`) or nav config, never by renaming a file out
+of the scheme.
 
 ## Document Types Supported
 

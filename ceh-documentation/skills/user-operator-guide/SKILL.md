@@ -65,19 +65,31 @@ A focused single-topic guide is one file: `docs/guide/index.md`. Anything broade
 
 ```
 docs/guide/
-├── index.md            # overview + table of contents linking every page
+├── index.md            # root level: overview + table of contents linking every page
 ├── getting-started.md
-├── how-to/
-│   ├── reset-password.md
-│   └── export-data.md
-├── operations/         # operator content, its own subtree, never interleaved
-│   ├── install.md
-│   ├── configure.md
-│   └── runbook-<failure>.md
-└── troubleshooting.md
+├── troubleshooting.md
+├── how-to/             # HT
+│   ├── HT-01-reset-password.md
+│   └── HT-02-export-data.md
+└── operations/         # OP — operator content, its own subtree, never interleaved
+    ├── OP-01-install.md
+    ├── OP-02-configure.md
+    └── database/       # OP-DB — nested folder chains its parent prefix
+        ├── OP-DB-01-backup.md
+        └── OP-DB-02-restore.md
 ```
 
-If the target docs system (Docusaurus, MkDocs, mdBook) has its own naming/nav/frontmatter conventions, follow them within `docs/guide/`.
+### How to name the files
+
+Files sitting directly in `docs/guide/` keep plain kebab-case names — **no prefix, no number**. Every file inside a subfolder is `<PREFIX>-<NN>-<kebab-name>.md`:
+
+- **Prefix** — a capitalized abbreviation of the subfolder name, as short as stays readable, minimum 2 characters: `how-to/` → `HT`, `operations/` → `OP`, `troubleshooting/` → `TS`. One prefix per subfolder, unique across the whole tree; if two subfolders abbreviate to the same letters, lengthen one of them (`onboarding/` → `ONB` next to `operations/` → `OP`).
+- **Number** — two digits, starting at `01`, restarting at `01` inside each subfolder. `HT-01` and `OP-01` coexist; the prefix keeps them apart.
+- **Reading order** — the number *is* the order the reader should follow, so it stays contiguous. Appending a guide at the end takes the next number and renumbers nothing. Inserting or removing one renumbers the rest of that subfolder — update every link to a renamed file in the same pass. Never leave a gap.
+- **Nested subfolder** — chains its parent prefix and adds its own (`operations/database/` → `OP-DB-`), and starts its own `01` sequence.
+- **At least two files per subfolder.** One file is not a folder: put it at the root level instead, unprefixed and unnumbered. The same applies in reverse — once a root-level topic grows to two or more files, move them into a subfolder and prefix/number them.
+
+This naming scheme wins over any docs-system convention. If the target docs system (Docusaurus, MkDocs, mdBook) needs a particular nav order or page metadata, express it in frontmatter (`sidebar_position`, `title`) or the nav config — never by renaming a file out of the scheme.
 
 ### User guide skeleton
 
@@ -149,7 +161,9 @@ Step standards:
 - [ ] Destructive ops state blast radius and recovery.
 - [ ] Spine is tasks, not a feature dump.
 - [ ] Terminology is consistent throughout.
+- [ ] Every subfolder file is `<PREFIX>-<NN>-<name>.md`; root-level files carry no prefix and no number.
+- [ ] Each subfolder holds at least two files, numbered contiguously from `01`, and every link to a renamed file was updated.
 
 ## Output
 
-All files live under `docs/guide/` — one `index.md` for a focused guide, or a cross-linked tree rooted there with `index.md` as the entry point (Phase 3). Open with a one-line summary: what you produced, the audience, and the file layout if multi-file. List anything assumed or unverified under a final **Open items** heading — never bury invented detail in confident prose.
+All files live under `docs/guide/` — one `index.md` for a focused guide, or a cross-linked tree rooted there with `index.md` as the entry point, root-level files unnumbered and subfolder files named `<PREFIX>-<NN>-<name>.md` (Phase 3). Open with a one-line summary: what you produced, the audience, and the file layout if multi-file. List anything assumed or unverified under a final **Open items** heading — never bury invented detail in confident prose.
