@@ -5,6 +5,49 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.29.2] — 2026-08-11
+
+`user-operator-guide` told an agent to build a cross-linked tree under `docs/guide/` for anything
+broader than a single topic, and then said nothing about what to call the files in it. The example
+tree used plain names — `how-to/reset-password.md`, `operations/install.md` — so every guide invented
+its own layout, and the order a reader should follow the pages in existed only inside `index.md`.
+Sort a subfolder and you learned the alphabet, not the sequence.
+
+Files directly under `docs/guide/` keep plain names. Every file inside a subfolder is now
+`<PREFIX>-<NN>-<name>.md`: a capitalized abbreviation of the subfolder name, at least two characters
+and unique across the tree (`how-to/` → `HT`, `operations/` → `OP`), then a two-digit number
+restarting at `01` in each subfolder. A nested folder chains its parent prefix and starts its own
+sequence — `operations/database/` → `OP-DB-01-backup.md`. A subfolder holds at least two files; one
+file is not a folder, and a root-level topic that grows to two moves down into one.
+
+Two choices in that scheme are the kind that get quietly reversed later, so both carry their
+reasoning in `ceh-documentation/README.md`. **Numbers stay contiguous**: the number *is* reading
+order, so inserting or deleting a guide renumbers the rest of that subfolder and every link to a
+renamed file is updated in the same pass. Appending at the end — the common case — renumbers nothing.
+The alternative, append-only numbers with gaps, was rejected because it demotes the number to an
+arbitrary ID, at which point numbering earns nothing; it only becomes the better trade if these
+filenames ever get referenced from outside the repo. **The scheme beats the docs system**: Docusaurus,
+MkDocs and mdBook derive nav order from filenames and would otherwise compete with the prefix, so
+nav order and page metadata go in frontmatter (`sidebar_position`, `title`) or nav config, never in
+a rename out of the scheme.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-documentation` | v1.1.5 |
+
+### Changed
+
+- **`ceh-documentation` / `user-operator-guide`** — Phase 3 gains a *How to name the files* section
+  and an example tree showing prefixes, per-subfolder numbering and a nested chained prefix; the
+  docs-system deference sentence now points nav order at frontmatter instead of at filenames; Phase 5
+  gains two checklist items (naming shape, contiguous numbering with links updated); the Output
+  section names the scheme. The plugin README documents the two reversible choices and why the
+  alternatives lost.
+
+---
+
 ## [3.29.1] — 2026-08-10
 
 Four more scenario passes over `explain-until-understood`, the skill v3.29.0 shipped. The eight-
