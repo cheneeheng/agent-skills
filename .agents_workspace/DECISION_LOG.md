@@ -1706,3 +1706,36 @@ trigger a renumber — because the perceived cost of contiguous numbering was ov
 from frontmatter; a tool that cannot do that would force revisiting this.
 **Outcome:** Phase 3 naming section updated; no further version bump (1.1.5 already pending, not yet
 committed).
+
+---
+
+### Entry 75
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-11
+**Task:** Salvage the page-furniture and Markdown rules from the abandoned branch
+`docs/guide-file-naming-and-nav` (commit `90ed1b7`, 2026-07-31) onto main as Phase 4.
+
+**Context:** That branch solved the same naming problem with an incompatible scheme — prefix by
+audience (`HT`/`OP` only), numbering global per prefix across the whole tree — and lost to the
+scheme released in v3.29.2 (prefix by subfolder, numbering restarting per subfolder). Its Phase 4
+content is orthogonal to naming and worth keeping, but its prev/next chains were defined per
+audience prefix and therefore crossed directory boundaries.
+**Decision:** Took the Phase 4 content, rebased on the shipped scheme rather than the branch's.
+Chains now run **within a subfolder**, which is where contiguous numbering lives, so prev/next
+links point at siblings and need no `../`. Root-level pages are unnumbered under the shipped scheme
+and so belong to no chain — they get a breadcrumb only, where the branch numbered and chained them
+(`HT-01-getting-started.md`, `HT-90-troubleshooting.md`). Kept the branch's H1-repeats-the-ID rule,
+its line-break table and blank-line rules verbatim in substance, and its bulleted
+When/Prerequisites/Time template — that template edit is the branch's own "stacked bold labels
+become a bullet list" rule applied to itself. Did not merge the branch: a dry-run merge conflicts in
+`SKILL.md` and `DECISION_LOG.md`, and it re-bumps to 1.1.5, a version main already occupies.
+**Impact / Risk:** Phases renumbered 4→5 and 5→6; the only internal phase cross-reference (Output,
+"Phase 3") was updated to "Phases 3-4". Risk is churn for anyone who already generated a guide under
+v3.29.2 — those pages now lack footers. Accepted: the skill tells the agent to edit docs in place,
+so existing trees are not migrated. The branch's decision-log Entry 60 is numbered against a stale
+log (main is at 75) and is not carried over; this entry records its fate instead.
+**Outcome:** `validate.py` passes. `ceh-documentation` bumped 1.1.5 → 1.1.6 in both manifests;
+plugin README gains a "What It Produces" bullet. Branch `docs/guide-file-naming-and-nav` can now be
+deleted — nothing unsalvaged remains in it.

@@ -40,6 +40,7 @@ Markdown written under `docs/guide/` — a single `index.md` for a focused guide
 - Numbered procedures where every step has a verifiable result
 - Prerequisites and warnings before the steps that need them
 - A fixed file-naming scheme — root-level pages keep plain names, subfolder pages are `<PREFIX>-<NN>-<name>.md` (`how-to/HT-01-reset-password.md`), numbered contiguously from `01` per subfolder
+- Page furniture that survives a real renderer — an index breadcrumb and prev/next footer on every subfolder page, and Markdown that breaks lines where it looks like it does
 - An **Open items** list of anything assumed or left unverified — never invented detail
 
 ### File naming — two rules worth knowing
