@@ -5,6 +5,57 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.29.3] — 2026-08-11
+
+v3.29.2 gave `user-operator-guide` a filename for every page and nothing else. A reader who landed
+on `how-to/HT-02-export-data.md` — from a search, a link, a pasted path — had no way back to the
+index and no way on to `HT-03`, and the numbering that encoded reading order was visible only to
+whoever listed the directory. The new Phase 4 closes that: a breadcrumb under the H1, a prev/next
+footer at the bottom of every subfolder page, and an H1 that repeats the file's ID so a printed or
+pasted page still says where it came from. Chains run **within a subfolder**, which is where the
+contiguous numbering lives, so prev/next point at siblings and need no `../`; root-level pages are
+unnumbered, belong to no chain, and get the breadcrumb alone.
+
+The second half of Phase 4 is about Markdown that renders the way it reads in source. A single
+newline is not a line break — two lines separated by one collapse into a paragraph, which is the
+most common way a finished guide arrives looking wrong. The rules that follow are the ones that
+actually bite: blank lines before and after every list, table, fence, blockquote and heading; three
+spaces of indent to keep a nested fence inside a numbered step instead of restarting the list at 1;
+no hard-wrapping at a fixed column. The procedure template in Phase 5 now applies its own rule to
+itself — When/Prerequisites/Time were stacked bold labels relying on single newlines, and are a
+bullet list.
+
+Both halves are salvaged from `docs/guide-file-naming-and-nav` (`90ed1b7`, 2026-07-31), a branch
+that solved the v3.29.2 naming problem a different way — prefix by audience, `HT`/`OP` only,
+numbering global per prefix across the whole tree — and was superseded. Its page-furniture content
+was orthogonal to that disagreement and worth keeping, so it was rebased onto the released scheme
+rather than merged: chains became per-subfolder, and root pages left the chain entirely. The branch
+carries nothing unsalvaged now.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-documentation` | v1.1.6 |
+
+### Added
+
+- **`ceh-documentation` / `user-operator-guide`** — Phase 4 *Page furniture and markdown that
+  renders*: per-page breadcrumb and per-subfolder prev/next footer with dead-link and relative-path
+  rules, `index.md` as the unfootered hub listing every page, H1 repeating the file ID, and a
+  line-break section covering the single-newline trap, blank lines around block elements, 3-space
+  continuation indent, heading levels, and table shape.
+
+### Changed
+
+- **`ceh-documentation` / `user-operator-guide`** — phases renumbered (write-each-procedure 4 → 5,
+  self-review 5 → 6); the Output section now cites Phases 3-4; two self-review checklist items added
+  (navigation present with no dead or cross-chain links; no reliance on a single newline for a
+  break). Renumbering a subfolder now explicitly requires fixing the affected footers, not only the
+  links in prose.
+
+---
+
 ## [3.29.2] — 2026-08-11
 
 `user-operator-guide` told an agent to build a cross-linked tree under `docs/guide/` for anything

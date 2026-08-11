@@ -119,26 +119,78 @@ This naming scheme wins over any docs-system convention. If the target docs syst
 ## Escalation          — who/what to page when the runbook runs out
 ```
 
-## Phase 4 — Write each procedure
+## Phase 4 — Page furniture and markdown that renders
+
+A human reads these pages in a Markdown renderer; nothing parses them. Two faults spoil that more than any other: a page with no way out, and line breaks that silently collapse.
+
+### Every page carries navigation
+
+Put a breadcrumb directly under the H1, and a prev/next/index footer at the bottom. The footer follows `NN` order **within the page's own subfolder** — each subfolder is a separate chain, never linked across.
+
+```markdown
+# HT-02 — Reset a password
+
+[← Guide index](../index.md)
+
+<body>
+
+---
+
+[← HT-01 Change your email](HT-01-change-email.md) · [Guide index](../index.md) · [HT-03 Export data →](HT-03-export-data.md)
+```
+
+- The H1 repeats the file's ID, so a printed or pasted page still says where it came from.
+- The first page in a chain drops the prev link, the last drops the next. Never leave a dead link.
+- Prev/next point at siblings in the same subfolder, so they need no path prefix; the breadcrumb climbs to the root `index.md` — `../index.md` from a subfolder, `../../index.md` from a nested one. Check each link resolves rather than copying the neighbour's footer.
+- Root-level pages are unnumbered and belong to no chain: breadcrumb only, no prev/next.
+- `index.md` gets no footer — it *is* the hub. It lists every page grouped by subfolder in `NN` order, each with a one-line "read this when…".
+- Renumbering a subfolder (Phase 3) means fixing the affected footers in the same pass, not only the links in prose.
+
+### Line-break rules
+
+**A single newline is not a line break.** Two lines separated by one newline render as one paragraph — the most common way a finished guide arrives looking wrong.
+
+| Want | Write |
+|------|-------|
+| A new paragraph | A blank line between the two lines |
+| A hard break inside one paragraph | Two trailing spaces at the end of the first line |
+| A stack of labelled fields | A bullet list — not stacked bold labels |
+
+Prefer the blank line. Trailing spaces are invisible in review and formatters strip them, so use them only where a blank line would wrongly split a block.
+
+Blank lines that carry the same weight:
+
+- One blank line **before and after** every list, table, fenced code block, blockquote, and heading. A list or table glued to the paragraph above it renders as literal text in strict parsers.
+- Inside a numbered step, indent a nested fence or paragraph by **3 spaces** so it stays in the item; any less and the list restarts at 1.
+- One `#` H1 per page, then `##`/`###` — never skip a level.
+- Don't hard-wrap paragraphs at a fixed column. Wrapping is the renderer's job, and hard wraps read badly on a narrow screen.
+- Tables need the header separator row and leading/trailing `|`. A table past ~5 columns is a list in disguise.
+
+## Phase 5 — Write each procedure
 
 ````markdown
 ### <Goal-stated task, e.g. "Rotate the API signing key">
 
-**When:** <triggering condition — for runbooks, the alert/symptom>
-**Prerequisites:** <access, tools, preconditions>
-**Time / impact:** <duration; for ops, whether it causes downtime>
+- **When:** <triggering condition — for runbooks, the alert/symptom>
+- **Prerequisites:** <access, tools, preconditions>
+- **Time / impact:** <duration; for ops, whether it causes downtime>
 
 1. <Action>. <Result the reader can confirm.>
+
 2. <Action>.
+
    ```bash
    actual --command --here
    ```
+
    Expected output:
+
    ```
    the real output to compare against
    ```
 
 **Verify:** <the single check that proves it worked>
+
 **If it fails:** <1-2 likely failure modes + fix, or a link to troubleshooting>
 ````
 
@@ -150,7 +202,7 @@ Step standards:
 - For destructive/irreversible ops, state blast radius and recovery in the same block.
 - Cross-reference, don't repeat: link to the canonical procedure instead of copy-pasting it.
 
-## Phase 5 — Self-review
+## Phase 6 — Self-review
 
 - [ ] Every command, flag, path, env var, UI label comes from a real source — none invented; unverifiable items marked `[VERIFY: …]`.
 - [ ] A reader with only the stated prerequisites can complete each task end to end.
@@ -163,7 +215,9 @@ Step standards:
 - [ ] Terminology is consistent throughout.
 - [ ] Every subfolder file is `<PREFIX>-<NN>-<name>.md`; root-level files carry no prefix and no number.
 - [ ] Each subfolder holds at least two files, numbered contiguously from `01`, and every link to a renamed file was updated.
+- [ ] Every page has its breadcrumb and — inside a subfolder — a prev/next footer; no dead links, no link across two subfolders' chains; `index.md` lists every page.
+- [ ] No two lines rely on a single newline for a break; blank lines surround every list, table, and code fence.
 
 ## Output
 
-All files live under `docs/guide/` — one `index.md` for a focused guide, or a cross-linked tree rooted there with `index.md` as the entry point, root-level files unnumbered and subfolder files named `<PREFIX>-<NN>-<name>.md` (Phase 3). Open with a one-line summary: what you produced, the audience, and the file layout if multi-file. List anything assumed or unverified under a final **Open items** heading — never bury invented detail in confident prose.
+All files live under `docs/guide/` — one `index.md` for a focused guide, or a cross-linked tree rooted there with `index.md` as the entry point, root-level files unnumbered and subfolder files named `<PREFIX>-<NN>-<name>.md`, each page carrying its breadcrumb and prev/next footer (Phases 3-4). Open with a one-line summary: what you produced, the audience, and the file layout if multi-file. List anything assumed or unverified under a final **Open items** heading — never bury invented detail in confident prose.
