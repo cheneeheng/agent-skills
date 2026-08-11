@@ -1657,3 +1657,52 @@ one clause. The known-open item from Entry 71 (the "Don't paste code" three-line
 mechanism when a constant *is* the behavior) is still open — it needs the two-file shared-block edit.
 
 **Outcome:** `python tools/validate-plugins/validate.py` green.
+
+---
+
+### Entry 73
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-11
+**Task:** Add a file-naming convention (`<PREFIX>-<NN>-<name>.md`) to `ceh-documentation:user-operator-guide`.
+
+**Context:** The user specified the prefix/number scheme for subfolder files and the unnumbered root
+level. Two points were left unresolved: (a) how the new scheme interacts with the pre-existing rule
+"if the target docs system (Docusaurus, MkDocs, mdBook) has its own naming/nav conventions, follow
+them"; (b) what to do with a root-level topic that later grows past one file.
+**Decision:** (a) Docs-system conventions keep precedence where the two conflict — Docusaurus and
+MkDocs derive nav and URLs from filenames, so an imposed prefix would break their generated output,
+and the deference rule already existed in the skill. Stated the precedence explicitly instead of
+leaving it implied. (b) Made the two-file rule symmetric: under two files, keep it at root
+unprefixed; at two or more, move into a subfolder and prefix/number it. The user gave the "at least
+2 files" floor for subfolders; the reverse direction follows from it and prevents a stuck state.
+**Impact / Risk:** Low. Risk is that (a) reads as an escape hatch that weakens the new convention on
+docs-site projects — accepted, because generated-nav breakage is the worse failure. Contiguous
+renumbering (the user's choice) means inserts rewrite filenames, so the skill now requires updating
+every cross-link in the same pass; missed links are the main foreseeable defect.
+**Outcome:** SKILL.md Phase 3, Phase 5 checklist and Output updated; plugin README updated;
+`ceh-documentation` bumped 1.1.4 → 1.1.5 in both manifests.
+
+---
+
+### Entry 74
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-11
+**Task:** Reverse the docs-system precedence decided in Entry 73.
+
+**Context:** Entry 73 gave Docusaurus/MkDocs/mdBook naming conventions precedence over the new
+`<PREFIX>-<NN>-<name>.md` scheme, on the grounds that those tools derive nav and URLs from filenames.
+The user overrode it: no docs-system framework is in use, so the escape hatch only weakens the
+convention.
+**Decision:** The naming scheme now wins unconditionally. Docs-system nav order and page metadata
+must be expressed in frontmatter (`sidebar_position`, `title`) or nav config, never by renaming a
+file out of the scheme. Entry 73's reasoning stands for the case it assumed; it no longer applies.
+Also made explicit that appending a guide at the end renumbers nothing — only inserts and deletes
+trigger a renumber — because the perceived cost of contiguous numbering was overstated.
+**Impact / Risk:** Low here (no docs site). If one is adopted later, generated nav must be driven
+from frontmatter; a tool that cannot do that would force revisiting this.
+**Outcome:** Phase 3 naming section updated; no further version bump (1.1.5 already pending, not yet
+committed).
