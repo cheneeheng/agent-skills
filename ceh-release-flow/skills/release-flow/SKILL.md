@@ -35,7 +35,7 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 | 6 | Update CLAUDE.md if project facts/structure changed | surgical edit (or `revise-claude-md` if that plugin is installed) | CLAUDE.md matches reality, or skip logged |
 | 7 | Commit the bump + docs | "commit" → `ceh-git-workflow:commit` | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean |
 | 8 | Open the PR — on repos that allow auto-merge, `open-pr` already queues it here | "open a PR" → `ceh-git-workflow:open-pr` | PR open, self-review + definition-of-done passed |
-| 9 | Merge and delete the branch — if step 8 queued auto-merge, this just confirms it lands; otherwise prefer `--auto` (or a direct merge once green). Don't poll CI by hand | "merge the PR" → `ceh-git-workflow:merge` (auto-merge probe) | CI green, approvals met, merged to `main` |
+| 9 | Merge and clean up — if step 8 queued auto-merge, this just confirms it lands; otherwise prefer `--auto` (or a direct merge once green). Don't poll CI by hand | "merge the PR" → `ceh-git-workflow:merge` (auto-merge probe) | CI green, approvals met, merged to `main`, remote-branch state reported |
 | 10 | Tag and publish the release on `main` | "cut a release" → `ceh-git-workflow:release` | Tag pushed, release created |
 
 ## Step 7 detail — the release commit is not subject-only

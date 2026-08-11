@@ -1739,3 +1739,32 @@ log (main is at 75) and is not carried over; this entry records its fate instead
 **Outcome:** `validate.py` passes. `ceh-documentation` bumped 1.1.5 → 1.1.6 in both manifests;
 plugin README gains a "What It Produces" bullet. Branch `docs/guide-file-naming-and-nav` can now be
 deleted — nothing unsalvaged remains in it.
+
+---
+
+### Entry 76
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-11T00:00:00Z
+**Task:** Remove `--delete-branch` from `gh pr merge` across the skills; report the surviving branch instead.
+
+**Context:** The user reported that Claude Code's auto-mode permission classifier blocks
+`gh pr merge --merge --auto --delete-branch`, so the merge itself fails. The request said "remove it
+from all the skills", which left open whether the other branch-deletion commands in the same files
+(`git branch -d`, `git push origin --delete` in `merge`'s local-branch path and in `hotfix`) were
+also in scope.
+
+**Decision:** Removed the flag only from the four `gh pr merge` invocations (`merge`, `open-pr`), and
+left the standalone git deletion commands untouched — they are separate commands, not the reported
+failure, and removing them would delete capability the user did not ask to lose. Added a
+"Reporting the remote branch" section keyed on `gh api ... --jq .delete_branch_on_merge` so the agent
+tells the user whether the remote branch survived and how to remove it. CHANGELOG history left as
+written (a record of what shipped, not live instructions).
+
+**Impact / Risk:** Remote branches now outlive a merge on repos without "Automatically delete head
+branches"; the mitigation is the required report, not automatic cleanup. If the classifier also
+starts blocking `git push origin --delete`, that path needs the same treatment.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. ceh-git-workflow 3.2.7 → 3.2.8,
+ceh-release-flow 1.1.8 → 1.1.9.

@@ -32,7 +32,9 @@ You merge one PR or one local branch into `main`, then clean up.
 
 - Follow the preloaded merge skill exactly: pre-merge gate, merge commit only (never squash
   or rebase-merge), a merge-commit message that reads on its own, post-merge cleanup
-  (delete remote + local branch, return to `main`, pull).
+  (local branch, return to `main`, pull). Never pass `--delete-branch` — the permission
+  classifier blocks the whole merge command; read `delete_branch_on_merge` instead and report
+  whether the remote branch survives.
 - **Never merge past a red gate.** If CI is red or approvals are missing, prefer queueing
   auto-merge where the repo supports it; otherwise stop and report the gate state.
 - If the branch does not merge cleanly, rebase it on `main` per the skill and re-check the
@@ -42,7 +44,8 @@ You merge one PR or one local branch into `main`, then clean up.
 ## Return format (and nothing else)
 
 - **Merged:** merge-commit sha on `main`, or "queued via auto-merge", or "not merged"
-- **Cleanup:** branch deleted (remote/local), `main` pulled — or what remains
+- **Cleanup:** local branch deleted, `main` pulled, and whether the remote branch still exists
+  (with `git push origin --delete <branch>` when it does)
 - **Blockers:** red gate details, conflicts, or "none".
 
 Do not paste CI logs or diffs back.

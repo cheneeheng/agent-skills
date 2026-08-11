@@ -5,6 +5,57 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [3.29.4] — 2026-08-11
+
+`gh pr merge --merge --auto --delete-branch` no longer runs. Claude Code's auto-mode permission
+classifier reads `--delete-branch` as a destructive flag and blocks the command, so the flag does
+not cost you a deleted branch — it costs you the merge. Every `gh pr merge` in the repo drops it:
+two in `merge` (the auto-merge probe and its direct fallback), two in `open-pr` (the Auto-Merge
+section and the tail of the Command block).
+
+Dropping the flag removes the only thing that deleted the remote branch, so the skills replace it
+with a report rather than pretending the cleanup still happens. `merge` gains a *Reporting the
+remote branch* section: read `gh api repos/{owner}/{repo} --jq .delete_branch_on_merge`, then say
+either that GitHub deleted the branch or that the branch is still there and
+`git push origin --delete <branch>` removes it. The same applies when auto-merge is queued rather
+than merged now — the branch outlives the queue either way. `branch-merger` reports the branch
+state instead of claiming "branch deleted (remote/local)", and `release-flow` step 9 asks for it in
+its gate.
+
+The standalone git deletion commands are untouched. `git branch -d` and `git push origin --delete`
+in the local-branch path and in `hotfix` are separate commands, not the blocked one, and removing
+them would drop cleanup that still works.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.2.8 |
+| `ceh-release-flow` | v1.1.9 |
+
+### Fixed
+
+- **`ceh-git-workflow` / `merge`, `open-pr`** — removed `--delete-branch` from all four
+  `gh pr merge` invocations, with an inline note naming the permission classifier as the reason so
+  it is not re-added.
+
+### Changed
+
+- **`ceh-git-workflow` / `merge`** — new *Reporting the remote branch* section keyed on
+  `delete_branch_on_merge`, covering both the merged-now and queued-auto-merge cases; the
+  description's cleanup summary now says "delete the local branch, report whether the remote branch
+  survived".
+- **`ceh-git-workflow` / `open-pr`** — the Auto-Merge section and the Command block check
+  `delete_branch_on_merge` and tell the user when the branch will still be there after the PR lands.
+- **`ceh-git-workflow` / `branch-merger` agent** — rules ban the flag; the return format reports
+  remote-branch state rather than asserting deletion.
+- **`ceh-release-flow` / `release-flow`** — step 9 renamed "Merge and clean up"; its gate now
+  includes the remote-branch state being reported.
+- **`CROSS_REFERENCES.md`** — the auto-merge probe entry records the `--delete-branch` ban and the
+  `delete_branch_on_merge` check as shared, and the direct-merge fallback as `merge`-only.
+
+---
+
 ## [3.29.3] — 2026-08-11
 
 v3.29.2 gave `user-operator-guide` a filename for every page and nothing else. A reader who landed

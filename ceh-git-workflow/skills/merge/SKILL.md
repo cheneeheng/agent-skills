@@ -6,8 +6,8 @@ description: >-
   main'. Also the merge half of compound requests like 'create a PR, merge it, delete the branch'.
   Covers both the PR-merge case (gh pr merge, including auto-merge) and the local no-PR branch-merge
   case (git merge --no-ff into main), the pre-merge gate (CI green, approvals, rebased, clean
-  history), merge-commit strategy (no squash/rebase-merge), and post-merge cleanup (delete remote +
-  local branch, return to main, pull).
+  history), merge-commit strategy (no squash/rebase-merge), and post-merge cleanup (delete the local
+  branch, report whether the remote branch survived, return to main, pull).
 ---
 
 # Merging
@@ -109,23 +109,44 @@ Re-run CI after the rebase; the pre-merge gate applies to the rebased state, not
 ## PR Merge & Cleanup
 
 Prefer `--auto` when the repo allows it: GitHub queues the merge and lands it the moment the gate
-(CI + approvals, enforced server-side via branch protection) goes green, then deletes the branch.
-Probe for support and fall back to a direct merge (which requires the gate already green):
+(CI + approvals, enforced server-side via branch protection) goes green. Probe for support and fall
+back to a direct merge (which requires the gate already green):
 
 ```bash
 if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then
-  gh pr merge <number> --merge --auto --delete-branch   # queues; lands when the gate goes green
+  gh pr merge <number> --merge --auto   # queues; lands when the gate goes green
 else
-  gh pr merge <number> --merge --delete-branch          # gate must already be green
+  gh pr merge <number> --merge          # gate must already be green
 fi
 git checkout main && git pull origin main   # return to main and sync
 git branch -d <branch-name>                 # only if a local copy lingers (e.g. merged via UI)
 git fetch --prune                           # drop stale remote-tracking refs
 ```
 
+**Do not pass `--delete-branch`.** Claude Code's permission classifier reads it as a destructive
+flag and blocks the whole command, so the merge itself fails. Leave remote-branch cleanup to the
+repo setting instead, and report the result — see "Reporting the remote branch" below.
+
 `git branch -d` (lowercase) refuses an unmerged branch — do not force with `-D` unless you intend
 to discard unmerged commits. For "create a PR, merge it, delete the branch", chain this after the
 PR opens. Never bypass CI — surface a red gate and wait rather than merging red.
+
+### Reporting the remote branch
+
+The merge no longer deletes the head branch, so the remote branch is gone only if the repo has
+**Automatically delete head branches** enabled. Read the setting and tell the user which case they
+are in — never claim the branch was deleted without checking:
+
+```bash
+gh api repos/{owner}/{repo} --jq .delete_branch_on_merge
+```
+
+- `true` — report that the PR merged and GitHub deleted the remote branch.
+- `false` — report that the PR merged and **the remote branch still exists**, plus the one command
+  that removes it: `git push origin --delete <branch-name>`.
+
+Report the same when auto-merge is queued rather than merged now: the branch outlives the queue
+either way, and the user should know a stale branch may be left behind.
 
 ## Local Branch Merge
 
