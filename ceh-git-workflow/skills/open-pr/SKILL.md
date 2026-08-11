@@ -162,9 +162,16 @@ handles landing the PR. A draft PR is safe to queue — auto-merge waits until t
 
 ```bash
 if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then
-  gh pr merge --merge --auto --delete-branch   # queues; lands when CI + approvals go green
+  gh pr merge --merge --auto   # queues; lands when CI + approvals go green
 fi
 ```
+
+**Do not pass `--delete-branch`.** Claude Code's permission classifier reads it as a destructive
+flag and blocks the whole command, so queuing the merge fails. The head branch is therefore deleted
+only when the repo has **Automatically delete head branches** enabled — check with
+`gh api repos/{owner}/{repo} --jq .delete_branch_on_merge` and tell the user when the answer is
+`false`, so they know the branch will still be there after the PR lands and that
+`git push origin --delete <branch-name>` removes it.
 
 To merge immediately (gate already green) or to merge a local branch with no PR, use the merge skill.
 
@@ -195,6 +202,7 @@ rm body.md
 
 # On repos that allow it, queue auto-merge so the PR lands itself when the gate goes green:
 if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then
-  gh pr merge --merge --auto --delete-branch
+  gh pr merge --merge --auto
 fi
+gh api repos/{owner}/{repo} --jq .delete_branch_on_merge   # false: tell the user the branch survives
 ```
