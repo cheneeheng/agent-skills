@@ -1870,3 +1870,38 @@ plugin metadata see a corrected value. No skill content changed. If this lands w
 bump, installed plugins will not auto-update to the corrected metadata.
 
 **Outcome:** `python tools/validate-plugins/validate.py` green. 25 files changed.
+
+---
+
+### Entry 80
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-21T00:00:00Z
+**Task:** Run the release flow for v4.0.1 (Apache-2.0 metadata + README manual-install fix).
+
+**Context:** Two deviations from the `release-flow` pipeline as written. (1) Step 2 says to branch
+`chore/release-vX.Y.Z` off latest `main`, but the release content sits unmerged on
+`docs/manual-install-list-and-apache-license`. (2) The skill offers to delegate steps 7–10 to the
+`ceh-git-workflow` subagents, while this session's standing instruction forbids dispatching agents
+unless the user asks.
+
+**Decision:** (1) Ran the bump, changelog, and release commit on the existing branch rather than
+cutting a second one. A fresh branch off `main` would either exclude the very changes being
+released or force two PRs for one change; the skill's intent — the bump lands through a reviewed PR,
+the tag points at the merge commit on `main` — is preserved either way. (2) Ran steps 7–10 inline
+via the owning skills, which the skill explicitly allows ("Without the agents, delegate to the
+skills by trigger phrase").
+
+Bump level: PATCH for all 23 plugins and for the repo tag. The `license` field ships in plugin
+metadata, so every plugin bumps even though no skill content changed; nothing was added or removed,
+so nothing forces MINOR. Steps 5 and 6 recorded as no-ops — README already carries the user-facing
+change from Entry 79, and CLAUDE.md holds no licence or hardcoded-version facts.
+
+**Impact / Risk:** The branch name says `docs/...` while the branch now also carries a release
+commit, so the name understates its contents. Reviewers reading the branch name alone may not
+expect a version bump.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. The changelog validator shipped with
+`update-changelog` is absent from the installed plugin (no `scripts/` directory), so semver ordering,
+date format, and duplicate headers were checked by hand instead.

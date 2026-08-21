@@ -1,6 +1,6 @@
 {
   "name": "ceh-seo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CEH SEO: discoverability standards for anything exposed to the internet — technical SEO/GEO for public web pages (meta tags, structured data, sitemap, llms.txt, rendering strategy) and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy).",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/agent-skills",
