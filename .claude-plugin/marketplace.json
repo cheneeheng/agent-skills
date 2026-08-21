@@ -12,7 +12,7 @@
       "name": "ceh-agent-coding-contract",
       "source": "./plugins/ceh-agent-coding-contract",
       "description": "CEH agent behavior contract: autonomous execution mode, the five-step task workflow, write-less-code minimalism, and how the agent explains its work.",
-      "version": "2.9.2",
+      "version": "2.9.3",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
