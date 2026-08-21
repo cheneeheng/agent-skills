@@ -276,7 +276,9 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-evaluation" },
     { "path": "~/agent-skills/plugins/ceh-fabled" },
     { "path": "~/agent-skills/plugins/ceh-advisor" },
-    { "path": "~/agent-skills/plugins/ceh-testing" }
+    { "path": "~/agent-skills/plugins/ceh-seo" },
+    { "path": "~/agent-skills/plugins/ceh-testing" },
+    { "path": "~/agent-skills/plugins/ceh-usability-audit" }
   ]
 }
 ```
