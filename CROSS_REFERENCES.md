@@ -27,8 +27,8 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-architecture/skills/domain-modeling/SKILL.md` | "Layer Boundaries" section | canonical — the always-on invariant (also injected by the architecture SessionStart hook) |
-| `ceh-scaffolding/skills/scaffold-python-service/SKILL.md` | "Hard Layer Rules" section | restates the same rules at scaffold time |
+| `plugins/ceh-architecture/skills/domain-modeling/SKILL.md` | "Layer Boundaries" section | canonical — the always-on invariant (also injected by the architecture SessionStart hook) |
+| `plugins/ceh-scaffolding/skills/scaffold-python-service/SKILL.md` | "Hard Layer Rules" section | restates the same rules at scaffold time |
 
 **What is shared:** route handlers contain no business logic (call services); services contain no SQL (call the db layer); the db layer contains no business logic; one mutation path per aggregate.
 
@@ -44,8 +44,8 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-python-service/skills/asyncpg/SKILL.md` | "Atomic Transactions" + "Connection Pool" | canonical — full transaction and pool code |
-| `ceh-python-service/skills/fastapi/SKILL.md` | lifespan / pool setup | same `asyncpg.create_pool(...)` call |
+| `plugins/ceh-python-service/skills/asyncpg/SKILL.md` | "Atomic Transactions" + "Connection Pool" | canonical — full transaction and pool code |
+| `plugins/ceh-python-service/skills/fastapi/SKILL.md` | lifespan / pool setup | same `asyncpg.create_pool(...)` call |
 
 **What is shared:** `asyncpg.create_pool(min_size=5, max_size=20, command_timeout=30)` call; the atomic transaction pattern (`pool.acquire` + `conn.transaction()`).
 
@@ -57,8 +57,8 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-git-workflow/skills/hotfix/SKILL.md` | entire file | canonical — full guide with bash commands |
-| `ceh-ops/skills/incidents/SKILL.md` | "Hotfix Process" section | subset — same 7 steps, no bash commands |
+| `plugins/ceh-git-workflow/skills/hotfix/SKILL.md` | entire file | canonical — full guide with bash commands |
+| `plugins/ceh-ops/skills/incidents/SKILL.md` | "Hotfix Process" section | subset — same 7 steps, no bash commands |
 
 **What is shared:** 7-step process: branch `fix/critical-<description>` from `main`, minimal scope, 1-approval review, CI must pass, merge commit to `main`, bump PATCH + tag, staging → production deploy.
 
@@ -74,8 +74,8 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-git-workflow/skills/merge/SKILL.md` | "PR Merge & Cleanup" section | canonical — full probe with the direct-merge fallback |
-| `ceh-git-workflow/skills/open-pr/SKILL.md` | "Auto-Merge" section + the `gh pr merge --auto` tail of the "Command" block | enables auto-merge at PR-creation time on repos that allow it |
+| `plugins/ceh-git-workflow/skills/merge/SKILL.md` | "PR Merge & Cleanup" section | canonical — full probe with the direct-merge fallback |
+| `plugins/ceh-git-workflow/skills/open-pr/SKILL.md` | "Auto-Merge" section + the `gh pr merge --auto` tail of the "Command" block | enables auto-merge at PR-creation time on repos that allow it |
 
 **What is shared:** the `allow_auto_merge` probe (`gh api repos/{owner}/{repo} --jq .allow_auto_merge`) guarding `gh pr merge --merge --auto`, which queues the PR to land when the gate (CI + approvals) goes green; plus the ban on `--delete-branch` (the permission classifier blocks the whole command) and the `delete_branch_on_merge` check that tells the user whether the remote branch survives the merge.
 
@@ -93,8 +93,8 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-git-workflow/skills/merge/SKILL.md` | "Reading CI status" under "Pre-Merge Gate" | canonical — full command set plus the three traps |
-| `ceh-git-workflow/agents/branch-merger.md` | "Inputs" bullet | one-line echo of the working commands + the `gh pr checks` prohibition, pointing back at the skill |
+| `plugins/ceh-git-workflow/skills/merge/SKILL.md` | "Reading CI status" under "Pre-Merge Gate" | canonical — full command set plus the three traps |
+| `plugins/ceh-git-workflow/agents/branch-merger.md` | "Inputs" bullet | one-line echo of the working commands + the `gh pr checks` prohibition, pointing back at the skill |
 
 **What is shared:** read the gate with `gh run list -c "$(git rev-parse HEAD)"` (commit-anchored, Actions API); never `gh pr checks` or `gh pr view --json statusCheckRollup`, which return 403 on a fine-grained PAT lacking `checks=read` — a permissions error, not a red gate.
 
@@ -110,7 +110,7 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-git-workflow/skills/open-pr/SKILL.md` | two "Checklist" blocks — the rendered template (after the body) and the `--body-file` body template in the "Command" block | canonical — only holder; the seven items appear twice in this one file |
+| `plugins/ceh-git-workflow/skills/open-pr/SKILL.md` | two "Checklist" blocks — the rendered template (after the body) and the `--body-file` body template in the "Command" block | canonical — only holder; the seven items appear twice in this one file |
 
 **What is shared:** seven checklist items, repeated word-for-word in both "Checklist" blocks inside `open-pr`: "All CI checks pass", "Tests added or updated for new behavior", "No `any` / `@ts-ignore` / `# type: ignore` introduced", "No secrets or credentials in code", "Migrations (if any) are backward-compatible", "ARCHITECTURE.md Key Decisions updated (if a durable decision was made)", "Attribution included if AI tooling assisted".
 
@@ -125,9 +125,9 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-git-workflow/skills/open-pr/SKILL.md` | "Coverage Targets" section (under Definition of Done) | canonical — three rows incl. TypeScript |
-| `ceh-python-service/skills/python-service-testing/SKILL.md` | coverage section | two Python thresholds with identical row labels |
-| `ceh-python-library/skills/python-library-testing/SKILL.md` | coverage section | two Python thresholds with identical row labels |
+| `plugins/ceh-git-workflow/skills/open-pr/SKILL.md` | "Coverage Targets" section (under Definition of Done) | canonical — three rows incl. TypeScript |
+| `plugins/ceh-python-service/skills/python-service-testing/SKILL.md` | coverage section | two Python thresholds with identical row labels |
+| `plugins/ceh-python-library/skills/python-library-testing/SKILL.md` | coverage section | two Python thresholds with identical row labels |
 
 **What is shared (identical labels and thresholds):** two rows, word-for-word — `Python application package | 80%`, `Core business logic / domain services | 95%`.
 
@@ -143,8 +143,8 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-python-service/skills/python-service-environment/SKILL.md` | entire file | service copy — web-service deps + uvicorn dev server (style half also injected by the service SessionStart hook) |
-| `ceh-python-library/skills/python-library-environment/SKILL.md` | entire file | library copy — no web deps, no uvicorn dev server (style half also injected by the library SessionStart hook) |
+| `plugins/ceh-python-service/skills/python-service-environment/SKILL.md` | entire file | service copy — web-service deps + uvicorn dev server (style half also injected by the service SessionStart hook) |
+| `plugins/ceh-python-library/skills/python-library-environment/SKILL.md` | entire file | library copy — no web deps, no uvicorn dev server (style half also injected by the library SessionStart hook) |
 
 **What is shared:** Python 3.12 + uv + `pyproject.toml`/`uv.lock` workflow, the uv command table, the ruff (line-length 88, `select = [E,F,I,UP,N,B]`) + mypy (`strict = true`) + pytest (`asyncio_mode = "auto"`) config, the coding-style rules (type hints, built-in generics, no `Any` without comment), naming table, three-group imports, and the "ruff only / no `# type: ignore` without comment" linting rules.
 
@@ -159,8 +159,8 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-python-service/skills/python-service-testing/SKILL.md` | entire file | service copy — real DB / HTTP integration |
-| `ceh-python-library/skills/python-library-testing/SKILL.md` | entire file | library copy — public-API tests, no DB/HTTP |
+| `plugins/ceh-python-service/skills/python-service-testing/SKILL.md` | entire file | service copy — real DB / HTTP integration |
+| `plugins/ceh-python-library/skills/python-library-testing/SKILL.md` | entire file | library copy — public-API tests, no DB/HTTP |
 
 **What is shared:** pytest + pytest-asyncio (`asyncio_mode = "auto"`), `tests/unit/` structure, `test_<what>_<expected_behavior>.py` naming, one-behavior-per-test rule, mocking rules (mock external boundaries, `unittest.mock`/`pytest-mock`), and the Coverage Targets block (see above).
 
@@ -176,10 +176,10 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-scaffolding/skills/scaffold-python-service/SKILL.md` | ".gitignore" block | Python entries |
-| `ceh-scaffolding/skills/scaffold-python-library/SKILL.md` | ".gitignore" block | Python entries |
-| `ceh-scaffolding/skills/scaffold-web-frontend/SKILL.md` | ".gitignore" block | Node/frontend entries |
-| `ceh-scaffolding/skills/scaffold-fullstack-web/SKILL.md` | "Combined .gitignore" block | union of both |
+| `plugins/ceh-scaffolding/skills/scaffold-python-service/SKILL.md` | ".gitignore" block | Python entries |
+| `plugins/ceh-scaffolding/skills/scaffold-python-library/SKILL.md` | ".gitignore" block | Python entries |
+| `plugins/ceh-scaffolding/skills/scaffold-web-frontend/SKILL.md` | ".gitignore" block | Node/frontend entries |
+| `plugins/ceh-scaffolding/skills/scaffold-fullstack-web/SKILL.md` | "Combined .gitignore" block | union of both |
 
 **What is shared:** the standard ignore fragments — Python (`.venv/`, `__pycache__/`, `*.pyc`, `*.egg-info/`, `.coverage`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`), Node (`node_modules/`, `.svelte-kit/`), build output (`dist/`, `build/`), secrets (`.env`, `.env.*`, `!.env.example`), and `.DS_Store`. When a fragment changes, update every scaffold skill that carries it.
 
@@ -197,11 +197,11 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "File Naming" + "Output Frontmatter" + terminator block | **golden standard** — producer copy; emits the whole set incl. the MVP terminator |
-| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | "File Naming" + "Output Frontmatter" | producer copy — emits one artifact per session |
-| `ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | entire file | consumer copy — schema plus pointer rules and resolution order |
-| `ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy |
-| `ceh-plan-build-review/skills/patch-built-version/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "File Naming" + "Output Frontmatter" + terminator block | **golden standard** — producer copy; emits the whole set incl. the MVP terminator |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | "File Naming" + "Output Frontmatter" | producer copy — emits one artifact per session |
+| `plugins/ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | entire file | consumer copy — schema plus pointer rules and resolution order |
+| `plugins/ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy |
+| `plugins/ceh-plan-build-review/skills/patch-built-version/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy |
 
 **What is shared:** file naming and version-tag rules (`SKELETON.md` / `ITER_NN.md`, `NN` two digits; canonical `_vN` suffix, `vN_` prefix also read; tag-sharing files form a plan family with a per-family `NN` counter); SKELETON frontmatter (`artifact`, `status`, `created`, `app`, `stack`, `sections`, no `depends_on`, no MVP fields); ITER frontmatter (`artifact`, `status`, `created`, `scope`, `sections_changed`, `sections_unchanged`, `depends_on` by stem, backward-only, covering both same-family chaining and cross-version inheritance); the MVP terminator convention (`mvp: true` + `mvp_target` + `## Out of MVP scope` body block on the final iteration only; non-terminal iterations omit `mvp` entirely); the patch convention (`patch: true` ITER continuing the family counter, `depends_on` the terminator or a prior patch, allowed past the terminator, never carries `mvp`, `sections_changed` within §04/§05 — produced by `patch-built-version`, consumed by `implement-from-plan` and `review-against-plan`).
 
@@ -219,13 +219,13 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "§02 · Architecture" | producer copy — golden standard, same wording as the iterative copy |
-| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | "§02 · Architecture" | producer copy — identical wording |
-| `ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | "Sections" table, §02 row | consumer copy — condensed table-cell form |
-| `ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md` | "Sections" table, §02 row | consumer copy — identical to the `implement-from-plan` row |
-| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/audit-checklist.md` | "Architecture (§02)" | verification copy — pre-delivery check |
-| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/audit-checklist.md` | "Architecture (§02)" | verification copy — identical bullet |
-| `ceh-plan-build-review/skills/review-against-plan/SKILL.md` | "Check" table, §02 row | verification copy — post-implementation review check |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` | "§02 · Architecture" | producer copy — golden standard, same wording as the iterative copy |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | "§02 · Architecture" | producer copy — identical wording |
+| `plugins/ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | "Sections" table, §02 row | consumer copy — condensed table-cell form |
+| `plugins/ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md` | "Sections" table, §02 row | consumer copy — identical to the `implement-from-plan` row |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/audit-checklist.md` | "Architecture (§02)" | verification copy — pre-delivery check |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/audit-checklist.md` | "Architecture (§02)" | verification copy — identical bullet |
+| `plugins/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | "Check" table, §02 row | verification copy — post-implementation review check |
 
 **What is shared:** the component diagram must be Mermaid, not ASCII art; at skeleton level it shows what exists and how pieces connect; at iteration level it must additionally visualize what changed (new/modified pieces marked distinctly), not just restate the current state.
 
@@ -243,9 +243,9 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-blog/skills/blog-writer/SKILL.md` | "Voice" section (top of file) | canonical — full section |
-| `ceh-blog/skills/blog-interviewer/SKILL.md` | "Voice" section (top of file) | word-for-word copy |
-| `ceh-blog/skills/blog-editor/SKILL.md` | "Personal voice, not influencer style" bullet (Core Principles) + "Influencer tells" checklist item | condensed restatement — same banned-tells list, framed for diagnosis |
+| `plugins/ceh-blog/skills/blog-writer/SKILL.md` | "Voice" section (top of file) | canonical — full section |
+| `plugins/ceh-blog/skills/blog-interviewer/SKILL.md` | "Voice" section (top of file) | word-for-word copy |
+| `plugins/ceh-blog/skills/blog-editor/SKILL.md` | "Personal voice, not influencer style" bullet (Core Principles) + "Influencer tells" checklist item | condensed restatement — same banned-tells list, framed for diagnosis |
 
 **What is shared:** personal voice, not influencer style; the reader overhears the reasoning, not a lecture; the `CLAUDE.md` blog-voice override; the prefer list (first person, connected paragraphs, doubt kept in, open inside a moment); the banned tells (one-liner paragraphs, aphoristic closers, imperative lessons, "If you're building X, then Y", bold pseudo-headers, meta-takeaway sign-offs, CTA endings); never invent scenes/feelings/chronology — flag the gap instead; the open-thread endings definition (honest current state; reserved verdict valid; closure only for a finished series' final post); series-as-serials framing; tutorial pitfalls narrated as cost to the author.
 
@@ -261,9 +261,9 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-blog/skills/blog-writer/SKILL.md` | "Structure by Post Type" (Phase 3) | canonical — full template lines |
-| `ceh-blog/skills/blog-interviewer/SKILL.md` | "Structure by Post Type" (Phase 3) | near-identical; Launch "Origin" line adds "(this IS the problem)" |
-| `ceh-blog/skills/blog-editor/SKILL.md` | "Post Type Structures" (Step 3) | abridged middles (shorter Origin/Argument lines); identical endings |
+| `plugins/ceh-blog/skills/blog-writer/SKILL.md` | "Structure by Post Type" (Phase 3) | canonical — full template lines |
+| `plugins/ceh-blog/skills/blog-interviewer/SKILL.md` | "Structure by Post Type" (Phase 3) | near-identical; Launch "Origin" line adds "(this IS the problem)" |
+| `plugins/ceh-blog/skills/blog-editor/SKILL.md` | "Post Type Structures" (Step 3) | abridged middles (shorter Origin/Argument lines); identical endings |
 
 **What is shared:** the six post-type templates (Lessons Learned, How-To, Opinion/Take, Project/Launch, Thought Leadership, Personal Story); every template's "The Open Thread:" closing line (word-for-word identical across all three files); the How-To Hook ("The moment this became a problem for you / what it cost you") and Pitfalls line ("what they cost you — narrated as your experience, not warnings issued to the reader").
 
@@ -280,9 +280,9 @@ notes live in the detailed entries referenced below.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-blog/skills/blog-interviewer/SKILL.md` | end of "Phase 4 — Refine" | canonical |
-| `ceh-blog/skills/blog-writer/SKILL.md` | end of "Phase 4 — Refine" | word-for-word copy |
-| `ceh-blog/skills/blog-editor/SKILL.md` | end of "Step 4 — Invite Feedback" | word-for-word copy |
+| `plugins/ceh-blog/skills/blog-interviewer/SKILL.md` | end of "Phase 4 — Refine" | canonical |
+| `plugins/ceh-blog/skills/blog-writer/SKILL.md` | end of "Phase 4 — Refine" | word-for-word copy |
+| `plugins/ceh-blog/skills/blog-editor/SKILL.md` | end of "Step 4 — Invite Feedback" | word-for-word copy |
 
 **What is shared:** the single handoff sentence pointing a satisfied user at
 `/ceh-blog:blog-repurpose` (Twitter/X thread, LinkedIn post, TL;DR, newsletter blurb) — identical
@@ -296,8 +296,8 @@ in all three files.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-agent-coding-contract/skills/write-less-code/SKILL.md` | "The ladder" + "When NOT to be lazy" | canonical — full skill, loaded on demand when code is written |
-| `ceh-agent-coding-contract/hooks/less-code-payload.sh` | `additionalContext` array | compact digest of the ladder + never-simplify list, injected per-turn by the `UserPromptSubmit` hook |
+| `plugins/ceh-agent-coding-contract/skills/write-less-code/SKILL.md` | "The ladder" + "When NOT to be lazy" | canonical — full skill, loaded on demand when code is written |
+| `plugins/ceh-agent-coding-contract/hooks/less-code-payload.sh` | `additionalContext` array | compact digest of the ladder + never-simplify list, injected per-turn by the `UserPromptSubmit` hook |
 
 **What is shared:** the six-rung ladder (YAGNI → stdlib → native platform feature → already-installed
 dependency → one line → minimum that works) and the never-simplify-away list (trust-boundary
@@ -318,8 +318,8 @@ digest in sync with the skill when either changes.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-agent-coding-contract/skills/shrink-diff/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | canonical — branch-diff-scoped application |
-| `ceh-agent-coding-contract/skills/refactor-repo/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | word-for-word copy — campaign-wide application |
+| `plugins/ceh-agent-coding-contract/skills/shrink-diff/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | canonical — branch-diff-scoped application |
+| `plugins/ceh-agent-coding-contract/skills/refactor-repo/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | word-for-word copy — campaign-wide application |
 
 **What is shared:** the six-rung retroactive ladder (delete outright → stdlib → native platform feature → installed dependency → one line → keep as the minimum, collapsing single-implementation abstractions / single-caller wrappers / config-for-a-constant) and the behavior-preservation rules (never mix a behavior change into a refactor; tests before and after where coverage exists, red-before is a finding not a license; mechanical transforms only without coverage; pin behavior with `ceh-testing:verify-behavior-preserved` before anything past a mechanical transform; `refactor:` commits separate from any other change).
 
@@ -335,8 +335,8 @@ digest in sync with the skill when either changes.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-evaluation/skills/evaluate-skill/SKILL.md` | "Structural integrity" check + "Triggering note" blockquote | canonical — full skill |
-| `ceh-evaluation/skills/evaluate-skill-lite/SKILL.md` | Phase 2 dimensions 1 & 2 | near-verbatim restatement in the lite variant |
+| `plugins/ceh-evaluation/skills/evaluate-skill/SKILL.md` | "Structural integrity" check + "Triggering note" blockquote | canonical — full skill |
+| `plugins/ceh-evaluation/skills/evaluate-skill-lite/SKILL.md` | Phase 2 dimensions 1 & 2 | near-verbatim restatement in the lite variant |
 
 **What is shared:** the deterministic structural-integrity check list (frontmatter parses,
 `name` matches dir, `description` present, body non-trivial, `references/` discipline; plugin manifest
@@ -357,8 +357,8 @@ for tasks it can't trivially handle alone …").
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-release-flow/skills/release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | canonical |
-| `ceh-release-flow/skills/direct-release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | near-verbatim copy |
+| `plugins/ceh-release-flow/skills/release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | canonical |
+| `plugins/ceh-release-flow/skills/direct-release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | near-verbatim copy |
 
 **What is shared:** the rule that `chore: release vX.Y.Z` is the subject and not the whole message,
 the commit-message template (what shipped / `Bump:` / `Manifests:` / `Docs:` / attribution footer),
@@ -366,9 +366,9 @@ the `git commit -F` requirement, and the delegation warning that a subagent hand
 will commit exactly that.
 
 **What diverges:** the direct variant adds one sentence — with no PR, the commit message is the only
-durable narrative of the release. Related but *not* duplicated: `ceh-git-workflow/skills/release/SKILL.md`
+durable narrative of the release. Related but *not* duplicated: `plugins/ceh-git-workflow/skills/release/SKILL.md`
 step 1 states the same "always multi-line, body required" rule in its own command-block comment, and
-`ceh-git-workflow/agents/commit-author.md` states that a required subject constrains the subject line
+`plugins/ceh-git-workflow/agents/commit-author.md` states that a required subject constrains the subject line
 only. Keep all four consistent in intent when the rule changes.
 
 ---
@@ -379,8 +379,8 @@ only. Keep all four consistent in intent when the rule changes.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/implementation-gotchas.md` | entire file | **canonical** — the all-at-once planner's copy |
-| `ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/implementation-gotchas.md` | entire file | copy — byte-for-byte identical |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/implementation-gotchas.md` | entire file | **canonical** — the all-at-once planner's copy |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/implementation-gotchas.md` | entire file | copy — byte-for-byte identical |
 
 **What is shared:** the whole file. Both planning skills fold the same gotchas into the artifacts
 they emit, and each skill folder carries its own copy so the skill stays self-contained.
@@ -396,9 +396,9 @@ becomes producer-specific, split it out explicitly rather than letting the copie
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-scaffolding/skills/scaffold-python-service/SKILL.md` | "Agent instruction file" | **canonical** |
-| `ceh-scaffolding/skills/scaffold-python-library/SKILL.md` | "Agent instruction file" | copy — identical |
-| `ceh-scaffolding/skills/scaffold-web-frontend/SKILL.md` | "Agent instruction file" | copy — identical |
+| `plugins/ceh-scaffolding/skills/scaffold-python-service/SKILL.md` | "Agent instruction file" | **canonical** |
+| `plugins/ceh-scaffolding/skills/scaffold-python-library/SKILL.md` | "Agent instruction file" | copy — identical |
+| `plugins/ceh-scaffolding/skills/scaffold-web-frontend/SKILL.md` | "Agent instruction file" | copy — identical |
 
 **What is shared:** Claude Code reads `CLAUDE.md` and not `AGENTS.md`; when a repo already has an
 `AGENTS.md`, write a `CLAUDE.md` whose first line is `@AGENTS.md` rather than duplicating content;
@@ -416,8 +416,8 @@ copy: it composes the service and frontend skills, which each state the rule.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-testing/skills/audit-test-suite/SKILL.md` | "Reporting" | canonical — in-session report |
-| `ceh-testing/agents/test-suite-auditor.md` | "Output to Parent Session" | near-identical copy — subagent report handed back |
+| `plugins/ceh-testing/skills/audit-test-suite/SKILL.md` | "Reporting" | canonical — in-session report |
+| `plugins/ceh-testing/agents/test-suite-auditor.md` | "Output to Parent Session" | near-identical copy — subagent report handed back |
 
 **What is shared:** the worst-first ranked finding format (`SEVERITY  file:line  what`) and the five
 example rows covering the same defect classes — assertion-free test, expectation computed with the
@@ -444,10 +444,10 @@ in a stack skill is the signal that this boundary has slipped.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-usability-audit/skills/first-run-walkthrough/SKILL.md` | "The personas" + "Score by observed outcome, not by appearance" | canonical — the five-row persona table and the four-row severity table |
-| `ceh-usability-audit/skills/audit-interface/SKILL.md` | "Run the persona battery" + "Rank by observed outcome" | verbatim copy of both tables |
-| `ceh-usability-audit/README.md` | "The personas" + "Severity — assigned by outcome, not by appearance" | condensed copies for the reader; column wording differs, the five personas and four severities must not |
-| `ceh-usability-audit/agents/novice-walker.md` | "Holding the persona" | the same five personas restated as **second-person instructions to the walker**, not as a table |
+| `plugins/ceh-usability-audit/skills/first-run-walkthrough/SKILL.md` | "The personas" + "Score by observed outcome, not by appearance" | canonical — the five-row persona table and the four-row severity table |
+| `plugins/ceh-usability-audit/skills/audit-interface/SKILL.md` | "Run the persona battery" + "Rank by observed outcome" | verbatim copy of both tables |
+| `plugins/ceh-usability-audit/README.md` | "The personas" + "Severity — assigned by outcome, not by appearance" | condensed copies for the reader; column wording differs, the five personas and four severities must not |
+| `plugins/ceh-usability-audit/agents/novice-walker.md` | "Holding the persona" | the same five personas restated as **second-person instructions to the walker**, not as a table |
 
 **What is shared:** the five personas (Blank Slate, Cautious Returner, Interrupted, Wrong Turn,
 Small Screen) with their constraints and the failure class each catches; the four severities
@@ -477,8 +477,8 @@ the baseline wording changes anywhere, change it everywhere.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `ceh-dev-tools/skills/explain-codebase/SKILL.md` | "Rules" section | canonical — the full list, including the accounting and regeneration rules that only apply to a generated file |
-| `ceh-agent-coding-contract/skills/explain-until-understood/SKILL.md` | "Rules" section | the three rules that hold for a spoken explanation too |
+| `plugins/ceh-dev-tools/skills/explain-codebase/SKILL.md` | "Rules" section | canonical — the full list, including the accounting and regeneration rules that only apply to a generated file |
+| `plugins/ceh-agent-coding-contract/skills/explain-until-understood/SKILL.md` | "Rules" section | the three rules that hold for a spoken explanation too |
 
 **What is shared:** three bullets, word for word — "Evidence over inference" (unclear purpose is
 written as "purpose unclear — checked imports and call sites, no references found", never guessed

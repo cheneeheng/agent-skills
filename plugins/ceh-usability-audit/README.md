@@ -237,5 +237,5 @@ bias is confirmed and the screenshot handoff is the better path.
 Or manually in `~/.claude/settings.json`:
 
 ```json
-{ "plugins": [{ "path": "~/agent-skills/ceh-usability-audit" }] }
+{ "plugins": [{ "path": "~/agent-skills/plugins/ceh-usability-audit" }] }
 ```

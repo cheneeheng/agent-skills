@@ -136,5 +136,5 @@ oversight.
 Or manually in `~/.claude/settings.json`:
 
 ```json
-{ "plugins": [{ "path": "~/agent-skills/ceh-testing" }] }
+{ "plugins": [{ "path": "~/agent-skills/plugins/ceh-testing" }] }
 ```

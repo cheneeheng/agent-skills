@@ -88,5 +88,5 @@ delegating. The `revise-claude-md` step always falls back to a surgical inline e
 Or manually in `~/.claude/settings.json`:
 
 ```json
-{ "plugins": [{ "path": "~/agent-skills/ceh-release-flow" }] }
+{ "plugins": [{ "path": "~/agent-skills/plugins/ceh-release-flow" }] }
 ```

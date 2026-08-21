@@ -1768,3 +1768,42 @@ starts blocking `git push origin --delete`, that path needs the same treatment.
 
 **Outcome:** `python tools/validate-plugins/validate.py` green. ceh-git-workflow 3.2.7 → 3.2.8,
 ceh-release-flow 1.1.8 → 1.1.9.
+
+---
+
+### Entry 77
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-21T00:00:00Z
+**Task:** Flatten the 23 `ceh-*` plugin directories into `plugins/` and archive pre-v3 changelog history.
+
+**Context:** Three forks the request left open. (1) Which layout — the user first proposed grouping
+plugins into tier folders (cross-cutting / use-case / stack); that would encode in filesystem paths a
+taxonomy this repo has already re-cut once, making the next re-categorization a 23-`source` edit.
+(2) Where to split the 3129-line, 93-version CHANGELOG. (3) Whether to rewrite the plugin path strings
+recorded in `.agents_workspace/` history files.
+
+**Decision:** (1) Flat `plugins/ceh-*`, one level, no tier subdirectories — the tier table in
+`CLAUDE.md` stays the only place the taxonomy is written down, so re-categorizing costs one table row.
+(2) Split at `v3.0.0`, the plugin reorganisation that introduced the current use-case axis: entries
+below it describe plugins that no longer exist under those names, so they are history in a stronger
+sense than mere age. `CHANGELOG.md` keeps v3.0.0+ (2503 lines) and links forward;
+`CHANGELOG-ARCHIVE.md` holds v1.0.0–v2.8.0 (638 lines). (3) Left `.agents_workspace/DECISION_LOG.md`
+and `skill-evals/**` unrewritten — they record what the paths were at the time, and rewriting them
+would falsify the record.
+
+Distinguished repo-relative paths (rewritten) from plugin-internal runtime paths and
+`plugin/skill` references (left alone): `ceh-fabled/skills/fabled/references/` and
+`ceh-git-workflow/release` resolve against the installed plugin root, not this repo.
+
+**Impact / Risk:** Breaking change for anyone whose `settings.json` points at a plugin path rather
+than installing via the marketplace name — the manual-install blocks in `README.md` and six plugin
+READMEs are updated, but existing local settings need a manual edit. Marketplace-name installs are
+unaffected.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. All 93 changelog entries and their
+bodies verified preserved by diff (only the one separator `---` at the split point differs). All 23
+plugin directories moved as pure git renames — no plugin content changed except six README
+manual-install paths, which took PATCH bumps: ceh-advisor 1.0.5, ceh-dev-tools 1.2.3,
+ceh-orchestration 1.0.6, ceh-release-flow 1.1.10, ceh-testing 1.0.3, ceh-usability-audit 1.0.2.

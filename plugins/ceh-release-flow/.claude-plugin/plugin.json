@@ -1,6 +1,6 @@
 {
   "name": "ceh-release-flow",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "CEH release flow: orchestrate an end-to-end project release in one pass — version bump, changelog, README, CLAUDE.md, PR, merge, tag, and GitHub release — by sequencing the skills that own each step. Includes a PR-less direct-release-flow variant that commits straight to main.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/agent-skills",

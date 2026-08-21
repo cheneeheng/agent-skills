@@ -156,7 +156,7 @@ Metrics to watch in live use:
 Or manually in `~/.claude/settings.json`:
 
 ```json
-{ "plugins": [{ "path": "~/agent-skills/ceh-advisor" }] }
+{ "plugins": [{ "path": "~/agent-skills/plugins/ceh-advisor" }] }
 ```
 
 Restart Claude Code after installing or upgrading — hooks load at session start, no hot-swap.

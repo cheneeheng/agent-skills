@@ -32,10 +32,10 @@ use case, so each must be self-contained.
 
 ## 2. Write the component
 
-**Skill** — `ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. All content
+**Skill** — `plugins/ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. All content
 inline; `references/` is only for schemas and templates shared across skills.
 
-**Agent** — `ceh-<plugin>/agents/<name>.md`. Required frontmatter is only `name` and `description`
+**Agent** — `plugins/ceh-<plugin>/agents/<name>.md`. Required frontmatter is only `name` and `description`
 (`model` defaults to `inherit`); auto-delegation is driven entirely by `description` (include "use
 proactively" to encourage it).
 
@@ -88,7 +88,7 @@ work, so no agent sets it.
 
 - Root `README.md` — add a row under the correct plugin group in **Skills** or **Agents**. If the
   plugin has no agents group yet, add a `### <Plugin> (\`ceh-<plugin>\`)` subsection.
-- `ceh-<plugin>/README.md` — add a row to that plugin's own table.
+- `plugins/ceh-<plugin>/README.md` — add a row to that plugin's own table.
 
 ## 4. Register any duplication
 
@@ -101,7 +101,7 @@ what is shared, and what deliberately diverges.
 
 Same commit, both files, or CI fails:
 
-- `ceh-<plugin>/.claude-plugin/plugin.json`
+- `plugins/ceh-<plugin>/.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 
 **PATCH** for content/description updates, **MINOR** for a new skill or agent. Bump at commit

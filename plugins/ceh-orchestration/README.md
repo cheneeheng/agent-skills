@@ -73,5 +73,5 @@ named checks. Returns PASS/FAIL plus a one-line reason — fixes nothing.
 Or manually in `~/.claude/settings.json`:
 
 ```json
-{ "plugins": [{ "path": "~/agent-skills/ceh-orchestration" }] }
+{ "plugins": [{ "path": "~/agent-skills/plugins/ceh-orchestration" }] }
 ```

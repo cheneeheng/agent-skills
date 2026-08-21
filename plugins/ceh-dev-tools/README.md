@@ -89,5 +89,5 @@ bash scripts/walk-repo.sh [target_dir] [max_depth]
 Or manually in `~/.claude/settings.json`:
 
 ```json
-{ "plugins": [{ "path": "~/agent-skills/ceh-dev-tools" }] }
+{ "plugins": [{ "path": "~/agent-skills/plugins/ceh-dev-tools" }] }
 ```

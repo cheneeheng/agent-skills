@@ -3,7 +3,7 @@
 How the four testing-related plugins fit together in a session: what loads, when it loads, and what
 the sequence looks like for the moments that actually come up.
 
-Per-skill detail lives in `ceh-testing/README.md` and each plugin's own README. This guide covers
+Per-skill detail lives in `plugins/ceh-testing/README.md` and each plugin's own README. This guide covers
 only what no single plugin can document — the routing *between* them.
 
 ## The split
