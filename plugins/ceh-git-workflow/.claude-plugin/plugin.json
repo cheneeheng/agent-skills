@@ -1,9 +1,9 @@
 {
   "name": "ceh-git-workflow",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "description": "CEH Git workflow: commits, branching, PRs (with definition-of-done gate), merging, releases, code review, and dependency management. Includes subagents for delegating the commit, open-PR, merge, and release steps out of the main session.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/agent-skills",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "keywords": ["agent", "git", "commits", "branching", "pull-requests", "releases"]
 }

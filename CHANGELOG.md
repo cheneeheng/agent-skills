@@ -5,6 +5,61 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [4.0.1] — 2026-08-21
+
+Two metadata corrections, no skill content touched.
+
+Every `plugin.json` and every `marketplace.json` entry declared `"license": "MIT"`, while the only
+licence text this repo has ever carried is the Apache 2.0 `LICENSE.md` at the root. The manifests
+were naming a grant the repo does not make. The 23 `license` fields now read `Apache-2.0`; the
+actual grant is unchanged, so this corrects what was advertised rather than relicensing anything.
+
+The manual-install snippet in `README.md` listed 21 of the 23 plugins — `ceh-seo` and
+`ceh-usability-audit` shipped without being added to it, so anyone installing by path silently got
+neither. Both are now listed, placed to match the tail order in `marketplace.json`. The
+marketplace-name install path was never affected.
+
+All 23 plugins take PATCH bumps: the licence field ships in plugin metadata, so a bump is what
+carries the correction to installed plugins.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-advisor` | v1.0.6 |
+| `ceh-agent-coding-contract` | v2.9.2 |
+| `ceh-architecture` | v3.1.4 |
+| `ceh-blog` | v1.0.10 |
+| `ceh-business-plan` | v1.0.3 |
+| `ceh-dev-tools` | v1.2.4 |
+| `ceh-documentation` | v1.1.7 |
+| `ceh-evaluation` | v1.1.6 |
+| `ceh-fabled` | v1.3.4 |
+| `ceh-git-workflow` | v3.2.9 |
+| `ceh-lessons-learned` | v2.0.8 |
+| `ceh-ops` | v3.0.6 |
+| `ceh-orchestration` | v1.0.7 |
+| `ceh-plan-build-review` | v1.1.4 |
+| `ceh-python-library` | v1.2.5 |
+| `ceh-python-service` | v3.1.8 |
+| `ceh-release-flow` | v1.1.11 |
+| `ceh-scaffolding` | v1.0.5 |
+| `ceh-seo` | v1.0.2 |
+| `ceh-summarize-chat` | v2.0.7 |
+| `ceh-testing` | v1.0.5 |
+| `ceh-usability-audit` | v1.0.3 |
+| `ceh-web-frontend` | v3.2.6 |
+
+### Fixed
+
+- **Plugin licence metadata** — the `license` field in all 23 `plugin.json` files and all 23
+  `marketplace.json` entries changes from `MIT` to `Apache-2.0`, matching the repo-root
+  `LICENSE.md`.
+- **`README.md`** — the manual-installation settings snippet gains `ceh-seo` and
+  `ceh-usability-audit`, completing the list at 23 paths.
+
+---
+
 ## [4.0.0] — 2026-08-21
 
 The repo root held 23 `ceh-*` plugin directories and six markdown files. Plugins now live under
