@@ -60,6 +60,7 @@ Plugins fall into three tiers:
 ```
 .agents_workspace/            # Skill session artifacts — not a plugin. DECISION_LOG.md and PLUGIN_REORG_PLAN.md are tracked; skill-evals/<skill>/run-NNN/SKILL_EVAL.md holds ceh-evaluation output
 .claude-plugin/               # Marketplace manifest (marketplace.json)
+docs/                         # Maintainer docs — CROSS_REFERENCES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md (pre-v3 releases)
 plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
 └── ceh-<plugin-name>/
     ├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here

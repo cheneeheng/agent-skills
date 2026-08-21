@@ -5,6 +5,72 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [4.0.0] — 2026-08-21
+
+The repo root held 23 `ceh-*` plugin directories and six markdown files. Plugins now live under
+`plugins/`, and the three maintainer-facing documents move to `docs/`, leaving four files at the
+root — `README.md`, `LICENSE.md`, `CLAUDE.md`, `CHANGELOG.md`. Each of those four is pinned there
+by tooling rather than convention: GitHub renders the readme and detects the licence, Claude Code
+auto-loads `CLAUDE.md` only from the project root, and the release skills target `CHANGELOG.md` at
+the root path.
+
+`plugins/` is flat. Grouping by the CLAUDE.md tier table — cross-cutting, use-case workflow,
+stack/build — was considered and rejected: that axis has already been re-cut once, and encoding it
+in filesystem paths turns the next re-categorization into a 23-`source` edit instead of one table
+row. The tier table stays the only place the taxonomy is written down.
+
+Rewriting the path references meant separating three kinds of string that look alike. Repo-relative
+paths (`ceh-git-workflow/skills/merge/SKILL.md`) gained the prefix. Plugin-internal runtime paths
+(`ceh-fabled/skills/fabled/references/`) resolve against the installed plugin root, not this
+checkout, so they did not. Neither did `plugin/skill` references such as `ceh-ops/deploy`, which
+name a skill rather than a file. Paths recorded in `.agents_workspace/` and in past changelog
+entries are left as they were — they document what was true when written.
+
+`CHANGELOG.md` splits at v3.0.0, the reorganisation that introduced the current use-case axis.
+Entries below that line describe plugins that no longer exist under those names, which makes them
+history in a stronger sense than age alone. The archive is named for its range,
+`docs/CHANGELOG-v1-v2.md`, so the next split extends the pattern as `CHANGELOG-v3-v4.md` rather
+than accumulating `-ARCHIVE` suffixes that stop distinguishing anything once there are two. This
+file keeps v3.0.0 onward and drops from 3129 to 2503 lines; all 93 version entries are preserved.
+
+Nine plugins take PATCH bumps. Every one is a documentation path fix — six carried manual-install
+snippets pointing at the old root paths, four cited `CROSS_REFERENCES.md` or `TESTING_WORKFLOW.md`
+at the root. No skill, agent, hook, or script changed; all 23 plugin directories moved as pure git
+renames, so history follows the files.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-advisor` | v1.0.5 |
+| `ceh-dev-tools` | v1.2.3 |
+| `ceh-orchestration` | v1.0.6 |
+| `ceh-plan-build-review` | v1.1.3 |
+| `ceh-python-library` | v1.2.4 |
+| `ceh-release-flow` | v1.1.10 |
+| `ceh-scaffolding` | v1.0.4 |
+| `ceh-testing` | v1.0.4 |
+| `ceh-usability-audit` | v1.0.2 |
+
+### Changed
+
+- **BREAKING — plugin source paths** — every plugin moves from `./ceh-<name>` to
+  `./plugins/ceh-<name>`, and the 23 `source` values in `marketplace.json` follow. Installs by
+  marketplace name are unaffected. Anyone who pointed `settings.json` at a plugin path must update
+  it; `README.md` and the six plugin READMEs that document manual installation show the new paths.
+- **Repo layout** — `docs/` holds `CROSS_REFERENCES.md`, `TESTING_WORKFLOW.md`, and
+  `CHANGELOG-v1-v2.md`. Inbound references updated in `CLAUDE.md`, `README.md`, the repo-local
+  `add-plugin-component` skill, and four plugin READMEs.
+- **`CHANGELOG.md`** — pre-v3.0.0 releases (v1.0.0 through v2.8.0) move to
+  `docs/CHANGELOG-v1-v2.md`, linked from the foot of this file.
+- **`tools/validate-plugins`** — the plugin glob becomes `plugins/ceh-*`; the README and an inline
+  path comment follow. CI needs no change: it invokes `validate.py` by its unmoved path.
+- **`CLAUDE.md`** — the Structure tree shows `plugins/` and records that the layout is deliberately
+  flat; the Commands block, Versioning section, and Key Files table carry the new paths, and Key
+  Files gains a row for the changelog archive.
+
+---
+
 ## [3.29.4] — 2026-08-11
 
 `gh pr merge --merge --auto --delete-branch` no longer runs. Claude Code's auto-mode permission
