@@ -1838,3 +1838,35 @@ record the paths as they were.
 **Outcome:** `python tools/validate-plugins/validate.py` green. Four plugin READMEs cited the moved
 files and took PATCH bumps: ceh-plan-build-review 1.1.3, ceh-python-library 1.2.4, ceh-scaffolding
 1.0.4, ceh-testing 1.0.4.
+
+---
+
+### Entry 79
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-21T00:00:00Z
+**Task:** Add `ceh-seo` and `ceh-usability-audit` to the README manual-install list; change every
+plugin `license` field from MIT to Apache-2.0 to match the repo-root `LICENSE.md`.
+
+**Context:** Two forks the request left open. (1) Where to insert the two missing paths — the README
+list is close to, but not identical with, `marketplace.json` order (`ceh-git-workflow` sits earlier).
+(2) Whether a `license` metadata change counts as a "content update" requiring a PATCH bump of all 23
+plugins per CLAUDE.md's versioning rule.
+
+**Decision:** (1) Inserted `ceh-seo` after `ceh-advisor` and `ceh-usability-audit` after
+`ceh-testing`, reproducing the marketplace order for the tail of the list without reordering the
+existing entries. (2) Did **not** bump versions: CLAUDE.md says to bump "only at commit time — not
+during iterative edits within a session", and the user asked for the fix, not a commit or a release.
+The bump (23 plugins, PATCH, both manifests) is flagged for whoever commits this.
+
+Restored CRLF in `plugins/ceh-summarize-chat/.claude-plugin/plugin.json` — the only manifest with
+CRLF endings, which the `sed` pass had silently normalised to LF, turning a one-line change into a
+nine-line one.
+
+**Impact / Risk:** The licence text at the repo root has always been Apache 2.0, so the manifests
+were previously advertising a licence the repo does not grant; consumers who read `license` from
+plugin metadata see a corrected value. No skill content changed. If this lands without the version
+bump, installed plugins will not auto-update to the corrected metadata.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. 25 files changed.
