@@ -2500,4 +2500,4 @@ were renamed; there are no alias shims. Net 11 → 13 plugins.
 
 ---
 
-Releases before `v3.0.0` live in [CHANGELOG-ARCHIVE.md](CHANGELOG-ARCHIVE.md).
+Releases before `v3.0.0` live in [docs/CHANGELOG-v1-v2.md](docs/CHANGELOG-v1-v2.md).

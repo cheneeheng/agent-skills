@@ -145,7 +145,7 @@ Every **other** frontmatter key that contains `: ` must be quoted — single quo
 
 The repo-local skill `.claude/skills/add-plugin-component/` is the single checklist for adding or
 changing a skill, agent, hook, or script — plugin choice, frontmatter fields worth reaching for
-(and their traps), the plugin-agent gotchas, both README tables, `CROSS_REFERENCES.md`, the
+(and their traps), the plugin-agent gotchas, both README tables, `docs/CROSS_REFERENCES.md`, the
 two-manifest version bump, and the validator. It auto-loads when a `SKILL.md` or `agents/*.md` is
 being created; load it explicitly if it has not.
 
@@ -200,18 +200,18 @@ Current plugin versions: check `plugins/ceh-<plugin>/.claude-plugin/plugin.json`
 | `plugins/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version and metadata |
 | `.claude-plugin/marketplace.json` | Marketplace listing (all plugins) |
 | `README.md` | User-facing docs — skill and agent tables live here |
-| `CROSS_REFERENCES.md` | Tracks content duplicated across skills; lists canonical source and all copies per block |
+| `docs/CROSS_REFERENCES.md` | Tracks content duplicated across skills; lists canonical source and all copies per block |
 | `CHANGELOG.md` | Release notes per repo tag; each entry carries a `### Plugin versions` table |
-| `CHANGELOG-ARCHIVE.md` | Release notes for v1.0.0–v2.8.0, before the v3.0.0 plugin reorganisation |
-| `TESTING_WORKFLOW.md` | Cross-plugin guide: how `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
+| `docs/CHANGELOG-v1-v2.md` | Release notes for v1.0.0–v2.8.0, before the v3.0.0 plugin reorganisation |
+| `docs/TESTING_WORKFLOW.md` | Cross-plugin guide: how `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
 | `.agents_workspace/DECISION_LOG.md` | Agent decision log — **tracked in git here**, append-only, next sequential entry ID |
 
 ## Cross-Reference Rule
 
-Before editing any skill, check `CROSS_REFERENCES.md`. If the section you are changing appears
+Before editing any skill, check `docs/CROSS_REFERENCES.md`. If the section you are changing appears
 in that file, propagate the edit to every other listed file in the same session. Edit the
 canonical file first, then mirror the change to all copies. If you add new duplication, add an
-entry to `CROSS_REFERENCES.md`.
+entry to `docs/CROSS_REFERENCES.md`.
 
 ## Shared-Standards Duplication Policy
 
@@ -225,5 +225,5 @@ duplicated into both `ceh-python-service` and `ceh-python-library`. The library 
 web-only dependencies (`fastapi`, `uvicorn`, `asyncpg`) and the uvicorn dev-server command.
 
 Cost of this choice is drift between copies; the required mitigation is to register every
-duplicated block in `CROSS_REFERENCES.md` and propagate edits in the same session (see the
+duplicated block in `docs/CROSS_REFERENCES.md` and propagate edits in the same session (see the
 Cross-Reference Rule above).

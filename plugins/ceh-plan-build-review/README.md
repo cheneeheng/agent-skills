@@ -57,5 +57,5 @@ producer side.
 > the skills are also used standalone in other tools outside this plugin, so each skill folder
 > carries its own copy of the shared material instead of pointing at a common file. This is the
 > **only** sanctioned exception to the repo's normal rule against duplicating reference material;
-> the copies are registered in the root `CROSS_REFERENCES.md` ("Plan document schema" entry) and
+> the copies are registered in the repo's `docs/CROSS_REFERENCES.md` ("Plan document schema" entry) and
 > must be kept in sync.

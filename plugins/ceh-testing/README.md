@@ -108,7 +108,7 @@ missing tests is delegated to the stack's own tester agents.
 
 End-to-end routing between this plugin, the stack testing skills, and the tester agents — trigger
 phrases, sequencing, and the overlaps — is documented in the repo's
-[`TESTING_WORKFLOW.md`](../TESTING_WORKFLOW.md).
+[`docs/TESTING_WORKFLOW.md`](../../docs/TESTING_WORKFLOW.md).
 
 ## Deliberately out of scope
 

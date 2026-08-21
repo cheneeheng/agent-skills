@@ -3,7 +3,7 @@
 A collection of Claude Code plugins providing engineering standards for AI coding agents. Plugins are
 organized around **use cases** — load the ones that match what you are building.
 
-**Guides:** [`TESTING_WORKFLOW.md`](TESTING_WORKFLOW.md) — how `ceh-testing` and the three stack
+**Guides:** [`docs/TESTING_WORKFLOW.md`](docs/TESTING_WORKFLOW.md) — how `ceh-testing` and the three stack
 testing skills route between each other, with the trigger phrases and sequence for each moment.
 
 ---

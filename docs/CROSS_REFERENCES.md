@@ -9,7 +9,7 @@ this map exists so edits don't get lost.
 ## Same Skill, Different Plugins (name map)
 
 These skill pairs are the **same foundational standard duplicated into two plugins** per the
-Shared-Standards Duplication Policy (see `CLAUDE.md`). Skill names are plugin-qualified so that
+Shared-Standards Duplication Policy (see the root `CLAUDE.md`). Skill names are plugin-qualified so that
 every skill name in the repo is unique; this table maps each pair back to its shared standard.
 Editing one copy means editing the other in the same session — full file lists and divergence
 notes live in the detailed entries referenced below.

@@ -1,8 +1,8 @@
-# Changelog Archive — v1.0.0 through v2.8.0
+# Changelog v1 – v2 (archive)
 
 Releases before `v3.0.0`, the plugin reorganisation that split the old mixed
 tech-domain/lifecycle-phase axis into per-use-case plugins. Current releases live in
-[CHANGELOG.md](CHANGELOG.md).
+[../CHANGELOG.md](../CHANGELOG.md).
 
 Versions follow [Semantic Versioning](https://semver.org/).
 Versions refer to the Marketplace versions.

@@ -3,7 +3,7 @@ name: add-plugin-component
 description: >-
   The checklist for adding or changing a skill, agent, hook, or script in this plugin repo — which
   plugin it belongs in, the frontmatter it needs, and every registration chore that must land in the
-  same commit (README tables, CROSS_REFERENCES.md, plugin.json + marketplace.json version bumps,
+  same commit (README tables, docs/CROSS_REFERENCES.md, plugin.json + marketplace.json version bumps,
   validate.py). Load whenever a new SKILL.md or agents/*.md is being created, an existing one is
   being renamed or moved between plugins, or the user says "add a skill", "add an agent", "new
   plugin component", or asks why validate.py is failing.
@@ -92,7 +92,7 @@ work, so no agent sets it.
 
 ## 4. Register any duplication
 
-Before editing an existing skill, check `CROSS_REFERENCES.md`. If the section appears there,
+Before editing an existing skill, check `docs/CROSS_REFERENCES.md`. If the section appears there,
 propagate the edit to **every** listed file in the same session — canonical file first, then the
 copies. If you introduce new duplication, add an entry naming the canonical source, every copy,
 what is shared, and what deliberately diverges.

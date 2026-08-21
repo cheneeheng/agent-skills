@@ -14,4 +14,4 @@ generic "structure" skill: layout, config, and ignore rules are co-located per t
 | `scaffold-fullstack-web` | Starting a fullstack web app (service + frontend in one repo) |
 
 The small shared bits duplicated across these skills (e.g. `.gitignore` entries) are governed by the
-repo's Shared-Standards Duplication Policy — see `CROSS_REFERENCES.md`.
+repo's Shared-Standards Duplication Policy — see `docs/CROSS_REFERENCES.md`.

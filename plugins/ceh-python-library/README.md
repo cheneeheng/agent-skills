@@ -36,4 +36,4 @@ tagged with the skill (e.g. `[python-library-environment]`) that documents it in
 (`python-service-environment` / `python-service-testing`) per the repo's
 [Shared-Standards Duplication Policy](../CLAUDE.md). The library copies drop web-service
 dependencies (`fastapi`, `uvicorn`, `asyncpg`) and the uvicorn dev-server command. See
-`CROSS_REFERENCES.md` — edit both copies in the same session.
+`docs/CROSS_REFERENCES.md` — edit both copies in the same session.
