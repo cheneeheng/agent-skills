@@ -5,6 +5,66 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [4.0.2] — 2026-08-22
+
+`explain-until-understood` defaulted to explaining at a peer engineer's level. The cause was
+structural rather than a wording slip: the skill had seven steps about *what to say* and nothing
+about *who is listening*, so the model filled the gap with its own default reader and every other
+rule calibrated to that reader. Step 2 was the one place a floor could have been set, and it scoped
+its primitives to the subject — "the primitives the explanation rests on" — which selects the
+top-layer domain concepts and silently treats everything beneath them as already known.
+
+The skill now opens by assuming the reader knows nothing about the subject: not that they are
+inexperienced, but that they have never seen this system and do not know the words it uses. It
+states the floor it is building from in one line so the reader can raise it, and raises it only on
+evidence — a job title is not evidence, and neither is a term the reader pasted out of an error
+message. Foundations are chosen for that floor rather than for the subject, which in practice means
+one layer below where the subject's own documentation begins, since that documentation was written
+for someone who had already chosen to use the thing.
+
+A `Plain language` section carries the register rules that did not exist before: concept first and
+name second, every term of art defined at first use in the same sentence, the shorter and older
+word except where the precise one *is* the mechanism, one new idea per sentence, and an analogy
+bounded by where it stops being true. The old text had a single adjacent rule — do not reuse a term
+introduced earlier in the session — which bans session vocabulary while permitting every term of
+art the reader has never seen.
+
+The escalation ladder gained a routing question ahead of it, because it had only one dimension.
+A reader lost on a *word* was being sent to a different representation, which renumbers the same
+unknown vocabulary. Three miss kinds are now separated: an undefined word is defined and re-said at
+the same level and is not a ladder attempt at all; a foundation that was stated and did not take
+goes straight to attempt 4; only a reader who has the words and cannot assemble them walks the
+ladder. `primitives` is renamed to `foundations` throughout, so one concept keeps one word.
+
+Simulated runs against the revised text caught three defects before release: the floor line was
+unconditional and consumed half of a one-sentence answer, the two foundation-miss routes
+contradicted each other, and step 2's comprehension checkpoint told the model to stop mid-reply
+against the skill's own one-reply structure. All three are folded into this release. Behavioural
+lift is unmeasured — the runs were self-simulated by the author of the change, so they establish
+that the text is followable and self-consistent, not that a cold model explains differently.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-agent-coding-contract` | v2.9.3 |
+
+### Added
+
+- **`ceh-agent-coding-contract` / `explain-until-understood`** — a `Who you are explaining to`
+  section setting a zero-knowledge default and a stated, evidence-gated floor; a `Plain language`
+  section with five register rules; a routing question ahead of the escalation ladder separating a
+  word miss, a stated-foundation miss, and an assembly miss.
+
+### Changed
+
+- **`ceh-agent-coding-contract` / `explain-until-understood`** — step 2 selects foundations for the
+  reader's floor rather than the subject, tests each term against what a sharp person outside the
+  field would know, and sends a subject needing more than four foundations back to *Scale to the
+  ask* to be sliced; the comprehension check moved out of the middle of the reply and into step 7's
+  first self-test question; `primitives` renamed to `foundations` throughout; the frontmatter
+  description compacted by roughly a fifth with no facts dropped.
+
 ## [4.0.1] — 2026-08-21
 
 Two metadata corrections, no skill content touched.
