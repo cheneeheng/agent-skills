@@ -60,15 +60,17 @@ Plugins fall into three tiers:
 ```
 .agents_workspace/            # Skill session artifacts — not a plugin. DECISION_LOG.md and PLUGIN_REORG_PLAN.md are tracked; skill-evals/<skill>/run-NNN/SKILL_EVAL.md holds ceh-evaluation output
 .claude-plugin/               # Marketplace manifest (marketplace.json)
-ceh-<plugin-name>/
-├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here
-├── agents/                   # Optional — subagents for complex autonomous tasks
-├── hooks/                    # Optional — hooks.json wiring hook scripts via ${CLAUDE_PLUGIN_ROOT} (e.g. ceh-advisor)
-├── scripts/                  # Optional — hook scripts and shell helpers (e.g. ceh-advisor guards, ceh-ops CI scaffolding, test/coverage runners)
-└── skills/
-    └── <skill-name>/
-        ├── SKILL.md               # Required — all content inline; frontmatter + full body
-        └── references/            # Sparingly — shared schemas/templates (plan-schema.md) or a standards set too large to inline (fabled)
+docs/                         # Maintainer docs — CROSS_REFERENCES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md (pre-v3 releases)
+plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
+└── ceh-<plugin-name>/
+    ├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here
+    ├── agents/                   # Optional — subagents for complex autonomous tasks
+    ├── hooks/                    # Optional — hooks.json wiring hook scripts via ${CLAUDE_PLUGIN_ROOT} (e.g. ceh-advisor)
+    ├── scripts/                  # Optional — hook scripts and shell helpers (e.g. ceh-advisor guards, ceh-ops CI scaffolding, test/coverage runners)
+    └── skills/
+        └── <skill-name>/
+            ├── SKILL.md               # Required — all content inline; frontmatter + full body
+            └── references/            # Sparingly — shared schemas/templates (plan-schema.md) or a standards set too large to inline (fabled)
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
 └── <tool-name>/               # validate-plugins (the CI gate), skills-sync — own README.md, no plugin.json
 ```
@@ -144,15 +146,15 @@ Every **other** frontmatter key that contains `: ` must be quoted — single quo
 
 The repo-local skill `.claude/skills/add-plugin-component/` is the single checklist for adding or
 changing a skill, agent, hook, or script — plugin choice, frontmatter fields worth reaching for
-(and their traps), the plugin-agent gotchas, both README tables, `CROSS_REFERENCES.md`, the
+(and their traps), the plugin-agent gotchas, both README tables, `docs/CROSS_REFERENCES.md`, the
 two-manifest version bump, and the validator. It auto-loads when a `SKILL.md` or `agents/*.md` is
 being created; load it explicitly if it has not.
 
 Whatever else gets skipped, these four land in the **same commit** or CI fails:
 
 1. A row in the root `README.md` table (Skills or Agents).
-2. A row in `ceh-<plugin>/README.md`.
-3. A version bump in **both** `ceh-<plugin>/.claude-plugin/plugin.json` and
+2. A row in `plugins/ceh-<plugin>/README.md`.
+3. A version bump in **both** `plugins/ceh-<plugin>/.claude-plugin/plugin.json` and
    `.claude-plugin/marketplace.json` — PATCH for content, MINOR for a new skill or agent.
 4. `python tools/validate-plugins/validate.py` green.
 
@@ -160,13 +162,13 @@ Whatever else gets skipped, these four land in the **same commit** or CI fails:
 
 ```bash
 # List all skills in a plugin
-ls ceh-<plugin>/skills/
+ls plugins/ceh-<plugin>/skills/
 
 # Find a skill by name across all plugins
-find . -path '*skills/<name>/SKILL.md'
+find plugins -path '*skills/<name>/SKILL.md'
 
 # Verify every plugin is listed in marketplace.json
-grep '"name"' ceh-*/.claude-plugin/plugin.json .claude-plugin/marketplace.json
+grep '"name"' plugins/ceh-*/.claude-plugin/plugin.json .claude-plugin/marketplace.json
 
 # Validate the whole repo (manifests, skills, agents, references, scripts) — CI runs this too
 python tools/validate-plugins/validate.py
@@ -177,7 +179,7 @@ python tools/validate-plugins/validate.py
 This repo has two independent versioning layers:
 
 **Per-plugin versions** (load-bearing for auto-update):
-- Live in `ceh-<plugin>/.claude-plugin/plugin.json` and mirrored in `.claude-plugin/marketplace.json`.
+- Live in `plugins/ceh-<plugin>/.claude-plugin/plugin.json` and mirrored in `.claude-plugin/marketplace.json`.
 - Follow semver: **PATCH** for content/description updates, **MINOR** for new skills or agents.
 - Bump only at commit time — not during iterative edits within a session.
 - Both `plugin.json` and `marketplace.json` must be bumped in the same commit.
@@ -190,26 +192,27 @@ This repo has two independent versioning layers:
 - Add a `CHANGELOG.md` entry under the new version: prose on what changed and why, a
   `### Plugin versions` table listing every plugin bumped, then `### Added` / `### Changed` / `### Fixed`.
 
-Current plugin versions: check `ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`.
+Current plugin versions: check `plugins/ceh-<plugin>/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`.
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version and metadata |
+| `plugins/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version and metadata |
 | `.claude-plugin/marketplace.json` | Marketplace listing (all plugins) |
 | `README.md` | User-facing docs — skill and agent tables live here |
-| `CROSS_REFERENCES.md` | Tracks content duplicated across skills; lists canonical source and all copies per block |
+| `docs/CROSS_REFERENCES.md` | Tracks content duplicated across skills; lists canonical source and all copies per block |
 | `CHANGELOG.md` | Release notes per repo tag; each entry carries a `### Plugin versions` table |
-| `TESTING_WORKFLOW.md` | Cross-plugin guide: how `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
+| `docs/CHANGELOG-v1-v2.md` | Release notes for v1.0.0–v2.8.0, before the v3.0.0 plugin reorganisation |
+| `docs/TESTING_WORKFLOW.md` | Cross-plugin guide: how `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
 | `.agents_workspace/DECISION_LOG.md` | Agent decision log — **tracked in git here**, append-only, next sequential entry ID |
 
 ## Cross-Reference Rule
 
-Before editing any skill, check `CROSS_REFERENCES.md`. If the section you are changing appears
+Before editing any skill, check `docs/CROSS_REFERENCES.md`. If the section you are changing appears
 in that file, propagate the edit to every other listed file in the same session. Edit the
 canonical file first, then mirror the change to all copies. If you add new duplication, add an
-entry to `CROSS_REFERENCES.md`.
+entry to `docs/CROSS_REFERENCES.md`.
 
 ## Shared-Standards Duplication Policy
 
@@ -223,5 +226,5 @@ duplicated into both `ceh-python-service` and `ceh-python-library`. The library 
 web-only dependencies (`fastapi`, `uvicorn`, `asyncpg`) and the uvicorn dev-server command.
 
 Cost of this choice is drift between copies; the required mitigation is to register every
-duplicated block in `CROSS_REFERENCES.md` and propagate edits in the same session (see the
+duplicated block in `docs/CROSS_REFERENCES.md` and propagate edits in the same session (see the
 Cross-Reference Rule above).

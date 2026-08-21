@@ -13,7 +13,7 @@ Exits non-zero and prints a grouped list of problems if any check fails.
 
 | Group | What it verifies |
 |-------|------------------|
-| `manifests`  | Each `ceh-*/.claude-plugin/plugin.json` is valid JSON, `name` matches its directory, `version` is semver. `marketplace.json` lists every plugin with a matching version and an existing `source` path; no plugin is missing or unlisted. |
+| `manifests`  | Each `plugins/ceh-*/.claude-plugin/plugin.json` is valid JSON, `name` matches its directory, `version` is semver. `marketplace.json` lists every plugin with a matching version and an existing `source` path; no plugin is missing or unlisted. |
 | `skills`     | Every `skills/<name>/SKILL.md` has `name` + `description` frontmatter and `name` matches the directory. |
 | `agents`     | Every `agents/<name>.md` has `name` + `description` frontmatter. |
 | `references` | `references/...` mentions and `${CLAUDE_PLUGIN_ROOT}/scripts/...` mentions in skill/agent files resolve to a real file. |

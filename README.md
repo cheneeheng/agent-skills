@@ -3,7 +3,7 @@
 A collection of Claude Code plugins providing engineering standards for AI coding agents. Plugins are
 organized around **use cases** — load the ones that match what you are building.
 
-**Guides:** [`TESTING_WORKFLOW.md`](TESTING_WORKFLOW.md) — how `ceh-testing` and the three stack
+**Guides:** [`docs/TESTING_WORKFLOW.md`](docs/TESTING_WORKFLOW.md) — how `ceh-testing` and the three stack
 testing skills route between each other, with the trigger phrases and sequence for each moment.
 
 ---
@@ -256,27 +256,27 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 ```json
 {
   "plugins": [
-    { "path": "~/agent-skills/ceh-agent-coding-contract" },
-    { "path": "~/agent-skills/ceh-plan-build-review" },
-    { "path": "~/agent-skills/ceh-git-workflow" },
-    { "path": "~/agent-skills/ceh-architecture" },
-    { "path": "~/agent-skills/ceh-python-service" },
-    { "path": "~/agent-skills/ceh-python-library" },
-    { "path": "~/agent-skills/ceh-web-frontend" },
-    { "path": "~/agent-skills/ceh-scaffolding" },
-    { "path": "~/agent-skills/ceh-ops" },
-    { "path": "~/agent-skills/ceh-summarize-chat" },
-    { "path": "~/agent-skills/ceh-lessons-learned" },
-    { "path": "~/agent-skills/ceh-dev-tools" },
-    { "path": "~/agent-skills/ceh-blog" },
-    { "path": "~/agent-skills/ceh-documentation" },
-    { "path": "~/agent-skills/ceh-orchestration" },
-    { "path": "~/agent-skills/ceh-release-flow" },
-    { "path": "~/agent-skills/ceh-business-plan" },
-    { "path": "~/agent-skills/ceh-evaluation" },
-    { "path": "~/agent-skills/ceh-fabled" },
-    { "path": "~/agent-skills/ceh-advisor" },
-    { "path": "~/agent-skills/ceh-testing" }
+    { "path": "~/agent-skills/plugins/ceh-agent-coding-contract" },
+    { "path": "~/agent-skills/plugins/ceh-plan-build-review" },
+    { "path": "~/agent-skills/plugins/ceh-git-workflow" },
+    { "path": "~/agent-skills/plugins/ceh-architecture" },
+    { "path": "~/agent-skills/plugins/ceh-python-service" },
+    { "path": "~/agent-skills/plugins/ceh-python-library" },
+    { "path": "~/agent-skills/plugins/ceh-web-frontend" },
+    { "path": "~/agent-skills/plugins/ceh-scaffolding" },
+    { "path": "~/agent-skills/plugins/ceh-ops" },
+    { "path": "~/agent-skills/plugins/ceh-summarize-chat" },
+    { "path": "~/agent-skills/plugins/ceh-lessons-learned" },
+    { "path": "~/agent-skills/plugins/ceh-dev-tools" },
+    { "path": "~/agent-skills/plugins/ceh-blog" },
+    { "path": "~/agent-skills/plugins/ceh-documentation" },
+    { "path": "~/agent-skills/plugins/ceh-orchestration" },
+    { "path": "~/agent-skills/plugins/ceh-release-flow" },
+    { "path": "~/agent-skills/plugins/ceh-business-plan" },
+    { "path": "~/agent-skills/plugins/ceh-evaluation" },
+    { "path": "~/agent-skills/plugins/ceh-fabled" },
+    { "path": "~/agent-skills/plugins/ceh-advisor" },
+    { "path": "~/agent-skills/plugins/ceh-testing" }
   ]
 }
 ```

@@ -1768,3 +1768,73 @@ starts blocking `git push origin --delete`, that path needs the same treatment.
 
 **Outcome:** `python tools/validate-plugins/validate.py` green. ceh-git-workflow 3.2.7 → 3.2.8,
 ceh-release-flow 1.1.8 → 1.1.9.
+
+---
+
+### Entry 77
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-21T00:00:00Z
+**Task:** Flatten the 23 `ceh-*` plugin directories into `plugins/` and archive pre-v3 changelog history.
+
+**Context:** Three forks the request left open. (1) Which layout — the user first proposed grouping
+plugins into tier folders (cross-cutting / use-case / stack); that would encode in filesystem paths a
+taxonomy this repo has already re-cut once, making the next re-categorization a 23-`source` edit.
+(2) Where to split the 3129-line, 93-version CHANGELOG. (3) Whether to rewrite the plugin path strings
+recorded in `.agents_workspace/` history files.
+
+**Decision:** (1) Flat `plugins/ceh-*`, one level, no tier subdirectories — the tier table in
+`CLAUDE.md` stays the only place the taxonomy is written down, so re-categorizing costs one table row.
+(2) Split at `v3.0.0`, the plugin reorganisation that introduced the current use-case axis: entries
+below it describe plugins that no longer exist under those names, so they are history in a stronger
+sense than mere age. `CHANGELOG.md` keeps v3.0.0+ (2503 lines) and links forward;
+`CHANGELOG-ARCHIVE.md` holds v1.0.0–v2.8.0 (638 lines). (3) Left `.agents_workspace/DECISION_LOG.md`
+and `skill-evals/**` unrewritten — they record what the paths were at the time, and rewriting them
+would falsify the record.
+
+Distinguished repo-relative paths (rewritten) from plugin-internal runtime paths and
+`plugin/skill` references (left alone): `ceh-fabled/skills/fabled/references/` and
+`ceh-git-workflow/release` resolve against the installed plugin root, not this repo.
+
+**Impact / Risk:** Breaking change for anyone whose `settings.json` points at a plugin path rather
+than installing via the marketplace name — the manual-install blocks in `README.md` and six plugin
+READMEs are updated, but existing local settings need a manual edit. Marketplace-name installs are
+unaffected.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. All 93 changelog entries and their
+bodies verified preserved by diff (only the one separator `---` at the split point differs). All 23
+plugin directories moved as pure git renames — no plugin content changed except six README
+manual-install paths, which took PATCH bumps: ceh-advisor 1.0.5, ceh-dev-tools 1.2.3,
+ceh-orchestration 1.0.6, ceh-release-flow 1.1.10, ceh-testing 1.0.3, ceh-usability-audit 1.0.2.
+
+---
+
+### Entry 78
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-21T00:00:00Z
+**Task:** Move CROSS_REFERENCES.md, TESTING_WORKFLOW.md, and the changelog archive into `docs/`.
+
+**Context:** The user asked for the archive to be renamed to a form that survives future splits,
+suggesting `CHANGELOG-v0-v2` "or something in that direction". The archive actually spans v1.0.0 to
+v2.8.0 — there is no v0 in this repo's history.
+
+**Decision:** Named it `docs/CHANGELOG-v1-v2.md`, matching the real range rather than the suggested
+placeholder, and retitled the heading to "Changelog v1 – v2 (archive)". The pattern extends by range
+(`CHANGELOG-v3-v4.md`) rather than by an "-ARCHIVE" suffix that gets ambiguous once there are two
+archives. Note this reverses my earlier recommendation against a `docs/` folder, which was argued on
+the grounds that only two files could move; the archive makes it three, and the user decided.
+
+Kept at root: `README.md`, `LICENSE.md` (GitHub rendering and licence detection), `CLAUDE.md`
+(Claude Code only auto-loads it from the project root), `CHANGELOG.md` (release-flow and
+update-changelog target the root path).
+
+**Impact / Risk:** Any external link to `TESTING_WORKFLOW.md` or `CROSS_REFERENCES.md` at the repo
+root breaks. Historical mentions inside `CHANGELOG.md` and the archive are left unrewritten — they
+record the paths as they were.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. Four plugin READMEs cited the moved
+files and took PATCH bumps: ceh-plan-build-review 1.1.3, ceh-python-library 1.2.4, ceh-scaffolding
+1.0.4, ceh-testing 1.0.4.

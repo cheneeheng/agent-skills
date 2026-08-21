@@ -3,7 +3,7 @@ name: add-plugin-component
 description: >-
   The checklist for adding or changing a skill, agent, hook, or script in this plugin repo — which
   plugin it belongs in, the frontmatter it needs, and every registration chore that must land in the
-  same commit (README tables, CROSS_REFERENCES.md, plugin.json + marketplace.json version bumps,
+  same commit (README tables, docs/CROSS_REFERENCES.md, plugin.json + marketplace.json version bumps,
   validate.py). Load whenever a new SKILL.md or agents/*.md is being created, an existing one is
   being renamed or moved between plugins, or the user says "add a skill", "add an agent", "new
   plugin component", or asks why validate.py is failing.
@@ -32,10 +32,10 @@ use case, so each must be self-contained.
 
 ## 2. Write the component
 
-**Skill** — `ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. All content
+**Skill** — `plugins/ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. All content
 inline; `references/` is only for schemas and templates shared across skills.
 
-**Agent** — `ceh-<plugin>/agents/<name>.md`. Required frontmatter is only `name` and `description`
+**Agent** — `plugins/ceh-<plugin>/agents/<name>.md`. Required frontmatter is only `name` and `description`
 (`model` defaults to `inherit`); auto-delegation is driven entirely by `description` (include "use
 proactively" to encourage it).
 
@@ -88,11 +88,11 @@ work, so no agent sets it.
 
 - Root `README.md` — add a row under the correct plugin group in **Skills** or **Agents**. If the
   plugin has no agents group yet, add a `### <Plugin> (\`ceh-<plugin>\`)` subsection.
-- `ceh-<plugin>/README.md` — add a row to that plugin's own table.
+- `plugins/ceh-<plugin>/README.md` — add a row to that plugin's own table.
 
 ## 4. Register any duplication
 
-Before editing an existing skill, check `CROSS_REFERENCES.md`. If the section appears there,
+Before editing an existing skill, check `docs/CROSS_REFERENCES.md`. If the section appears there,
 propagate the edit to **every** listed file in the same session — canonical file first, then the
 copies. If you introduce new duplication, add an entry naming the canonical source, every copy,
 what is shared, and what deliberately diverges.
@@ -101,7 +101,7 @@ what is shared, and what deliberately diverges.
 
 Same commit, both files, or CI fails:
 
-- `ceh-<plugin>/.claude-plugin/plugin.json`
+- `plugins/ceh-<plugin>/.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 
 **PATCH** for content/description updates, **MINOR** for a new skill or agent. Bump at commit

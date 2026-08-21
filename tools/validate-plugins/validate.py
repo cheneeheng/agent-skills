@@ -47,7 +47,7 @@ def rel(p: Path) -> str:
 
 
 def plugin_dirs() -> list[Path]:
-    return sorted(p for p in REPO.glob("ceh-*") if p.is_dir())
+    return sorted(p for p in REPO.glob("plugins/ceh-*") if p.is_dir())
 
 
 def parse_frontmatter(path: Path) -> dict[str, str] | None:
@@ -221,7 +221,7 @@ def check_references() -> None:
     skill_dir_pat = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/([A-Za-z0-9_./-]+)")
     for doc in doc_files():
         where = rel(doc)
-        # SKILL.md -> ceh-<plugin>/skills/<name>/SKILL.md ; agent -> ceh-<plugin>/agents/<name>.md
+        # SKILL.md -> plugins/ceh-<plugin>/skills/<name>/SKILL.md ; agent -> plugins/ceh-<plugin>/agents/<name>.md
         plugin_root = doc.parents[2] if doc.parent.parent.name == "skills" else doc.parents[1]
         base_dir = doc.parent
         text = doc.read_text(encoding="utf-8")
