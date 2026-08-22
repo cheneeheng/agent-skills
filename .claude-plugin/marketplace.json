@@ -227,6 +227,83 @@
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
       "keywords": ["agent", "usability", "ux", "novice", "walkthrough", "error-messages", "plain-language", "audit"]
+    },
+    {
+      "name": "ceh-scenario-service-greenfield",
+      "source": "./plugins/ceh-scenario-service-greenfield",
+      "description": "CEH scenario bundle: starting a Python backend service from nothing — everything in the -iterate bundle plus planning and scaffolding.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "dependencies": ["ceh-scenario-service-iterate", "ceh-scaffolding", "ceh-business-plan"],
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "service", "greenfield"]
+    },
+    {
+      "name": "ceh-scenario-service-iterate",
+      "source": "./plugins/ceh-scenario-service-iterate",
+      "description": "CEH scenario bundle: working on a Python backend service that already ships — features, fixes, tests, docs, releases.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "dependencies": ["ceh-coding-agent", "ceh-git-workflow", "ceh-testing", "ceh-architecture", "ceh-python-service", "ceh-documentation", "ceh-release-flow", "ceh-usability-audit", "ceh-plan-build-review"],
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "service", "iterate"]
+    },
+    {
+      "name": "ceh-scenario-library-greenfield",
+      "source": "./plugins/ceh-scenario-library-greenfield",
+      "description": "CEH scenario bundle: starting a Python library from nothing — everything in the -iterate bundle plus planning and scaffolding.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "dependencies": ["ceh-scenario-library-iterate", "ceh-scaffolding", "ceh-business-plan"],
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "library", "greenfield"]
+    },
+    {
+      "name": "ceh-scenario-library-iterate",
+      "source": "./plugins/ceh-scenario-library-iterate",
+      "description": "CEH scenario bundle: working on a Python library that already ships — features, fixes, tests, docs, releases.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "dependencies": ["ceh-coding-agent", "ceh-git-workflow", "ceh-testing", "ceh-architecture", "ceh-python-library", "ceh-documentation", "ceh-release-flow", "ceh-usability-audit", "ceh-plan-build-review"],
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "library", "iterate"]
+    },
+    {
+      "name": "ceh-scenario-webapp-greenfield",
+      "source": "./plugins/ceh-scenario-webapp-greenfield",
+      "description": "CEH scenario bundle: starting a web frontend from nothing — everything in the -iterate bundle plus planning and scaffolding.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "dependencies": ["ceh-scenario-webapp-iterate", "ceh-scaffolding", "ceh-business-plan"],
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "webapp", "greenfield"]
+    },
+    {
+      "name": "ceh-scenario-webapp-iterate",
+      "source": "./plugins/ceh-scenario-webapp-iterate",
+      "description": "CEH scenario bundle: working on a web frontend that already ships — features, fixes, tests, docs, releases.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "dependencies": ["ceh-coding-agent", "ceh-git-workflow", "ceh-testing", "ceh-architecture", "ceh-web-frontend", "ceh-documentation", "ceh-release-flow", "ceh-usability-audit", "ceh-plan-build-review"],
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "webapp", "iterate"]
+    },
+    {
+      "name": "ceh-scenario-editorial",
+      "source": "./plugins/ceh-scenario-editorial",
+      "description": "CEH scenario bundle: writing and publishing what readers see — blog posts, user and operator docs, discoverability.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "dependencies": ["ceh-coding-agent", "ceh-blog", "ceh-documentation", "ceh-seo"],
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "editorial", "writing"]
     }
   ]
 }
