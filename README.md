@@ -8,6 +8,38 @@ testing skills route between each other, with the trigger phrases and sequence f
 
 ---
 
+## Start here — scenario bundles
+
+You should not have to remember 22 plugins. Pick the bundle that matches the situation you are in;
+its dependencies install and enable automatically.
+
+| Bundle | Install when |
+|--------|--------------|
+| `ceh-scenario-service-greenfield` | Starting a Python backend service from nothing |
+| `ceh-scenario-service-iterate` | Working on a Python backend service that already ships |
+| `ceh-scenario-library-greenfield` | Starting a Python library from nothing |
+| `ceh-scenario-library-iterate` | Working on a Python library that already ships |
+| `ceh-scenario-webapp-greenfield` | Starting a web frontend from nothing |
+| `ceh-scenario-webapp-iterate` | Working on a web frontend that already ships |
+| `ceh-scenario-editorial` | Writing what readers see — blog posts, user/operator docs, discoverability |
+
+```
+/plugin install ceh-scenario-service-iterate@ceh-plugins --scope user
+```
+
+A `-greenfield` bundle contains everything its `-iterate` twin does, plus scaffolding and business
+planning — so the phase transition is a no-op. You never switch bundles; you just stop reaching for
+the planning skills.
+
+Four plugins are deliberately outside every bundle: `ceh-fabled` and `ceh-advisor` (experimental),
+and `ceh-ops`, `ceh-summarize-chat`, `ceh-orchestration`, `ceh-lessons-learned` (installed once, on
+their own, when you want them). A dependency is always installed — `defaultEnabled: false` does not
+protect one — so omission is the only way to keep them opt-in.
+
+The table below is the reference list of what those bundles are made of.
+
+---
+
 ## Plugins
 
 | Plugin | Install as | Contents |
@@ -30,19 +62,20 @@ testing skills route between each other, with the trigger phrases and sequence f
 | Release Flow | `ceh-release-flow` | Orchestrate an end-to-end release in one pass: version bump → changelog → README → CLAUDE.md → PR → merge → tag → GitHub release, by sequencing the skills that own each step |
 | Business Plan | `ceh-business-plan` | Turn a product idea or app plan into a validated business plan via a product-market-fit interview loop — draft, interrogate the weakest assumption, revise until a PMF gate passes |
 | Evaluation | `ceh-evaluation` | Evaluate a skill or plugin you just wrote — derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a readiness gate passes |
-| Fabled | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
-| Advisor | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
+| Fabled *(experimental)* | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
+| Advisor *(experimental)* | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
 | Testing | `ceh-testing` | Stack-agnostic testing technique — reproduce-first bug fixes and bisection, systematic test-case design (partitions, boundaries, properties, metamorphic, fuzzing), suite audits (assertions, mutation, flakiness), behavior-preservation checks for refactors, and a pre-completion risk gate |
 | Usability Audit | `ceh-usability-audit` | Measure whether a non-expert can actually use what you built — cold persona-constrained walkthroughs (`novice-walker`), a five-question interface audit across web UI/CLI/library/app surfaces, error-message rewrites, and a plain-language pass |
 
 ### Categorization
 
 Plugins split on a single axis — **use case** — so you load exactly what your work needs. They fall
-into three tiers:
+into four tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
+| **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below |
+| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -203,7 +236,8 @@ interpreter is available. Install with `winget install Python.Python.3.12` / `br
 
 ### Step 2 — Install plugins
 
-Install individual plugins for the use cases you need:
+Prefer a scenario bundle (see [Start here](#start-here--scenario-bundles)) — it pulls its members
+in automatically. Install individual plugins only when you want a set no bundle describes:
 
 ```
 /plugin install ceh-coding-agent@ceh-plugins --scope user
@@ -228,6 +262,9 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-testing@ceh-plugins --scope user
 /plugin install ceh-usability-audit@ceh-plugins --scope user
 ```
+
+Some of those are already dependencies of others: installing `ceh-release-flow` brings
+`ceh-git-workflow` and `ceh-documentation`, and each stack plugin brings `ceh-testing`.
 
 Or install all at once using `--scope project` for project-specific installs.
 
