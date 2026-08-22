@@ -28,7 +28,7 @@ Plugins fall into three tiers:
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
-`ceh-dev-tools` is a standalone tooling plugin. Categorization rules of thumb:
+Categorization rules of thumb:
 
 - **Framework variants do not split into separate plugins** when their skills trigger on disjoint
   file types (e.g. `sveltekit` on `.svelte`, `react-vite` on `.tsx` both live in `ceh-web-frontend`).
@@ -79,7 +79,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 
 | Plugin directory | Domain |
 |-----------------|--------|
-| `ceh-coding-agent` | Behavioral contract for coding agents; write-less-code minimalism reflex; retroactive refactoring (`shrink-diff` on a branch's diff, `refactor-repo` campaign-wide); usage-limit guard hook + stop-and-summarize handoff (`usage-limit-handoff`); explaining code to a person in-session until it lands (`explain-until-understood`) |
+| `ceh-coding-agent` | Behavioral contract for coding agents; write-less-code minimalism reflex; retroactive refactoring (`shrink-diff` on a branch's diff, `refactor-repo` campaign-wide); usage-limit guard hook + stop-and-summarize handoff (`usage-limit-handoff`); explaining code to a person in-session until it lands (`explain-until-understood`); whole-repo orientation — `explain-codebase` writes a component-level explanation into a git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md`, and the `repo-tree-mapper` agent writes an annotated structure map |
 | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app (iteratively or to MVP), implement from the plan, review against it, patch a shipped version with small non-feature changes |
 | `ceh-architecture` | Stack-agnostic design: living architecture docs (Mermaid diagrams + Key Decisions), domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
@@ -91,7 +91,6 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-seo` | SEO/GEO discoverability for anything internet-exposed: public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
-| `ceh-dev-tools` | Repository exploration and codebase orientation: `explain-codebase` writes a component-level explanation of a whole repo into a git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md`; the `repo-tree-mapper` agent writes an annotated structure map |
 | `ceh-blog` | Interview-driven blog post writing |
 | `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; changelog & README maintenance |
 | `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) for cost-optimized multi-step work |

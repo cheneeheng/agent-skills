@@ -11,12 +11,12 @@
     {
       "name": "ceh-coding-agent",
       "source": "./plugins/ceh-coding-agent",
-      "description": "CEH agent behavior contract: autonomous execution mode, the five-step task workflow, write-less-code minimalism, and how the agent explains its work.",
-      "version": "3.0.0",
+      "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, and whole-repo explanation and mapping.",
+      "version": "3.1.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
-      "keywords": ["agent", "coding-contract", "workflow"]
+      "keywords": ["agent", "coding-contract", "workflow", "refactor", "codebase", "exploration"]
     },
     {
       "name": "ceh-plan-build-review",
@@ -117,16 +117,6 @@
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
       "keywords": ["agent", "lessons-learned", "retrospective"]
-    },
-    {
-      "name": "ceh-dev-tools",
-      "source": "./plugins/ceh-dev-tools",
-      "description": "CEH developer tools: repository exploration, mapping, and codebase orientation — skill and agents.",
-      "version": "1.2.4",
-      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
-      "repository": "https://github.com/cheneeheng/agent-skills",
-      "license": "Apache-2.0",
-      "keywords": ["agent", "dev-tools", "repo-map", "codebase", "exploration"]
     },
     {
       "name": "ceh-blog",

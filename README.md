@@ -12,7 +12,7 @@ testing skills route between each other, with the trigger phrases and sequence f
 
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
-| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`) |
+| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`); whole-repo orientation — `explain-codebase` into `.agents_workspace/CODEBASE_EXPLAINED.md` and the `repo-tree-mapper` agent |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
@@ -23,7 +23,6 @@ testing skills route between each other, with the trigger phrases and sequence f
 | Ops | `ceh-ops` | Incident response, rollback, deploy pipeline; CI agents |
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
-| Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation — explain a whole repo component by component into `.agents_workspace/CODEBASE_EXPLAINED.md`, or map its structure into `REPO_MAP.md` |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
 | Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README maintenance |
 | SEO | `ceh-seo` | SEO/GEO discoverability for anything internet-exposed — public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
@@ -47,7 +46,7 @@ into three tiers:
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
-`ceh-dev-tools` is a standalone tooling plugin. Each plugin is self-contained: a
+Each plugin is self-contained: a
 foundational standard needed by more than one plugin is duplicated into each rather than extracted
 into a shared base, so one plugin per use case is all you load. Cross-cutting plugins are the
 orthogonal tier — they hold a discipline that applies whatever you are building, so they load
@@ -114,7 +113,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-documentation` | User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
 | `ceh-documentation` | Update Changelog | `/ceh-documentation:update-changelog` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
 | `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
-| `ceh-dev-tools` | Explain Codebase | `/ceh-dev-tools:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and key flows into git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` (per-file detail only on request) |
+| `ceh-coding-agent` | Explain Codebase | `/ceh-coding-agent:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and key flows into git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` (per-file detail only on request) |
 | `ceh-seo` | Web Discoverability | `/ceh-seo:web-discoverability` | Shipping a public web page/route — head checklist, sitemap/robots/llms.txt, JSON-LD, SSR/prerender, GEO citation rules |
 | `ceh-seo` | Text Discoverability | `/ceh-seo:text-discoverability` | Writing public-facing repo/package text — README first screen, one-liner, GitHub topics, PyPI/npm descriptions and keywords |
 | `ceh-orchestration` | Orchestrate | `/ceh-orchestration:orchestrate` | Decompose and delegate a big multi-step task — plan/delegate-only main session, cheap isolated workers, to cap context/token cost |
@@ -161,7 +160,7 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 | Plugin | Agent | Invoke as | When to use |
 |--------|-------|-----------|-------------|
-| `ceh-dev-tools` | Repo Tree Mapper | `/ceh-dev-tools:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
+| `ceh-coding-agent` | Repo Tree Mapper | `/ceh-coding-agent:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
 | `ceh-python-service` | Python Unit Tester | `/ceh-python-service:python-unit-tester` | Write isolated pytest unit tests for functions, classes, or modules with mocked dependencies |
 | `ceh-python-service` | Python Integration Tester | `/ceh-python-service:python-integration-tester` | Write tests for real component interactions — DB, HTTP between internal services, service boundaries |
 | `ceh-python-service` | Python System Tester | `/ceh-python-service:python-system-tester` | Write full end-to-end / acceptance tests that exercise the entire application stack |
@@ -218,7 +217,6 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-ops@ceh-plugins --scope user
 /plugin install ceh-summarize-chat@ceh-plugins --scope user
 /plugin install ceh-lessons-learned@ceh-plugins --scope user
-/plugin install ceh-dev-tools@ceh-plugins --scope user
 /plugin install ceh-blog@ceh-plugins --scope user
 /plugin install ceh-documentation@ceh-plugins --scope user
 /plugin install ceh-orchestration@ceh-plugins --scope user
@@ -267,7 +265,6 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-ops" },
     { "path": "~/agent-skills/plugins/ceh-summarize-chat" },
     { "path": "~/agent-skills/plugins/ceh-lessons-learned" },
-    { "path": "~/agent-skills/plugins/ceh-dev-tools" },
     { "path": "~/agent-skills/plugins/ceh-blog" },
     { "path": "~/agent-skills/plugins/ceh-documentation" },
     { "path": "~/agent-skills/plugins/ceh-orchestration" },

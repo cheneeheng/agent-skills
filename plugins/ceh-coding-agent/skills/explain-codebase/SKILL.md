@@ -9,7 +9,7 @@ description: >-
   this repo", or "I inherited this repo — what is going on". Explains at component/module level by
   default; drops to one entry per file only when the user explicitly asks for per-file detail. Also
   load before making the first change to an unfamiliar codebase. Not for a one-line-per-path
-  structure map (use the ceh-dev-tools:repo-tree-mapper agent), not for design diagrams and decision
+  structure map (use the ceh-coding-agent:repo-tree-mapper agent), not for design diagrams and decision
   records (ceh-architecture:document-architecture), and not for end-user or operator documentation
   (ceh-documentation).
 ---
@@ -29,7 +29,7 @@ you report, not an omission you make quietly.
 
 | Want | Use |
 |------|-----|
-| One line per path, clickable tree, fast orientation | `ceh-dev-tools:repo-tree-mapper` agent |
+| One line per path, clickable tree, fast orientation | `ceh-coding-agent:repo-tree-mapper` agent |
 | Diagrams of the system's shape + decision log | `ceh-architecture:document-architecture` |
 | Docs for people who *use* or *operate* the product | `ceh-documentation:user-operator-guide` |
 | Explain one subsystem to someone who is in the session and can say "still blurry" | `ceh-coding-agent:explain-until-understood` |

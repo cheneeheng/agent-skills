@@ -10,7 +10,7 @@ description: >-
   the escalation ladder for an explanation that missed — prose, steps, pictures, foundations — on
   the rule that you change the representation rather than restate it louder. Writes no files by
   default. Not for implementing, fixing, or reviewing code, a repo-wide orientation file
-  (ceh-dev-tools:explain-codebase), or user-facing documentation (ceh-documentation).
+  (ceh-coding-agent:explain-codebase), or user-facing documentation (ceh-documentation).
 argument-hint: '[what to explain]'
 ---
 
@@ -53,8 +53,8 @@ able to answer nothing.
 
 | Want | Use |
 |------|-----|
-| A repo-wide orientation file, component by component | `ceh-dev-tools:explain-codebase` |
-| One line per path, fast structure map | `ceh-dev-tools:repo-tree-mapper` agent |
+| A repo-wide orientation file, component by component | `ceh-coding-agent:explain-codebase` |
+| One line per path, fast structure map | `ceh-coding-agent:repo-tree-mapper` agent |
 | Diagrams and decision records that live in the repo | `ceh-architecture:document-architecture` |
 | Docs for people who *use* or *operate* the product | `ceh-documentation:user-operator-guide` |
 | Someone in this session needs to understand something now | **this skill** |

@@ -477,7 +477,7 @@ the baseline wording changes anywhere, change it everywhere.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `plugins/ceh-dev-tools/skills/explain-codebase/SKILL.md` | "Rules" section | canonical — the full list, including the accounting and regeneration rules that only apply to a generated file |
+| `plugins/ceh-coding-agent/skills/explain-codebase/SKILL.md` | "Rules" section | canonical — the full list, including the accounting and regeneration rules that only apply to a generated file |
 | `plugins/ceh-coding-agent/skills/explain-until-understood/SKILL.md` | "Rules" section | the three rules that hold for a spoken explanation too |
 
 **What is shared:** three bullets, word for word — "Evidence over inference" (unclear purpose is
