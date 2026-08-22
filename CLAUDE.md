@@ -20,13 +20,19 @@ Two consequences drive how skills are written and where they live:
   `ceh-web-frontend`, etc. — the name states the use case, which removes the silent
   "fullstack-web-only" assumption and makes gaps obvious.
 
-Plugins fall into three tiers:
+Plugins fall into four tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
+| **Scenario bundle** | one per situation | `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial` |
+| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
+
+The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
+`dependencies` and nothing else — no skills, agents, or hooks — that names the set belonging to one
+situation. `-greenfield` depends on its own `-iterate` twin plus the planning delta, so the phase
+transition is a no-op. Design record: `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md`.
 
 Categorization rules of thumb:
 
@@ -36,6 +42,10 @@ Categorization rules of thumb:
   Apply the "split only when too big" rule later if a framework's skills bloat the plugin.
 - **A foundational standard needed by more than one use-case plugin is duplicated into each**, not
   extracted into a shared base plugin — see the Shared-Standards Duplication Policy below.
+- **Scenario bundles live in `plugins/` like everything else**, with no `plugins-scenario/` folder.
+  Tier subfolders are already ruled out below; a sibling top-level folder is the same decision
+  relabelled. The `ceh-scenario-` name prefix carries the distinction, and `validate.py` enforces
+  the structural invariant (manifest + README only).
 - **App-specific patterns are not standards.** Anything bound to one application's schema or design
   is removed rather than kept as a niche plugin.
 - **The use-case axis governs the use-case-workflow and stack/build tiers; the cross-cutting tier is
@@ -58,10 +68,11 @@ Categorization rules of thumb:
 ## Structure
 
 ```
-.agents_workspace/            # Skill session artifacts — not a plugin. DECISION_LOG.md and PLUGIN_REORG_PLAN.md are tracked; skill-evals/<skill>/run-NNN/SKILL_EVAL.md holds ceh-evaluation output
+.agents_workspace/            # Skill session artifacts — not a plugin. DECISION_LOG.md, PLUGIN_REORG_PLAN.md and PLUGIN_DEPENDENCY_PLAN.md are tracked; skill-evals/<skill>/run-NNN/SKILL_EVAL.md holds ceh-evaluation output
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md (pre-v3 releases)
 plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
+├── ceh-scenario-<name>/      # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY, no skills/agents/hooks
 └── ceh-<plugin-name>/
     ├── .claude-plugin/           # Plugin manifest (plugin.json) — version lives here
     ├── agents/                   # Optional — subagents for complex autonomous tasks
@@ -141,6 +152,33 @@ inside the block. Folding joins lines with a single space, so never rely on a do
 Every **other** frontmatter key that contains `: ` must be quoted — single quotes are the default
 (`argument-hint: '[plan-file]'`). Short values that need no quoting stay bare (`effort: max`).
 
+## Plugin Dependencies
+
+A plugin declares `dependencies` in its `plugin.json` (bare strings, no version ranges — the repo
+has no per-plugin `{name}--v{version}` tags). Dependencies are installed and enabled automatically
+and transitively; there is **no optional dependency**, and `defaultEnabled: false` does not protect
+one.
+
+Two rules decide whether a cross-plugin reference earns a dependency:
+
+- **It must fire on every run of the skill.** A conditional handoff — `ceh-usability-audit`
+  delegating WCAG to `ceh-web-frontend:accessibility` only when the subject has a UI — stays prose.
+  Declaring it would install a whole plugin for a branch most runs never reach.
+- **Negative routing never counts.** `Not for tagging, use ceh-git-workflow:release` names an
+  *alternative*; a dependency there installs the plugin the user deliberately steered away from.
+
+**A cross-cutting plugin may depend only on other cross-cutting plugins.** This keeps the graph
+layered; `validate.py` checks acyclicity directly rather than relying on the rule to imply it.
+
+Where a dependency exists, the referencing skill body calls the target **explicitly** —
+`Invoke the Skill tool with skill="ceh-testing:design-test-cases"` — instead of naming a trigger
+phrase and hoping the description matches. `validate.py` rejects such a call if the target does not
+resolve, is not in a declared dependency, or sets `disable-model-invocation: true` (19 of 77 skills
+do, and the resulting failed call is silent).
+
+Do not convert every backtick-quoted skill name into an invocation: most references are advisory,
+and a sweep would pull a 6-plugin closure into a single install.
+
 ## Adding a Component
 
 The repo-local skill `.claude/skills/add-plugin-component/` is the single checklist for adding or
@@ -151,6 +189,8 @@ being created; load it explicitly if it has not.
 
 Whatever else gets skipped, these four land in the **same commit** or CI fails:
 
+0. If the change adds or removes a dependency edge, or a `ceh-scenario-*` bundle, update
+   `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` §4 in the same commit.
 1. A row in the root `README.md` table (Skills or Agents).
 2. A row in `plugins/ceh-<plugin>/README.md`.
 3. A version bump in **both** `plugins/ceh-<plugin>/.claude-plugin/plugin.json` and
