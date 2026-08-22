@@ -202,6 +202,7 @@ notes live in the detailed entries referenced below.
 | `plugins/ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md` | entire file | consumer copy — schema plus pointer rules and resolution order |
 | `plugins/ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy |
 | `plugins/ceh-plan-build-review/skills/patch-built-version/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy |
+| `plugins/ceh-business-plan/skills/develop-business-plan/references/plan-schema.md` | entire file | consumer copy — identical to the `implement-from-plan` copy; **cross-plugin** |
 
 **What is shared:** file naming and version-tag rules (`SKELETON.md` / `ITER_NN.md`, `NN` two digits; canonical `_vN` suffix, `vN_` prefix also read; tag-sharing files form a plan family with a per-family `NN` counter); SKELETON frontmatter (`artifact`, `status`, `created`, `app`, `stack`, `sections`, no `depends_on`, no MVP fields); ITER frontmatter (`artifact`, `status`, `created`, `scope`, `sections_changed`, `sections_unchanged`, `depends_on` by stem, backward-only, covering both same-family chaining and cross-version inheritance); the MVP terminator convention (`mvp: true` + `mvp_target` + `## Out of MVP scope` body block on the final iteration only; non-terminal iterations omit `mvp` entirely); the patch convention (`patch: true` ITER continuing the family counter, `depends_on` the terminator or a prior patch, allowed past the terminator, never carries `mvp`, `sections_changed` within §04/§05 — produced by `patch-built-version`, consumed by `implement-from-plan` and `review-against-plan`).
 
@@ -209,7 +210,11 @@ notes live in the detailed entries referenced below.
 - the producer copies omit the consumer-only material (pointer formats, resolution order, the absent-terminator fallback).
 - the iterative producer copy does not describe the terminator block (one-artifact-at-a-time sessions don't emit it).
 - the producer `section-specs.md` copies do not describe the `patch` marker — patches are produced by `patch-built-version`, not by the two planning skills.
-- the three `plan-schema.md` consumer copies are word-for-word identical — keep them in lockstep.
+- the four `plan-schema.md` consumer copies are word-for-word identical — keep them in lockstep.
+- the `ceh-business-plan` copy is the only cross-plugin one. It exists so `develop-business-plan`
+  can read an app plan's frontmatter without `ceh-plan-build-review` being installed — a
+  dependency there would install a whole plugin for a branch that fires only when the input is an
+  app plan.
 
 ---
 
