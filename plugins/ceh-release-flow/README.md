@@ -53,14 +53,11 @@ The PR-less variant — same pipeline directly on `main`, with no branch, PR, or
 **Auto-triggers on:** "run the release flow without a PR", "do the full release directly on main",
 "release this project without opening a PR", "cut a release without a PR".
 
-Each delegated step is named by trigger phrase as well as by skill, so the flow degrades
-gracefully when a referenced plugin is not installed — the phrase still names the standard to
-apply inline.
-
 ## Dependencies
 
-Both skills delegate to the following skills from other CEH plugins. Install them for the full
-experience:
+`ceh-git-workflow` and `ceh-documentation` are declared `dependencies` in this plugin's manifest,
+so installing `ceh-release-flow` installs both. Each step below is invoked directly by name — the
+flow does not rely on a trigger phrase matching.
 
 | Skill | Plugin | Used by |
 |-------|--------|---------|
@@ -73,11 +70,11 @@ experience:
 | `update-readme` | `ceh-documentation` | both |
 | `revise-claude-md` | `claude-md-management` | both (optional — CLAUDE.md refresh) |
 
-**Fallback when a dependency is not installed:** these are soft dependencies, not hard requirements.
-Each step is named by its trigger phrase as well as by its owning skill, so if a referenced plugin
-is missing the flow does **not** skip the step — it falls back to applying that step's standard
-inline (e.g. it bumps versions, writes the changelog, or tags the release directly) instead of
-delegating. The `revise-claude-md` step always falls back to a surgical inline edit.
+`revise-claude-md` is the one exception: it lives in another marketplace, which plugin
+dependencies cannot reach, so step 6 still falls back to a surgical inline edit.
+
+Disabling `ceh-git-workflow` or `ceh-documentation` while `ceh-release-flow` is enabled is refused
+by the plugin system, which is the point: the step tables call those skills unconditionally.
 
 ## Installation
 

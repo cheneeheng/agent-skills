@@ -27,6 +27,17 @@ Frameworks: **Vitest** (unit + component), **@testing-library/svelte**, **MSW** 
 
 Naming: `<subject>.test.ts` for unit/component, `<scenario>.spec.ts` for E2E. One behavior per test.
 
+## Choosing what to test
+
+This skill covers the **tooling** — runner, fixtures, mocking, coverage. It does not decide
+*which* inputs and cases a test should cover. Before writing the cases, run:
+
+> Invoke the Skill tool with skill="ceh-testing:design-test-cases"
+
+It supplies equivalence partitions, boundary values, decision tables, pairwise combinations,
+properties, and metamorphic relations — stack-agnostic technique that the sections below assume
+has already been applied.
+
 ## Unit Tests — No DOM, No Network
 
 ```ts

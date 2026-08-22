@@ -26,16 +26,16 @@ through a reviewed PR instead, use `ceh-release-flow:release-flow`.
 
 Run top to bottom. Each step gates the next — do not proceed past a red gate.
 
-| # | Step | Delegate to (trigger phrase / repo skill) | Gate before next step |
-|---|------|-------------------------------------------|-----------------------|
-| 1 | Decide the semver bump — MAJOR/MINOR/PATCH; when in doubt, PATCH | "cut a release" → `ceh-git-workflow:release` (bump table) | Version chosen, never below current |
+| # | Step | Delegate to | Gate before next step |
+|---|------|-------------|-----------------------|
+| 1 | Decide the semver bump — MAJOR/MINOR/PATCH; when in doubt, PATCH | Invoke the Skill tool with skill="ceh-git-workflow:release" (bump table) | Version chosen, never below current |
 | 2 | Confirm you are on an up-to-date `main` | `git checkout main && git pull origin main` | Clean tree on latest `main` |
 | 3 | Bump the version in **every** manifest the project ships (`pyproject.toml`, `package.json`, `plugin.json`, `marketplace.json`, `Cargo.toml`, …) | — mechanical edit | All manifests read the same vX.Y.Z |
-| 4 | Write the vX.Y.Z changelog entry | "update the changelog" → `ceh-documentation:update-changelog` | Section written and semver-validated |
-| 5 | Refresh the README if the change is user-facing | "update the readme" → `ceh-documentation:update-readme` | Updated, or "no update needed" recorded |
+| 4 | Write the vX.Y.Z changelog entry | Invoke the Skill tool with skill="ceh-documentation:update-changelog" | Section written and semver-validated |
+| 5 | Refresh the README if the change is user-facing | Invoke the Skill tool with skill="ceh-documentation:update-readme" | Updated, or "no update needed" recorded |
 | 6 | Update CLAUDE.md if project facts/structure changed | surgical edit (or `revise-claude-md` if that plugin is installed) | CLAUDE.md matches reality, or skip logged |
-| 7 | Commit the bump + docs straight to `main` | "commit" → `ceh-git-workflow:commit` | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean, pushed to `main` |
-| 8 | Tag and publish the release on `main` | "cut a release" → `ceh-git-workflow:release` | Tag pushed, release created |
+| 7 | Commit the bump + docs straight to `main` | Invoke the Skill tool with skill="ceh-git-workflow:commit" | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean, pushed to `main` |
+| 8 | Tag and publish the release on `main` | Invoke the Skill tool with skill="ceh-git-workflow:release" | Tag pushed, release created |
 
 ## Step 7 detail — the release commit is not subject-only
 
@@ -62,9 +62,9 @@ attribution footer only when settings supply none.
 
 ## Delegating steps 7–8 to subagents
 
-Steps 7–8 are mechanical once the docs are written. When the `ceh-git-workflow` agents are
-installed, dispatch them to the subagent that owns each — `commit-author` (7, tell it the commit
-goes straight to `main` and must be pushed, and pass **the body content above**) and
+Steps 7–8 are mechanical once the docs are written. Dispatch them to the `ceh-git-workflow`
+subagent that owns each — `commit-author` (7, tell it the commit goes straight to `main` and must
+be pushed, and pass **the body content above**) and
 `release-cutter` (8, pass "tag-only" plus the changelog notes file) — to keep the main session
 lean. A subagent handed only `chore: release vX.Y.Z` will commit exactly that and nothing more; it
 cannot recover the release's rationale from a diff of version strings. Pass the body text, or pass
@@ -98,5 +98,3 @@ Reuse the vX.Y.Z section you wrote in step 4 as the release notes (`--notes-file
 - **Push before you tag.** The release commit must be on the remote `main` (step 7) before the tag
   in step 8, so the tag points at a pushed commit.
 - **Versions only increase.** When the bump level is unclear, PATCH.
-- If a step's owning skill is not installed, its trigger phrase still names the standard — apply it
-  inline rather than skipping the step.

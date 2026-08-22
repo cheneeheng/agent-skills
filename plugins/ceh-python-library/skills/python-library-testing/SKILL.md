@@ -31,6 +31,17 @@ Test files mirror source structure. Naming: `test_<what>_<expected_behavior>.py`
 Test against the public API surface (`import your_library`), not private modules — tests that reach
 into `_private` internals lock in implementation details and break on every refactor.
 
+## Choosing what to test
+
+This skill covers the **tooling** — runner, fixtures, mocking, coverage. It does not decide
+*which* inputs and cases a test should cover. Before writing the cases, run:
+
+> Invoke the Skill tool with skill="ceh-testing:design-test-cases"
+
+It supplies equivalence partitions, boundary values, decision tables, pairwise combinations,
+properties, and metamorphic relations — stack-agnostic technique that the sections below assume
+has already been applied.
+
 ## Unit Tests — No I/O
 
 ```python
