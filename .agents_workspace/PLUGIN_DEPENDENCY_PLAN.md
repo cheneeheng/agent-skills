@@ -51,6 +51,7 @@ Source: https://code.claude.com/docs/en/plugin-dependencies (read 2026-08-22).
 | `defaultEnabled: false` | **Does not protect a dependency** — a dep pulled in by an active plugin installs with `true` regardless of its own default |
 | Version ranges | Resolved against git tags named `{plugin-name}--v{version}`, created by `claude plugin tag --push` |
 | Bundle plugin | A manifest may be `name` + `version` + `dependencies` only, with no skills/agents/hooks |
+| Where `dependencies` lives | `plugin.json` **or** the `marketplace.json` entry. This repo declares it in `plugin.json` only — the docs give no precedence when both are set, and the marketplace copy would be an unenforced duplicate |
 | Cross-marketplace | Blocked unless allowlisted. Out of scope: every dependency in this plan is `ceh-*` within `ceh-plugins` |
 | Cleanup | `claude plugin prune`, or `claude plugin uninstall <p> --prune` |
 
@@ -78,7 +79,7 @@ Rev-1 decisions kept unless marked. New in rev 2: **D13–D18**.
 | D5 | **Merge `ceh-dev-tools` into the contract plugin** | `explain-until-understood` and `explain-codebase` cross-reference each other purely to disambiguate — they belong in one plugin. Three whole-repo passes (`refactor-repo`, `explain-codebase`, `repo-tree-mapper`) end up co-located, so `refactor-repo` calling `explain-codebase` becomes an in-plugin call. `ceh-dev-tools` is one skill + one agent, below the weight of a standalone plugin. |
 | ~~D6~~ | ~~Do not rename `ceh-agent-coding-contract`~~ | **Superseded by D14.** Rev 1 priced only today's cost and missed that every later step of this plan raises the price. |
 | D7 | **`ceh-ops` is opt-in, not bundled** | Reported as "not really used". `defaultEnabled: false` cannot exclude it (§2), so the only lever is to omit it from `dependencies`. Says nothing about what `ceh-ops` itself requires — see D17 and §5.3. |
-| D8 | **`fabled` and `advisor` are experimental** | Excluded from every bundle; installed deliberately. Marked as such in the README and in their `plugin.json` `description` fields (that string is what `claude plugin list` shows). `ceh-advisor` warrants an explicit note that it installs always-on session hooks. |
+| D8 | **`fabled`, `advisor` and `orchestration` are experimental** | Excluded from every bundle; installed deliberately. Marked as such in the README and in their `plugin.json` `description` fields (that string is what `claude plugin list` shows). `ceh-advisor` warrants an explicit note that it installs always-on session hooks. |
 | D9 | **Session-mechanics plugins belong to no scenario** | `summarize-chat`, `orchestration`, and `lessons-learned` are about how you run a *session*, not what you are building. Install once at user scope. |
 | D10 | **Bare-string dependencies; no version ranges** | Ranges resolve against per-plugin `{name}--v{version}` git tags. This repo has only repo-wide snapshot tags (`v4.0.2`). Adding ranges requires changing the release flow to tag every plugin at every release. |
 | D11 | **Only imperative references become dependencies** | Most cross-plugin references are negative routing in `description` ("Not for tagging, use X"). Those mark *alternatives*; declaring a dependency there installs a plugin the user deliberately steered away from. Refined by D13. |
@@ -142,12 +143,12 @@ LAYER 2 — plugins that depend on Layer 1 (the complete set; six edges)
 LAYER 1 — cross-cutting leaves, declare nothing
 
   ceh-coding-agent   ceh-git-workflow   ceh-testing
-  ceh-fabled         ceh-advisor        [both experimental, D8]
+  ceh-fabled         ceh-advisor        [experimental, D8]
 
 NEVER BUNDLED
 
-  experimental (D8):        ceh-fabled, ceh-advisor
-  session mechanics (D9):   ceh-summarize-chat, ceh-orchestration, ceh-lessons-learned
+  experimental (D8):        ceh-fabled, ceh-advisor, ceh-orchestration
+  session mechanics (D9):   ceh-summarize-chat, ceh-lessons-learned
   opt-in (D7):              ceh-ops
   declare nothing of own:   ceh-blog, ceh-business-plan, ceh-scaffolding, ceh-architecture,
                             ceh-seo, ceh-evaluation, ceh-usability-audit, ceh-plan-build-review,

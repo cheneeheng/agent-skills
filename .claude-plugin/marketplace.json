@@ -141,8 +141,8 @@
     {
       "name": "ceh-orchestration",
       "source": "./plugins/ceh-orchestration",
-      "description": "CEH orchestration: thin-orchestrator mode for cost-optimized multi-step work — the main session plans and delegates while cheap isolated subagents (the built-in Explore agent plus executor/verifier workers) absorb the volume.",
-      "version": "1.1.0",
+      "description": "EXPERIMENTAL. CEH orchestration: thin-orchestrator mode for cost-optimized multi-step work — the main session plans and delegates while cheap isolated subagents (the built-in Explore agent plus executor/verifier workers) absorb the volume.",
+      "version": "1.1.1",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -235,7 +235,6 @@
       "version": "1.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
-      "dependencies": ["ceh-scenario-service-iterate", "ceh-scaffolding", "ceh-business-plan"],
       "license": "Apache-2.0",
       "keywords": ["agent", "scenario", "bundle", "service", "greenfield"]
     },
@@ -246,7 +245,6 @@
       "version": "1.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
-      "dependencies": ["ceh-coding-agent", "ceh-git-workflow", "ceh-testing", "ceh-architecture", "ceh-python-service", "ceh-documentation", "ceh-release-flow", "ceh-usability-audit", "ceh-plan-build-review"],
       "license": "Apache-2.0",
       "keywords": ["agent", "scenario", "bundle", "service", "iterate"]
     },
@@ -257,7 +255,6 @@
       "version": "1.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
-      "dependencies": ["ceh-scenario-library-iterate", "ceh-scaffolding", "ceh-business-plan"],
       "license": "Apache-2.0",
       "keywords": ["agent", "scenario", "bundle", "library", "greenfield"]
     },
@@ -268,7 +265,6 @@
       "version": "1.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
-      "dependencies": ["ceh-coding-agent", "ceh-git-workflow", "ceh-testing", "ceh-architecture", "ceh-python-library", "ceh-documentation", "ceh-release-flow", "ceh-usability-audit", "ceh-plan-build-review"],
       "license": "Apache-2.0",
       "keywords": ["agent", "scenario", "bundle", "library", "iterate"]
     },
@@ -279,7 +275,6 @@
       "version": "1.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
-      "dependencies": ["ceh-scenario-webapp-iterate", "ceh-scaffolding", "ceh-business-plan"],
       "license": "Apache-2.0",
       "keywords": ["agent", "scenario", "bundle", "webapp", "greenfield"]
     },
@@ -290,7 +285,6 @@
       "version": "1.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
-      "dependencies": ["ceh-coding-agent", "ceh-git-workflow", "ceh-testing", "ceh-architecture", "ceh-web-frontend", "ceh-documentation", "ceh-release-flow", "ceh-usability-audit", "ceh-plan-build-review"],
       "license": "Apache-2.0",
       "keywords": ["agent", "scenario", "bundle", "webapp", "iterate"]
     },
@@ -301,7 +295,6 @@
       "version": "1.0.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
-      "dependencies": ["ceh-coding-agent", "ceh-blog", "ceh-documentation", "ceh-seo"],
       "license": "Apache-2.0",
       "keywords": ["agent", "scenario", "bundle", "editorial", "writing"]
     }
