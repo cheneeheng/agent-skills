@@ -219,7 +219,9 @@ This repo has two independent versioning layers:
 
 **Per-plugin versions** (load-bearing for auto-update):
 - Live in `plugins/ceh-<plugin>/.claude-plugin/plugin.json` and mirrored in `.claude-plugin/marketplace.json`.
-- Follow semver: **PATCH** for content/description updates, **MINOR** for new skills or agents.
+- Follow semver: **PATCH** for content/description updates, **MINOR** for new skills or agents,
+  or for adding/removing a `dependencies` entry — that changes what a user gets on install, which
+  is more than content.
 - Bump only at commit time — not during iterative edits within a session.
 - Both `plugin.json` and `marketplace.json` must be bumped in the same commit.
 
