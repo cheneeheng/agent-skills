@@ -24,7 +24,7 @@ Plugins fall into three tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
+| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -79,7 +79,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 
 | Plugin directory | Domain |
 |-----------------|--------|
-| `ceh-agent-coding-contract` | Behavioral contract for coding agents; write-less-code minimalism reflex; retroactive refactoring (`shrink-diff` on a branch's diff, `refactor-repo` campaign-wide); usage-limit guard hook + stop-and-summarize handoff (`usage-limit-handoff`); explaining code to a person in-session until it lands (`explain-until-understood`) |
+| `ceh-coding-agent` | Behavioral contract for coding agents; write-less-code minimalism reflex; retroactive refactoring (`shrink-diff` on a branch's diff, `refactor-repo` campaign-wide); usage-limit guard hook + stop-and-summarize handoff (`usage-limit-handoff`); explaining code to a person in-session until it lands (`explain-until-understood`) |
 | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app (iteratively or to MVP), implement from the plan, review against it, patch a shipped version with small non-feature changes |
 | `ceh-architecture` | Stack-agnostic design: living architecture docs (Mermaid diagrams + Key Decisions), domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |

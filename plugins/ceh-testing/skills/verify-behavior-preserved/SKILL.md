@@ -128,5 +128,5 @@ Baseline first, always:
 Committing the tests separately is what lets a reviewer see that the pins predate the change. Tests
 written in the same commit as the refactor cannot prove they were not shaped by it.
 
-Pairs with `ceh-agent-coding-contract:shrink-diff` and `refactor-repo` — both change working code
+Pairs with `ceh-coding-agent:shrink-diff` and `refactor-repo` — both change working code
 with no behavior change intended, and neither carries a verification step of its own.

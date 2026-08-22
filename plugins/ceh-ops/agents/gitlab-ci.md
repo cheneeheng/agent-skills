@@ -13,7 +13,7 @@ description: >-
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch
 skills:
-  - ceh-agent-coding-contract:agent-coding-contract
+  - ceh-coding-agent:agent-coding-contract
 effort: medium
 maxTurns: 25
 ---

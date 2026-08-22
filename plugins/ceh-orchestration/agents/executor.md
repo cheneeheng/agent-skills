@@ -8,7 +8,7 @@ description: >-
 model: sonnet
 tools: Read, Write, Edit, Bash, Glob, Grep
 skills:
-  - ceh-agent-coding-contract:agent-coding-contract
+  - ceh-coding-agent:agent-coding-contract
 ---
 
 You implement a single, scoped task from the spec you are given.

@@ -103,7 +103,7 @@ The stack skill supplies the fixture and runner underneath; the technique skill 
 ## Scenario D — a refactor, and shrinking a branch
 
 "shrink the diff" is listed as a trigger by **both** `verify-behavior-preserved` and
-`ceh-agent-coding-contract:shrink-diff`. That is deliberate — both skills change working code with
+`ceh-coding-agent:shrink-diff`. That is deliberate — both skills change working code with
 no behavior change intended, and the shrink side carries no verification step of its own. The
 `Behavior preservation` block in `shrink-diff` and `refactor-repo` now points back at the pinning
 step for anything past a mechanical transform.
@@ -122,7 +122,7 @@ the pins were written against already-shrunk code and prove nothing. To force th
 
 ```
 /ceh-testing:verify-behavior-preserved     # pin behavior, commit the pins on their own
-/ceh-agent-coding-contract:shrink-diff     # then shrink; suite stays green with no test edits
+/ceh-coding-agent:shrink-diff     # then shrink; suite stays green with no test edits
 ```
 
 Committing the pins separately is what lets a reviewer see they predate the change.

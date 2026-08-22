@@ -296,8 +296,8 @@ in all three files.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `plugins/ceh-agent-coding-contract/skills/write-less-code/SKILL.md` | "The ladder" + "When NOT to be lazy" | canonical — full skill, loaded on demand when code is written |
-| `plugins/ceh-agent-coding-contract/hooks/less-code-payload.sh` | `additionalContext` array | compact digest of the ladder + never-simplify list, injected per-turn by the `UserPromptSubmit` hook |
+| `plugins/ceh-coding-agent/skills/write-less-code/SKILL.md` | "The ladder" + "When NOT to be lazy" | canonical — full skill, loaded on demand when code is written |
+| `plugins/ceh-coding-agent/hooks/less-code-payload.sh` | `additionalContext` array | compact digest of the ladder + never-simplify list, injected per-turn by the `UserPromptSubmit` hook |
 
 **What is shared:** the six-rung ladder (YAGNI → stdlib → native platform feature → already-installed
 dependency → one line → minimum that works) and the never-simplify-away list (trust-boundary
@@ -318,8 +318,8 @@ digest in sync with the skill when either changes.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `plugins/ceh-agent-coding-contract/skills/shrink-diff/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | canonical — branch-diff-scoped application |
-| `plugins/ceh-agent-coding-contract/skills/refactor-repo/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | word-for-word copy — campaign-wide application |
+| `plugins/ceh-coding-agent/skills/shrink-diff/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | canonical — branch-diff-scoped application |
+| `plugins/ceh-coding-agent/skills/refactor-repo/SKILL.md` | "The retroactive ladder" + "Behavior preservation" | word-for-word copy — campaign-wide application |
 
 **What is shared:** the six-rung retroactive ladder (delete outright → stdlib → native platform feature → installed dependency → one line → keep as the minimum, collapsing single-implementation abstractions / single-caller wrappers / config-for-a-constant) and the behavior-preservation rules (never mix a behavior change into a refactor; tests before and after where coverage exists, red-before is a finding not a license; mechanical transforms only without coverage; pin behavior with `ceh-testing:verify-behavior-preserved` before anything past a mechanical transform; `refactor:` commits separate from any other change).
 
@@ -478,7 +478,7 @@ the baseline wording changes anywhere, change it everywhere.
 | File | Section | Scope |
 |------|---------|-------|
 | `plugins/ceh-dev-tools/skills/explain-codebase/SKILL.md` | "Rules" section | canonical — the full list, including the accounting and regeneration rules that only apply to a generated file |
-| `plugins/ceh-agent-coding-contract/skills/explain-until-understood/SKILL.md` | "Rules" section | the three rules that hold for a spoken explanation too |
+| `plugins/ceh-coding-agent/skills/explain-until-understood/SKILL.md` | "Rules" section | the three rules that hold for a spoken explanation too |
 
 **What is shared:** three bullets, word for word — "Evidence over inference" (unclear purpose is
 written as "purpose unclear — checked imports and call sites, no references found", never guessed

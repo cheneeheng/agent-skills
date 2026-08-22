@@ -12,7 +12,7 @@ testing skills route between each other, with the trigger phrases and sequence f
 
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
-| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`) |
+| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`) |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
@@ -43,7 +43,7 @@ into three tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
+| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -59,12 +59,12 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 
 | Plugin | Skill | Invoke as | When to use |
 |--------|-------|-----------|-------------|
-| `ceh-agent-coding-contract` | Agent Coding Contract | `/ceh-agent-coding-contract:agent-coding-contract` | Start of any coding session — core rules, five-step workflow, stop conditions, non-goals |
-| `ceh-agent-coding-contract` | Write Less Code | `/ceh-agent-coding-contract:write-less-code` | Every coding session (auto — session-start load + per-turn reinforcement) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line) |
-| `ceh-agent-coding-contract` | Shrink Diff | `/ceh-agent-coding-contract:shrink-diff` | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main` |
-| `ceh-agent-coding-contract` | Refactor Repo | `/ceh-agent-coding-contract:refactor-repo` | Manual only — propose-then-apply refactor campaign over the whole repo or a named module |
-| `ceh-agent-coding-contract` | Usage Limit Handoff | `/ceh-agent-coding-contract:usage-limit-handoff` | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact for the next session, end the turn |
-| `ceh-agent-coding-contract` | Explain Until Understood | `/ceh-agent-coding-contract:explain-until-understood` | Manual only — explain a subsystem, design, or diff to the person in the session, starting from the assumption they know nothing about it: a stated floor, foundations first, plain language, verified claims, ASCII for structure and time, and the escalation ladder when an explanation misses |
+| `ceh-coding-agent` | Agent Coding Contract | `/ceh-coding-agent:agent-coding-contract` | Start of any coding session — core rules, five-step workflow, stop conditions, non-goals |
+| `ceh-coding-agent` | Write Less Code | `/ceh-coding-agent:write-less-code` | Every coding session (auto — session-start load + per-turn reinforcement) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line) |
+| `ceh-coding-agent` | Shrink Diff | `/ceh-coding-agent:shrink-diff` | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main` |
+| `ceh-coding-agent` | Refactor Repo | `/ceh-coding-agent:refactor-repo` | Manual only — propose-then-apply refactor campaign over the whole repo or a named module |
+| `ceh-coding-agent` | Usage Limit Handoff | `/ceh-coding-agent:usage-limit-handoff` | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact for the next session, end the turn |
+| `ceh-coding-agent` | Explain Until Understood | `/ceh-coding-agent:explain-until-understood` | Manual only — explain a subsystem, design, or diff to the person in the session, starting from the assumption they know nothing about it: a stated floor, foundations first, plain language, verified claims, ASCII for structure and time, and the escalation ladder when an explanation misses |
 | `ceh-plan-build-review` | Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning one release at a time — a greenfield skeleton or the next iteration |
 | `ceh-plan-build-review` | Plan Fullstack App to MVP | `/ceh-plan-build-review:plan-fullstack-app-to-mvp` | Planning the complete build to a working MVP in one session |
 | `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
@@ -187,7 +187,7 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 ### Prerequisites
 
-`python3` on `PATH` — required by the hooks in `ceh-advisor` and `ceh-agent-coding-contract`
+`python3` on `PATH` — required by the hooks in `ceh-advisor` and `ceh-coding-agent`
 (`ceh-fabled`'s SessionStart hook needs only `bash`)
 (stdlib only, no packages). Every other plugin works without it.
 
@@ -207,7 +207,7 @@ interpreter is available. Install with `winget install Python.Python.3.12` / `br
 Install individual plugins for the use cases you need:
 
 ```
-/plugin install ceh-agent-coding-contract@ceh-plugins --scope user
+/plugin install ceh-coding-agent@ceh-plugins --scope user
 /plugin install ceh-plan-build-review@ceh-plugins --scope user
 /plugin install ceh-git-workflow@ceh-plugins --scope user
 /plugin install ceh-architecture@ceh-plugins --scope user
@@ -256,7 +256,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 ```json
 {
   "plugins": [
-    { "path": "~/agent-skills/plugins/ceh-agent-coding-contract" },
+    { "path": "~/agent-skills/plugins/ceh-coding-agent" },
     { "path": "~/agent-skills/plugins/ceh-plan-build-review" },
     { "path": "~/agent-skills/plugins/ceh-git-workflow" },
     { "path": "~/agent-skills/plugins/ceh-architecture" },

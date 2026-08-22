@@ -1,4 +1,4 @@
-# ceh-agent-coding-contract
+# ceh-coding-agent
 
 A behavioral contract for coding agents: the rules that govern how an agent operates during a
 session — what it may change, when it must stop, and how it logs decisions. The plugin loads the
