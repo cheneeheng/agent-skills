@@ -67,13 +67,13 @@ plugins in other marketplaces. Prose fallbacks guarding those stay as they are.
 
 ## 3. Decisions
 
-Rev-1 decisions kept unless marked. New in rev 2: **D13–D17**.
+Rev-1 decisions kept unless marked. New in rev 2: **D13–D18**.
 
 | # | Decision | Rationale |
 |---|----------|-----------|
 | D1 | **Scenario bundles**, not tier bundles | A bundle should answer "what am I doing", mirroring the repo's own "skills trigger on moments, not topics" rule one level up. A `ceh-core` tier bundle was rejected: it requires knowing the repo's internal structure before you can install anything. |
 | D2 | **No `ceh-core` intermediate node** | It saves repeated lines but removes per-scenario control, needed precisely because `fabled` and `advisor` are experimental and must not be forced into every scenario. Cost accepted: editing several manifests instead of one when the cross-cutting set changes. |
-| D3 | **Greenfield extends maintenance** | Everything needed to maintain a thing is also needed while building it. Greenfield = maintenance + a planning delta. Avoids duplication and makes the phase transition a no-op — you never switch bundles, you just stop reaching for the planning skills. |
+| D3 | **Greenfield extends `-iterate`** | Everything needed to keep working on a thing is also needed while building it. Greenfield = `-iterate` + a planning delta. Avoids duplication and makes the phase transition a no-op — you never switch bundles, you just stop reaching for the planning skills. |
 | D4 | **No `plugins-scenario/` folder** | `CLAUDE.md` already rules out tier subfolders; a sibling top-level folder is the same decision relabelled. The `ceh-scenario-` name prefix carries the distinction. The structural invariant (manifest only, no skills) is better enforced by `validate.py` than by a directory. |
 | D5 | **Merge `ceh-dev-tools` into the contract plugin** | `explain-until-understood` and `explain-codebase` cross-reference each other purely to disambiguate — they belong in one plugin. Three whole-repo passes (`refactor-repo`, `explain-codebase`, `repo-tree-mapper`) end up co-located, so `refactor-repo` calling `explain-codebase` becomes an in-plugin call. `ceh-dev-tools` is one skill + one agent, below the weight of a standalone plugin. |
 | ~~D6~~ | ~~Do not rename `ceh-agent-coding-contract`~~ | **Superseded by D14.** Rev 1 priced only today's cost and missed that every later step of this plan raises the price. |
@@ -88,6 +88,7 @@ Rev-1 decisions kept unless marked. New in rev 2: **D13–D17**.
 | **D15** | **Bundle set: 7, not 8** | Dropped `ceh-scenario-plugin-authoring` — it described work on *this* repo, which `CLAUDE.md` and `.claude/skills/add-plugin-component/` already own. Renamed `ceh-scenario-content` → **`ceh-scenario-editorial`**: "content" reads as CMS; "publishing" collides with package publishing; "editorial" is the standard name for the function owning everything a reader sees, and is one word like `service`/`library`/`webapp`. |
 | **D16** | **`validate.py` enforces the invocation contract** | Any skill named in an `Invoke the Skill tool with skill="X"` instruction must (a) exist, (b) live in the source plugin itself or in a declared dependency, and (c) **not** set `disable-model-invocation: true`. 19 of 77 skills set that flag and the failure is silent (`DECISION_LOG.md:898` records the same degradation from the `fabled-voice` hook work). Also enforces acyclicity, replacing D12's lost justification. |
 | **D17** | **`ceh-business-plan` duplicates `plan-schema.md` rather than declaring an edge** | `develop-business-plan:58` reads a file *path* inside `ceh-plan-build-review` — conditional (fires only when the input is an app plan) but unrecoverable if absent, the one case D13 handles badly. The file is already duplicated 3× inside `ceh-plan-build-review` and registered at `docs/CROSS_REFERENCES.md:202-204`; a 4th copy (121 lines) adds one row to an existing block and removes the only cross-plugin file read in the repo. Standard Shared-Standards Duplication Policy. |
+| **D18** | **The post-launch suffix is `-iterate`, not `-maintenance`** | The axis is *before first release* vs *after first release*, and most feature work lives on the second side for years. "Maintenance" connotes bugfix-and-keep-the-lights-on, which is exactly why `ceh-plan-build-review` was filed on the wrong side (Q2). `-iterate` names the activity, so someone with a new feature to build picks the right bundle; it also matches the bundle's headline skill, `plan-fullstack-app-iteratively`, and the repo's own "moments, not topics" rule. Rejected: `-existing` and `-ongoing` (state a fact, not an activity), `-brownfield` (means inherited legacy code), `-live`/`-running` (false for a library), `-growth` (excludes patches), `-shipped` (good, but `-iterate` matches the plugin vocabulary). Cost: a verb pairs unevenly with the noun `greenfield`. |
 
 ---
 
@@ -100,17 +101,17 @@ must be installed". Six edges, all evidenced in §5.
 LAYER 3 — scenario bundles (manifest only, no skills/agents/hooks)
 
   ceh-scenario-service-greenfield ──┐
-  ceh-scenario-library-greenfield ──┼── each depends on its own -maintenance bundle
+  ceh-scenario-library-greenfield ──┼── each depends on its own -iterate bundle
   ceh-scenario-webapp-greenfield ───┘   plus the greenfield delta:
                                           + ceh-scaffolding
                                           + ceh-business-plan
-                                          + ceh-plan-build-review
-                                        (ceh-architecture is already in the base)
+                                        (ceh-architecture and ceh-plan-build-review
+                                         are already in the base)
                     │
                     ▼
-  ceh-scenario-service-maintenance
-  ceh-scenario-library-maintenance
-  ceh-scenario-webapp-maintenance
+  ceh-scenario-service-iterate
+  ceh-scenario-library-iterate
+  ceh-scenario-webapp-iterate
                     │
                     ├── common to all three:
                     │     ceh-coding-agent        (renamed, D14; carries dev-tools content, D5)
@@ -120,6 +121,7 @@ LAYER 3 — scenario bundles (manifest only, no skills/agents/hooks)
                     │     ceh-release-flow
                     │     ceh-architecture
                     │     ceh-usability-audit     (all three — its skills are stack-agnostic)
+                    │     ceh-plan-build-review   (Q2 — post-launch feature work is planned work)
                     │
                     ├── service adds:  ceh-python-service
                     ├── library adds:  ceh-python-library
@@ -163,15 +165,15 @@ true leaf.
 ### Example manifests
 
 ```json
-// plugins/ceh-scenario-service-maintenance/.claude-plugin/plugin.json
+// plugins/ceh-scenario-service-iterate/.claude-plugin/plugin.json
 {
-  "name": "ceh-scenario-service-maintenance",
+  "name": "ceh-scenario-service-iterate",
   "version": "1.0.0",
-  "description": "CEH scenario: maintaining a running Python backend service.",
+  "description": "CEH scenario: building on a Python backend service that already ships.",
   "dependencies": [
     "ceh-coding-agent", "ceh-git-workflow", "ceh-testing",
     "ceh-python-service", "ceh-architecture", "ceh-documentation",
-    "ceh-release-flow", "ceh-usability-audit"
+    "ceh-release-flow", "ceh-usability-audit", "ceh-plan-build-review"
   ]
 }
 ```
@@ -183,8 +185,8 @@ true leaf.
   "version": "1.0.0",
   "description": "CEH scenario: starting a new Python backend service from nothing.",
   "dependencies": [
-    "ceh-scenario-service-maintenance",
-    "ceh-scaffolding", "ceh-business-plan", "ceh-plan-build-review"
+    "ceh-scenario-service-iterate",
+    "ceh-scaffolding", "ceh-business-plan"
   ]
 }
 ```
@@ -295,7 +297,7 @@ Ordered so each step leaves the repo green. Steps 1–3 are independent of the b
    rule, D4, and the `ceh-coding-agent` rename throughout.
 10. **Repo tag + `CHANGELOG.md` entry** per the existing versioning policy. MAJOR: D14 renames a
     plugin and D5 removes one.
-11. **Local cleanup** (owner's machines, after the tag is pushed) — see §9.
+11. **Local cleanup** — **manual, done by the repo owner**, after the tag is pushed. See §9.
 
 ---
 
@@ -346,22 +348,36 @@ name into an invocation.
 ## 8. Open questions
 
 - ~~**Q1 — `ceh-seo` in the service bundle?**~~ **Retired.** `ceh-seo` is dropped from all three
-  maintenance bundles. SEO is a "this thing has a public surface" moment, a property of one release
-  rather than of a maintenance phase, so it is installed deliberately — same shelf as `ceh-ops`
+  `-iterate` bundles. SEO is a "this thing has a public surface" moment, a property of one release
+  rather than of a whole phase, so it is installed deliberately — same shelf as `ceh-ops`
   under D7. `ceh-scenario-editorial` keeps it, where a public surface is the premise.
-- **Q2 — `ceh-plan-build-review` phase.** Placed in the greenfield delta on a 3-of-4 majority of
-  its skills. But `patch-built-version` is squarely a maintenance moment, so wherever the plugin
-  goes, one half is dead weight. The clean fix is to relocate `patch-built-version` to a
-  maintenance-side home and let the plugin be cleanly greenfield — a bigger refactor, deferred.
+- ~~**Q2 — `ceh-plan-build-review` phase.**~~ **Resolved: it belongs in the `-iterate` bundles.** Rev 1 put it
+  in the greenfield delta on a claimed 3-of-4 majority; the skill descriptions say the opposite.
+  `plan-fullstack-app-iteratively` states it "covers greenfield skeletons **and iterative feature
+  planning for existing apps**", and `implement-from-plan` / `review-against-plan` consume any plan
+  artifact regardless of phase — 4 of 5 skills work post-launch, and only
+  `plan-fullstack-app-to-mvp` is greenfield-exclusive. Adding features to a shipped thing is the
+  normal case after first release, and it is planned work. Under D3 the greenfield bundles inherit
+  the plugin anyway, so the greenfield delta shrinks to `ceh-scaffolding` + `ceh-business-plan` and
+  nothing is lost. The deferred refactor is dropped: `patch-built-version` explicitly routes
+  feature work to `plan-fullstack-app-iteratively`, which is an argument for keeping them in one
+  plugin, not for splitting them.
+- ~~**Q5 — is "maintenance" the right word?**~~ **Resolved: no. The suffix is now `-iterate`.**
+  See D18.
 - **Q3 — is `ceh-ops` unused because you rarely deploy, or because `deploy` / `incidents` /
   `rollback` never auto-trigger?** If the second, D7 treats a symptom: the fix belongs in those
   three descriptions, and that is the same reliability problem that motivated this whole plan.
 - **Q4 — `ceh-scenario-` prefix.** Confirmed. Makes the tier obvious in `claude plugin list` and
-  sorts the greenfield/maintenance pairs adjacently, at the cost of long names.
+  sorts the greenfield/iterate pairs adjacently, at the cost of long names.
 
 ---
 
 ## 9. Local cleanup after the rename
+
+> **Manual step — the repo owner runs this personally.** It is recorded here for reference only.
+> No agent should execute any part of this section, and checklist step 11 is not agent work: it
+> touches the owner's global Claude Code state and 26 unrelated project directories, all outside
+> this repo.
 
 Owner's machines only; run after step 10's tag is pushed, because the `ceh-plugins` marketplace is
 `github: cheneeheng/agent-skills` with `autoUpdate: true` and would otherwise reinstall the old
