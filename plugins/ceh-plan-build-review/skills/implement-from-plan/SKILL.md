@@ -1,6 +1,5 @@
 ---
 name: implement-from-plan
-disable-model-invocation: true
 description: >-
   Implement a SKELETON.md or ITER_NN.md planning document — including version-tagged variants like
   SKELETON_v2.md or v2_ITER_03.md. Reads plan frontmatter to determine artifact type and scope, then

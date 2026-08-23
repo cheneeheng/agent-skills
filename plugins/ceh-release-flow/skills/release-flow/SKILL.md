@@ -1,6 +1,5 @@
 ---
 name: release-flow
-disable-model-invocation: true
 description: >-
   Ship a complete project release in one pass — bump the version, update the
   changelog/README/CLAUDE.md, open a PR, merge it, then tag and publish the release. This skill only

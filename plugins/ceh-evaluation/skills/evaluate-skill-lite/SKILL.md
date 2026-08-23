@@ -1,6 +1,5 @@
 ---
 name: evaluate-skill-lite
-disable-model-invocation: true
 description: >-
   A fast, cheap sanity check on a Claude Code skill or plugin while you are still writing or
   iterating on it — not the full ship gate. Runs only the three cheap dimensions — structural

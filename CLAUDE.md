@@ -168,7 +168,7 @@ layered; `validate.py` checks acyclicity directly rather than relying on the rul
 Where a dependency exists, the referencing skill body calls the target **explicitly** —
 `Invoke the Skill tool with skill="ceh-testing:design-test-cases"` — instead of naming a trigger
 phrase and hoping the description matches. `validate.py` rejects such a call if the target does not
-resolve, is not in a declared dependency, or sets `disable-model-invocation: true` (19 of 77 skills
+resolve, is not in a declared dependency, or sets `disable-model-invocation: true` (6 of 77 skills
 do, and the resulting failed call is silent).
 
 Do not convert every backtick-quoted skill name into an invocation: most references are advisory,

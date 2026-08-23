@@ -1,6 +1,5 @@
 ---
 name: patch-built-version
-disable-model-invocation: true
 description: >-
   Patch an already-implemented version of a planned app — a small, non-feature change made after
   that version was built (bug fix, copy/config tweak, validation tightening, small behavioral

@@ -1,6 +1,5 @@
 ---
 name: develop-business-plan
-disable-model-invocation: true
 description: >-
   Turn a product idea — or an existing app/product plan — into a validated business plan with a
   clear product-market fit. If app plans exist (the plan-build-review SKELETON.md / ITER_NN.md

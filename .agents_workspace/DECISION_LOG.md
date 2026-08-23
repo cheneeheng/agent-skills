@@ -1923,3 +1923,44 @@ with the version bump. Acceptable here because the alternative is two PRs where 
 changelog and the second has no content. Step 3 was a no-op: the repo tag lives in no manifest, and
 per-plugin versions were already bumped in earlier commits on this branch.
 **Outcome:** Changelog entry written for 5.0.0; tag applied to the merge commit on `main`.
+
+### Entry 82
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-23T00:00:00Z
+**Task:** Partially reverse v3.19.1 — drop `disable-model-invocation: true` from 13 of the 19
+skills that set it.
+
+**Context:** The user reported the concrete failure: typing "…and use skill X for it" does nothing,
+because the flag removes the skill from the model-visible listing entirely. v3.19.1 applied the flag
+to 16 skills on the criterion "explicit tasks a user directs, not reference standards that fire on a
+code moment" — but that same release also trimmed the trigger scaffolding from every one of those
+descriptions, which is what actually delivers "does not auto-fire". The flag on top of the trim buys
+nothing except the reported failure, plus D16's ban on being an invocation target.
+
+**Decision:** Kept the flag on 6 skills where an unintended fire costs more than a blocked explicit
+request: `orchestrate` (session-mode takeover that persists), `refactor-repo` (repo-wide blast
+radius, and `shrink-diff` is the sibling that should fire), `direct-release-flow` (straight to main,
+no PR, no review), `evaluate-skill` (`effort: xhigh` N-run subagent battery with a `-lite` twin),
+and — on explicit user instruction, against the recommendation — `summarize-chat` and
+`lessons-learned`. Dropped it from the other 13. Three sub-calls: (1) Descriptions left untouched —
+the v3.19.1 trim is the part that was right, and restoring trigger phrases would reopen arbitrations
+that release closed. (2) `release-flow` splits from `direct-release-flow` because the PR-gated
+variant delegates to skills that each gate, so the failure mode is recoverable; the direct variant's
+is not, and a model auto-picking the direct one is a silent loss of the review gate. (3)
+`explain-until-understood` needed no description work after all: Entry 66 wrote it with no trigger
+phrases at all, so dropping the flag restores explicit invocability without making it compete for
+auto-fire, leaving Entry 67's byte-identical `explain-codebase` intact.
+
+**Impact / Risk:** 13 skills can now auto-fire on a close description match — the descriptions are
+trigger-phrase-free, so this should be rare, but `plan-fullstack-app-iteratively` vs `-to-mvp` and
+`blog-writer` vs `blog-interviewer` vs `blog-editor` now arbitrate against each other for the first
+time; their descriptions carry explicit choosers, which is exactly what those choosers were written
+for. All 13 also become legal D16 invocation targets, so a future session may wire a cross-skill
+handoff into one. PATCH bumps across 6 plugins, matching the v3.19.1 precedent for the inverse
+change. Stale "19 of 77" counts in `CLAUDE.md` and `PLUGIN_DEPENDENCY_PLAN.md` (D16 and the
+silent-invocation-failure risk) updated to 6.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. No repo tag and no CHANGELOG entry —
+that is the release step, not this one.

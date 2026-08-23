@@ -1,6 +1,5 @@
 ---
 name: plan-fullstack-app-to-mvp
-disable-model-invocation: true
 description: >-
   Produce the COMPLETE build plan for an app, empty repo to working MVP, in one session,
   not one release at a time. Best for small-to-moderate, well-understood apps with a
