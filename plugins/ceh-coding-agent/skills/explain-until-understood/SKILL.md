@@ -26,33 +26,38 @@ The output is the conversation. By default this skill writes no files; the two e
 ## Who you are explaining to
 
 **Assume the reader is new here and knows nothing about the subject.** Not that they are
-inexperienced — that it is their first day on this project: they have never seen this repo, this
-tool, or the work that led to it, and they do not know the words any of it uses. Project-local
-names are terms of art like any other and get defined at first use — a service, a table, an
-internal acronym, a file everyone refers to by a nickname. The cost is asymmetric and that is the
-whole argument: explaining above someone burns a full round trip and they may not say they are
-lost, while explaining below someone costs one paragraph they skim in three seconds.
+inexperienced — that it is their first day on this project. They have never seen this repo, this
+tool, or the work that led to it, and they do not know the words any of it uses.
 
-State the floor you are building from in one line before you start — "assuming you have written
+Project-local names are terms of art like any other, and get defined at first use: a service, a
+table, an internal acronym, a file everyone refers to by a nickname.
+
+The cost is asymmetric, and that is the whole argument. Explaining above someone burns a full round
+trip, and they may not say they are lost. Explaining below someone costs one paragraph they skim in
+three seconds.
+
+**State the floor you are building from in one line before you start** — "assuming you have written
 Python but never used asyncio" — so the reader can raise it. Then build strictly upward from it.
-The stated floor scales like everything else (see *Scale to the ask*): it belongs on anything
-running the full procedure, and a one-sentence answer carries its floor implicitly. Spending half a
-short answer on a preamble about what you assume is its own way of explaining badly.
-Raise the floor only on evidence: they say so, or they ask a question that uses the vocabulary
-correctly. Their job title is not evidence, that they are in a terminal is not evidence, and a term
-they pasted from an error message is not evidence they know it.
 
-**Scale to the ask.** "What does this regex do" earns a sentence, and at most the wrong-conclusion
-framing from step 6. Step 1 is the one step that never scales away — the one-sentence answer is
-only right because you opened the file. The worked walk of step 5 is the next hardest to drop,
-because it shrinks instead of disappearing: two numbered lines tracing one real input beat a
-paragraph describing the mechanism in general. Everything else does scale away: the full eight-step
-procedure is for something the reader has to hold in their head afterwards — a subsystem, a design,
-a release's worth of change. Running all eight on a one-line question is its own way of failing to
-explain.
-The other end has a limit too: when the subject is larger than one explanation can carry, name the
-slices, explain one, and say what the others are. A compressed tour of all of it leaves the reader
-able to answer nothing.
+- **The floor scales like everything else** (see *Scale to the ask*). It belongs on anything running
+  the full procedure; a one-sentence answer carries its floor implicitly. Spending half a short
+  answer on a preamble about what you assume is its own way of explaining badly.
+- **Raise the floor only on evidence:** they say so, or they ask a question that uses the vocabulary
+  correctly. A job title is not evidence. Being in a terminal is not evidence. A term pasted out of
+  an error message is not evidence they know it.
+
+**Scale to the ask.** The full eight-step procedure is for something the reader has to hold in their
+head afterwards — a subsystem, a design, a release's worth of change.
+
+- **A small ask earns a small answer.** "What does this regex do" earns a sentence, and at most the
+  wrong-conclusion framing from step 6. Running all eight steps on a one-line question is its own
+  way of failing to explain.
+- **Two steps resist shrinking.** Step 1 never scales away at all — the one-sentence answer is only
+  right because you opened the file. Step 5 shrinks rather than disappears: two numbered lines
+  tracing one real input beat a paragraph describing the mechanism in general.
+- **The other end has a limit too.** When the subject is larger than one explanation can carry, name
+  the slices, explain one, and say what the others are. A compressed tour of all of it leaves the
+  reader able to answer nothing.
 
 ## Not the same as
 
@@ -66,56 +71,70 @@ able to answer nothing.
 
 ## Procedure
 
-Step 1 is what *you* do; steps 2 and 4–8 are what the *reply* contains, in that order. Step 3 is
-both — you run the command, and its output goes in the reply next to the claim it supports. Do not
-narrate the doing: "I read the modules and ran the validator" is process, and the reader asked for
-an explanation. Pasted output is evidence, not narration.
+Step 1 is what *you* do. Steps 2 and 4–8 are what the *reply* contains, in that order. Step 3 is
+both: you run the command, and its output goes in the reply next to the claim it supports.
+
+Do not narrate the doing. "I read the modules and ran the validator" is process, and the reader
+asked for an explanation. Pasted output is evidence, not narration.
 
 1. **Read the real thing first.** Never explain from memory, from a design doc, or from a summary —
-   including a design doc you wrote yourself earlier in the session. What "the real thing" is
-   follows the ask: for repo code, open the modules, read the docstrings, follow the call sites;
-   for "what changed since `<tag>`", the diff — commit messages after it and labelled as claimed
-   intent, never the changelog; for an unfamiliar tool, its own `--help` plus one run against a
-   real fixture — read-only, per step 3. A tool with no read-only run is read, not run: say so, and
-   mark its behavior unverified. A design doc says what the author decided; the source says what is
-   true today.
-   The ban covers the *subject* only: a step 2 foundation may come from your own knowledge — say
-   plainly that it does. If the subject itself has no artifact you can reach, say so before
-   explaining anything, and mark every claim that follows as unverified. A subject that has no
-   artifact to reach in the first place — a protocol, a general technique — is a different case:
-   say once that it comes from knowledge, and do not label every line.
+   including a design doc you wrote yourself earlier in the session. A design doc says what the
+   author decided; the source says what is true today.
+
+   What "the real thing" is follows the ask:
+
+   - **Repo code** — open the modules, read the docstrings, follow the call sites.
+   - **"What changed since `<tag>`"** — the diff. Commit messages come after it and are labelled as
+     claimed intent, never the changelog.
+   - **An unfamiliar tool** — its own `--help`, plus one run against a real fixture, read-only per
+     step 3. A tool with no read-only run is read, not run: say so, and mark its behavior
+     unverified.
+
+   The ban covers the *subject* only. A step 2 foundation may come from your own knowledge — say
+   plainly that it does. If the subject has an artifact you cannot reach, say so before explaining
+   anything, and mark every claim that follows as unverified. A subject with no artifact to reach in
+   the first place — a protocol, a general technique — is a different case: say once that it comes
+   from knowledge, and do not label every line.
 
 2. **Establish foundations before the specific case.** Name the two to four ideas the whole
-   explanation rests on, and state each one plainly before you use it. Choose them for the reader's
-   floor, not for the subject: the foundation you owe them usually sits one layer *below* where the
-   subject's own documentation begins, because that documentation was written for someone who had
-   already chosen to use the thing. The test for any term is whether a sharp person outside this
-   field would know it — if not, it is either a foundation to state here or a word to replace.
-   Writing "as you know", or reusing a term introduced earlier in the session, is the tell that a
-   definition is missing. Needing more than four foundations means the subject is too big for one
-   explanation: name the slices and explain one (see *Scale to the ask*).
-   Everything after this step stands on these, so a foundation that missed makes the rest
-   unreadable rather than partly readable — which is the single most common cause of an explanation
-   that has to be repeated. You do not stop mid-reply to check: aim step 8's first self-test
-   question at a foundation, which is where a missed one surfaces cheapest.
+   explanation rests on, and state each one plainly before you use it.
+
+   - **Choose them for the reader's floor, not for the subject.** The foundation you owe them
+     usually sits one layer *below* where the subject's own documentation begins, because that
+     documentation was written for someone who had already chosen to use the thing.
+   - **The test for any term:** would a sharp person outside this field know it? If not, it is
+     either a foundation to state here or a word to replace.
+   - **Two tells that a definition is missing:** writing "as you know", and reusing a term
+     introduced earlier in the session.
+   - **More than four foundations means the subject is too big** for one explanation. Name the
+     slices and explain one (see *Scale to the ask*).
+
+   Everything after this step stands on these. A foundation that missed makes the rest unreadable
+   rather than partly readable, which is the single most common cause of an explanation that has to
+   be repeated. You do not stop mid-reply to check: aim step 8's first self-test question at a
+   foundation, which is where a missed one surfaces cheapest.
 
 3. **Verify by running.** Run the tool, the command, the throwaway script, and paste the real
    output. "semgrep found 2 hits, lines 22 and 23–27" beats "semgrep would flag the network call."
-   Read-only runs only — a command that changes state is not an illustration, and the contract
-   requires it be requested first. Cheap, too: a throwaway snippet or one targeted command needs no
-   permission, while a full test suite, a build, or a repo-wide lint stays contract-gated even
-   though it changes nothing — ask for it, or cite output that already exists. Where you cannot or
-   may not run it, say so in the same breath as the claim.
+
+   - **Read-only runs only.** A command that changes state is not an illustration, and the contract
+     requires it be requested first.
+   - **Cheap runs only.** A throwaway snippet or one targeted command needs no permission. A full
+     test suite, a build, or a repo-wide lint stays contract-gated even though it changes nothing —
+     ask for it, or cite output that already exists.
+   - **Where you cannot or may not run it,** say so in the same breath as the claim.
 
 4. **Draw structure and time; write everything else.** Prose is bad at nesting, ordering,
-   before/after, and data flow — use a picture for those, a table or list for the rest. A diagram
-   of a list is noise. In the conversation, draw in ASCII: it renders on every surface, while
-   Mermaid renders only where the reader's client draws it — a terminal does not. Mermaid is for a
-   file that will be viewed rendered.
-   **ASCII means the plain keyboard characters and nothing else** — `- | + / \ < > ^ v` for lines
-   and arrowheads, `[ ]` or `+---+` for boxes. No box-drawing glyphs, no `→`, no emoji: those
-   depend on the reader's font and terminal encoding, and one glyph that fails to render turns the
-   picture into noise exactly where the picture was carrying the meaning.
+   before/after, and data flow. Use a picture for those and a table or list for the rest — a diagram
+   of a list is noise.
+
+   - **Draw in ASCII in the conversation.** It renders on every surface. Mermaid renders only where
+     the reader's client draws it, and a terminal does not, so Mermaid is for a file that will be
+     viewed rendered.
+   - **ASCII means the plain keyboard characters and nothing else:** `- | + / \ < > ^ v` for lines
+     and arrowheads, `[ ]` or `+---+` for boxes. No box-drawing glyphs, no `→`, no emoji — those
+     depend on the reader's font and terminal encoding, and one glyph that fails to render turns the
+     picture into noise exactly where the picture was carrying the meaning.
 
    ```
    request --> [ router ] --+--> [ handler A ] --> db
@@ -124,33 +143,41 @@ an explanation. Pasted output is evidence, not narration.
    ```
 
 5. **Walk one concrete case, numbered, end to end.** Take a single real input — one request, one
-   file, one commit — and number what happens to it, one hop per line, using the real names and the
-   real values. A reader who cannot follow the general rule can almost always follow one worked
-   case and then read the rule back off it, which is why this is the default form rather than a
-   fallback: prefer a walked case over a general description wherever a concrete case exists.
-   Pick the *ordinary* case, not the interesting edge — the edge is step 6's job. Mark any value
-   you made up, as against one that came out of the run in step 3. The walk and the step 4 picture
-   describe the same thing and must agree; where they cannot, the picture is wrong.
-   Where nothing concrete can be walked — a naming convention, a policy — say so and skip the step
-   rather than inventing a trace.
+   file, one commit — and number what happens to it, one hop per line, with the real names and the
+   real values.
+
+   This is the default form, not a fallback: prefer a walked case over a general description
+   wherever a concrete case exists. A reader who cannot follow the general rule can almost always
+   follow one worked case, and then read the rule back off it.
+
+   - **Pick the ordinary case,** not the interesting edge — the edge is step 6's job.
+   - **Mark any value you made up,** as against one that came out of the run in step 3.
+   - **The walk and the step 4 picture describe the same thing** and must agree. Where they cannot,
+     the picture is wrong.
+   - **Where nothing concrete can be walked** — a naming convention, a policy — say so and skip the
+     step rather than inventing a trace.
 
 6. **Frame failure as "what you would wrongly conclude".** Not "this is a bug" but "you would read
    that as reconcile routing to verdict, and go debug the rule ladder — and the rule ladder is
-   fine." The wrong conclusion is what makes a subtle failure memorable. The step frames a failure
-   the code actually has — if reading it turned up none, say the path is straightforward and move
-   on. An invented failure mode breaks the evidence rule.
+   fine." The wrong conclusion is what makes a subtle failure memorable.
+
+   The step frames a failure the code actually has. If reading it turned up none, say the path is
+   straightforward and move on — an invented failure mode breaks the evidence rule.
 
 7. **Show the tempting-but-wrong alternative.** For any non-obvious design, name the simpler thing
    a reader would reach for and show precisely where it breaks. This is what turns "the code does
    X" into "the code *must* do X".
 
-8. **Close with the transferable rule, then a self-test.** One sentence the reader can apply to
-   the next case — "pass context explicitly wherever someone else's scheduler owns the task" beats
+8. **Close with the transferable rule, then a self-test.** One sentence the reader can apply to the
+   next case — "pass context explicitly wherever someone else's scheduler owns the task" beats
    re-listing the three call sites where it is passed. Follow it with two to five questions they
-   should now be able to answer unaided. A wrong answer is the miss signal — go to the ladder
-   below, but re-explain only the idea that answer got wrong rather than the whole subject, and a
-   wrong answer about a step 2 foundation goes straight to attempt 4. Silence is not a signal: it
-   reads as "understood" as often as "lost", so end the turn rather than re-explain unprompted.
+   should now be able to answer unaided.
+
+   - **A wrong answer is the miss signal.** Go to the ladder below, but re-explain only the idea
+     that answer got wrong rather than the whole subject. A wrong answer about a step 2 foundation
+     goes straight to attempt 4.
+   - **Silence is not a signal.** It reads as "understood" as often as "lost", so end the turn
+     rather than re-explain unprompted.
 
 ## Plain language
 
@@ -182,18 +209,21 @@ First ask *what kind* of miss it was, because two of the three are not ladder mo
 - **They have the words and cannot assemble them.** This is what the ladder below is for.
 
 Do not restate the same explanation with more words. Drop a level and change the representation.
-Only the representation changes: a re-explanation still closes on step 8's rule and self-test at
-the scale the first attempt was pitched at — one question is enough for a small ask — because the
+
+Only the representation changes. A re-explanation still closes on step 8's rule and self-test,
+pitched at the scale the first attempt was — one question is enough for a small ask — because the
 self-test is how you find out whether the new form landed.
 
 Locate yourself on the ladder by the **form of the last attempt**, not by how many messages have
-passed — invoked cold after a miss, look at what the previous explanation actually was and take the
-next row down. A table is attempt 1, not attempt 3: it lays out facts side by side but carries no
-structure, ordering, or flow, so a reader stuck on *how the parts connect* gains nothing from one.
-A prose explanation carrying one diagram is attempt 1 too — that is step 4 done right, not the
-ladder skipped ahead, and the same goes for one carrying a numbered walk of a single case: that is
-step 5. Attempt 2 is the *whole explanation* rebuilt as numbered steps, not one worked example
-sitting inside prose. Attempt 3 is that rebuild with a picture on every step.
+passed. Invoked cold after a miss, look at what the previous explanation actually was and take the
+next row down.
+
+- **A table is attempt 1, not attempt 3.** It lays out facts side by side but carries no structure,
+  ordering, or flow, so a reader stuck on *how the parts connect* gains nothing from one.
+- **Prose carrying one diagram is attempt 1** — that is step 4 done right, not the ladder skipped
+  ahead. Prose carrying a numbered walk of a single case is attempt 1 too: that is step 5.
+- **Attempt 2 is the *whole explanation* rebuilt as numbered steps,** not one worked example sitting
+  inside prose. Attempt 3 is that rebuild with a picture on every step.
 
 | Attempt | Representation | If it still misses |
 |---|---|---|
