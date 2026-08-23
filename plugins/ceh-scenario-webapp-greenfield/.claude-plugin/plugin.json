@@ -1,0 +1,23 @@
+{
+  "name": "ceh-scenario-webapp-greenfield",
+  "version": "1.0.0",
+  "description": "CEH scenario bundle: starting a web frontend from nothing \u2014 everything in the -iterate bundle plus planning and scaffolding.",
+  "author": {
+    "name": "cheneeheng",
+    "email": "eeheng.chen@gmail.com"
+  },
+  "repository": "https://github.com/cheneeheng/agent-skills",
+  "dependencies": [
+    "ceh-scenario-webapp-iterate",
+    "ceh-scaffolding",
+    "ceh-business-plan"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "scenario",
+    "bundle",
+    "webapp",
+    "greenfield"
+  ]
+}

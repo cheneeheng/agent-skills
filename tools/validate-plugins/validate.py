@@ -16,6 +16,10 @@ Checks:
   references - `references/...`, `${CLAUDE_PLUGIN_ROOT}/scripts/...` and `${CLAUDE_SKILL_DIR}/...`
                mentions in SKILL.md/agent files resolve to a real file.
   skill-refs - `plugin:component` references resolve to a real skill or agent.
+  deps       - every `dependencies` entry names a plugin in this repo, the graph is acyclic,
+               and a ceh-scenario-* directory holds only plugin.json + README.md.
+  invocations- every `Invoke the Skill tool with skill="X"` resolves, is in-plugin or in a
+               declared dependency, and does not set `disable-model-invocation: true`.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
 """
 
@@ -293,12 +297,102 @@ def check_scripts() -> None:
                     fail(where, f"py_compile error: {r.stderr.strip()}")
 
 
+# --- dependencies & invocations --------------------------------------------
+
+def plugin_deps() -> dict[str, list[str]]:
+    """{plugin: [dependency names]}. Accepts bare strings or {"name": ...} objects."""
+    out: dict[str, list[str]] = {}
+    for d in plugin_dirs():
+        data = load_json(d / ".claude-plugin/plugin.json", rel(d)) or {}
+        names = []
+        for dep in data.get("dependencies", []):
+            names.append(dep["name"] if isinstance(dep, dict) else dep)
+        out[d.name] = names
+    return out
+
+
+def check_dependencies() -> None:
+    """Deps resolve, the graph is acyclic, and ceh-scenario-* dirs hold a manifest only."""
+    deps = plugin_deps()
+    for name, targets in deps.items():
+        where = rel(REPO / f"plugins/{name}/.claude-plugin/plugin.json")
+        for t in targets:
+            if t not in deps:
+                fail(where, f"dependency '{t}' is not a plugin in this repo")
+
+    # acyclicity (iterative DFS with a colour map, so the cycle path is reportable)
+    colour: dict[str, int] = {}
+
+    def visit(node: str, path: list[str]) -> None:
+        colour[node] = 1
+        for t in deps.get(node, []):
+            if colour.get(t) == 1:
+                fail("dependency graph", "cycle: " + " -> ".join(path + [node, t]))
+            elif colour.get(t, 0) == 0:
+                visit(t, path + [node])
+        colour[node] = 2
+
+    for name in deps:
+        if colour.get(name, 0) == 0:
+            visit(name, [])
+
+    for d in plugin_dirs():
+        if not d.name.startswith("ceh-scenario-"):
+            continue
+        where = rel(d / ".claude-plugin/plugin.json")
+        if not deps[d.name]:
+            fail(where, "scenario bundle has no 'dependencies'")
+        allowed = {d / ".claude-plugin/plugin.json", d / "README.md"}
+        for f in sorted(d.rglob("*")):
+            if f.is_file() and f not in allowed:
+                fail(rel(f), "scenario bundle may contain only plugin.json and README.md")
+
+
+INVOKE_PAT = re.compile(r'Invoke the Skill tool with skill="([^"]+)"')
+
+
+def check_invocations() -> None:
+    """An explicit Skill call must resolve, be installed by declaration, and be invocable."""
+    comps = known_components()
+    deps = plugin_deps()
+    skill_fm: dict[str, dict[str, str]] = {}
+    for d in plugin_dirs():
+        for skill_dir in (d / "skills").glob("*"):
+            if (skill_dir / "SKILL.md").exists():
+                skill_fm[f"{d.name}:{skill_dir.name}"] = parse_frontmatter(skill_dir / "SKILL.md") or {}
+
+    def reachable(root: str) -> set[str]:
+        seen, stack = {root}, [root]
+        while stack:
+            for t in deps.get(stack.pop(), []):
+                if t not in seen:
+                    seen.add(t)
+                    stack.append(t)
+        return seen
+
+    for doc in doc_files():
+        where = rel(doc)
+        source = doc.relative_to(REPO / "plugins").parts[0]
+        allowed = reachable(source)
+        for ref in dict.fromkeys(INVOKE_PAT.findall(doc.read_text(encoding="utf-8"))):
+            if ref not in comps:
+                fail(where, f"invocation target '{ref}' does not resolve")
+                continue
+            target = ref.split(":", 1)[0]
+            if target not in allowed:
+                fail(where, f"invokes '{ref}' but '{source}' does not depend on '{target}'")
+            if str(skill_fm.get(ref, {}).get("disable-model-invocation", "")).lower() == "true":
+                fail(where, f"invokes '{ref}', which sets disable-model-invocation: true")
+
+
 def main() -> int:
     check_manifests()
     check_skills()
     check_agents()
     check_references()
     check_skill_refs()
+    check_dependencies()
+    check_invocations()
     check_scripts()
 
     if errors:

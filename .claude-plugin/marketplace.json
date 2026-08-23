@@ -9,14 +9,14 @@
   },
   "plugins": [
     {
-      "name": "ceh-agent-coding-contract",
-      "source": "./plugins/ceh-agent-coding-contract",
-      "description": "CEH agent behavior contract: autonomous execution mode, the five-step task workflow, write-less-code minimalism, and how the agent explains its work.",
-      "version": "2.9.3",
+      "name": "ceh-coding-agent",
+      "source": "./plugins/ceh-coding-agent",
+      "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, and whole-repo explanation and mapping.",
+      "version": "3.1.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
-      "keywords": ["agent", "coding-contract", "workflow"]
+      "keywords": ["agent", "coding-contract", "workflow", "refactor", "codebase", "exploration"]
     },
     {
       "name": "ceh-plan-build-review",
@@ -42,7 +42,7 @@
       "name": "ceh-python-service",
       "source": "./plugins/ceh-python-service",
       "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, testing (unit/integration/system), observability, and security standards for web services.",
-      "version": "3.1.8",
+      "version": "3.2.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -52,7 +52,7 @@
       "name": "ceh-python-library",
       "source": "./plugins/ceh-python-library",
       "description": "CEH Python library: packaging and publishing, public API surface discipline, semantic versioning, uv environment, and pytest testing standards for distributable libraries (no web dependencies).",
-      "version": "1.2.5",
+      "version": "1.3.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -72,7 +72,7 @@
       "name": "ceh-web-frontend",
       "source": "./plugins/ceh-web-frontend",
       "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, and testing agents (unit/integration/system).",
-      "version": "3.2.6",
+      "version": "3.3.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -92,7 +92,7 @@
       "name": "ceh-ops",
       "source": "./plugins/ceh-ops",
       "description": "CEH ops: incident response, rollback, deploy pipeline, and CI agents (GitHub Actions, GitLab CI).",
-      "version": "3.0.6",
+      "version": "3.1.0",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -119,16 +119,6 @@
       "keywords": ["agent", "lessons-learned", "retrospective"]
     },
     {
-      "name": "ceh-dev-tools",
-      "source": "./plugins/ceh-dev-tools",
-      "description": "CEH developer tools: repository exploration, mapping, and codebase orientation — skill and agents.",
-      "version": "1.2.4",
-      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
-      "repository": "https://github.com/cheneeheng/agent-skills",
-      "license": "Apache-2.0",
-      "keywords": ["agent", "dev-tools", "repo-map", "codebase", "exploration"]
-    },
-    {
       "name": "ceh-blog",
       "source": "./plugins/ceh-blog",
       "description": "CEH blog: interview-driven blog post writing in a personal, series-first voice — from rough idea to publication-ready draft; repurpose finished posts for Twitter/X, LinkedIn, TL;DR, and newsletters.",
@@ -151,8 +141,8 @@
     {
       "name": "ceh-orchestration",
       "source": "./plugins/ceh-orchestration",
-      "description": "CEH orchestration: thin-orchestrator mode for cost-optimized multi-step work — the main session plans and delegates while cheap isolated subagents (the built-in Explore agent plus executor/verifier workers) absorb the volume.",
-      "version": "1.0.7",
+      "description": "EXPERIMENTAL. CEH orchestration: thin-orchestrator mode for cost-optimized multi-step work — the main session plans and delegates while cheap isolated subagents (the built-in Explore agent plus executor/verifier workers) absorb the volume.",
+      "version": "1.1.1",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -162,7 +152,7 @@
       "name": "ceh-release-flow",
       "source": "./plugins/ceh-release-flow",
       "description": "CEH release flow: orchestrate an end-to-end project release in one pass — version bump, changelog, README, CLAUDE.md, PR, merge, tag, and GitHub release — by sequencing the skills that own each step. Includes a PR-less direct-release-flow variant that commits straight to main.",
-      "version": "1.1.11",
+      "version": "1.2.1",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -172,7 +162,7 @@
       "name": "ceh-business-plan",
       "source": "./plugins/ceh-business-plan",
       "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes.",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -191,8 +181,8 @@
     {
       "name": "ceh-advisor",
       "source": "./plugins/ceh-advisor",
-      "description": "CEH advisor: a stronger-model second-opinion subagent consulted at decision points, failure loops, irreversible actions, and pre-completion gates — with deterministic hook backstops (destructive-command guard, consecutive-failure watch).",
-      "version": "1.0.6",
+      "description": "EXPERIMENTAL, and installs always-on session hooks. CEH advisor: a stronger-model second-opinion subagent consulted at decision points, failure loops, irreversible actions, and pre-completion gates — with deterministic hook backstops (destructive-command guard, consecutive-failure watch).",
+      "version": "1.0.7",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -211,8 +201,8 @@
     {
       "name": "ceh-fabled",
       "source": "./plugins/ceh-fabled",
-      "description": "CEH fabled: apply frontier-grade reasoning discipline — deliberate thinking, alternative generation, adversarial self-review, verification, and calibrated conviction — to any non-trivial task.",
-      "version": "1.3.4",
+      "description": "EXPERIMENTAL. CEH fabled: apply frontier-grade reasoning discipline — deliberate thinking, alternative generation, adversarial self-review, verification, and calibrated conviction — to any non-trivial task.",
+      "version": "1.3.5",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
@@ -237,6 +227,76 @@
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",
       "keywords": ["agent", "usability", "ux", "novice", "walkthrough", "error-messages", "plain-language", "audit"]
+    },
+    {
+      "name": "ceh-scenario-service-greenfield",
+      "source": "./plugins/ceh-scenario-service-greenfield",
+      "description": "CEH scenario bundle: starting a Python backend service from nothing — everything in the -iterate bundle plus planning and scaffolding.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "service", "greenfield"]
+    },
+    {
+      "name": "ceh-scenario-service-iterate",
+      "source": "./plugins/ceh-scenario-service-iterate",
+      "description": "CEH scenario bundle: working on a Python backend service that already ships — features, fixes, tests, docs, releases.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "service", "iterate"]
+    },
+    {
+      "name": "ceh-scenario-library-greenfield",
+      "source": "./plugins/ceh-scenario-library-greenfield",
+      "description": "CEH scenario bundle: starting a Python library from nothing — everything in the -iterate bundle plus planning and scaffolding.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "library", "greenfield"]
+    },
+    {
+      "name": "ceh-scenario-library-iterate",
+      "source": "./plugins/ceh-scenario-library-iterate",
+      "description": "CEH scenario bundle: working on a Python library that already ships — features, fixes, tests, docs, releases.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "library", "iterate"]
+    },
+    {
+      "name": "ceh-scenario-webapp-greenfield",
+      "source": "./plugins/ceh-scenario-webapp-greenfield",
+      "description": "CEH scenario bundle: starting a web frontend from nothing — everything in the -iterate bundle plus planning and scaffolding.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "webapp", "greenfield"]
+    },
+    {
+      "name": "ceh-scenario-webapp-iterate",
+      "source": "./plugins/ceh-scenario-webapp-iterate",
+      "description": "CEH scenario bundle: working on a web frontend that already ships — features, fixes, tests, docs, releases.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "webapp", "iterate"]
+    },
+    {
+      "name": "ceh-scenario-editorial",
+      "source": "./plugins/ceh-scenario-editorial",
+      "description": "CEH scenario bundle: writing and publishing what readers see — blog posts, user and operator docs, discoverability.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "scenario", "bundle", "editorial", "writing"]
     }
   ]
 }

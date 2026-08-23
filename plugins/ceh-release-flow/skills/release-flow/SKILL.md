@@ -25,18 +25,18 @@ the feature branch.
 
 Run top to bottom. Each step gates the next — do not proceed past a red gate.
 
-| # | Step | Delegate to (trigger phrase / repo skill) | Gate before next step |
-|---|------|-------------------------------------------|-----------------------|
-| 1 | Decide the semver bump — MAJOR/MINOR/PATCH; when in doubt, PATCH | "cut a release" → `ceh-git-workflow:release` (bump table) | Version chosen, never below current |
-| 2 | Branch `chore/release-vX.Y.Z` from latest `main` | "create a branch" → `ceh-git-workflow:branch` | On a clean branch off up-to-date `main` |
+| # | Step | Delegate to | Gate before next step |
+|---|------|-------------|-----------------------|
+| 1 | Decide the semver bump — breaking change → MAJOR, new backward-compatible feature → MINOR, fixes/chores/docs/refactors → PATCH. When in doubt, PATCH | — decision, no delegation | Version chosen, never below current |
+| 2 | Branch `chore/release-vX.Y.Z` from latest `main` | Invoke the Skill tool with skill="ceh-git-workflow:branch" | On a clean branch off up-to-date `main` |
 | 3 | Bump the version in **every** manifest the project ships (`pyproject.toml`, `package.json`, `plugin.json`, `marketplace.json`, `Cargo.toml`, …) | — mechanical edit | All manifests read the same vX.Y.Z |
-| 4 | Write the vX.Y.Z changelog entry | "update the changelog" → `ceh-documentation:update-changelog` | Section written and semver-validated |
-| 5 | Refresh the README if the change is user-facing | "update the readme" → `ceh-documentation:update-readme` | Updated, or "no update needed" recorded |
+| 4 | Write the vX.Y.Z changelog entry | Invoke the Skill tool with skill="ceh-documentation:update-changelog" | Section written and semver-validated |
+| 5 | Refresh the README if the change is user-facing | Invoke the Skill tool with skill="ceh-documentation:update-readme" | Updated, or "no update needed" recorded |
 | 6 | Update CLAUDE.md if project facts/structure changed | surgical edit (or `revise-claude-md` if that plugin is installed) | CLAUDE.md matches reality, or skip logged |
-| 7 | Commit the bump + docs | "commit" → `ceh-git-workflow:commit` | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean |
-| 8 | Open the PR — on repos that allow auto-merge, `open-pr` already queues it here | "open a PR" → `ceh-git-workflow:open-pr` | PR open, self-review + definition-of-done passed |
-| 9 | Merge and clean up — if step 8 queued auto-merge, this just confirms it lands; otherwise prefer `--auto` (or a direct merge once green). Don't poll CI by hand | "merge the PR" → `ceh-git-workflow:merge` (auto-merge probe) | CI green, approvals met, merged to `main`, remote-branch state reported |
-| 10 | Tag and publish the release on `main` | "cut a release" → `ceh-git-workflow:release` | Tag pushed, release created |
+| 7 | Commit the bump + docs | Invoke the Skill tool with skill="ceh-git-workflow:commit" | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean |
+| 8 | Open the PR — on repos that allow auto-merge, `open-pr` already queues it here | Invoke the Skill tool with skill="ceh-git-workflow:open-pr" | PR open, self-review + definition-of-done passed |
+| 9 | Merge and clean up — if step 8 queued auto-merge, this just confirms it lands; otherwise prefer `--auto` (or a direct merge once green). Don't poll CI by hand | Invoke the Skill tool with skill="ceh-git-workflow:merge" (auto-merge probe) | CI green, approvals met, merged to `main`, remote-branch state reported |
+| 10 | Tag and publish the release on `main` | Invoke the Skill tool with skill="ceh-git-workflow:release" — **run its tag + release steps only; the bump commit already landed via the PR** | Tag pushed, release created |
 
 ## Step 7 detail — the release commit is not subject-only
 
@@ -63,9 +63,9 @@ attribution footer only when settings supply none.
 ## Delegating steps 7–10 to subagents
 
 Steps 7–10 are mechanical once the docs are written: their input is the branch state, not the
-conversation. When the `ceh-git-workflow` agents are installed, dispatch each to the subagent that
-owns it — `commit-author` (7), `pr-opener` (8), `branch-merger` (9), `release-cutter` (10, pass
-"tag-only" since the bump landed via the PR) — to keep the main session lean. Dispatch each on the
+conversation. Dispatch each to the `ceh-git-workflow` subagent that owns it — `commit-author` (7),
+`pr-opener` (8), `branch-merger` (9), `release-cutter` (10, pass "tag-only" since the bump landed
+via the PR) — to keep the main session lean. Dispatch each on the
 model and effort declared in its frontmatter: **Claude Sonnet at medium reasoning effort** for all
 four. The steps are mechanical but write to `main` — do not downgrade to a smaller model or lower
 effort. Each agent preloads its owning skill and derives what changed from git itself; pass only
@@ -77,7 +77,7 @@ version strings. Pass the body text, or pass the changelog section and tell it t
 there. The gates stay **here**: check
 each step's gate on the agent's report before dispatching the next. Steps 1–6 stay in the main
 session — they need the session's context (what changed and why) to write correct docs. Without
-the agents, delegate to the skills by trigger phrase as in the table.
+the agents, invoke each step's skill from the main session exactly as the table specifies.
 
 ## Step 10 detail — tag and release *after* merge
 
@@ -102,5 +102,3 @@ Reuse the vX.Y.Z section you wrote in step 4 as the release notes (`--notes-file
 - **Never tag or release on a red gate.** CI must be green and required approvals met (step 9)
   before step 10. Surface a red gate and wait; do not merge or tag around it.
 - **Versions only increase.** When the bump level is unclear, PATCH.
-- If a step's owning skill is not installed, its trigger phrase still names the standard — apply it
-  inline rather than skipping the step.

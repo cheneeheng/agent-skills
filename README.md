@@ -8,11 +8,44 @@ testing skills route between each other, with the trigger phrases and sequence f
 
 ---
 
+## Start here — scenario bundles
+
+You should not have to remember 22 plugins. Pick the bundle that matches the situation you are in;
+its dependencies install and enable automatically.
+
+| Bundle | Install when |
+|--------|--------------|
+| `ceh-scenario-service-greenfield` | Starting a Python backend service from nothing |
+| `ceh-scenario-service-iterate` | Working on a Python backend service that already ships |
+| `ceh-scenario-library-greenfield` | Starting a Python library from nothing |
+| `ceh-scenario-library-iterate` | Working on a Python library that already ships |
+| `ceh-scenario-webapp-greenfield` | Starting a web frontend from nothing |
+| `ceh-scenario-webapp-iterate` | Working on a web frontend that already ships |
+| `ceh-scenario-editorial` | Writing what readers see — blog posts, user/operator docs, discoverability |
+
+```
+/plugin install ceh-scenario-service-iterate@ceh-plugins --scope user
+```
+
+A `-greenfield` bundle contains everything its `-iterate` twin does, plus scaffolding and business
+planning — so the phase transition is a no-op. You never switch bundles; you just stop reaching for
+the planning skills.
+
+Several plugins are deliberately outside every bundle: `ceh-fabled`, `ceh-advisor` and
+`ceh-orchestration` (experimental),
+and `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned` (installed once, on
+their own, when you want them). A dependency is always installed — `defaultEnabled: false` does not
+protect one — so omission is the only way to keep them opt-in.
+
+The table below is the reference list of what those bundles are made of.
+
+---
+
 ## Plugins
 
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
-| Agent Coding Contract | `ceh-agent-coding-contract` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`) |
+| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`); whole-repo orientation — `explain-codebase` into `.agents_workspace/CODEBASE_EXPLAINED.md` and the `repo-tree-mapper` agent |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
@@ -23,31 +56,31 @@ testing skills route between each other, with the trigger phrases and sequence f
 | Ops | `ceh-ops` | Incident response, rollback, deploy pipeline; CI agents |
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
-| Dev Tools | `ceh-dev-tools` | Repository exploration and codebase orientation — explain a whole repo component by component into `.agents_workspace/CODEBASE_EXPLAINED.md`, or map its structure into `REPO_MAP.md` |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
 | Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README maintenance |
 | SEO | `ceh-seo` | SEO/GEO discoverability for anything internet-exposed — public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
-| Orchestration | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) |
+| Orchestration *(experimental)* | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) |
 | Release Flow | `ceh-release-flow` | Orchestrate an end-to-end release in one pass: version bump → changelog → README → CLAUDE.md → PR → merge → tag → GitHub release, by sequencing the skills that own each step |
 | Business Plan | `ceh-business-plan` | Turn a product idea or app plan into a validated business plan via a product-market-fit interview loop — draft, interrogate the weakest assumption, revise until a PMF gate passes |
 | Evaluation | `ceh-evaluation` | Evaluate a skill or plugin you just wrote — derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a readiness gate passes |
-| Fabled | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
-| Advisor | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
+| Fabled *(experimental)* | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
+| Advisor *(experimental)* | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
 | Testing | `ceh-testing` | Stack-agnostic testing technique — reproduce-first bug fixes and bisection, systematic test-case design (partitions, boundaries, properties, metamorphic, fuzzing), suite audits (assertions, mutation, flakiness), behavior-preservation checks for refactors, and a pre-completion risk gate |
 | Usability Audit | `ceh-usability-audit` | Measure whether a non-expert can actually use what you built — cold persona-constrained walkthroughs (`novice-walker`), a five-question interface audit across web UI/CLI/library/app surfaces, error-message rewrites, and a plain-language pass |
 
 ### Categorization
 
 Plugins split on a single axis — **use case** — so you load exactly what your work needs. They fall
-into three tiers:
+into four tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Cross-cutting** | most sessions | `ceh-agent-coding-contract`, `ceh-git-workflow`, `ceh-fabled`, `ceh-advisor`, `ceh-testing` |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration`, `ceh-release-flow` |
+| **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below |
+| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` *(experimental)*, `ceh-release-flow` |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
-`ceh-dev-tools` is a standalone tooling plugin. Each plugin is self-contained: a
+Each plugin is self-contained: a
 foundational standard needed by more than one plugin is duplicated into each rather than extracted
 into a shared base, so one plugin per use case is all you load. Cross-cutting plugins are the
 orthogonal tier — they hold a discipline that applies whatever you are building, so they load
@@ -59,12 +92,12 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 
 | Plugin | Skill | Invoke as | When to use |
 |--------|-------|-----------|-------------|
-| `ceh-agent-coding-contract` | Agent Coding Contract | `/ceh-agent-coding-contract:agent-coding-contract` | Start of any coding session — core rules, five-step workflow, stop conditions, non-goals |
-| `ceh-agent-coding-contract` | Write Less Code | `/ceh-agent-coding-contract:write-less-code` | Every coding session (auto — session-start load + per-turn reinforcement) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line) |
-| `ceh-agent-coding-contract` | Shrink Diff | `/ceh-agent-coding-contract:shrink-diff` | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main` |
-| `ceh-agent-coding-contract` | Refactor Repo | `/ceh-agent-coding-contract:refactor-repo` | Manual only — propose-then-apply refactor campaign over the whole repo or a named module |
-| `ceh-agent-coding-contract` | Usage Limit Handoff | `/ceh-agent-coding-contract:usage-limit-handoff` | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact for the next session, end the turn |
-| `ceh-agent-coding-contract` | Explain Until Understood | `/ceh-agent-coding-contract:explain-until-understood` | Manual only — explain a subsystem, design, or diff to the person in the session, starting from the assumption they know nothing about it: a stated floor, foundations first, plain language, verified claims, ASCII for structure and time, and the escalation ladder when an explanation misses |
+| `ceh-coding-agent` | Agent Coding Contract | `/ceh-coding-agent:agent-coding-contract` | Start of any coding session — core rules, five-step workflow, stop conditions, non-goals |
+| `ceh-coding-agent` | Write Less Code | `/ceh-coding-agent:write-less-code` | Every coding session (auto — session-start load + per-turn reinforcement) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line) |
+| `ceh-coding-agent` | Shrink Diff | `/ceh-coding-agent:shrink-diff` | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main` |
+| `ceh-coding-agent` | Refactor Repo | `/ceh-coding-agent:refactor-repo` | Manual only — propose-then-apply refactor campaign over the whole repo or a named module |
+| `ceh-coding-agent` | Usage Limit Handoff | `/ceh-coding-agent:usage-limit-handoff` | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact for the next session, end the turn |
+| `ceh-coding-agent` | Explain Until Understood | `/ceh-coding-agent:explain-until-understood` | Manual only — explain a subsystem, design, or diff to the person in the session, starting from the assumption they know nothing about it: a stated floor, foundations first, plain language, verified claims, ASCII for structure and time, and the escalation ladder when an explanation misses |
 | `ceh-plan-build-review` | Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning one release at a time — a greenfield skeleton or the next iteration |
 | `ceh-plan-build-review` | Plan Fullstack App to MVP | `/ceh-plan-build-review:plan-fullstack-app-to-mvp` | Planning the complete build to a working MVP in one session |
 | `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
@@ -114,7 +147,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-documentation` | User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
 | `ceh-documentation` | Update Changelog | `/ceh-documentation:update-changelog` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
 | `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
-| `ceh-dev-tools` | Explain Codebase | `/ceh-dev-tools:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and key flows into git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` (per-file detail only on request) |
+| `ceh-coding-agent` | Explain Codebase | `/ceh-coding-agent:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and key flows into git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` (per-file detail only on request) |
 | `ceh-seo` | Web Discoverability | `/ceh-seo:web-discoverability` | Shipping a public web page/route — head checklist, sitemap/robots/llms.txt, JSON-LD, SSR/prerender, GEO citation rules |
 | `ceh-seo` | Text Discoverability | `/ceh-seo:text-discoverability` | Writing public-facing repo/package text — README first screen, one-liner, GitHub topics, PyPI/npm descriptions and keywords |
 | `ceh-orchestration` | Orchestrate | `/ceh-orchestration:orchestrate` | Decompose and delegate a big multi-step task — plan/delegate-only main session, cheap isolated workers, to cap context/token cost |
@@ -161,7 +194,7 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 | Plugin | Agent | Invoke as | When to use |
 |--------|-------|-----------|-------------|
-| `ceh-dev-tools` | Repo Tree Mapper | `/ceh-dev-tools:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
+| `ceh-coding-agent` | Repo Tree Mapper | `/ceh-coding-agent:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
 | `ceh-python-service` | Python Unit Tester | `/ceh-python-service:python-unit-tester` | Write isolated pytest unit tests for functions, classes, or modules with mocked dependencies |
 | `ceh-python-service` | Python Integration Tester | `/ceh-python-service:python-integration-tester` | Write tests for real component interactions — DB, HTTP between internal services, service boundaries |
 | `ceh-python-service` | Python System Tester | `/ceh-python-service:python-system-tester` | Write full end-to-end / acceptance tests that exercise the entire application stack |
@@ -187,7 +220,7 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 ### Prerequisites
 
-`python3` on `PATH` — required by the hooks in `ceh-advisor` and `ceh-agent-coding-contract`
+`python3` on `PATH` — required by the hooks in `ceh-advisor` and `ceh-coding-agent`
 (`ceh-fabled`'s SessionStart hook needs only `bash`)
 (stdlib only, no packages). Every other plugin works without it.
 
@@ -204,10 +237,11 @@ interpreter is available. Install with `winget install Python.Python.3.12` / `br
 
 ### Step 2 — Install plugins
 
-Install individual plugins for the use cases you need:
+Prefer a scenario bundle (see [Start here](#start-here--scenario-bundles)) — it pulls its members
+in automatically. Install individual plugins only when you want a set no bundle describes:
 
 ```
-/plugin install ceh-agent-coding-contract@ceh-plugins --scope user
+/plugin install ceh-coding-agent@ceh-plugins --scope user
 /plugin install ceh-plan-build-review@ceh-plugins --scope user
 /plugin install ceh-git-workflow@ceh-plugins --scope user
 /plugin install ceh-architecture@ceh-plugins --scope user
@@ -218,7 +252,6 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-ops@ceh-plugins --scope user
 /plugin install ceh-summarize-chat@ceh-plugins --scope user
 /plugin install ceh-lessons-learned@ceh-plugins --scope user
-/plugin install ceh-dev-tools@ceh-plugins --scope user
 /plugin install ceh-blog@ceh-plugins --scope user
 /plugin install ceh-documentation@ceh-plugins --scope user
 /plugin install ceh-orchestration@ceh-plugins --scope user
@@ -230,6 +263,9 @@ Install individual plugins for the use cases you need:
 /plugin install ceh-testing@ceh-plugins --scope user
 /plugin install ceh-usability-audit@ceh-plugins --scope user
 ```
+
+Some of those are already dependencies of others: installing `ceh-release-flow` brings
+`ceh-git-workflow` and `ceh-documentation`, and each stack plugin brings `ceh-testing`.
 
 Or install all at once using `--scope project` for project-specific installs.
 
@@ -256,7 +292,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 ```json
 {
   "plugins": [
-    { "path": "~/agent-skills/plugins/ceh-agent-coding-contract" },
+    { "path": "~/agent-skills/plugins/ceh-coding-agent" },
     { "path": "~/agent-skills/plugins/ceh-plan-build-review" },
     { "path": "~/agent-skills/plugins/ceh-git-workflow" },
     { "path": "~/agent-skills/plugins/ceh-architecture" },
@@ -267,7 +303,6 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-ops" },
     { "path": "~/agent-skills/plugins/ceh-summarize-chat" },
     { "path": "~/agent-skills/plugins/ceh-lessons-learned" },
-    { "path": "~/agent-skills/plugins/ceh-dev-tools" },
     { "path": "~/agent-skills/plugins/ceh-blog" },
     { "path": "~/agent-skills/plugins/ceh-documentation" },
     { "path": "~/agent-skills/plugins/ceh-orchestration" },

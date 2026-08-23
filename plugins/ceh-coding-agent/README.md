@@ -1,8 +1,11 @@
-# ceh-agent-coding-contract
+# ceh-coding-agent
 
 A behavioral contract for coding agents: the rules that govern how an agent operates during a
 session — what it may change, when it must stop, and how it logs decisions. The plugin loads the
 contract automatically at session start, alongside the `write-less-code` minimalism skill.
+
+It also carries the whole-repo passes an agent runs over code it did not write: `explain-codebase`,
+the `repo-tree-mapper` agent, and `refactor-repo`.
 
 > The plan-driven workflow skills (`implement-from-plan`, `review-against-plan`) moved to the
 > `ceh-plan-build-review` plugin, which bundles them with the planning skills.
@@ -17,6 +20,7 @@ contract automatically at session start, alongside the `write-less-code` minimal
 | `refactor-repo` | Manual only (`/refactor-repo`) — never auto-fires | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate. |
 | `usage-limit-handoff` | When the usage-limit guard hook fires (5h or weekly window past threshold) | Stop-and-summarize protocol: close the current atomic step, start nothing new, write a durable handoff artifact to `.agents_workspace/handoff/` plus a line in the global `~/.claude/handoff/index.md`, end the turn. Subagents report upward instead of writing the artifact. |
 | `explain-until-understood` | Manual only (`/explain-until-understood`) — never auto-fires | How an explanation is built and what to do when it misses: assume the reader knows nothing about the subject and say what floor you are building from, read the real code (never a design doc), foundations before the specific case, plain language (concept before name, every term of art defined at first use), verified output over described output, ASCII for structure and time, close on a transferable rule plus a self-test. Ships the escalation ladder — prose → steps → pictures → foundations — with the rule that a miss at pictures means a skipped foundation, not a missing detail; a reader lost on a *word* is not on the ladder at all. Writes no files by default — `.agents_workspace/` scratch notes on request, and one narrow repo path for a subsystem explainer no other skill owns. |
+| `explain-codebase` | Manual only (`/explain-codebase`) — never auto-fires | Whole-repo orientation: what each component does, how they connect, and the key flows, written into a git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` |
 
 **Manual triggers**
 
@@ -26,6 +30,13 @@ contract automatically at session start, alongside the `write-less-code` minimal
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
 - `usage-limit-handoff` — `/usage-limit-handoff`, or say `"wrap up the session"` / `"usage limit handoff"` / `"stop and summarize"`.
 - `explain-until-understood` — `/explain-until-understood [what to explain]` only (model auto-invocation is disabled by design).
+- `explain-codebase` — `/explain-codebase`, or say `"explain this codebase"` / `"what does this repo do"`.
+
+## Agents
+
+| Agent | When to use |
+|-------|-------------|
+| `repo-tree-mapper` | Map or document a repository's structure into an annotated tree; auto-triggers on orientation requests |
 
 ## How the skills auto-load
 

@@ -34,7 +34,7 @@ Or load automatically when the task involves:
 
 | Event | Script | Effect |
 |-------|--------|--------|
-| `SessionStart` (`startup\|resume\|clear\|compact`) | `hooks/load-voice.sh` | Injects a directive to invoke `fabled-voice`, so every session's responses are delivered in fable's form. Ordered after the `ceh-agent-coding-contract` load directive when both plugins are installed. |
+| `SessionStart` (`startup\|resume\|clear\|compact`) | `hooks/load-voice.sh` | Injects a directive to invoke `fabled-voice`, so every session's responses are delivered in fable's form. Ordered after the `ceh-coding-agent` load directive when both plugins are installed. |
 
 Requires `bash` on `PATH`. To opt out, disable the `ceh-fabled` plugin's hooks or remove
 `hooks/hooks.json`.
