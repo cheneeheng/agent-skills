@@ -4,12 +4,13 @@ description: >-
   Explain a subsystem, design, diff, or unfamiliar tool to someone in the session until they can
   answer questions about it unaided — assuming they know nothing about the subject and stating the
   floor it builds from. Reads the real thing rather than a doc or changelog, defines the
-  foundations before using them, verifies claims by running, draws structure and time in ASCII,
-  shows the tempting-but-wrong alternative, closes on a transferable rule plus a self-test. Carries
-  the escalation ladder for an explanation that missed — prose, steps, pictures, foundations — on
-  the rule that you change the representation rather than restate it louder. Writes no files by
-  default. Not for implementing, fixing, or reviewing code, a repo-wide orientation file
-  (ceh-coding-agent:explain-codebase), or user-facing documentation (ceh-documentation).
+  foundations before using them, verifies claims by running, draws structure and time in plain
+  ASCII, walks one real case step by step, shows the tempting-but-wrong alternative, closes on a
+  transferable rule plus a self-test. Carries the escalation ladder for an explanation that
+  missed — prose, steps, pictures, foundations — on the rule that you change the representation
+  rather than restate it louder. Writes no files by default. Not for implementing, fixing, or
+  reviewing code, a repo-wide orientation file (ceh-coding-agent:explain-codebase), or user-facing
+  documentation (ceh-documentation).
 argument-hint: '[what to explain]'
 ---
 
@@ -24,11 +25,13 @@ The output is the conversation. By default this skill writes no files; the two e
 
 ## Who you are explaining to
 
-**Assume the reader knows nothing about the subject.** Not that they are inexperienced — that they
-have never seen this system, this tool, or this codebase, and do not know the words it uses. The
-cost is asymmetric and that is the whole argument: explaining above someone burns a full round trip
-and they may not say they are lost, while explaining below someone costs one paragraph they skim in
-three seconds.
+**Assume the reader is new here and knows nothing about the subject.** Not that they are
+inexperienced — that it is their first day on this project: they have never seen this repo, this
+tool, or the work that led to it, and they do not know the words any of it uses. Project-local
+names are terms of art like any other and get defined at first use — a service, a table, an
+internal acronym, a file everyone refers to by a nickname. The cost is asymmetric and that is the
+whole argument: explaining above someone burns a full round trip and they may not say they are
+lost, while explaining below someone costs one paragraph they skim in three seconds.
 
 State the floor you are building from in one line before you start — "assuming you have written
 Python but never used asyncio" — so the reader can raise it. Then build strictly upward from it.
@@ -40,10 +43,13 @@ correctly. Their job title is not evidence, that they are in a terminal is not e
 they pasted from an error message is not evidence they know it.
 
 **Scale to the ask.** "What does this regex do" earns a sentence, and at most the wrong-conclusion
-framing from step 5. Step 1 is the one step that never scales away — the one-sentence answer is
-only right because you opened the file. Everything else does: the full seven-step procedure is for
-something the reader has to hold in their head afterwards — a subsystem, a design, a release's
-worth of change. Running all seven on a one-line question is its own way of failing to explain.
+framing from step 6. Step 1 is the one step that never scales away — the one-sentence answer is
+only right because you opened the file. The worked walk of step 5 is the next hardest to drop,
+because it shrinks instead of disappearing: two numbered lines tracing one real input beat a
+paragraph describing the mechanism in general. Everything else does scale away: the full eight-step
+procedure is for something the reader has to hold in their head afterwards — a subsystem, a design,
+a release's worth of change. Running all eight on a one-line question is its own way of failing to
+explain.
 The other end has a limit too: when the subject is larger than one explanation can carry, name the
 slices, explain one, and say what the others are. A compressed tour of all of it leaves the reader
 able to answer nothing.
@@ -60,7 +66,7 @@ able to answer nothing.
 
 ## Procedure
 
-Step 1 is what *you* do; steps 2 and 4–7 are what the *reply* contains, in that order. Step 3 is
+Step 1 is what *you* do; steps 2 and 4–8 are what the *reply* contains, in that order. Step 3 is
 both — you run the command, and its output goes in the reply next to the claim it supports. Do not
 narrate the doing: "I read the modules and ran the validator" is process, and the reader asked for
 an explanation. Pasted output is evidence, not narration.
@@ -90,7 +96,7 @@ an explanation. Pasted output is evidence, not narration.
    explanation: name the slices and explain one (see *Scale to the ask*).
    Everything after this step stands on these, so a foundation that missed makes the rest
    unreadable rather than partly readable — which is the single most common cause of an explanation
-   that has to be repeated. You do not stop mid-reply to check: aim step 7's first self-test
+   that has to be repeated. You do not stop mid-reply to check: aim step 8's first self-test
    question at a foundation, which is where a missed one surfaces cheapest.
 
 3. **Verify by running.** Run the tool, the command, the throwaway script, and paste the real
@@ -106,18 +112,39 @@ an explanation. Pasted output is evidence, not narration.
    of a list is noise. In the conversation, draw in ASCII: it renders on every surface, while
    Mermaid renders only where the reader's client draws it — a terminal does not. Mermaid is for a
    file that will be viewed rendered.
+   **ASCII means the plain keyboard characters and nothing else** — `- | + / \ < > ^ v` for lines
+   and arrowheads, `[ ]` or `+---+` for boxes. No box-drawing glyphs, no `→`, no emoji: those
+   depend on the reader's font and terminal encoding, and one glyph that fails to render turns the
+   picture into noise exactly where the picture was carrying the meaning.
 
-5. **Frame failure as "what you would wrongly conclude".** Not "this is a bug" but "you would read
+   ```
+   request --> [ router ] --+--> [ handler A ] --> db
+                            |
+                            +--> [ handler B ] --> queue
+   ```
+
+5. **Walk one concrete case, numbered, end to end.** Take a single real input — one request, one
+   file, one commit — and number what happens to it, one hop per line, using the real names and the
+   real values. A reader who cannot follow the general rule can almost always follow one worked
+   case and then read the rule back off it, which is why this is the default form rather than a
+   fallback: prefer a walked case over a general description wherever a concrete case exists.
+   Pick the *ordinary* case, not the interesting edge — the edge is step 6's job. Mark any value
+   you made up, as against one that came out of the run in step 3. The walk and the step 4 picture
+   describe the same thing and must agree; where they cannot, the picture is wrong.
+   Where nothing concrete can be walked — a naming convention, a policy — say so and skip the step
+   rather than inventing a trace.
+
+6. **Frame failure as "what you would wrongly conclude".** Not "this is a bug" but "you would read
    that as reconcile routing to verdict, and go debug the rule ladder — and the rule ladder is
    fine." The wrong conclusion is what makes a subtle failure memorable. The step frames a failure
    the code actually has — if reading it turned up none, say the path is straightforward and move
    on. An invented failure mode breaks the evidence rule.
 
-6. **Show the tempting-but-wrong alternative.** For any non-obvious design, name the simpler thing
+7. **Show the tempting-but-wrong alternative.** For any non-obvious design, name the simpler thing
    a reader would reach for and show precisely where it breaks. This is what turns "the code does
    X" into "the code *must* do X".
 
-7. **Close with the transferable rule, then a self-test.** One sentence the reader can apply to
+8. **Close with the transferable rule, then a self-test.** One sentence the reader can apply to
    the next case — "pass context explicitly wherever someone else's scheduler owns the task" beats
    re-listing the three call sites where it is passed. Follow it with two to five questions they
    should now be able to answer unaided. A wrong answer is the miss signal — go to the ladder
@@ -150,12 +177,12 @@ First ask *what kind* of miss it was, because two of the three are not ladder mo
 - **A word you never defined.** Define it and say the same thing again at the same level. This is
   not an attempt on the ladder — you owed them the definition and the explanation was otherwise
   fine.
-- **A foundation you did state, that did not take.** Go to attempt 4 directly, per step 7. The
+- **A foundation you did state, that did not take.** Go to attempt 4 directly, per step 8. The
   words were on the page and still did not land, so restating them is what already failed.
 - **They have the words and cannot assemble them.** This is what the ladder below is for.
 
 Do not restate the same explanation with more words. Drop a level and change the representation.
-Only the representation changes: a re-explanation still closes on step 7's rule and self-test at
+Only the representation changes: a re-explanation still closes on step 8's rule and self-test at
 the scale the first attempt was pitched at — one question is enough for a small ask — because the
 self-test is how you find out whether the new form landed.
 
@@ -164,7 +191,9 @@ passed — invoked cold after a miss, look at what the previous explanation actu
 next row down. A table is attempt 1, not attempt 3: it lays out facts side by side but carries no
 structure, ordering, or flow, so a reader stuck on *how the parts connect* gains nothing from one.
 A prose explanation carrying one diagram is attempt 1 too — that is step 4 done right, not the
-ladder skipped ahead. Attempt 3 is the explanation rebuilt so that every step has its own picture.
+ladder skipped ahead, and the same goes for one carrying a numbered walk of a single case: that is
+step 5. Attempt 2 is the *whole explanation* rebuilt as numbered steps, not one worked example
+sitting inside prose. Attempt 3 is that rebuild with a picture on every step.
 
 | Attempt | Representation | If it still misses |
 |---|---|---|
@@ -219,7 +248,9 @@ most valuable line in the whole explanation.
 - Treating a term as known because the reader typed it, when they may have copied it out of an
   error message.
 - Reusing a term introduced earlier in the session as though it is now known.
-- A diagram where a table would do; Mermaid where the reader has a terminal.
+- A diagram where a table would do; Mermaid where the reader has a terminal; box-drawing or
+  arrow glyphs where a plain `+`, `-`, `|` and `-->` would have rendered anywhere.
+- Describing a mechanism in general terms when one real case could have been walked step by step.
 - Answering "is this documented?" with yes or no instead of a grep result per file.
 - Ending on the mechanism instead of the rule of thumb.
 - Restating attempt N as attempt N+1 with more words.
