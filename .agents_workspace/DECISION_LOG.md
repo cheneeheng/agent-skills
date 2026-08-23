@@ -1964,3 +1964,36 @@ silent-invocation-failure risk) updated to 6.
 
 **Outcome:** `python tools/validate-plugins/validate.py` green. No repo tag and no CHANGELOG entry —
 that is the release step, not this one.
+
+### Entry 83
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-23T00:00:00Z
+**Task:** release-flow for the model-invocation change (repo v5.0.1).
+
+**Context:** Three forks. (1) The pipeline says branch `chore/release-vX.Y.Z` from main and bump
+versions there, but the release's changes and all six plugin bumps already landed on
+`chore/re-enable-model-invocation` (commit `c626f88`). (2) I had reported in-session that no README
+change was needed; that was wrong — both README tables carry an invocation-mode column
+("Manual only — never auto-fires"), so `explain-until-understood` had a row that the flag removal
+falsified. (3) That same table has a pre-existing error one row down: `explain-codebase` is listed
+as "Manual only ... never auto-fires" but has never set the flag and carries a full trigger-phrase
+list.
+
+**Decision:** (1) Reuse the existing feature branch as the release branch — the release IS these
+changes, so a second branch is churn. Entry 1 sets the precedent for exactly this. (2) Fixed both
+`explain-until-understood` rows: the root README cell now reads as a moment ("Explaining a
+subsystem...") matching the column's gerund style, and the plugin README's "When it loads" cell
+reads "On demand — ...", matching `shrink-diff`'s phrasing rather than `refactor-repo`'s. (3) Left
+the `explain-codebase` row alone. It is a pre-existing defect unrelated to this change, and the
+contract puts an adjacent-but-unrequested surface out of scope; flagged to the user for a follow-up
+instead. (4) Repo tag is PATCH (v5.0.0 → v5.0.1) — frontmatter and docs only, no new skills or
+agents, matching the v3.19.1 precedent for the inverse change.
+
+**Impact / Risk:** Branch name does not match the `chore/release-*` convention (cosmetic). The
+`explain-codebase` README row stays wrong until a follow-up commit fixes it, so anyone reading that
+table still believes the skill never auto-fires.
+
+**Outcome:** `validate.py` green; `check-semver.py` green. Tag and release cut on `main` after the
+merge, per the hard rules.
