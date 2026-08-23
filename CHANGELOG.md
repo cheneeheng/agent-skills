@@ -5,6 +5,121 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [5.0.0] — 2026-08-23
+
+Two problems had the same root. With 23 plugins and roughly 77 skills, nobody remembers the
+catalogue — a user knows the situation they are in, not which four plugins that situation needs.
+And where one skill genuinely required another, the only mechanism connecting them was a trigger
+phrase in prose, hoping the target's `description` matched whatever phrasing reached the model.
+Both are addressed here, and the fixes are independent: **installation** is solved by plugin
+`dependencies`, **invocation** by naming the `Skill` tool call outright in the skill body.
+
+Seven `ceh-scenario-*` bundles are the new install entry point. Each is a manifest and a README
+with no skills, agents, or hooks of its own — `ceh-scenario-service-iterate` names the nine plugins
+that working on a shipped Python service actually needs, and installing it pulls all nine
+automatically. The greenfield halves depend on their own `-iterate` twin plus a planning delta, so
+the phase transition is a no-op: you never switch bundles, you just stop reaching for the planning
+skills. The post-launch suffix is `-iterate` rather than `-maintenance` because most feature work
+lives on that side for years, and "maintenance" reading as bugfix-only had already caused
+`ceh-plan-build-review` to be filed on the wrong side.
+
+Sixteen cross-plugin references became explicit `Invoke the Skill tool with skill="X"`
+instructions, backed by six new dependency edges so the call cannot fail with an unknown skill.
+The bar for an edge is deliberately high: the reference must fire on *every* run of the skill.
+The platform has no optional dependency, so a conditional handoff declared as one installs a whole
+plugin for a branch most runs never reach — `ceh-usability-audit` delegating WCAG to
+`ceh-web-frontend:accessibility` stays prose for exactly that reason. Negative routing ("not for
+tagging, use X") never counts, since it names the alternative the user steered away from. That
+keeps the graph at six edges and the worst-case install closure at three plugins. An audit of all
+102 cross-plugin references found that eleven of the sixteen edges originally planned had no
+supporting reference at all.
+
+Two breaking changes. `ceh-agent-coding-contract` is now **`ceh-coding-agent`**: the plugin holds a
+behavioral contract, a minimalism reflex, two retroactive-refactoring skills, a usage-limit hook,
+and three explanation and orientation skills, so "coding contract" named one of eight things. The
+rename window closed at the dependency rollout, after which the old string would have been a hard
+key in thirteen manifests. `ceh-dev-tools` is **removed**, its `explain-codebase` skill and
+`repo-tree-mapper` agent absorbed into `ceh-coding-agent` — they cross-referenced the contract
+purely to disambiguate, and one skill plus one agent is below the weight of a standalone plugin.
+Existing installs of either name are orphaned and must be reinstalled.
+
+`validate.py` now enforces the contract rather than trusting it. Every `Invoke the Skill tool with
+skill="X"` must name a skill that exists, lives in-plugin or in a declared dependency, and does not
+set `disable-model-invocation: true` — 19 of 77 skills set that flag, and a call into one fails
+silently at runtime with nothing to catch it at author time. The dependency graph is checked for
+cycles directly, and `ceh-scenario-*` directories are held to manifest-plus-README.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-coding-agent` | v3.1.0 *(was `ceh-agent-coding-contract` v2.9.3)* |
+| `ceh-ops` | v3.1.0 |
+| `ceh-orchestration` | v1.1.1 |
+| `ceh-python-library` | v1.3.0 |
+| `ceh-python-service` | v3.2.0 |
+| `ceh-web-frontend` | v3.3.0 |
+| `ceh-release-flow` | v1.2.1 |
+| `ceh-business-plan` | v1.0.4 |
+| `ceh-advisor` | v1.0.7 |
+| `ceh-fabled` | v1.3.5 |
+| `ceh-scenario-service-greenfield` | v1.0.0 |
+| `ceh-scenario-service-iterate` | v1.0.0 |
+| `ceh-scenario-library-greenfield` | v1.0.0 |
+| `ceh-scenario-library-iterate` | v1.0.0 |
+| `ceh-scenario-webapp-greenfield` | v1.0.0 |
+| `ceh-scenario-webapp-iterate` | v1.0.0 |
+| `ceh-scenario-editorial` | v1.0.0 |
+| `ceh-dev-tools` | *removed* |
+
+### Added
+
+- **Seven scenario bundles** — `ceh-scenario-{service,library,webapp}-{greenfield,iterate}` and
+  `ceh-scenario-editorial`. Manifest plus README only; each declares the plugin set for one
+  situation. The `-greenfield` halves depend on their `-iterate` twin plus `ceh-scaffolding` and
+  `ceh-business-plan`.
+- **Six dependency edges** — `ceh-release-flow` → `ceh-git-workflow` + `ceh-documentation`;
+  `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend` → `ceh-testing`; `ceh-ops` and
+  `ceh-orchestration` → `ceh-coding-agent`. Bare strings, no version ranges — the repo has no
+  per-plugin `{name}--v{version}` tags.
+- **Sixteen explicit skill invocations** — eight in `release-flow`, five in `direct-release-flow`,
+  and one in each of the three stack testing skills. `ceh-testing:design-test-cases` was previously
+  reachable only through agent preloads, so the in-conversation path had no access to the technique.
+- **`validate.py` rules** — invocation resolution, dependency-graph acyclicity, and the
+  `ceh-scenario-*` structural invariant.
+- **A fourth `plan-schema.md` copy** in `ceh-business-plan`, removing the only cross-plugin file-path
+  read in the repo.
+- **README scenario table** above the plugin table, so the install path reads scenario-first.
+
+### Changed
+
+- **`ceh-coding-agent`** — renamed from `ceh-agent-coding-contract`; absorbs `explain-codebase` and
+  the `repo-tree-mapper` agent from `ceh-dev-tools`. Hooks, agent `skills:` preloads, both READMEs,
+  `CLAUDE.md`, and `docs/CROSS_REFERENCES.md` updated across 180 occurrences.
+- **`ceh-fabled`, `ceh-advisor`, `ceh-orchestration`** — marked EXPERIMENTAL in their manifest
+  `description` fields and in the README, and excluded from every bundle. `ceh-advisor` additionally
+  states that it installs always-on session hooks.
+- **`CLAUDE.md`** — documents the scenario tier, the two rules deciding whether a reference earns a
+  dependency, the cross-cutting layering rule, and the `ceh-scenario-` naming convention.
+
+### Removed
+
+- **`ceh-dev-tools`** — contents absorbed into `ceh-coding-agent`; the marketplace entry is gone.
+- **`release-flow` / `direct-release-flow` fallbacks** — the "if a step's owning skill is not
+  installed, apply it inline" and trigger-phrase dispatch paragraphs, replaced by the dependency
+  guarantee in the same commit.
+
+### Fixed
+
+- **`release-flow` / `direct-release-flow` step 1** — invoked `ceh-git-workflow:release` to reach a
+  four-row bump table. Invocation injects the entire body, so the call also delivered that skill's
+  push-and-tag command sequence nine steps before it applies, and was byte-identical to the later
+  call that legitimately wants the full procedure. Step 1 now states the mapping inline; the late
+  call names which half of the target to run.
+- **Dependency declaration site** — `dependencies` was briefly mirrored into `marketplace.json`.
+  The platform accepts either with no documented precedence, so `plugin.json` is now the single
+  source of truth.
+
 ## [4.0.2] — 2026-08-22
 
 `explain-until-understood` defaulted to explaining at a peer engineer's level. The cause was

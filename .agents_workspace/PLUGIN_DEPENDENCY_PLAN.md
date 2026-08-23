@@ -1,6 +1,7 @@
 # Plugin Dependency & Scenario Bundle Plan
 
-Status: **design agreed — nothing implemented**
+Status: **steps 1–9 implemented** on `feat/plugin-dependencies-and-scenario-bundles`; step 10 (repo
+tag + `CHANGELOG.md`) and step 11 (owner-manual local cleanup) outstanding. Per-step commits in §6.
 Author: dependency design session, 2026-08-22 (rev 2, same day)
 Scope: all `ceh-*` plugins, `.claude-plugin/marketplace.json`, `tools/validate-plugins/validate.py`.
 **This plan touches this repo only.** No change here depends on, or modifies, a plugin from another
@@ -262,6 +263,23 @@ model may invoke *that* skill, not what the skill's body invokes once a human ha
 ## 6. Implementation checklist
 
 Ordered so each step leaves the repo green. Steps 1–3 are independent of the bundles.
+
+Steps 1–9 landed on `feat/plugin-dependencies-and-scenario-bundles`, verified 2026-08-23 against a
+clean tree with `validate.py` green:
+
+| Step | Commit | Note |
+|------|--------|------|
+| 1 | `9e4d665` | rename `ceh-agent-coding-contract` → `ceh-coding-agent` |
+| 2 | `484fd47` | absorb `ceh-dev-tools` |
+| 3 | `9641997` | 4th `plan-schema.md` copy + `CROSS_REFERENCES.md:205` |
+| 4, 5 | `d6f461c`, `0390149`, `d00c416` | six edges + 16 invocations; later commits fixed the bump level and removed the `marketplace.json` duplicate |
+| 6 | `6e549bb` | seven bundles |
+| 7 | `cf60012` | scenario shape, dependency resolution, acyclicity, invocation contract |
+| 8 | `09d28e0` | scenario table first; experimental marks |
+| 9 | `0f9d789`, `4f8230d` | scenario tier, D12/D13, naming rule, rename |
+
+Step 10 lands as repo tag **v5.0.0** (MAJOR: D14 renames a plugin, D5 removes one). Step 11
+remains open — owner-manual, after the tag is pushed.
 
 1. **Execute D14 — rename `ceh-agent-coding-contract` → `ceh-coding-agent`**, as its own commit,
    first. 180 occurrences repo-wide. Beyond the obvious (directory, `plugin.json`,

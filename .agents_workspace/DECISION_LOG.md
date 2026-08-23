@@ -1905,3 +1905,21 @@ expect a version bump.
 **Outcome:** `python tools/validate-plugins/validate.py` green. The changelog validator shipped with
 `update-changelog` is absent from the installed plugin (no `scripts/` directory), so semver ordering,
 date format, and duplicate headers were checked by hand instead.
+
+### Entry 81
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-23T00:00:00Z
+**Task:** Cut repo tag v5.0.0 via ceh-release-flow:release-flow.
+
+**Context:** The flow's step 2 branches `chore/release-vX.Y.Z` from latest `main`. All of the
+release content sits on the unmerged `feat/plugin-dependencies-and-scenario-bundles`, so a release
+branch cut from `main` would carry a changelog describing work `main` does not have.
+**Decision:** Reuse the existing feature branch as the release branch and let one PR carry both the
+feature work and the release commit. Steps 3-10 otherwise run as written.
+**Impact / Risk:** The release PR is larger than a pure `chore/release-` PR and mixes feature work
+with the version bump. Acceptable here because the alternative is two PRs where the first has no
+changelog and the second has no content. Step 3 was a no-op: the repo tag lives in no manifest, and
+per-plugin versions were already bumped in earlier commits on this branch.
+**Outcome:** Changelog entry written for 5.0.0; tag applied to the merge commit on `main`.
