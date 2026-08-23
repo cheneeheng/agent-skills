@@ -1,6 +1,5 @@
 ---
 name: plan-fullstack-app-iteratively
-disable-model-invocation: true
 description: >-
   Plan a software project one release at a time: each session produces a single artifact
   scoped to the next build, never the finished product. Handles vague or early-stage

@@ -1,6 +1,5 @@
 ---
 name: explain-until-understood
-disable-model-invocation: true
 description: >-
   Explain a subsystem, design, diff, or unfamiliar tool to someone in the session until they can
   answer questions about it unaided — assuming they know nothing about the subject and stating the

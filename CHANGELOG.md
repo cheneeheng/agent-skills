@@ -5,6 +5,62 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [5.0.1] — 2026-08-23
+
+Thirteen of the nineteen skills carrying `disable-model-invocation: true` drop the flag. v3.19.1 set
+it on sixteen skills, but that same release also trimmed the trigger scaffolding out of their
+descriptions — and the trim is the half that actually stops a skill firing on a stray code moment.
+The flag on top of it only removes the skill from the model-visible listing, so asking for one by
+name ("...and use skill X for it") silently does nothing, and D16 bars the skill from ever being an
+`Invoke the Skill tool` target. Thirteen of the flagged skills were paying that cost for nothing.
+
+The flag stays on the six where an unintended fire costs more than a blocked explicit request:
+`orchestrate` (session-mode takeover that persists for the rest of the session), `refactor-repo`
+(repo-wide blast radius, with `shrink-diff` as the sibling that *should* fire),
+`direct-release-flow` (straight to main, no PR, no review), `evaluate-skill` (`effort: xhigh` N-run
+subagent battery with a cheap `-lite` twin), and `summarize-chat` + `lessons-learned`.
+
+Descriptions are deliberately untouched. Restoring the trigger-phrase lists v3.19.1 removed would
+reopen arbitrations that release closed; the trimmed descriptions already carry the `Not for X, use
+Y` pointers and the explicit "choose THIS skill when..." choosers, which is what the newly
+competing pairs (`plan-fullstack-app-iteratively` vs `-to-mvp`, and the three drafting blog skills)
+now arbitrate on. Rationale: `.agents_workspace/DECISION_LOG.md` entry 82.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-blog` | v1.0.11 |
+| `ceh-business-plan` | v1.0.5 |
+| `ceh-coding-agent` | v3.1.1 |
+| `ceh-evaluation` | v1.1.7 |
+| `ceh-plan-build-review` | v1.1.5 |
+| `ceh-release-flow` | v1.2.2 |
+
+### Changed
+
+- **`ceh-blog`** — `blog-writer`, `blog-interviewer`, `blog-editor`, `blog-repurpose` are
+  model-invocable again.
+- **`ceh-plan-build-review`** — all five skills (`plan-fullstack-app-iteratively`,
+  `plan-fullstack-app-to-mvp`, `implement-from-plan`, `review-against-plan`,
+  `patch-built-version`) are model-invocable again. Each is pointed at a named plan artifact, so it
+  cannot misfire without that artifact already existing.
+- **`ceh-release-flow` / `release-flow`** — model-invocable again; it is PR-gated and delegates to
+  skills that each gate, so the failure mode is recoverable. `direct-release-flow` keeps the flag:
+  its failure mode is not, and a model auto-picking the direct variant is a silent loss of the
+  review gate.
+- **`ceh-business-plan` / `develop-business-plan`**, **`ceh-evaluation` / `evaluate-skill-lite`** —
+  model-invocable again. `evaluate-skill-lite` exists because it is cheap, which is the argument
+  against gating it.
+- **`ceh-coding-agent` / `explain-until-understood`** — model-invocable again with no description
+  change: it was written with no trigger phrases at all, so dropping the flag restores explicit
+  invocability without entering it into auto-fire competition with `explain-codebase`.
+
+### Fixed
+
+- **`CLAUDE.md` and `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md`** — the flagged-skill count in the
+  D16 invocation contract and in the silent-invocation-failure risk now reads 6 of 77, not 19.
+
 ## [5.0.0] — 2026-08-23
 
 Two problems had the same root. With 23 plugins and roughly 77 skills, nobody remembers the

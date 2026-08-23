@@ -1,6 +1,5 @@
 ---
 name: review-against-plan
-disable-model-invocation: true
 description: >-
   Audit or verify that the current codebase matches a SKELETON.md or ITER_NN.md planning document —
   including version-tagged variants like SKELETON_v2.md or v2_ITER_03.md. For each in-scope section,

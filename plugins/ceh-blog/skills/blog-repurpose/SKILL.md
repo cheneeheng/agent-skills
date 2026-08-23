@@ -1,6 +1,5 @@
 ---
 name: blog-repurpose
-disable-model-invocation: true
 description: >-
   Adapt a finished blog post into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb.
   Requires a complete draft — otherwise use blog-interviewer, blog-writer, or blog-editor first.
