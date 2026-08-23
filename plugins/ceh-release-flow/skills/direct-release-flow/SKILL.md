@@ -28,14 +28,14 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 
 | # | Step | Delegate to | Gate before next step |
 |---|------|-------------|-----------------------|
-| 1 | Decide the semver bump — MAJOR/MINOR/PATCH; when in doubt, PATCH | Invoke the Skill tool with skill="ceh-git-workflow:release" (bump table) | Version chosen, never below current |
+| 1 | Decide the semver bump — breaking change → MAJOR, new backward-compatible feature → MINOR, fixes/chores/docs/refactors → PATCH. When in doubt, PATCH | — decision, no delegation | Version chosen, never below current |
 | 2 | Confirm you are on an up-to-date `main` | `git checkout main && git pull origin main` | Clean tree on latest `main` |
 | 3 | Bump the version in **every** manifest the project ships (`pyproject.toml`, `package.json`, `plugin.json`, `marketplace.json`, `Cargo.toml`, …) | — mechanical edit | All manifests read the same vX.Y.Z |
 | 4 | Write the vX.Y.Z changelog entry | Invoke the Skill tool with skill="ceh-documentation:update-changelog" | Section written and semver-validated |
 | 5 | Refresh the README if the change is user-facing | Invoke the Skill tool with skill="ceh-documentation:update-readme" | Updated, or "no update needed" recorded |
 | 6 | Update CLAUDE.md if project facts/structure changed | surgical edit (or `revise-claude-md` if that plugin is installed) | CLAUDE.md matches reality, or skip logged |
 | 7 | Commit the bump + docs straight to `main` | Invoke the Skill tool with skill="ceh-git-workflow:commit" | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean, pushed to `main` |
-| 8 | Tag and publish the release on `main` | Invoke the Skill tool with skill="ceh-git-workflow:release" | Tag pushed, release created |
+| 8 | Tag and publish the release on `main` | Invoke the Skill tool with skill="ceh-git-workflow:release" — **run its tag + release steps only; step 7 already committed and pushed the bump** | Tag pushed, release created |
 
 ## Step 7 detail — the release commit is not subject-only
 
@@ -72,8 +72,8 @@ the changelog section and tell it to summarize from there. Dispatch each on the 
 declared in its frontmatter: **Claude Sonnet at medium reasoning effort** for both. These steps
 write to `main` — do not downgrade to a smaller model or lower effort. The gates stay **here**: check each step's
 gate on the agent's report before dispatching the next. Steps 1–6 stay in the main session — they
-need the session's context to write correct docs. Without the agents, delegate to the skills by
-trigger phrase as in the table.
+need the session's context to write correct docs. Without the agents, invoke each step's skill from the
+main session exactly as the table specifies.
 
 ## Step 8 detail — tag and release after the commit lands
 

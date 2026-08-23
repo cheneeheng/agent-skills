@@ -356,6 +356,31 @@ for tasks it can't trivially handle alone …").
 
 ---
 
+## Semver bump mapping (release-flow step 1)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-git-workflow/skills/release/SKILL.md` | bump table, lines 17-23 | canonical |
+| `plugins/ceh-release-flow/skills/release-flow/SKILL.md` | pipeline table, step 1 cell | condensed inline copy |
+| `plugins/ceh-release-flow/skills/direct-release-flow/SKILL.md` | pipeline table, step 1 cell | condensed inline copy |
+
+**What is shared:** the change-type-to-level mapping (breaking change -> MAJOR, new
+backward-compatible feature -> MINOR, fixes/chores/docs/refactors -> PATCH) and the "when in doubt,
+PATCH" tiebreaker.
+
+**Why duplicated:** the two flow skills previously invoked `ceh-git-workflow:release` at step 1 to
+reach this table. Invocation injects the whole body, so that call also delivered the skill's
+push-and-tag command sequence nine steps before it applies -- and made step 1's call
+indistinguishable from the step 10/8 call that legitimately wants the full procedure. Inlining the
+mapping is three lines and removes the premature payload.
+
+**What diverges:** the flow copies condense the table into one cell and drop "Never lower a
+version", which the gate column carries instead.
+
+---
+
 ## Release-commit message block (step 7 detail)
 
 **Files:**

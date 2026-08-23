@@ -27,7 +27,7 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 
 | # | Step | Delegate to | Gate before next step |
 |---|------|-------------|-----------------------|
-| 1 | Decide the semver bump — MAJOR/MINOR/PATCH; when in doubt, PATCH | Invoke the Skill tool with skill="ceh-git-workflow:release" (bump table) | Version chosen, never below current |
+| 1 | Decide the semver bump — breaking change → MAJOR, new backward-compatible feature → MINOR, fixes/chores/docs/refactors → PATCH. When in doubt, PATCH | — decision, no delegation | Version chosen, never below current |
 | 2 | Branch `chore/release-vX.Y.Z` from latest `main` | Invoke the Skill tool with skill="ceh-git-workflow:branch" | On a clean branch off up-to-date `main` |
 | 3 | Bump the version in **every** manifest the project ships (`pyproject.toml`, `package.json`, `plugin.json`, `marketplace.json`, `Cargo.toml`, …) | — mechanical edit | All manifests read the same vX.Y.Z |
 | 4 | Write the vX.Y.Z changelog entry | Invoke the Skill tool with skill="ceh-documentation:update-changelog" | Section written and semver-validated |
@@ -36,7 +36,7 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 | 7 | Commit the bump + docs | Invoke the Skill tool with skill="ceh-git-workflow:commit" | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean |
 | 8 | Open the PR — on repos that allow auto-merge, `open-pr` already queues it here | Invoke the Skill tool with skill="ceh-git-workflow:open-pr" | PR open, self-review + definition-of-done passed |
 | 9 | Merge and clean up — if step 8 queued auto-merge, this just confirms it lands; otherwise prefer `--auto` (or a direct merge once green). Don't poll CI by hand | Invoke the Skill tool with skill="ceh-git-workflow:merge" (auto-merge probe) | CI green, approvals met, merged to `main`, remote-branch state reported |
-| 10 | Tag and publish the release on `main` | Invoke the Skill tool with skill="ceh-git-workflow:release" | Tag pushed, release created |
+| 10 | Tag and publish the release on `main` | Invoke the Skill tool with skill="ceh-git-workflow:release" — **run its tag + release steps only; the bump commit already landed via the PR** | Tag pushed, release created |
 
 ## Step 7 detail — the release commit is not subject-only
 
@@ -77,7 +77,7 @@ version strings. Pass the body text, or pass the changelog section and tell it t
 there. The gates stay **here**: check
 each step's gate on the agent's report before dispatching the next. Steps 1–6 stay in the main
 session — they need the session's context (what changed and why) to write correct docs. Without
-the agents, delegate to the skills by trigger phrase as in the table.
+the agents, invoke each step's skill from the main session exactly as the table specifies.
 
 ## Step 10 detail — tag and release *after* merge
 
