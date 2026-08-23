@@ -12,7 +12,7 @@
       "name": "ceh-coding-agent",
       "source": "./plugins/ceh-coding-agent",
       "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, and whole-repo explanation and mapping.",
-      "version": "3.1.1",
+      "version": "3.1.2",
       "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
       "repository": "https://github.com/cheneeheng/agent-skills",
       "license": "Apache-2.0",

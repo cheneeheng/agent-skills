@@ -5,6 +5,62 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [5.0.2] — 2026-08-23
+
+`explain-until-understood` gains a step. Describing a mechanism in general terms is the form that
+reads as understood and is not; walking one real input through it, one hop per numbered line, is the
+form a reader can follow and then read the rule back off. The skill already knew that move — but
+only as ladder attempt 2, a *recovery* reached after an explanation had already missed. It is now
+step 5 of the procedure and the default rather than the fallback, placed after the drawing step so
+the picture is the map and the walk is one journey across it. Old steps 5-7 shift to 6-8.
+
+That collides with the escalation ladder, whose attempt 2 *is* numbered steps: if the first attempt
+already walks a case, attempt 2 is no longer a change of representation. The rung stays — it was
+the only step between prose and pictures — and the prose disambiguates instead. A numbered walk of
+one case sitting inside prose is still attempt 1; attempt 2 is the *whole explanation* rebuilt as
+steps.
+
+Two smaller gaps closed alongside it. "Assume the reader knows nothing about the subject" left
+project-local vocabulary uncovered — the repo, the work that led here, an internal acronym everyone
+says out loud — so the floor is now explicitly a reader on their first day, and project-local names
+are terms of art that get defined at first use. And "draw in ASCII" never said which characters,
+which let box-drawing and arrow glyphs through; one glyph that fails to render breaks the picture
+exactly where the picture is carrying the meaning, so the charset is spelled out and demonstrated.
+
+The skill body was then rewritten against its own "one new idea per sentence" rule, which it had
+been breaking in eight-to-thirteen-line paragraphs that each carried four rules. Every procedure
+step now opens with one bold claim and drops its qualifiers into sub-bullets — the form the skill
+tells you to use. No rule changed in that pass, and the `Rules` section it shares with
+`explain-codebase` is byte-identical.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-coding-agent` | v3.1.2 |
+
+### Added
+
+- **`ceh-coding-agent` / `explain-until-understood`** — procedure step 5, "walk one concrete case,
+  numbered, end to end": the ordinary case rather than the interesting edge, invented values marked
+  against run output, and the walk required to agree with the step 4 picture. Skipped, with that
+  said out loud, where nothing concrete can be walked.
+
+### Changed
+
+- **`ceh-coding-agent` / `explain-until-understood`** — the reader floor is a person on their first
+  day on the project, not only someone new to the subject.
+- **`ceh-coding-agent` / `explain-until-understood`** — ASCII is defined as the plain keyboard
+  characters, with box-drawing glyphs, `→` and emoji named as excluded and a worked diagram showing
+  the substitutes.
+- **`ceh-coding-agent` / `explain-until-understood`** — every procedure step restructured as one
+  bold claim plus sub-bullets; longest unbroken prose block drops from 13 lines to 5.
+
+### Fixed
+
+- **`ceh-coding-agent` README** — `explain-until-understood` was still listed as slash-command-only
+  with "model auto-invocation is disabled by design". v5.0.1 removed that flag from the skill.
+
 ## [5.0.1] — 2026-08-23
 
 Thirteen of the nineteen skills carrying `disable-model-invocation: true` drop the flag. v3.19.1 set

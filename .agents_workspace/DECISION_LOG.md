@@ -1997,3 +1997,34 @@ table still believes the skill never auto-fires.
 
 **Outcome:** `validate.py` green; `check-semver.py` green. Tag and release cut on `main` after the
 merge, per the hard rules.
+
+### Entry 84
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-23T00:00:00Z
+**Task:** Add worked step-by-step examples, a new-to-the-project reader floor, and a plain-ASCII charset rule to `ceh-coding-agent:explain-until-understood`
+
+**Context:** Three forks the request left open. (a) Where a worked walk belongs in the seven-step
+procedure — a new step, or folded into an existing one. (b) Making step-by-step the default
+collides with the escalation ladder, whose attempt 2 *is* "numbered steps, one idea each"; if the
+first attempt already walks a case, attempt 2 is no longer a drop in representation. (c) The plugin
+README claimed model auto-invocation was disabled for this skill, which stopped being true when
+commit c626f88 re-enabled it.
+
+**Decision:** (a) New step 5, placed after step 4 so the picture is the map and the walk is one
+journey across it; steps 5–7 renumbered to 6–8 and all seven internal cross-references updated.
+(b) Kept the ladder intact and disambiguated it in prose: a first attempt carrying a numbered walk
+of one case is still attempt 1, because attempt 2 rebuilds the *whole explanation* as numbered
+steps rather than embedding one example in prose. Rejected the alternative of deleting ladder
+attempt 2, which would have cost the only rung between prose and pictures.
+(c) Fixed the stale README line — a one-line factual correction to the skill under audit, in a
+README that had to be edited anyway.
+
+**Impact / Risk:** The skill body grew ~50 lines against its own brevity standard; the file was
+already dense, and that density is flagged to the user as the remaining known weakness rather than
+fixed by an unrequested rewrite. Renumbering risk is mechanical — a missed step reference would
+send a reader to the wrong step; all references were grepped after the edit.
+
+**Outcome:** `python tools/validate-plugins/validate.py` green. `ceh-coding-agent` bumped
+3.1.1 -> 3.1.2 (PATCH, content only) in plugin.json and marketplace.json.
