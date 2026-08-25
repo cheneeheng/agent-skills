@@ -11,7 +11,7 @@ REST API design now lives in `ceh-python-service:fastapi`; PostgreSQL schema des
 
 | Skill | Triggers When |
 |-------|---------------|
-| `document-architecture` | Writing or updating the living `ARCHITECTURE.md` — Mermaid diagrams plus a Key Decisions log — including when a version re-plan changes the system's shape |
+| `document-architecture` | Writing or updating the living `ARCHITECTURE.md` — a 3-second Overview, Mermaid diagrams, plus a Key Decisions log — including when a version re-plan changes the system's shape |
 | `domain-modeling` | Designing entities, identifier formats, status enums, state transitions, or layer boundaries |
 
 ## Hooks

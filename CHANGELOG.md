@@ -5,6 +5,69 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [5.0.3] — 2026-08-25
+
+`document-architecture` gains an opening section. `ARCHITECTURE.md` began at the diagram set, which
+answers how a system is built before anything answers what it is — so the doc now opens with an
+`## Overview`: one domain sentence and one linear 3-6 node flow. The bar is what makes it work.
+"Keep it high level" is advice a writer can satisfy and still produce three paragraphs; "a reader
+gets it in three seconds, or cut" can be failed.
+
+The obvious next request — a fuller diagram of how the whole thing actually works — is the
+Components diagram, and the skill was underselling it. It carried four unlabelled arrows as an
+example and one table cell of description, which is why an expanded overview read as a missing
+diagram type rather than an existing one drawn thinly. No sixth type was added. Components is now
+named as the expanded Overview, with the contrast stated outright: the Overview is a spine *by
+rule*, Components branches wherever the real system does. Its rules — label every edge with what
+crosses it, draw the trust boundary as a `subgraph`, put stack names on nodes — and a worked example
+doing all three were what was actually being asked for.
+
+That surfaced an older overlap. System context and Components both claimed the externals, and the
+new example puts Stripe and a carrier API on Components while the table said context owned them.
+System context now earns a separate diagram only when the externals outgrow Components.
+
+The SessionStart hook gains the doc-sync invariant. The hook's selection rule is that it carries
+rules firing on implicit mid-turn decisions with no signal in the prompt, and "a change altered the
+system's shape, so update the diagram and record the decision in the same change" is exactly that.
+Its absence was a gap rather than a deliberate omission, since the rest of the skill auto-loads on
+an explicit ask.
+
+A simulation pass then ran the skill over two systems: the shop its examples use, and this repo,
+which has no users, no database, and no state machine. The repo case broke it — Components would
+have been the Overview plus two nodes — so three cases are now written down: a system too small for
+Components, a doc predating the Overview, and an audience that is an operator or an importing
+developer rather than an end user. Three rules that were each stated twice (update cadence,
+split-when-too-big, where stack names belong) drop to one statement each.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-architecture` | v3.1.5 |
+
+### Added
+
+- **`ceh-architecture` / `document-architecture`** — "The 3-second read": `ARCHITECTURE.md` opens
+  with an `## Overview` of one domain sentence plus one linear 3-6 node Mermaid flow, three seconds
+  being the acceptance test.
+- **`ceh-architecture` / `document-architecture`** — Components diagram rules plus a worked example:
+  labelled edges, the trust boundary as a `subgraph`, stack names on nodes, branch freely, and skip
+  the diagram when it would add nothing to the Overview.
+- **`ceh-architecture` hook** — an `Architecture doc [document-architecture]` invariant injected at
+  SessionStart: update the affected diagram in the same change as a shape change, and append a Key
+  Decisions entry on a framework/persistence/pattern choice or its reversal.
+
+### Changed
+
+- **`ceh-architecture` / `document-architecture`** — System context earns a separate diagram only
+  when the externals are too many to sit legibly on Components.
+- **`ceh-architecture` / `document-architecture`** — an `ARCHITECTURE.md` predating the Overview
+  gets one written before any other edit.
+- **`ceh-architecture` / `document-architecture`** — update cadence, the one-screen ceiling, and
+  where stack names belong are each stated once rather than twice.
+- **`docs/CROSS_REFERENCES.md`** — new entry registering the skill/hook duplication of the doc-sync
+  and Key Decisions triggers.
+
 ## [5.0.2] — 2026-08-23
 
 `explain-until-understood` gains a step. Describing a mechanism in general terms is the form that
