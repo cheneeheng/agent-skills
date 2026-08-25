@@ -85,7 +85,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 |-----------------|--------|
 | `ceh-coding-agent` | The coding agent's own behavior: contract + five-step workflow, write-less-code minimalism, retroactive refactoring (`shrink-diff`, `refactor-repo`), usage-limit guard + handoff, and whole-repo orientation (`explain-until-understood`, `explain-codebase`, `repo-tree-mapper`) |
 | `ceh-plan-build-review` | Plan-driven loop: plan a fullstack app (iteratively or to MVP), implement from the plan, review against it, patch a shipped version |
-| `ceh-architecture` | Stack-agnostic design: living architecture docs (Mermaid + Key Decisions), domain modeling |
+| `ceh-architecture` | Stack-agnostic design: living architecture docs (3-second Overview + Mermaid + Key Decisions), domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
 | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility, UI design |
