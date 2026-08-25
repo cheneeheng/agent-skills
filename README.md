@@ -103,7 +103,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
 | `ceh-plan-build-review` | Review Against Plan | `/ceh-plan-build-review:review-against-plan` | Auditing implementation against a SKELETON.md or ITER_NN.md planning document |
 | `ceh-plan-build-review` | Patch Built Version | `/ceh-plan-build-review:patch-built-version` | Patching an already-implemented version — a small, non-feature change recorded as a patch ITER_NN.md; routes features to the iterative planner |
-| `ceh-architecture` | Document Architecture | `/ceh-architecture:document-architecture` | Writing/updating the living `ARCHITECTURE.md` — Mermaid diagrams + a Key Decisions log |
+| `ceh-architecture` | Document Architecture | `/ceh-architecture:document-architecture` | Writing/updating the living `ARCHITECTURE.md` — a 3-second Overview, Mermaid diagrams, a Key Decisions log |
 | `ceh-architecture` | Domain Modeling | `/ceh-architecture:domain-modeling` | Designing entities, IDs, status fields, or layer boundaries |
 | `ceh-python-service` | FastAPI | `/ceh-python-service:fastapi` | Writing route handlers, DI, middleware, exception hierarchy, or REST API design |
 | `ceh-python-service` | asyncpg | `/ceh-python-service:asyncpg` | Writing database queries, transactions, tenant isolation, or connection pool config |

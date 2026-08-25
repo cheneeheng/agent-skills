@@ -38,6 +38,23 @@ notes live in the detailed entries referenced below.
 
 ---
 
+## Architecture doc sync + Key Decisions trigger
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-architecture/skills/document-architecture/SKILL.md` | "Rules" and "Key Decisions" sections | canonical — full rules, entry template, and supersede protocol |
+| `plugins/ceh-architecture/hooks/load-invariants.sh` | `Architecture doc [document-architecture]` block | compact always-on copy — two lines, injected at SessionStart |
+
+**What is shared:** a change that alters the system's shape updates the affected diagram in the same change; choosing or reversing a framework/runtime/persistence/pattern decision appends a `## Key Decisions` entry; never silently diverge from an accepted decision — supersede it on the record.
+
+**What diverges:**
+- the skill carries the diagram set, the entry template, and the storage layout.
+- the hook carries only the two trigger rules, because they fire on implicit mid-turn decisions with no signal in the user's prompt — the rest of the skill auto-loads on an explicit ask.
+
+---
+
 ## asyncpg connection pool + transaction code
 
 **Files:**
