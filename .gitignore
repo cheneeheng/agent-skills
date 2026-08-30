@@ -19,7 +19,5 @@ build/
 # Database
 *.db
 
-# Skill-eval runs: track only the SKILL_EVAL.md report; ignore all raw run evidence
-.agents_workspace/skill-evals/**
-!.agents_workspace/skill-evals/**/
-!.agents_workspace/skill-evals/**/SKILL_EVAL.md
+# Agents Workspace
+.agents_workspace/
