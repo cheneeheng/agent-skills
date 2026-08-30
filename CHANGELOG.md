@@ -5,6 +5,37 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.0.1] — 2026-08-30
+
+`.agents_workspace/` is now git-ignored in full. It had been half-tracked: `DECISION_LOG.md`, the
+two `PLUGIN_*_PLAN.md` design records, and every `skill-evals/**/SKILL_EVAL.md` were committed
+while the raw run evidence beside them was ignored, held apart by four `.gitignore` negation rules.
+The directory is session scratch — an append-only agent log and the evidence trail behind it — and
+committing part of it put 6,000 lines of one session's working notes into every clone and every
+diff, while the negation rules meant a new artifact's tracked-or-not status depended on where in
+the tree it landed. One rule, `.agents_workspace/`, replaces all four.
+
+The tracked records stay on disk locally; nothing is deleted, only untracked. `CLAUDE.md` said in
+three places that they were in git, so those statements moved with the change — including the
+"Adding a Component" checklist, where `PLUGIN_DEPENDENCY_PLAN.md` §4 was listed among the items
+that must land in the same commit or CI fails. CI never checked it, and a git-ignored file cannot
+land in a commit at all; it is now a local-only follow-up recorded below that list.
+
+No plugin changed, so no plugin version moved.
+
+### Changed
+
+- **`.gitignore`** — the four `.agents_workspace/skill-evals/**` track/negate rules collapse to a
+  single `.agents_workspace/` ignore; 23 files (2,081-line `DECISION_LOG.md`, both plan documents,
+  13 `SKILL_EVAL.md` reports, their raw iteration evidence, and `strip-ceh-plugins.py`) are
+  untracked, 6,043 lines out of the tree.
+- **`CLAUDE.md`** — the Structure tree, the Key Files table, and the "Adding a Component"
+  checklist now state that `.agents_workspace/` is git-ignored and local only. The checklist drops
+  from five same-commit items to four; updating `PLUGIN_DEPENDENCY_PLAN.md` §4 remains required
+  when a dependency edge or scenario bundle changes, as a local record rather than a commit.
+
+---
+
 ## [6.0.0] — 2026-08-30
 
 `ceh-release-flow` is gone; its `release-flow` skill now lives in `ceh-git-workflow`. The plugin was

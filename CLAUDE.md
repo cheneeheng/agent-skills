@@ -61,7 +61,7 @@ Categorization rules of thumb:
 ## Structure
 
 ```
-.agents_workspace/            # Session artifacts — not a plugin. DECISION_LOG.md and the two PLUGIN_*_PLAN.md files are tracked; skill-evals/<skill>/run-NNN/SKILL_EVAL.md holds ceh-evaluation output
+.agents_workspace/            # Session artifacts — not a plugin, git-ignored in full. Local-only: DECISION_LOG.md, the two PLUGIN_*_PLAN.md design records, skill-evals/<skill>/run-NNN/SKILL_EVAL.md (ceh-evaluation output)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md
 plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
@@ -180,15 +180,17 @@ changing a skill, agent, hook, or script — plugin choice, frontmatter traps, p
 both README tables, `docs/CROSS_REFERENCES.md`, the two-manifest version bump, and the validator. It
 auto-loads when a `SKILL.md` or `agents/*.md` is created; load it explicitly if it has not.
 
-Whatever else gets skipped, these five land in the **same commit** or CI fails:
+Whatever else gets skipped, these four land in the **same commit** or CI fails:
 
 1. A row in the root `README.md` table (Skills or Agents).
 2. A row in `plugins/ceh-<plugin>/README.md`.
 3. A version bump in **both** `plugins/ceh-<plugin>/.claude-plugin/plugin.json` and
    `.claude-plugin/marketplace.json` — level per the Versioning section below.
-4. `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` §4, if the change adds or removes a dependency
-   edge or a `ceh-scenario-*` bundle.
-5. `python tools/validate-plugins/validate.py` green.
+4. `python tools/validate-plugins/validate.py` green.
+
+`.agents_workspace/` is git-ignored, so its records never land in a commit. Still update
+`PLUGIN_DEPENDENCY_PLAN.md` §4 locally when the change adds or removes a dependency edge or a
+`ceh-scenario-*` bundle — the graph it holds is what the next session reasons from.
 
 ## Commands
 
@@ -241,8 +243,8 @@ and why, a `### Plugin versions` table listing every plugin bumped, then `### Ad
 | `CHANGELOG.md` | Release notes per repo tag, each with a `### Plugin versions` table |
 | `docs/CHANGELOG-v1-v2.md` | Release notes for v1.0.0–v2.8.0, before the v3.0.0 reorganisation |
 | `docs/TESTING_WORKFLOW.md` | How `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
-| `.agents_workspace/DECISION_LOG.md` | Agent decision log — **tracked in git here**, append-only, next sequential entry ID |
-| `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` | Dependency graph and scenario bundles: decisions, reference audit, checklist |
+| `.agents_workspace/DECISION_LOG.md` | Agent decision log — **git-ignored, local only**, append-only, next sequential entry ID |
+| `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` | Dependency graph and scenario bundles: decisions, reference audit, checklist — git-ignored, local only |
 
 ## Cross-Reference Rule
 
