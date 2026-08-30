@@ -5,7 +5,46 @@ Versions refer to the Marketplace versions.
 
 ---
 
-## [Unreleased]
+## [6.0.0] — 2026-08-30
+
+`ceh-release-flow` is gone; its `release-flow` skill now lives in `ceh-git-workflow`. The plugin was
+a manifest around one pipeline that sequenced `ceh-git-workflow` skills and dispatched
+`ceh-git-workflow` subagents — every step it owned was a git moment, and its only original content
+was the ordering and the gates. Adding a second flow that does not release anything made the name
+false, which is what forced the question.
+
+That second flow is `merge-flow`: changelog under `[Unreleased]` → README → commit → PR → merge →
+cleanup, with no version bump, no tag, and no GitHub release. It exists because the release pipeline
+was answering a question most branches do not ask. A branch that is finished still needs a changelog
+trace, a commit, a PR, and a merge; folding that into `release-flow` meant either bolting a bump
+onto work that had nothing to release, or running four skills by hand and remembering the ordering.
+`merge-flow` also starts on the branch you are already on rather than cutting one — ten
+`DECISION_LOG` entries record `release-flow`'s fresh-branch step being deviated from for exactly
+that reason, so the new skill encodes what sessions were already doing.
+
+The merge would have cost a dependency. `release-flow` invokes `update-changelog` on every run, and
+`validate.py` rejects an invocation target outside a declared dependency — so absorbing the flow
+implied `ceh-git-workflow` → `ceh-documentation`, breaking "a cross-cutting plugin may depend only
+on other cross-cutting plugins". Rather than carve an exception into the rule, `update-changelog`
+moved to `ceh-git-workflow` as well. Every input that skill reads is git plumbing —
+`git describe --tags`, `git log $TAG..HEAD`, `git tag`, `git remote get-url` — so it cannot run
+outside a repo, and it was a git moment filed under a topic label. The grouping that put it in
+`ceh-documentation` dates to v2.5.0, before the v3.0.0 move to the use-case axis. `ceh-git-workflow`
+keeps zero declared dependencies.
+
+`update-readme` did not move, and the difference is the point. Git appears in it once, as one of two
+ways to see what changed; its significance gate asks about install steps, env vars, config keys and
+public API, none of which are git concepts. Both flows call it conditionally, which is why it stays
+prose rather than a dependency. `ceh-seo:text-discoverability` already routes to it as a sibling.
+
+`direct-release-flow` was deleted rather than moved. It carried `disable-model-invocation: true`
+precisely because a model auto-picking the PR-less variant is a silent loss of the review gate;
+removing it is the stronger form of that guard.
+
+One trap surfaced late: `open-pr` and `merge` both claimed the compound request "create a PR, merge
+it, delete the branch" in their descriptions — verbatim `merge-flow`'s moment, and both would have
+out-matched the new skill. Both now name `merge-flow` and describe themselves as the single-step
+option.
 
 ### Plugin versions
 
@@ -17,6 +56,7 @@ Versions refer to the Marketplace versions.
 | `ceh-scenario-library-iterate` | v1.1.0 |
 | `ceh-scenario-webapp-iterate` | v1.1.0 |
 | `ceh-scenario-editorial` | v1.1.0 |
+| `ceh-plan-build-review` | v1.1.6 |
 
 ### Added
 
@@ -47,6 +87,10 @@ Versions refer to the Marketplace versions.
   it, delete the branch" — that phrase is `merge-flow`'s moment, and both would have out-matched it.
 - **Scenario bundles** — the three `-iterate` bundles drop `ceh-release-flow`;
   `ceh-scenario-editorial` gains `ceh-git-workflow` so it keeps changelog capability.
+- **`ceh-plan-build-review` / `patch-built-version`** — its release hand-off pointed at
+  `ceh-release-flow`, a plugin that no longer exists. Now `ceh-git-workflow:release-flow`. Bumped
+  despite the v3.16.0 precedent for leaving doc-touched plugins alone: that precedent covered
+  cosmetic invoke-syntax edits, whereas this string had become a dead plugin name.
 
 ### Removed
 
