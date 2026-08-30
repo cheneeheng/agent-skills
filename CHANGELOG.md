@@ -5,6 +5,57 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [Unreleased]
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.3.0 |
+| `ceh-documentation` | v1.2.0 |
+| `ceh-scenario-service-iterate` | v1.1.0 |
+| `ceh-scenario-library-iterate` | v1.1.0 |
+| `ceh-scenario-webapp-iterate` | v1.1.0 |
+| `ceh-scenario-editorial` | v1.1.0 |
+
+### Added
+
+- **`ceh-git-workflow` / `merge-flow`** — lands the branch you are already on in one pass:
+  changelog under `[Unreleased]` → README → commit → PR → merge → cleanup, with no version bump, no
+  tag, and no GitHub release. It does not cut a fresh branch; ten `DECISION_LOG` entries record
+  `release-flow` step 2 being deviated from for exactly that reason.
+- **`ceh-git-workflow` / `update-changelog`** — an Unreleased mode: when the caller says the change
+  is not being released, the skill categorizes as usual but writes bullets under `## [Unreleased]`
+  with no version, no dated header, and no comparison-link edits.
+
+### Changed
+
+- **`ceh-release-flow` removed** — `release-flow` moved into `ceh-git-workflow`, whose skills it was
+  already sequencing and whose subagents it was already dispatching. Its invoke path changes from
+  `/ceh-release-flow:release-flow` to `/ceh-git-workflow:release-flow`.
+- **`update-changelog` moved** from `ceh-documentation` to `ceh-git-workflow` (with
+  `scripts/check-semver.py`). Every input it reads is git plumbing — `git describe --tags`,
+  `git log`, `git tag`, `git remote` — so it fires on a git moment, not a documentation one. Its
+  invoke path changes from `/ceh-documentation:update-changelog` to
+  `/ceh-git-workflow:update-changelog`. `update-readme` stays put: its inputs are the code and the
+  README, and `ceh-seo:text-discoverability` routes to it as a sibling.
+- **`ceh-git-workflow` keeps zero declared dependencies.** Moving `update-changelog` is what avoids
+  a `ceh-git-workflow` → `ceh-documentation` edge, which would have broken "a cross-cutting plugin
+  may depend only on other cross-cutting plugins". Both flows' remaining `update-readme` call is
+  conditional and therefore stays prose.
+- **`open-pr` and `merge` descriptions** no longer claim the compound request "create a PR, merge
+  it, delete the branch" — that phrase is `merge-flow`'s moment, and both would have out-matched it.
+- **Scenario bundles** — the three `-iterate` bundles drop `ceh-release-flow`;
+  `ceh-scenario-editorial` gains `ceh-git-workflow` so it keeps changelog capability.
+
+### Removed
+
+- **`ceh-release-flow` / `direct-release-flow`** — the PR-less variant that committed straight to
+  `main`. It carried `disable-model-invocation: true` precisely because auto-picking it was a silent
+  loss of the review gate; deleting it is the stronger form of that guard.
+
+---
+
 ## [5.0.3] — 2026-08-25
 
 `document-architecture` gains an opening section. `ARCHITECTURE.md` began at the diagram set, which

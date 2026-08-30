@@ -7,7 +7,6 @@ Claude Code plugin for writing end-user and operator-facing documentation — ta
 | Skill | Description |
 |-------|-------------|
 | `user-operator-guide` | Write or revise user guides and operator runbooks — distinguishes the two audiences, picks the right document type, and enforces task-oriented, verifiable procedures |
-| `update-changelog` | Generate or update `CHANGELOG.md` from git history using semver and Keep a Changelog format |
 | `update-readme` | Keep `README.md` accurate after significant changes (new features, CLI changes, config changes) |
 
 Invoke manually:
@@ -23,14 +22,13 @@ Invoke manually:
 - `"document how to use this"` / `"document how to operate this"`
 - `"admin manual"` / `"configuration guide"`
 
-**update-changelog** loads automatically when you say:
-- `"update the changelog"` / `"generate a changelog"`
-- `"document this release"` / `"write release notes"`
-- `"what changed since the last release"`
-
 **update-readme** loads automatically when you say:
 - `"update the readme"` / `"refresh the docs"`
 - `"document this feature"` / `"I just shipped X — update docs"`
+
+> Changelog maintenance moved to `ceh-git-workflow:update-changelog` — every input that skill reads
+> is git (`git describe --tags`, `git log`, `git tag`, `git remote`), so it fires on a git moment,
+> not a documentation one. `check-semver.py` moved with it.
 
 ## What It Produces
 
@@ -67,15 +65,3 @@ of the scheme.
 | Operator Runbook | Operate and recover a system |
 | Installation / Config Guide | Stand the system up correctly |
 | Troubleshooting Reference | Diagnose and fix a known failure |
-
-## Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`) |
-
-Usage:
-
-```bash
-python3 scripts/check-semver.py CHANGELOG.md
-```

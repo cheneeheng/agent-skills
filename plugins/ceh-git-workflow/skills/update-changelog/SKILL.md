@@ -2,10 +2,11 @@
 name: update-changelog
 description: >-
   Load this skill when generating a changelog, updating CHANGELOG.md, documenting recent changes,
-  writing release notes, or summarizing what changed between versions or commits. Trigger on "update
-  the changelog", "generate a changelog", "document this release", "write release notes", "what
-  changed since the last release". Follows Semantic Versioning and the Keep a Changelog format. Not
-  for tagging or publishing the release itself (use ceh-git-workflow:release).
+  writing release notes, or logging a change under Unreleased. Trigger on "update the changelog",
+  "generate a changelog", "document this release", "write release notes", "log this under
+  unreleased", "what changed since the last release". Follows Semantic Versioning and the Keep a
+  Changelog format, and writes either a versioned section or an Unreleased entry. Not for tagging or
+  publishing the release itself (use ceh-git-workflow:release).
 allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/../../scripts/check-semver.py *)
 ---
 
@@ -31,6 +32,14 @@ cat CHANGELOG.md 2>/dev/null || echo "No CHANGELOG.md found"
 If no tag exists, read the version from whatever manifest the project uses (e.g. `package.json`, `pyproject.toml`, `Cargo.toml`, `*.csproj`, `build.gradle`, `VERSION`).
 
 ### 2. Determine Version and Categorize
+
+**Unreleased mode.** When the caller says the change is not being released — no version bump, no
+tag — skip the version entirely: categorize as below, then add the bullets under the existing
+`## [Unreleased]` heading (create it directly under the intro if missing) and stop after step 5. Do
+not invent a version number, do not add a dated header, and do not touch the comparison links.
+Everything else in this skill applies unchanged.
+
+
 
 Apply semver rules and map to Keep a Changelog sections in one pass:
 

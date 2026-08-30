@@ -2,10 +2,10 @@
 name: open-pr
 description: >-
   Load when creating or opening a pull request, any phrasing — create/open/raise/make/submit/send a
-  PR, pull request, or merge request, or pushing a branch for review. Handles the PR-creation half
-  of compound requests like 'create a PR, merge it, delete the branch' (merge/cleanup is the merge
-  skill). Covers the PR title, the What/Why/How/Testing/Checklist template, size limits, the author
-  self-review checklist, and enabling GitHub auto-merge on repos that allow it so the PR lands
+  PR, pull request, or merge request, or pushing a branch for review. For opening the PR alone — a
+  compound 'commit, open a PR and merge it' is ceh-git-workflow:merge-flow, which sequences this
+  skill with the rest. Covers the PR title, the What/Why/How/Testing/Checklist template, size
+  limits, the author self-review checklist, and enabling GitHub auto-merge on repos that allow it so the PR lands
   itself when the gate goes green.
 ---
 

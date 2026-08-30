@@ -20,6 +20,7 @@ them at the same scope.
 | Plugin |
 |--------|
 | `ceh-coding-agent` |
+| `ceh-git-workflow` |
 | `ceh-blog` |
 | `ceh-documentation` |
 | `ceh-seo` |

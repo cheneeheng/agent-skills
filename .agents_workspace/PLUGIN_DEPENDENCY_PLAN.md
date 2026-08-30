@@ -120,7 +120,6 @@ LAYER 3 — scenario bundles (manifest only, no skills/agents/hooks)
                     │     ceh-git-workflow
                     │     ceh-testing
                     │     ceh-documentation
-                    │     ceh-release-flow
                     │     ceh-architecture
                     │     ceh-usability-audit     (all three — its skills are stack-agnostic)
                     │     ceh-plan-build-review   (Q2 — post-launch feature work is planned work)
@@ -129,12 +128,11 @@ LAYER 3 — scenario bundles (manifest only, no skills/agents/hooks)
                     ├── library adds:  ceh-python-library
                     └── webapp adds:   ceh-web-frontend
 
-  ceh-scenario-editorial          ceh-coding-agent, ceh-blog,
+  ceh-scenario-editorial          ceh-coding-agent, ceh-git-workflow, ceh-blog,
                                   ceh-documentation, ceh-seo         (no phase split)
 
-LAYER 2 — plugins that depend on Layer 1 (the complete set; six edges)
+LAYER 2 — plugins that depend on Layer 1 (the complete set; five edges)
 
-  ceh-release-flow      ──► ceh-git-workflow, ceh-documentation   [13 unconditional step rows]
   ceh-python-service    ──► ceh-testing                           [3 agent `skills:` preloads]
   ceh-web-frontend      ──► ceh-testing                           [3 agent `skills:` preloads]
   ceh-python-library    ──► ceh-testing                           [after the step-5 text fix]
@@ -160,9 +158,23 @@ NEVER BUNDLED
 those references are advisory (it scaffolds whichever type you name). Declaring them would
 install Python service + library + web frontend on someone who only writes libraries.
 
-Worst-case install closure is **3 plugins** (`ceh-ops` → `ceh-coding-agent`; `ceh-release-flow` →
-`ceh-git-workflow` + `ceh-documentation`). No transitive blow-up, because every Layer 1 plugin is a
-true leaf.
+Worst-case install closure is **2 plugins** (`ceh-ops` → `ceh-coding-agent`, and each stack plugin
+→ `ceh-testing`). No transitive blow-up, because every Layer 1 plugin is a true leaf.
+
+**D19 (2026-08-30) — `ceh-release-flow` dissolved into `ceh-git-workflow`.** Its `release-flow`
+skill moved into `ceh-git-workflow` alongside a new `merge-flow` sibling (PR + merge, no version
+bump, changelog under `[Unreleased]`); `direct-release-flow` was deleted. That would have forced
+`ceh-git-workflow` ──► `ceh-documentation`, breaking "a cross-cutting plugin may depend only on
+other cross-cutting plugins" — so `update-changelog` (and `check-semver.py`) moved to
+`ceh-git-workflow` too. Every input that skill reads is git plumbing, so it fires on a git moment,
+not a documentation one. The only cross-plugin call left in either flow is `update-readme`, which is
+conditional ("if the change is user-facing") and therefore stays prose under the negative/conditional
+rule in §5. `ceh-git-workflow` keeps **zero** declared dependencies and stays a Layer 1 leaf.
+`update-readme` stayed in `ceh-documentation`: its inputs are the code and the README, and
+`ceh-seo:text-discoverability` routes to it as a sibling. `ceh-scenario-editorial` gained
+`ceh-git-workflow` so it does not lose changelog capability. §5-§7 below are the 2026-08-23
+audit snapshot that produced the original graph and were **not** re-run for D19 — read their
+`ceh-release-flow` rows as history, not current state.
 
 ### Example manifests
 
@@ -175,7 +187,7 @@ true leaf.
   "dependencies": [
     "ceh-coding-agent", "ceh-git-workflow", "ceh-testing",
     "ceh-python-service", "ceh-architecture", "ceh-documentation",
-    "ceh-release-flow", "ceh-usability-audit", "ceh-plan-build-review"
+    "ceh-usability-audit", "ceh-plan-build-review"
   ]
 }
 ```
