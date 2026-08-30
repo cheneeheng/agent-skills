@@ -107,5 +107,5 @@ Report:
 - Items the user should verify manually.
 
 Then hand off the release: state that this is a **SemVer PATCH** and point the user at
-`ceh-git-workflow:release` (or `ceh-release-flow`) to bump, tag, and publish. This skill does
+`ceh-git-workflow:release` (or `ceh-git-workflow:release-flow`) to bump, tag, and publish. This skill does
 not bump versions or tag.

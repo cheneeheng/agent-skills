@@ -2,10 +2,13 @@
 name: release-flow
 description: >-
   Ship a complete project release in one pass — bump the version, update the
-  changelog/README/CLAUDE.md, open a PR, merge it, then tag and publish the release. This skill only
-  sequences the steps and gates between them; it delegates each step to the skill that owns it
-  (branch, update-changelog, update-readme, commit, open-pr, merge, release). Not for tagging alone
-  (use ceh-git-workflow:release) or an urgent production fix (use ceh-git-workflow:hotfix).
+  changelog/README/CLAUDE.md, open a PR, merge it, then tag and publish the release. Trigger on "run
+  the release flow", "do the full release", "ship this release end to end", "bump version, update
+  docs, open a PR, merge, tag and release". This skill only sequences the steps and gates between
+  them; it delegates each step to the skill that owns it (branch, update-changelog, update-readme,
+  commit, open-pr, merge, release). Not for landing a branch with no version bump and no tag (use
+  ceh-git-workflow:merge-flow), not for tagging alone (use ceh-git-workflow:release), and not for an
+  urgent production fix (use ceh-git-workflow:hotfix).
 argument-hint: '[version]'
 ---
 
@@ -29,8 +32,8 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 | 1 | Decide the semver bump — breaking change → MAJOR, new backward-compatible feature → MINOR, fixes/chores/docs/refactors → PATCH. When in doubt, PATCH | — decision, no delegation | Version chosen, never below current |
 | 2 | Branch `chore/release-vX.Y.Z` from latest `main` | Invoke the Skill tool with skill="ceh-git-workflow:branch" | On a clean branch off up-to-date `main` |
 | 3 | Bump the version in **every** manifest the project ships (`pyproject.toml`, `package.json`, `plugin.json`, `marketplace.json`, `Cargo.toml`, …) | — mechanical edit | All manifests read the same vX.Y.Z |
-| 4 | Write the vX.Y.Z changelog entry | Invoke the Skill tool with skill="ceh-documentation:update-changelog" | Section written and semver-validated |
-| 5 | Refresh the README if the change is user-facing | Invoke the Skill tool with skill="ceh-documentation:update-readme" | Updated, or "no update needed" recorded |
+| 4 | Write the vX.Y.Z changelog entry | Invoke the Skill tool with skill="ceh-git-workflow:update-changelog" | Section written and semver-validated |
+| 5 | Refresh the README if the change is user-facing | `ceh-documentation:update-readme` if that plugin is installed, else a surgical edit | Updated, or "no update needed" recorded |
 | 6 | Update CLAUDE.md if project facts/structure changed | surgical edit (or `revise-claude-md` if that plugin is installed) | CLAUDE.md matches reality, or skip logged |
 | 7 | Commit the bump + docs | Invoke the Skill tool with skill="ceh-git-workflow:commit" | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean |
 | 8 | Open the PR — on repos that allow auto-merge, `open-pr` already queues it here | Invoke the Skill tool with skill="ceh-git-workflow:open-pr" | PR open, self-review + definition-of-done passed |
@@ -62,7 +65,7 @@ attribution footer only when settings supply none.
 ## Delegating steps 7–10 to subagents
 
 Steps 7–10 are mechanical once the docs are written: their input is the branch state, not the
-conversation. Dispatch each to the `ceh-git-workflow` subagent that owns it — `commit-author` (7),
+conversation. Dispatch each to the subagent that owns it — `commit-author` (7),
 `pr-opener` (8), `branch-merger` (9), `release-cutter` (10, pass "tag-only" since the bump landed
 via the PR) — to keep the main session lean. Dispatch each on the
 model and effort declared in its frontmatter: **Claude Sonnet at medium reasoning effort** for all

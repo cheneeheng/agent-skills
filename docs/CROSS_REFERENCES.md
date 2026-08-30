@@ -100,7 +100,7 @@ notes live in the detailed entries referenced below.
 - `merge` adds the direct-merge fallback (`gh pr merge --merge`) for repos without auto-merge, where the gate must already be green, and owns the "Reporting the remote branch" wording.
 - `open-pr` runs only the probe-and-enable half, right after `gh pr create`, so a PR opened on an auto-merge repo lands itself without a separate merge invocation.
 
-**What also references this:** `ceh-release-flow:release-flow` step 9 names the same `--auto` behavior but delegates to the `merge` skill rather than inlining the command — keep its wording consistent if the probe changes.
+**What also references this:** `ceh-git-workflow:release-flow` step 9 and `ceh-git-workflow:merge-flow` step 6 name the same `--auto` behavior but delegate to the `merge` skill rather than inlining the command — keep their wording consistent if the probe changes.
 
 ---
 
@@ -375,26 +375,29 @@ for tasks it can't trivially handle alone …").
 
 ## Semver bump mapping (release-flow step 1)
 
-**Files:**
+**Files:** all three now live in `ceh-git-workflow`, so this entry is intra-plugin.
 
 | File | Section | Scope |
 |------|---------|-------|
 | `plugins/ceh-git-workflow/skills/release/SKILL.md` | bump table, lines 17-23 | canonical |
-| `plugins/ceh-release-flow/skills/release-flow/SKILL.md` | pipeline table, step 1 cell | condensed inline copy |
-| `plugins/ceh-release-flow/skills/direct-release-flow/SKILL.md` | pipeline table, step 1 cell | condensed inline copy |
+| `plugins/ceh-git-workflow/skills/release-flow/SKILL.md` | pipeline table, step 1 cell | condensed inline copy |
+| `plugins/ceh-git-workflow/skills/update-changelog/SKILL.md` | "Determine Version and Categorize" table | copy that also carries the Keep a Changelog section per level |
 
 **What is shared:** the change-type-to-level mapping (breaking change -> MAJOR, new
 backward-compatible feature -> MINOR, fixes/chores/docs/refactors -> PATCH) and the "when in doubt,
 PATCH" tiebreaker.
 
-**Why duplicated:** the two flow skills previously invoked `ceh-git-workflow:release` at step 1 to
+**Why duplicated:** `release-flow` previously invoked `ceh-git-workflow:release` at step 1 to
 reach this table. Invocation injects the whole body, so that call also delivered the skill's
 push-and-tag command sequence nine steps before it applies -- and made step 1's call
-indistinguishable from the step 10/8 call that legitimately wants the full procedure. Inlining the
+indistinguishable from the step 10 call that legitimately wants the full procedure. Inlining the
 mapping is three lines and removes the premature payload.
 
-**What diverges:** the flow copies condense the table into one cell and drop "Never lower a
-version", which the gate column carries instead.
+**What diverges:** the `release-flow` copy condenses the table into one cell and drops "Never lower
+a version", which the gate column carries instead. `update-changelog` keys its rows off commit
+prefixes (`feat:`, `fix:`, `BREAKING CHANGE:`) rather than change descriptions, and adds the
+Keep a Changelog section each level maps to; `merge-flow` reaches none of this — it runs
+`update-changelog` in Unreleased mode, which skips the version entirely.
 
 ---
 
@@ -404,19 +407,20 @@ version", which the gate column carries instead.
 
 | File | Section | Scope |
 |------|---------|-------|
-| `plugins/ceh-release-flow/skills/release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | canonical |
-| `plugins/ceh-release-flow/skills/direct-release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | near-verbatim copy |
+| `plugins/ceh-git-workflow/skills/release-flow/SKILL.md` | "Step 7 detail — the release commit is not subject-only" | canonical, and now the only copy |
 
 **What is shared:** the rule that `chore: release vX.Y.Z` is the subject and not the whole message,
 the commit-message template (what shipped / `Bump:` / `Manifests:` / `Docs:` / attribution footer),
 the `git commit -F` requirement, and the delegation warning that a subagent handed only the subject
 will commit exactly that.
 
-**What diverges:** the direct variant adds one sentence — with no PR, the commit message is the only
-durable narrative of the release. Related but *not* duplicated: `plugins/ceh-git-workflow/skills/release/SKILL.md`
+**Why this entry survives with one copy:** the near-verbatim second copy lived in
+`direct-release-flow`, deleted with the `ceh-release-flow` plugin. What remains is not duplication
+but three files that must agree in *intent*: `plugins/ceh-git-workflow/skills/release/SKILL.md`
 step 1 states the same "always multi-line, body required" rule in its own command-block comment, and
-`plugins/ceh-git-workflow/agents/commit-author.md` states that a required subject constrains the subject line
-only. Keep all four consistent in intent when the rule changes.
+`plugins/ceh-git-workflow/agents/commit-author.md` states that a required subject constrains the
+subject line only. Keep all three consistent when the rule changes; delete this entry if the block
+ever becomes single-site in intent too.
 
 ---
 

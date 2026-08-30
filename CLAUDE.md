@@ -24,7 +24,7 @@ Plugins fall into four tiers:
 |------|--------|---------|
 | **Scenario bundle** | one per situation | `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial` |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` *(experimental)*, `ceh-release-flow` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
@@ -90,15 +90,14 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
 | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility, UI design |
 | `ceh-scaffolding` | Per-project-type setup: directory layout + config + .gitignore |
-| `ceh-git-workflow` | Commits, branching, PRs, merging, releases, code review, dependency management |
+| `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
 | `ceh-ops` | Deploy pipeline, incidents, rollback; CI agents |
 | `ceh-seo` | SEO/GEO for anything internet-exposed: web pages (meta, structured data, sitemap, llms.txt) and public-facing text (README first screen, package descriptions, repo topics) |
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-blog` | Interview-driven blog post writing |
-| `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; changelog & README maintenance |
+| `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; README maintenance |
 | `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents |
-| `ceh-release-flow` | End-to-end release orchestration — sequences bump, changelog, README, CLAUDE.md, PR, merge, tag, release by invoking the skill that owns each step |
 | `ceh-business-plan` | Interview-driven business plan: draft from an app plan or idea, loop until a product-market-fit gate passes |
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive criteria, measure structure/triggering/content/behavioral lift with evidence, loop until a readiness gate passes |
 | `ceh-fabled` | Frontier-grade reasoning discipline: deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction; plus plan review, failure-loop escape, and `fabled-voice` (form only, always-on via SessionStart hook) |

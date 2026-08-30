@@ -1,6 +1,6 @@
 {
   "name": "ceh-scenario-service-iterate",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "CEH scenario bundle: working on a Python backend service that already ships \u2014 features, fixes, tests, docs, releases.",
   "author": {
     "name": "cheneeheng",
@@ -14,7 +14,6 @@
     "ceh-architecture",
     "ceh-python-service",
     "ceh-documentation",
-    "ceh-release-flow",
     "ceh-usability-audit",
     "ceh-plan-build-review"
   ],

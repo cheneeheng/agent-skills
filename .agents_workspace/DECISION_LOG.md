@@ -2028,3 +2028,54 @@ send a reader to the wrong step; all references were grepped after the edit.
 
 **Outcome:** `python tools/validate-plugins/validate.py` green. `ceh-coding-agent` bumped
 3.1.1 -> 3.1.2 (PATCH, content only) in plugin.json and marketplace.json.
+
+### Entry 85
+
+**Type:** Decision
+**Mode:** Autonomous
+**Timestamp:** 2026-08-30T00:00:00Z
+**Task:** Dissolve `ceh-release-flow` into `ceh-git-workflow`, delete `direct-release-flow`, add a
+PR-and-merge flow with no version bump.
+
+**Context:** Four forks the request left open. (1) Merging `release-flow` into `ceh-git-workflow`
+forces a `ceh-git-workflow` → `ceh-documentation` dependency, because step 4 invokes
+`update-changelog` unconditionally — that breaks CLAUDE.md's "a cross-cutting plugin may depend only
+on other cross-cutting plugins", and `validate.py` would not catch it (it checks resolution and
+acyclicity only). (2) Whether `update-readme` moves too. (3) The new skill's name — the user
+rejected `land-flow`. (4) Whether to cut a repo tag and a versioned CHANGELOG entry in this change.
+
+**Decision:** (1) Moved `update-changelog` and `scripts/check-semver.py` into `ceh-git-workflow`
+rather than amending the layering rule. Every input that skill reads is git plumbing
+(`git describe --tags`, `git log $TAG..HEAD`, `git tag`, `git remote get-url`), so under the repo's
+"skills trigger on moments, not topics" principle it was a git moment filed under a topic label —
+the v2.5.0 grouping that put it in `ceh-documentation` predates the v3.0.0 move to the use-case
+axis. With it moved, the only cross-plugin call left in either flow is `update-readme`, which is
+conditional and therefore stays prose; `ceh-git-workflow` keeps zero declared dependencies. (2)
+`update-readme` stayed: git appears in it once as one of two ways to see what changed, its
+significance gate is about install steps and public API, and `ceh-seo:text-discoverability`
+explicitly routes to it as a sibling. Moving both would also have left `ceh-documentation` with one
+skill. (3) Named it `merge-flow`, pairing with `release-flow` on the axis that separates them — one
+pipeline ends at the merge, the other continues to the tag; the `merge`/`merge-flow` collision has
+in-plugin precedent in `release`/`release-flow`. (4) No repo tag and no versioned CHANGELOG entry —
+Entry 82's precedent is that those are the release step. Logged the work under `## [Unreleased]`
+instead, which is what `merge-flow` itself prescribes.
+
+Two sub-calls. `merge-flow` starts on the branch you are already on rather than cutting one: ten
+DECISION_LOG entries (509, 550, 610, 707, 880, 911, 926, 1372, 1883, 1916) record deviating from
+`release-flow` step 2 for exactly that reason, so the new skill encodes what sessions actually do.
+`update-changelog` gained an Unreleased mode (~5 lines) rather than `merge-flow` carrying the
+instruction alone, because the skill body would otherwise contradict its caller by demanding a
+version. `release-flow` step 2 was left alone; the user confirmed the fresh `chore/release-vX.Y.Z` branch is
+intended there, so the ten deviations are situational, not a defect in that skill.
+
+**Impact / Risk:** Two invoke paths break for anyone who installed the old plugins:
+`/ceh-release-flow:release-flow` → `/ceh-git-workflow:release-flow`, and
+`/ceh-documentation:update-changelog` → `/ceh-git-workflow:update-changelog`. `ceh-scenario-editorial`
+gained `ceh-git-workflow` so it does not silently lose changelog capability. `open-pr` and `merge`
+descriptions lost their "create a PR, merge it, delete the branch" claim, which they would otherwise
+have out-matched `merge-flow` on — that phrase was the only reason those two skills named the
+compound case, so nothing else depends on it. `PLUGIN_DEPENDENCY_PLAN.md` §5-§7 were left as the
+2026-08-23 audit snapshot and now carry stale `ceh-release-flow` rows; §4 records **D19** and says
+so. (D18 was already taken by the `-iterate` naming decision — renumbered before commit.)
+
+**Outcome:** `python tools/validate-plugins/validate.py` green; `check-semver.py CHANGELOG.md` green.

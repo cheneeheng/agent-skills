@@ -52,7 +52,7 @@ The table below is the reference list of what those bundles are made of.
 | Python Library | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
 | Web Frontend | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, ESLint/Prettier, Vitest, Playwright, accessibility |
 | Scaffolding | `ceh-scaffolding` | Per-project-type setup: directory layout + config + `.gitignore` |
-| Git Workflow | `ceh-git-workflow` | Commits, branching, PRs, merging, releases, code review, dependency management |
+| Git Workflow | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations |
 | Ops | `ceh-ops` | Incident response, rollback, deploy pipeline; CI agents |
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
@@ -60,7 +60,6 @@ The table below is the reference list of what those bundles are made of.
 | Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README maintenance |
 | SEO | `ceh-seo` | SEO/GEO discoverability for anything internet-exposed — public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
 | Orchestration *(experimental)* | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) |
-| Release Flow | `ceh-release-flow` | Orchestrate an end-to-end release in one pass: version bump → changelog → README → CLAUDE.md → PR → merge → tag → GitHub release, by sequencing the skills that own each step |
 | Business Plan | `ceh-business-plan` | Turn a product idea or app plan into a validated business plan via a product-market-fit interview loop — draft, interrogate the weakest assumption, revise until a PMF gate passes |
 | Evaluation | `ceh-evaluation` | Evaluate a skill or plugin you just wrote — derive its own criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a readiness gate passes |
 | Fabled *(experimental)* | `ceh-fabled` | Frontier-grade reasoning discipline for any non-trivial task — deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction |
@@ -77,7 +76,7 @@ into four tiers:
 |------|--------|---------|
 | **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` *(experimental)*, `ceh-release-flow` |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 Each plugin is self-contained: a
@@ -135,6 +134,9 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-git-workflow` | Release | `/ceh-git-workflow:release` | Tagging a release or bumping a version |
 | `ceh-git-workflow` | Code Review | `/ceh-git-workflow:code-review` | Reviewing a PR or leaving review comments |
 | `ceh-git-workflow` | Dependency Management | `/ceh-git-workflow:dependency-management` | Adding or upgrading a package |
+| `ceh-git-workflow` | Update Changelog | `/ceh-git-workflow:update-changelog` | Generate or update CHANGELOG.md, write release notes, or log a change under `[Unreleased]` |
+| `ceh-git-workflow` | Merge Flow | `/ceh-git-workflow:merge-flow` | Land the branch you are on in one pass — changelog under `[Unreleased]` → README → commit → PR → merge → cleanup, with no version bump and no tag |
+| `ceh-git-workflow` | Release Flow | `/ceh-git-workflow:release-flow` | Ship a complete release in one pass — version bump → changelog → README → CLAUDE.md → PR → merge → tag → release, sequencing the skill that owns each step |
 | `ceh-ops` | Deploy | `/ceh-ops:deploy` | Building/promoting images, staging→prod, post-deploy health checks, change classification |
 | `ceh-ops` | Incidents | `/ceh-ops:incidents` | Responding to a production incident or writing a post-mortem |
 | `ceh-ops` | Rollback | `/ceh-ops:rollback` | Deciding to roll back a deployment or recovering from a failed migration |
@@ -145,14 +147,11 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-blog` | Blog Editor | `/ceh-blog:blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
 | `ceh-blog` | Blog Repurpose | `/ceh-blog:blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
 | `ceh-documentation` | User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
-| `ceh-documentation` | Update Changelog | `/ceh-documentation:update-changelog` | Generate or update CHANGELOG.md, write release notes, summarize changes between versions |
 | `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
 | `ceh-coding-agent` | Explain Codebase | `/ceh-coding-agent:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and key flows into git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` (per-file detail only on request) |
 | `ceh-seo` | Web Discoverability | `/ceh-seo:web-discoverability` | Shipping a public web page/route — head checklist, sitemap/robots/llms.txt, JSON-LD, SSR/prerender, GEO citation rules |
 | `ceh-seo` | Text Discoverability | `/ceh-seo:text-discoverability` | Writing public-facing repo/package text — README first screen, one-liner, GitHub topics, PyPI/npm descriptions and keywords |
 | `ceh-orchestration` | Orchestrate | `/ceh-orchestration:orchestrate` | Decompose and delegate a big multi-step task — plan/delegate-only main session, cheap isolated workers, to cap context/token cost |
-| `ceh-release-flow` | Release Flow | `/ceh-release-flow:release-flow` | Ship a complete release in one pass — version bump → changelog → README → CLAUDE.md → PR → merge → tag → release, sequencing the skill that owns each step |
-| `ceh-release-flow` | Direct Release Flow | `/ceh-release-flow:direct-release-flow` | PR-less variant — same release pipeline directly on `main` (no branch/PR/merge): version bump → changelog → README → CLAUDE.md → commit → tag → release |
 | `ceh-business-plan` | Develop Business Plan | `/ceh-business-plan:develop-business-plan` | Draft a business plan proactively from app plans or a product idea, then loop interview→revise until the product-market-fit readiness gate passes |
 | `ceh-evaluation` | Evaluate Skill | `/ceh-evaluation:evaluate-skill` | Evaluate a skill or plugin you wrote — derive its criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a 6-point gate passes |
 | `ceh-evaluation` | Evaluate Skill — Lite | `/ceh-evaluation:evaluate-skill-lite` | Fast dev-loop check — structure + triggering (single pass) + content only; skips behavioral lift, reports a partial 4/6 gate for cheap iteration before the full ship verdict |
@@ -255,7 +254,6 @@ in automatically. Install individual plugins only when you want a set no bundle 
 /plugin install ceh-blog@ceh-plugins --scope user
 /plugin install ceh-documentation@ceh-plugins --scope user
 /plugin install ceh-orchestration@ceh-plugins --scope user
-/plugin install ceh-release-flow@ceh-plugins --scope user
 /plugin install ceh-business-plan@ceh-plugins --scope user
 /plugin install ceh-evaluation@ceh-plugins --scope user
 /plugin install ceh-fabled@ceh-plugins --scope user
@@ -264,8 +262,8 @@ in automatically. Install individual plugins only when you want a set no bundle 
 /plugin install ceh-usability-audit@ceh-plugins --scope user
 ```
 
-Some of those are already dependencies of others: installing `ceh-release-flow` brings
-`ceh-git-workflow` and `ceh-documentation`, and each stack plugin brings `ceh-testing`.
+Some of those are already dependencies of others: installing `ceh-ops` brings `ceh-coding-agent`,
+and each stack plugin brings `ceh-testing`.
 
 Or install all at once using `--scope project` for project-specific installs.
 
@@ -306,7 +304,6 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-blog" },
     { "path": "~/agent-skills/plugins/ceh-documentation" },
     { "path": "~/agent-skills/plugins/ceh-orchestration" },
-    { "path": "~/agent-skills/plugins/ceh-release-flow" },
     { "path": "~/agent-skills/plugins/ceh-business-plan" },
     { "path": "~/agent-skills/plugins/ceh-evaluation" },
     { "path": "~/agent-skills/plugins/ceh-fabled" },

@@ -1,6 +1,6 @@
 {
   "name": "ceh-scenario-editorial",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "CEH scenario bundle: writing and publishing what readers see \u2014 blog posts, user and operator docs, discoverability.",
   "author": {
     "name": "cheneeheng",
@@ -9,6 +9,7 @@
   "repository": "https://github.com/cheneeheng/agent-skills",
   "dependencies": [
     "ceh-coding-agent",
+    "ceh-git-workflow",
     "ceh-blog",
     "ceh-documentation",
     "ceh-seo"

@@ -25,7 +25,6 @@ them at the same scope.
 | `ceh-architecture` |
 | `ceh-python-service` |
 | `ceh-documentation` |
-| `ceh-release-flow` |
 | `ceh-usability-audit` |
 | `ceh-plan-build-review` |
 
