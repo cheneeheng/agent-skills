@@ -5,6 +5,71 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.1.0] — 2026-09-05
+
+`ceh-web-frontend` gains `visualize-graph-cytoscape`, for the moment someone asks to draw entities
+as connected nodes and edges — a dependency map, org chart, topology, knowledge graph, lineage
+view. Cytoscape.js is a building block rather than an app, so the delta worth writing down is not
+the API: it is the eight or ten ways a technically-correct build fails at runtime. The skill leads
+with those (container height before init, `curve-style` defaulting to `haystack` so arrows never
+draw, the stylesheet not being CSS, dangling edges throwing on init, `cy` in React state, missing
+`cy.resize()`, async layout, unreadable fit zoom, `remove()`/`add()` on polling data), then a
+layout-by-graph-shape table, data converters for the four shapes real inputs actually arrive in,
+and a working single-file template.
+
+The skill was then run against three built visualizers before release — a 116-node org chart from
+a parent-pointer HR export, a Terraform `depends_on` DAG through `dagre`, and a 52-node
+co-authorship network through `fcose` — and four of its own claims did not survive contact.
+
+The readable-zoom gate was the serious one, because it was the skill's headline feature. It said to
+fit when `fitZoom >= 0.35`. The org chart fit at 0.47, cleared the gate, and rendered `font-size:
+10` labels at 4.6px — below the same stylesheet's `min-zoomed-font-size: 7`, so Cytoscape drew no
+labels at all and produced exactly the grey confetti the rule existed to prevent. A zoom constant
+cannot decide legibility; `zoom × font-size` in pixels can, and that gate works out to 0.7 for those
+values, twice what the constant allowed. The measured tables behind the rule were replaced with
+reproducible numbers: the old `circle: true` row claimed zoom 1.25 and "readable: yes", which is not
+achievable for a ~1115px bounding box in the viewport it named.
+
+The second was a contradiction with the skill's own reference code. Rule 7 said to listen for
+`layoutstop`, while the skeleton and `assets/template.html` both passed `layout:` to the
+`cytoscape()` constructor — where the layout runs before any handler can bind, so the network
+scenario's guard silently never ran. The rule now names the trap and gives both exits, and the
+template uses `cy.ready()` plus a `layoutstop` on each re-layout.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-web-frontend` | v3.4.1 |
+
+### Added
+
+- **`ceh-web-frontend` / `visualize-graph-cytoscape`** — building a node-link graph UI with
+  Cytoscape.js: the runtime-failure checklist, layout chosen from the graph's shape, converters
+  from parent pointers / `depends_on` arrays / edge lists / adjacency matrices into elements JSON
+  with a `sanitize()` guard that surfaces dropped references instead of swallowing them, the
+  stylesheet, tap-to-highlight, readable zoom defaults, and when a node-link diagram is the wrong
+  tool. Ships `assets/template.html` and `scripts/to-elements.js`.
+
+### Fixed
+
+- **Readable-zoom gate** — `fitZoom >= 0.35` replaced by `fitZoom × font-size >= min-label-px`;
+  `minZoom` derives from the same ratio. Verified against a 150-node graph that now clamps to 7px
+  labels instead of fitting to 2px.
+- **`layoutstop` on a constructor layout** — documented as unlistenable, with `cy.ready()` and the
+  layout-outside-the-constructor exits; `template.html` fixed to match. Also notes that
+  `layoutstop` lands well after `animationDuration` on animated layouts.
+- **Id-selector claim** — `.` does *not* break `#id` selectors in v3.34.2 (it matches even when a
+  class of that name exists), so the skill's own example character was the wrong one. `@`, `$`,
+  `/`, `:` and spaces do break it, silently returning an empty collection rather than throwing.
+  `cy.$id()` remains the recommendation.
+- **8-digit hex colours** — silently rejected by Cytoscape's parser, falling back to `#999` with no
+  error, so an alpha-suffixed palette renders uniformly grey. `theming.md` previously said to
+  resolve colours to "hex", which invited exactly that; alpha belongs in `background-opacity` and
+  its siblings.
+
+---
+
 ## [6.0.1] — 2026-08-30
 
 `.agents_workspace/` is now git-ignored in full. It had been half-tracked: `DECISION_LOG.md`, the
