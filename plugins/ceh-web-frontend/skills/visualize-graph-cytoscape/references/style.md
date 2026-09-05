@@ -32,6 +32,14 @@ cy.style().resetToDefault()... // start from the default sheet
 cy.style().clear()...          // start from nothing
 ```
 
+## Colour values
+
+Every colour must be a 3- or 6-digit hex, an `rgb()`/`hsl()` string, or a named colour.
+**8-digit hex (`#RRGGBBAA`) is silently rejected** — the property falls back to its
+default (`#999` for `background-color`) with no error and no console warning, so an
+alpha-suffixed palette renders uniformly grey. Alpha goes in `background-opacity`,
+`line-opacity`, `text-opacity` or `border-opacity` instead.
+
 ## Mappers
 
 Three ways to make a property depend on the element.

@@ -62,6 +62,16 @@ before you consider a visualizer finished. They are listed in the order they usu
 7. **Layout is asynchronous for force-directed algorithms.** `cy.layout(...).run()`
    returns immediately. If you need to act on final positions (fit, screenshot, measure),
    listen for `layoutstop` or await `layout.promiseOn('layoutstop')`.
+   **A layout passed as the `layout:` constructor option cannot be listened to this way.**
+   It runs during `cytoscape()`, before your code has an instance to bind a handler to, so
+   a `cy.on('layoutstop')` or `cy.one('layoutstop')` registered on the next line never
+   fires and every check you hung off it silently does not run. Two ways out, and you must
+   pick one deliberately: keep `layout:` in the constructor and use `cy.ready(fn)`, which
+   fires after that initial layout; or omit `layout:`, then `const l = cy.layout(opts);
+   l.one('layoutstop', fn); l.run();`. Use the second whenever the handler must also run on
+   later re-layouts. `layoutstop` also lands well after `animationDuration` on an animated
+   layout — a 300ms animation on 150 nodes took over 1.6s — so never verify it with a short
+   fixed sleep and conclude it never fires.
 
 8. **The container div must be empty and owned by Cytoscape.** Do not render your own
    children into it. If taps land at the wrong offset, this or a missing `cy.resize()`
@@ -69,8 +79,10 @@ before you consider a visualizer finished. They are listed in the order they usu
 
 9. **`cy.fit()` on the whole graph stops working past a few dozen nodes.** Fitting
    computes a zoom that makes everything visible, which for a wide or large graph is a
-   zoom nobody can read. A 120-node org chart fits at zoom 0.18 — labels are invisible
-   and the user sees grey confetti. Measure it and decide: fit to a *subset*, start at a
+   zoom nobody can read. A 116-node org chart fits at zoom 0.47, which renders a
+   `font-size: 10` label at 4.6px — under `min-zoomed-font-size`, so Cytoscape draws no
+   labels at all and the user sees grey confetti. The test is `zoom × font-size` in
+   pixels, never a zoom constant. Measure it and decide: fit to a *subset*, start at a
    fixed readable zoom and let the user pan, or show fewer elements. See "Sizing and
    readable defaults" below.
 
@@ -148,9 +160,14 @@ Use `classes` for *state* that changes at runtime (`highlighted`, `dimmed`, `fad
 `data` for *facts* about the entity. This split keeps interaction code to
 `addClass` / `removeClass`.
 
-Ids from real data often contain `.`, `@`, `$`, or `/`, which break `#id` selectors. Use
-`cy.$id('aws_vpc.main')` (no parsing, no escaping) or pass collections directly to
-options like `roots` — never hand-escape into a selector string.
+Ids from real data often contain characters the `#id` selector grammar cannot carry:
+`@`, `$`, `/`, `:` and spaces all fail, and they fail **silently** — `cy.$('#ceo@corp.com')`
+returns an empty collection rather than throwing, so the bug surfaces as a button that
+does nothing. (`.` and `-` do parse: `cy.$('#aws_vpc.main')` matches by id even when a
+class named `main` exists. Do not rely on it — the next id in the same dataset will have
+an `@` in it.) Use `cy.$id('aws_vpc.main')`, which takes the id as a plain string with no
+parsing and no escaping, or pass collections directly to options like `roots` — never
+hand-escape into a selector string.
 
 ### 3. Write the stylesheet
 
@@ -210,7 +227,7 @@ This runs as-is. Use it as the starting point rather than writing init from memo
       { selector: '.highlighted', style: { 'border-width': 3, 'border-color': '#D85A30' } }
     ],
     layout: { name: 'breadthfirst', directed: true, padding: 30, spacingFactor: 1.2 },
-    minZoom: 0.2,
+    minZoom: 7 / 11,        // min-zoomed-font-size / font-size — below this, no labels
     maxZoom: 3,
     wheelSensitivity: 0.3
   });
@@ -304,41 +321,53 @@ guard above, which is what actually catches a script tag that did not load.
 The most common way a technically-correct graph fails its user is being rendered at a
 zoom nobody can read. Work out the zoom *before* deciding to fit.
 
-Measured on a 120-node org chart in a 1000×600 viewport:
+**A bare zoom threshold is the wrong test.** What decides legibility is the label's
+rendered size — `zoom × font-size`, in CSS pixels — and a gate written as a constant like
+`fitZoom >= 0.35` passes graphs whose labels Cytoscape then refuses to draw at all.
+Measured on a 116-node org chart, `font-size: 10`, `min-zoomed-font-size: 7`, viewport
+1828×559:
 
-| Layout | Aspect ratio | Zoom needed to fit | Readable? |
-|---|---|---|---|
-| `breadthfirst` downward, default `spacingFactor: 1.75` | 24.6 : 1 | 0.18 | no |
-| `breadthfirst` downward, `spacingFactor: 1.0` | 22.0 : 1 | 0.31 | no |
-| `breadthfirst` `direction: 'rightward'` | 1 : 10 | 0.19 | no |
-| `breadthfirst` `circle: true` | 1 : 1 | 1.25 | yes |
+| Layout | Bounding box | Aspect | Fit zoom | Label at that zoom | Result |
+|---|---|---|---|---|---|
+| `breadthfirst` downward, `spacingFactor: 1.15` | 4268 × 393 | 10.9 : 1 | 0.47 | 4.6px | labels hidden — grey confetti |
+| `breadthfirst` `circle: true`, `spacingFactor: 1.0` | 1142 × 1115 | 1.02 : 1 | 0.50 | 5.0px | labels hidden; structure readable |
 
-Below roughly **zoom 0.35, labels are illegible** even with a generous font size. Trees
-get exponentially wider with depth, so a tree that fits comfortably at 30 nodes will not
-at 150 — and the failure is not visible in a small test fixture.
+Both clear 0.35 comfortably and both are unusable. `circle: true` fixes the aspect ratio —
+the hierarchy is legible as *shape* — but it does not fix label size, so it is a framing
+fix, not a readability fix. Trees also get wider with depth, so a tree that fits
+comfortably at 30 nodes will not at 150, and the failure never shows up in a small test
+fixture.
 
-So:
+Gate on the pixel size instead:
 
 ```js
+const MIN_LABEL_PX = 7;          // keep equal to your min-zoomed-font-size
+const FONT_PX = 10;              // the node font-size in your stylesheet
+
+// Constructor layout? use cy.ready(...) instead — see rule 7.
 const layout = cy.layout(opts);
 layout.one('layoutstop', () => {
   const bb = cy.elements().boundingBox();
   const fitZoom = Math.min(cy.width() / bb.w, cy.height() / bb.h);
 
-  if (fitZoom >= 0.35) {
-    cy.fit(30);                       // small enough — fit it
+  if (fitZoom * FONT_PX >= MIN_LABEL_PX) {
+    cy.fit(30);                       // labels survive the fit
   } else {
-    cy.zoom(0.8);                     // readable, user pans
+    cy.zoom(MIN_LABEL_PX / FONT_PX);  // smallest zoom that still renders labels
     cy.center(cy.nodes().roots());    // start somewhere meaningful
     setStatus('Large graph — drag to pan, or search to jump to a node.');
   }
 });
+layout.run();
 ```
 
+With those numbers the real gate is `fitZoom >= 0.7`, twice what a 0.35 constant allows.
+Raising the font size lowers the gate proportionally; it does not remove it.
+
 When fitting is not viable, give the user a way in: search-and-zoom-to-node, collapse to
-the top two levels with expand on demand, or `circle: true` for trees. Any of these is
-better than a fitted view of unreadable specks. Set `minZoom` no lower than about `0.3`
-so users cannot zoom themselves into that state by hand either.
+the top two levels with expand on demand, or `circle: true` plus a starting zoom for
+trees. Any of these is better than a fitted view of unreadable specks. Set `minZoom` to
+`MIN_LABEL_PX / FONT_PX` too, so users cannot hand-zoom into that state either.
 
 ## Reference files
 

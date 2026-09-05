@@ -229,15 +229,36 @@
     circle: { name: 'circle', padding: 34, animate: true, animationDuration: 400 }
   };
 
+  // Legibility is zoom x font-size in pixels, not a zoom constant. Keep these two in
+  // step with 'font-size' and 'min-zoomed-font-size' in stylesheet() above.
+  const FONT_PX = 11, MIN_LABEL_PX = 7;
+
   const cy = cytoscape({
     container: document.getElementById('cy'),
     elements: clean.elements,
     style: stylesheet(palette()),
     layout: LAYOUTS.force,
-    minZoom: 0.25,
+    minZoom: MIN_LABEL_PX / FONT_PX,
     maxZoom: 3,
     wheelSensitivity: 0.3
   });
+
+  // The constructor layout above runs before this file can bind a 'layoutstop' handler,
+  // so the readability check hangs off cy.ready() instead. Layouts started later by
+  // runLayout() get their own layoutstop.
+  cy.ready(function () { fitIfReadable(); });
+
+  function fitIfReadable() {
+    const bb = cy.elements().boundingBox();
+    const fitZoom = Math.min(cy.width() / bb.w, cy.height() / bb.h);
+    if (fitZoom * FONT_PX >= MIN_LABEL_PX) {
+      cy.fit(34);
+    } else {
+      cy.zoom(MIN_LABEL_PX / FONT_PX);
+      cy.center(cy.nodes().roots().nonempty() ? cy.nodes().roots() : cy.nodes());
+      setStatus('Large graph — labels would vanish if fitted. Drag to pan, or search.');
+    }
+  }
 
   if (clean.warnings.length) setStatus(clean.warnings.length + ' element(s) dropped: ' + clean.warnings.join('; '));
 
@@ -287,6 +308,7 @@
   function runLayout(key) {
     if (running) running.stop();
     running = cy.layout(LAYOUTS[key]);
+    running.one('layoutstop', fitIfReadable);
     running.run();
     for (const k in buttons) {
       document.getElementById(buttons[k]).setAttribute('aria-pressed', String(k === key));

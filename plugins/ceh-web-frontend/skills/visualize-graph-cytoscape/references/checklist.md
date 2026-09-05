@@ -31,11 +31,16 @@ up at runtime, which is exactly the kind an agent is most likely to ship.
       background where they cross edges.
 - [ ] Long labels are handled — `text-wrap: 'ellipsis'` with a `text-max-width`, or
       `'wrap'`. Untruncated labels overlap and look broken.
-- [ ] **Readability measured at real data volume**, not on a small fixture. After
-      `layoutstop`, compute `Math.min(cy.width()/bb.w, cy.height()/bb.h)`; if it is below
-      ~0.35, do not `cy.fit()` — set a readable zoom and give the user search or
-      collapse instead.
-- [ ] `minZoom` is no lower than about `0.3`, so users cannot hand-zoom into unreadability.
+- [ ] **Readability measured at real data volume**, not on a small fixture. After the
+      layout settles, compute `Math.min(cy.width()/bb.w, cy.height()/bb.h)`; if
+      `fitZoom × font-size` is under your `min-zoomed-font-size` (~7px), do not `cy.fit()`
+      — set a readable zoom and give the user search or collapse instead. Gate on the
+      pixel size, never on a zoom constant.
+- [ ] The readability check actually ran. A layout passed as the `layout:` constructor
+      option never emits a `layoutstop` your code can hear — use `cy.ready()` there, or
+      move the layout out of the constructor. Confirm the branch fired, don't assume it.
+- [ ] `minZoom` is no lower than `min-zoomed-font-size / font-size`, so users cannot
+      hand-zoom into unreadability.
 - [ ] Nothing is cut off at the edges — `padding` on the layout and on `cy.fit()`.
 - [ ] Colours encode a category, not an arbitrary sequence. Two or three ramps, not six.
 - [ ] Dark mode tested. Every colour was resolved in JS, not left as a CSS variable.
@@ -47,7 +52,8 @@ up at runtime, which is exactly the kind an agent is most likely to ship.
 - [ ] `minZoom` and `maxZoom` set — unbounded zoom lets users lose the graph entirely.
 - [ ] `wheelSensitivity` tuned if the graph sits in a scrollable page.
 - [ ] Layout completes: for force layouts, `layoutstop` fires and `cy.fit()` runs after
-      it, not before.
+      it, not before — and the handler is bound to a layout you created with `cy.layout()`,
+      not to one the constructor already ran.
 - [ ] Only one layout runs at a time — the previous one is `stop()`ed.
 - [ ] `ResizeObserver` calls `cy.resize()`, and taps land where you click after the
       container changes size.

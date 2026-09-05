@@ -9,8 +9,22 @@ Cytoscape renders to `<canvas>`. The canvas does not participate in CSS cascade.
 - Tailwind classes, DOM `class` attributes, `:root` variables → **no effect**.
 - `prefers-color-scheme` media queries → **no effect on the graph**.
 
-You must resolve every colour to a concrete string (hex, `rgb()`, named) in JavaScript
-and pass it into the stylesheet.
+You must resolve every colour to a concrete string (3- or 6-digit hex, `rgb()`, named) in
+JavaScript and pass it into the stylesheet.
+
+**Not 8-digit hex.** `'#534AB733'` is valid CSS and invalid here: Cytoscape's parser
+rejects it, falls back to the property default (`#999` for `background-color`), logs
+nothing, and throws nothing — so a tinted palette built by appending an alpha suffix comes
+out uniformly grey. `rgba()` parses, but the alpha is dropped on read-back. Alpha belongs
+in the dedicated properties — `background-opacity`, `line-opacity`, `text-opacity`,
+`border-opacity` — not in the colour string:
+
+```js
+// wrong — silently grey
+{ 'background-color': token + '33' }
+// right
+{ 'background-color': token, 'background-opacity': 0.2 }
+```
 
 ## Resolving design tokens once
 

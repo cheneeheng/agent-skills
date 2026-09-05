@@ -74,7 +74,7 @@ export function useCytoscape({ elements, style, layout, onNodeTap }) {
       elements,
       style,
       layout,
-      minZoom: 0.2,
+      minZoom: 7 / 11,      // min-zoomed-font-size / font-size
       maxZoom: 3,
       wheelSensitivity: 0.3
     });

@@ -137,24 +137,26 @@ infinite loop.
 
 Almost always set `roots` explicitly. Left to guess, it picks nodes with no incoming
 edges, which is rarely the semantic root the user has in mind. Pass a **collection**, not
-a selector string, when ids contain `.`, `@`, or `/` — `roots: cy.$id('ceo@corp.com')`
-needs no escaping, whereas `roots: '#ceo@corp.com'` fails to parse.
+a selector string, when ids contain `@`, `$`, `/`, `:` or spaces — `roots:
+cy.$id('ceo@corp.com')` needs no escaping, whereas `roots: '#ceo@corp.com'` matches
+nothing and lets the layout pick its own roots without complaint.
 
 **Trees get wide fast, and this is the layout's main failure mode.** Width grows with the
-widest level, so depth-4 trees blow out quickly. Measured on a 120-person org chart:
+widest level, so depth-4 trees blow out quickly. Measured on a 116-person org chart in an
+1828×559 viewport:
 
-| Settings | Aspect ratio | Fit zoom in 1000x600 |
-|---|---|---|
-| `direction: 'downward'`, `spacingFactor: 1.75` (default) | 24.6 : 1 | 0.18 |
-| `direction: 'downward'`, `spacingFactor: 1.0` | 22.0 : 1 | 0.31 |
-| `direction: 'rightward'`, `spacingFactor: 1.0` | 1 : 10 | 0.19 |
-| `circle: true` | 1 : 1 | 1.25 |
+| Settings | Bounding box | Aspect ratio | Fit zoom |
+|---|---|---|---|
+| `direction: 'downward'`, `spacingFactor: 1.15` | 4268 × 393 | 10.9 : 1 | 0.47 |
+| `circle: true`, `spacingFactor: 1.0` | 1142 × 1115 | 1.02 : 1 | 0.50 |
 
 Rotating to `rightward` swaps a very wide chart for a very tall one; it does not fix the
-zoom. Lowering `spacingFactor` helps a little. The genuine fixes are `circle: true`,
-collapsing to the top two levels with expand-on-demand, or not fitting at all — see
-"Sizing and readable defaults" in SKILL.md. Check the aspect ratio on real data volumes,
-not on a ten-node fixture where every setting looks fine.
+zoom. Lowering `spacingFactor` helps a little. `circle: true` fixes the aspect ratio and
+makes the hierarchy legible as a shape, but note that it barely moved the fit zoom — at
+`font-size: 10` both rows above put labels under 5px, so both are still unreadable when
+fitted. The genuine fixes are collapsing to the top two levels with expand-on-demand, or
+not fitting at all — see "Sizing and readable defaults" in SKILL.md. Check the aspect
+ratio on real data volumes, not on a ten-node fixture where every setting looks fine.
 
 ### `cose`
 The built-in force-directed layout. **Prefer the `fcose` extension** — it is faster and
