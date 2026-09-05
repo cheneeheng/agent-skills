@@ -7,6 +7,10 @@ description: >-
   skill with the rest. Covers the PR title, the What/Why/How/Testing/Checklist template, size
   limits, the author self-review checklist, and enabling GitHub auto-merge on repos that allow it so the PR lands
   itself when the gate goes green.
+compatibility: >-
+  Requires the git CLI on PATH, the GitHub CLI (`gh`) installed and authenticated via `gh auth
+  login`, a git repository with a GitHub remote, push permission, and network access. The pre-PR
+  checks it recommends run the target repo's own toolchain, not assumed here.
 ---
 
 # Opening a Pull Request

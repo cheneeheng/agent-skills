@@ -5,6 +5,10 @@ description: >-
   layout, build metadata, type marker, tests, and .gitignore. Trigger when the user says
   "start/scaffold a Python library", "new Python package/SDK", or sets up a publishable package. For
   a web service use scaffold-python-service.
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI for the
+  first `uv sync`. `ruff`, `mypy`, and `pytest` are declared as dev dependencies and installed by
+  `uv`; none is assumed to be present globally. `git` is needed only to initialise the repo.
 ---
 
 # Scaffold a Python Library

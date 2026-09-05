@@ -12,6 +12,10 @@ description: >-
   structure map (use the ceh-coding-agent:repo-tree-mapper agent), not for design diagrams and decision
   records (ceh-architecture:document-architecture), and not for end-user or operator documentation
   (ceh-documentation).
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree (it checks tracking with `git ls-files` and
+  untracks with `git rm --cached`). No language runtime or package manager is needed - the output
+  is a Markdown file.
 ---
 
 # Explain Codebase

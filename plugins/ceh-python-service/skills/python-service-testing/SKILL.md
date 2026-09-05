@@ -4,6 +4,11 @@ description: >-
   Load this skill when writing Python tests: adding unit tests, integration tests, test fixtures, or
   mocks. Auto-load whenever a test file is created or modified, a pytest fixture is written, or a
   decision is made about what to mock vs what to test against a real dependency.
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI on first
+  sync; `pytest`, `pytest-asyncio`, and `httpx` come from `uv sync`, not from a global install.
+  Database-backed tests additionally need a reachable PostgreSQL instance dedicated to tests - an
+  in-memory substitute will not do.
 paths:
   - "**/test_*.py"
   - "**/*_test.py"

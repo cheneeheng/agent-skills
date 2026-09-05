@@ -5,6 +5,11 @@ description: >-
   creating the source layout, $lib/api client boundary, test folders, and .gitignore. Trigger when
   the user says "start/scaffold a Svelte app", "scaffold a React app", or sets up a fresh frontend
   repo. For the backend use scaffold-python-service.
+compatibility: >-
+  Requires `bun` on PATH (or Node.js 20+ with npm) and network access to the npm registry for the
+  first install. Vite, Vitest, and Playwright arrive as project dev dependencies, not from a
+  global install; Playwright additionally downloads browser binaries on first run. `git` is needed
+  only to initialise the repo.
 ---
 
 # Scaffold a Web Frontend

@@ -11,6 +11,10 @@ description: >-
   refactor", or "simplify the branch before the PR". Not for whole-codebase cleanup (use
   refactor-repo), write-time minimalism (use write-less-code), or reviewing a PR (use
   ceh-git-workflow:code-review).
+compatibility: >-
+  Requires the git CLI on PATH and a feature branch in a git working tree, since the whole skill
+  reads `git diff main...HEAD`. Verifying the shrunk diff additionally needs whatever runtime and
+  test runner the target repo already uses - none is assumed.
 argument-hint: '[base-branch]'
 ---
 

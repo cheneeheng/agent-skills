@@ -5,6 +5,11 @@ description: >-
   Playwright E2E tests for any web frontend. Auto-load whenever a .test.ts, .test.tsx, or .spec.ts
   file is created or modified, or MSW handlers are being written. Framework-agnostic — Vitest,
   Testing Library, MSW, and Playwright serve SvelteKit and React alike.
+compatibility: >-
+  Requires `bun` on PATH (or Node.js 20+) and network access on first install. Vitest, Testing
+  Library, and MSW are project dev dependencies, not global installs. Playwright additionally
+  needs its browser binaries, downloaded once by `bunx playwright install` - E2E tests will not
+  run without them.
 paths:
   - "**/*.test.{ts,tsx}"
   - "**/*.spec.{ts,tsx}"

@@ -6,6 +6,10 @@ description: >-
   or publishing to PyPI. Auto-load whenever build-system config is edited, a release is built with
   uv build, or a publish to PyPI/TestPyPI is prepared. Not for application deployment (see
   ceh-ops/deploy).
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI for
+  resolving dependencies and for `uv publish`. Nothing is assumed to be installed globally: build
+  and publish run through `uv`.
 ---
 
 # Library Packaging and Publishing

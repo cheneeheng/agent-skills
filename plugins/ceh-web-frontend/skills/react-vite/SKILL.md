@@ -5,6 +5,10 @@ description: >-
   Vite project: building a component, writing a custom hook, wiring React Router, managing state, or
   configuring Vite env vars. Auto-load whenever a .tsx file or vite.config.ts is created or
   modified. For SvelteKit projects use the sveltekit skill instead.
+compatibility: >-
+  Requires Node.js 20+ or `bun` on PATH, with `react`, `react-dom`, and `vite` installed as
+  project dependencies and network access for the first install. None is assumed to be present
+  globally; the dev server also needs a free local port.
 paths:
   - "**/*.tsx"
   - "**/vite.config.ts"

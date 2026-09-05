@@ -6,6 +6,10 @@ description: >-
   conventions, or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command
   is run, or a question arises about code style, type annotations, or import ordering. For web
   service environment (uvicorn/asyncpg) use ceh-python-service instead.
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI for `uv
+  sync` / `uv add`. `ruff`, `mypy`, and `pytest` are not assumed to be installed globally - `uv`
+  installs them into the project environment and every command runs via `uv run`.
 ---
 
 # Python Environment (Library)

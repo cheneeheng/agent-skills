@@ -5,6 +5,10 @@ description: >-
   (owner_id filtering), atomic transactions, connection pool configuration, or raw SQL patterns.
   Auto-load whenever asyncpg is imported, a SQL query is written, or a database transaction is
   needed.
+compatibility: >-
+  Requires Python 3.12+ with the `asyncpg` driver installed as a project dependency (via `uv
+  sync`), and a reachable PostgreSQL server with a valid `DATABASE_URL`. Neither the driver nor a
+  database server is assumed to be present.
 ---
 
 # asyncpg

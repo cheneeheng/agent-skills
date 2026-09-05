@@ -7,6 +7,9 @@ description: >-
   unreleased", "what changed since the last release". Follows Semantic Versioning and the Keep a
   Changelog format, and writes either a versioned section or an Unreleased entry. Not for tagging or
   publishing the release itself (use ceh-git-workflow:release).
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree, to read history since the last tag. Nothing
+  else is needed - the output is Markdown.
 allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/../../scripts/check-semver.py *)
 ---
 

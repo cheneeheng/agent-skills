@@ -6,6 +6,10 @@ description: >-
   React). Auto-load whenever bun install/add/run or package.json scripts are used, a
   .ts/.tsx/.svelte file is written, or eslint.config.js / .prettierrc / tsconfig.json is created or
   modified.
+compatibility: >-
+  Requires `bun` on PATH (the repo's package manager and script runner; Node.js 20+ with npm works
+  as a fallback) and network access to the npm registry. TypeScript, Vite, ESLint, and Prettier
+  are project dev dependencies installed by `bun install`, not assumed to be global.
 ---
 
 # Environment, TypeScript Style, and Linting

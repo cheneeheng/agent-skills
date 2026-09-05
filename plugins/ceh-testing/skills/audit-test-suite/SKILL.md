@@ -8,6 +8,11 @@ description: >-
   tests not catch this", "flaky test", "tests pass but the bug shipped", "review the test coverage",
   or after generating a batch of tests. Not for choosing new test cases (use design-test-cases) or
   for testing a specific bug fix (use test-a-bug-fix).
+compatibility: >-
+  Requires the target project's own test runner already working (`pytest` via `uv run`, or
+  `vitest` via `bun`), since every check runs the suite. Mutation testing additionally needs a
+  mutation tool as a dev dependency (`mutmut` for Python, `@stryker-mutator/core` for JS/TS) plus
+  network access; without one, skip that check rather than assuming it is present.
 ---
 
 # Audit a Test Suite

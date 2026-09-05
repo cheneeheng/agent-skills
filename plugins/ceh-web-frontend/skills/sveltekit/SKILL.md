@@ -4,6 +4,10 @@ description: >-
   Load this skill when adding or modifying SvelteKit routes, writing load functions, managing Svelte
   stores, or building components. Auto-load whenever a +page.svelte, +page.server.ts, +page.ts,
   store, or component file is created or modified.
+compatibility: >-
+  Requires Node.js 20+ or `bun` on PATH, with `@sveltejs/kit`, `svelte`, and `vite` installed as
+  project dependencies and network access for the first install. None is assumed to be present
+  globally; the dev server also needs a free local port.
 paths:
   - "**/*.svelte"
   - "**/+page*.ts"

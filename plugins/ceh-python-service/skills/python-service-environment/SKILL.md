@@ -5,6 +5,11 @@ description: >-
   with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions, or
   configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command is run, or a
   question arises about code style, type annotations, or import ordering.
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI for `uv
+  sync` / `uv add`. `ruff`, `mypy`, `pytest`, `uvicorn`, and `alembic` are not assumed to be
+  installed globally - `uv` installs them into the project environment and commands run via `uv
+  run`. Running the service also needs a reachable PostgreSQL instance.
 ---
 
 # Python Environment

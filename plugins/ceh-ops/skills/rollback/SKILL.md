@@ -5,6 +5,10 @@ description: >-
   rollback, or planning recovery from a failed migration. Auto-load whenever a deployment fails its
   health check, error rates spike post-deploy, P95 latency triples within 10 minutes of a release,
   or any data integrity issue is detected after deploying. Not for forward-fix deploys (see deploy).
+compatibility: >-
+  Requires access to the deploy environment and its CLI, plus the previously published container
+  image still present in the registry - a rollback cannot rebuild it. An HTTP client (`curl`) is
+  needed to verify `/health`. None of these is assumed installed.
 ---
 
 # Rollback

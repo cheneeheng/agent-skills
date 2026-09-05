@@ -144,6 +144,19 @@ Folding joins lines with one space, so never rely on a double space.
 Every **other** frontmatter key containing `: ` must be quoted — single quotes by default
 (`argument-hint: '[plan-file]'`). Short values that need no quoting stay bare (`effort: max`).
 
+### `compatibility`
+
+Optional, max 500 chars (enforced by `validate.py`), same `>-` folded block scalar as
+`description`. Present on a skill **only
+when running it needs software the machine may not have** — a bundled script's interpreter, a CLI
+the procedure invokes (`git`, `gh`, `uv`, `bun`, `docker`), a package manager, a reachable server
+(PostgreSQL, an OTLP collector), or network access.
+
+Write it assuming a bare machine: name the runtime *and* its minimum version, say which tools arrive
+as project dependencies rather than global installs, and name what fails without each one. A skill
+that only reads files and emits Markdown (planning, blog, retrospectives, review, most `ceh-fabled`)
+gets no `compatibility` field — an empty prerequisite list is noise in every context window.
+
 ## Plugin Dependencies
 
 **Declare `dependencies` in `plugin.json` only, never in the `marketplace.json` entry.** The

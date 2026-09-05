@@ -12,6 +12,11 @@ description: >-
   caller-supplied ID could return someone else's data, or a column is renamed/backfilled. Not for
   new-test selection (design-test-cases), suite trust (audit-test-suite), one bug (test-a-bug-fix),
   or refactor safety (verify-behavior-preserved).
+compatibility: >-
+  Requires the target project's own test runner already working (`pytest` via `uv run`, or
+  `vitest` via `bun`). The performance-regression class additionally needs a benchmark plugin
+  (`pytest-benchmark`, `vitest bench`), and the migration class needs a reachable database
+  instance. None of these is assumed installed - skip the class instead.
 ---
 
 # Close Test Risk Gaps

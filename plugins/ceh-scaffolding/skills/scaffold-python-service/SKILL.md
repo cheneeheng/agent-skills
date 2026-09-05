@@ -5,6 +5,11 @@ description: >-
   initial directory layout, layer boundaries, base config, and .gitignore. Trigger when the user
   says "start/scaffold a FastAPI service", "new Python backend project", or sets up a fresh service
   repo. For a library use scaffold-python-library; for the frontend use scaffold-web-frontend.
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI for the
+  first `uv sync`. `ruff`, `mypy`, `pytest`, and `alembic` arrive as dev/project dependencies, not
+  from a global install. Running the scaffolded service needs a reachable PostgreSQL instance;
+  `git` is needed only to initialise the repo.
 ---
 
 # Scaffold a Python Service

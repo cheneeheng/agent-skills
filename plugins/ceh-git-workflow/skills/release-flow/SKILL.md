@@ -9,6 +9,10 @@ description: >-
   commit, open-pr, merge, release). Not for landing a branch with no version bump and no tag (use
   ceh-git-workflow:merge-flow), not for tagging alone (use ceh-git-workflow:release), and not for an
   urgent production fix (use ceh-git-workflow:hotfix).
+compatibility: >-
+  Requires the git CLI on PATH, the GitHub CLI (`gh`) installed and authenticated via `gh auth
+  login`, a git repository with a GitHub remote, permission to push branches and tags, and network
+  access. Delegated steps may need the target repo's toolchain; none is assumed.
 argument-hint: '[version]'
 ---
 
