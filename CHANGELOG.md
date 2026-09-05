@@ -5,6 +5,73 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.2.1] — 2026-09-05
+
+Skills that shell out to something now say so before they run. A skill could invoke `gh`, `uv`,
+`bun`, `docker` or a bundled Python script and the reader found out only when the command failed —
+`ceh-git-datastore` ships four scripts whose interpreter was never named anywhere, and the README
+told users that apart from two plugins' hooks "every other plugin works without it", which was true
+of hooks and false of skills. The optional `compatibility` frontmatter key now carries those
+prerequisites on 44 of the 80 skills, written for a machine with nothing installed: the runtime and
+its minimum version, which tools arrive via `uv sync` or `bun install` rather than a global install,
+and what specifically fails when one is absent.
+
+The interesting decision was where to stop. The field is metadata, so it sits in every context
+window whether or not the skill loads, which makes an empty prerequisite list a real cost rather
+than harmless completeness. So 36 skills declare nothing — planning, blog, business plan, the
+`ceh-fabled` set, retrospectives, `design-test-cases`, `code-review`, `accessibility`, `ui-design`,
+`document-architecture`, `domain-modeling`, both `ceh-evaluation` skills, `web-discoverability` —
+because they read files and emit Markdown and genuinely need nothing. Two calls went the other way
+from what a purely mechanical scan would give: stack-teaching skills like `fastapi`, `sveltekit` and
+`asyncpg` carry the field although their bodies run no command, since the code they produce is
+unusable without the stack; and Mermaid rendering plus viewing `ui-design`'s HTML reference pages
+were left undeclared, because a viewer is not software the agent has to invoke.
+
+`validate.py` enforces the 500-char cap the platform imposes on the field. That check reuses the
+existing frontmatter parser, which already folds any block scalar, so it cost a constant and two
+lines. The `>-` style for this key is still covered only by the generic "no unquoted scalar
+containing `: `" rule rather than pinned the way `description` is.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-coding-agent` | v3.1.3 |
+| `ceh-documentation` | v1.2.1 |
+| `ceh-git-datastore` | v1.0.1 |
+| `ceh-git-workflow` | v3.3.1 |
+| `ceh-ops` | v3.1.1 |
+| `ceh-python-library` | v1.3.1 |
+| `ceh-python-service` | v3.2.1 |
+| `ceh-scaffolding` | v1.0.6 |
+| `ceh-testing` | v1.0.6 |
+| `ceh-usability-audit` | v1.0.4 |
+| `ceh-web-frontend` | v3.4.2 |
+
+### Added
+
+- **`compatibility` frontmatter on 44 skills** — `ceh-git-workflow` (10), `ceh-python-service` (8),
+  `ceh-web-frontend` (5), `ceh-python-library` / `ceh-scaffolding` / `ceh-testing` (4 each),
+  `ceh-coding-agent` (3), `ceh-git-datastore` / `ceh-ops` (2 each), `ceh-documentation` /
+  `ceh-usability-audit` (1 each). Grouped by what they need: the git and GitHub CLIs authenticated
+  via `gh auth login`; Python 3.12 with `uv`; Bun or Node.js 20+; a reachable PostgreSQL instance or
+  OTLP collector; a container runtime and registry credentials. The two `ceh-git-datastore` skills
+  name Python 3.9+ for their stdlib-only bundled scripts, verified against the scripts rather than
+  assumed.
+- **`compatibility` length check in `validate.py`** — `MAX_COMPATIBILITY_LEN = 500`, applied to
+  skills and agents alike through `check_frontmatter_doc`. Verified in both directions: a padded
+  660-char value fails with the expected message and exit 1.
+- **Frontmatter convention in `CLAUDE.md`** — the field's cap and scalar style, plus the line for
+  when a skill earns the field and when an empty prerequisite list is just context cost.
+
+### Changed
+
+- **README Prerequisites** no longer implies plugins are prerequisite-free. It kept a claim that was
+  scoped to hooks (`python3` for two plugins' hooks, "every other plugin works without it") and read
+  as a claim about plugins. It now says that plainly and points at per-skill `compatibility`.
+
+---
+
 ## [6.2.0] — 2026-09-05
 
 New plugin `ceh-git-datastore`, for the persistence strategy no existing plugin owned: running an
