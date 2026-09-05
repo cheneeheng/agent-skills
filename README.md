@@ -50,7 +50,7 @@ The table below is the reference list of what those bundles are made of.
 | Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | Python Library | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
-| Web Frontend | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, ESLint/Prettier, Vitest, Playwright, accessibility |
+| Web Frontend | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, ESLint/Prettier, Vitest, Playwright, accessibility, UI design, Cytoscape.js graph visualization |
 | Scaffolding | `ceh-scaffolding` | Per-project-type setup: directory layout + config + `.gitignore` |
 | Git Workflow | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations |
 | Ops | `ceh-ops` | Incident response, rollback, deploy pipeline; CI agents |
@@ -122,6 +122,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-web-frontend` | Frontend Testing | `/ceh-web-frontend:frontend-testing` | Writing Vitest, Testing Library, MSW, or Playwright tests |
 | `ceh-web-frontend` | Accessibility | `/ceh-web-frontend:accessibility` | Writing component markup (Svelte or React) |
 | `ceh-web-frontend` | UI Design | `/ceh-web-frontend:ui-design` | Frontend UI visual design — layout, hierarchy, navigation, states, finishing recipes for first-pass polish, plus theme/brand from bundled templates |
+| `ceh-web-frontend` | Visualize Graph (Cytoscape) | `/ceh-web-frontend:visualize-graph-cytoscape` | Building a node-link graph UI with Cytoscape.js — layout choice, data conversion, stylesheet, interactions, readable zoom |
 | `ceh-scaffolding` | Scaffold Python Service | `/ceh-scaffolding:scaffold-python-service` | Starting a FastAPI/Python web service repo |
 | `ceh-scaffolding` | Scaffold Python Library | `/ceh-scaffolding:scaffold-python-library` | Starting a distributable Python library/package |
 | `ceh-scaffolding` | Scaffold Web Frontend | `/ceh-scaffolding:scaffold-web-frontend` | Starting a SvelteKit or React + Vite frontend |

@@ -88,7 +88,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-architecture` | Stack-agnostic design: living architecture docs (3-second Overview + Mermaid + Key Decisions), domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
-| `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility, UI design |
+| `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility, UI design, Cytoscape.js graph visualization |
 | `ceh-scaffolding` | Per-project-type setup: directory layout + config + .gitignore |
 | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
 | `ceh-ops` | Deploy pipeline, incidents, rollback; CI agents |
