@@ -24,7 +24,7 @@ Plugins fall into four tiers:
 |------|--------|---------|
 | **Scenario bundle** | one per situation | `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial` |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` *(experimental)* |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
@@ -103,6 +103,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-fabled` | Frontier-grade reasoning discipline: deliberate thinking, alternative generation, adversarial self-review, verification, calibrated conviction; plus plan review, failure-loop escape, and `fabled-voice` (form only, always-on via SessionStart hook) |
 | `ceh-advisor` | Stronger-model second-opinion subagent (agent + hooks, no skills) for decision points, failure loops, irreversible actions, pre-completion gates; ships a destructive-command guard and a failure-watch hook |
 | `ceh-usability-audit` | Whether a non-expert can use the thing: cold persona walkthroughs of first-run and of an entered interface, the three-part error-message rule, a plain-language pass, and the `novice-walker` agent. Owns *comprehension* only — WCAG stays in `ceh-web-frontend:accessibility` |
+| `ceh-git-datastore` | Running an app on a bare git repo instead of a database: the fit gate, the plumbing-only store (`build-git-datastore`), and the pinned-snapshot migration to Postgres/SQLite (`migrate-git-datastore`) |
 | `ceh-testing` | Stack-agnostic testing *technique*: reproduce-first fixes and bisection, test-case design, suite audits (assertions, mutation, flakiness, coverage), behavior-preservation for refactors, and a pre-completion risk gate |
 
 ## Skills

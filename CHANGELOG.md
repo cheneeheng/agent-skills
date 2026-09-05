@@ -5,6 +5,75 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.2.0] — 2026-09-05
+
+New plugin `ceh-git-datastore`, for the persistence strategy no existing plugin owned: running an
+app on a bare git repository instead of a database while that still fits, and leaving when it stops.
+One repo per deployed instance, one orphan branch per project, JSON records in trees, every access
+through plumbing commands — which buys atomic multi-record writes, lock-free concurrency that holds
+across processes and worker pools, immutable point-in-time snapshots, history and undo, and
+`git push` as the entire backup story. It gives up ad-hoc queries, multi-node hosting, and the
+ability to actually delete anything.
+
+Because the pattern is narrow, most of the plugin's value is the gate in front of it. `build-git-datastore`
+opens with seven rows — write rate, record count, record size, hosting, query shape, cross-project
+reads, deletion — two of which are hard stops rather than trade-offs. Serverless or multi-node
+hosting disqualifies, because the store is a directory on a disk and two nodes with two disks are
+two divergent databases; a shared network volume does not rescue it, since `update-ref` derives its
+atomicity from `O_EXCL` plus rename semantics that NFS does not reliably provide, so both nodes can
+believe they hold the lock. A right-to-erasure obligation also disqualifies, because git history is
+append-only and "delete this user's data" means rewriting every commit that touched it and
+invalidating every clone and backup. The skill reports the verdict before writing anything, and
+talking someone out of the pattern is a normal outcome.
+
+`migrate-git-datastore` is the exit, and it starts by asking whether it is time at all — "keep the
+git store another quarter" is a legitimate answer, and SQLite is the right target far more often
+than people expect for a single-node app. What makes the migration tractable is that a commit SHA is
+an immutable snapshot of an entire project, so the backfill is not copying a moving target: pin each
+project's commit, backfill from those exact commits with no time pressure, then ask git precisely
+what changed since the pin. That last step is exact rather than approximate, which matters most for
+deletes — a catch-up that replays only upserts silently resurrects every record deleted during the
+migration window, and a timestamp-based catch-up cannot see deletes at all.
+
+The plugin was filed as its own use case rather than folded into `ceh-architecture`, which is
+design-only and hook-driven and ships no code, or into `ceh-python-service`, whose Postgres skills
+are stack-bound while these target SQLite as often as Postgres. It declares no dependencies: the
+handoff to `ceh-python-service:postgresql` after migration is a branch most runs never reach, so it
+stays prose.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-datastore` | v1.0.0 (new) |
+
+### Added
+
+- **`ceh-git-datastore` / `build-git-datastore`** — the fit gate, then the five rules that make the
+  design work: bare repo and never a working tree, compare-and-swap on the ref as the concurrency
+  control, reads inside a write pinned to the commit being CASed against, one git process per
+  operation rather than per record, and sortable ids that survive the move to SQL. Ships
+  `scripts/gitstore.py` and `scripts/sync.py` plus references for plumbing, data model, operations,
+  and porting the store contract to another language.
+- **`ceh-git-datastore` / `migrate-git-datastore`** — whether it is time, target choice, schema
+  inference from the records that actually exist, pinned-snapshot export, backfill, verification,
+  dual-write, and per-project cutover. Ships `scripts/gitexport.py` (`inventory`, `infer`, `export`,
+  `changed`) and `scripts/verify.py`, which exits non-zero so it can gate a deploy.
+- **`docs/CROSS_REFERENCES.md`** — a "Git datastore hard stops" entry covering the one block kept
+  deliberately in two places.
+
+### Changed
+
+- **Bundled long-form doc cut from 695 to 280 lines.** It duplicated the fit gate, the measured
+  numbers, the backup section (down to sharing literal headings with `references/operations.md`) and
+  the anti-patterns. It now carries only what no skill does — the quick start and the
+  `transaction()`-vs-`atomic()` distinction that silently discards a concurrent update when
+  confused, the full multi-node analysis, and the FAQ — and points at the owning file for the rest.
+- **Tier tables** in the root `README.md` and `CLAUDE.md` list `ceh-git-datastore` under
+  use-case workflow.
+
+---
+
 ## [6.1.0] — 2026-09-05
 
 `ceh-web-frontend` gains `visualize-graph-cytoscape`, for the moment someone asks to draw entities
