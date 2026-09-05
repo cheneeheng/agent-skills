@@ -12,6 +12,11 @@ description: >-
   "nobody can install this", "how long does setup take", "time to first success", "is this
   intuitive", or before shipping a README, install guide, or sign-up flow. Not for an interface
   already entered (audit-interface) or WCAG (ceh-web-frontend:accessibility).
+compatibility: >-
+  Requires whatever the target project's own first-run steps need - `uv`, `npm`, `docker`, a
+  database - none of which this skill assumes is installed; a missing prerequisite is itself an
+  audit finding. Running personas in parallel additionally needs the git CLI for `git worktree
+  add`, or a container runtime, to isolate each walker.
 effort: xhigh
 ---
 

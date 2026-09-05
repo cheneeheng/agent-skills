@@ -7,6 +7,10 @@ description: >-
   handlers, or defining the custom exception hierarchy. Auto-load whenever a route handler is
   written, an HTTP status code is chosen, an error response shape is defined, a FastAPI dependency
   is defined, or a domain exception is added.
+compatibility: >-
+  Requires Python 3.12+ with `fastapi`, `pydantic`, and an ASGI server (`uvicorn`) installed as
+  project dependencies via `uv sync` - none is assumed to be present globally. Running the app
+  needs `uv` on PATH and a free local port.
 ---
 
 # FastAPI Conventions

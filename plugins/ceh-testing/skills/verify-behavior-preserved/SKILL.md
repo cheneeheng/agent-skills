@@ -8,6 +8,10 @@ description: >-
   "refactor this", "clean this up", "extract this", "simplify without changing behavior", "upgrade
   this dependency", "rewrite this module", "shrink the diff", or "make sure nothing broke". Not for
   changes that intentionally change behavior — those need new tests (use design-test-cases).
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree, to compare before and after the refactor,
+  plus the target project's own test runner (`pytest` via `uv run`, or `vitest` via `bun`) since
+  the whole method is running the same suite on both sides. Neither is assumed installed.
 ---
 
 # Verify Behavior Was Preserved

@@ -12,6 +12,11 @@ description: >-
   node-link diagram is the wrong answer. Prefer over hand-rolled SVG or a D3 force layout for any
   graph past a handful of nodes. Not for a fixed diagram that never changes (Mermaid), charts, or
   architecture diagrams and decision records.
+compatibility: >-
+  Requires the `cytoscape` package installed from npm (via `bun add`, npm, or a CDN script tag)
+  and a browser to render the graph. The bundled `scripts/to-elements.js` is dependency-free but
+  needs Node.js 18+ when required server-side; loaded via a script tag it needs only the browser.
+  Layout extensions (`cytoscape-dagre`, `-fcose`) are separate npm packages.
 ---
 
 # Graph Visualization with Cytoscape.js

@@ -5,6 +5,10 @@ description: >-
   the public API, fixtures, or mocks. Auto-load whenever a test file is created or modified, a
   pytest fixture is written, or a decision is made about what to mock vs what to test for real. For
   web service testing (real DB / HTTP) use ceh-python-service instead.
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI on first
+  sync. `pytest` and its plugins are not assumed to be installed globally - `uv sync` installs
+  them into the project environment and tests run via `uv run pytest`.
 paths:
   - "**/test_*.py"
   - "**/*_test.py"

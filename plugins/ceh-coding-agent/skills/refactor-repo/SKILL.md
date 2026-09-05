@@ -9,6 +9,10 @@ description: >-
   them on refactor/ branches under a behavior-preservation gate, mechanical transforms only
   where tests are missing. Not for simplifying one branch's diff before a PR (use shrink-diff)
   or write-time minimalism (use write-less-code).
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree, for the before/after `git diff --stat`
+  totals the report is built on. Applying and verifying a refactor additionally needs whatever
+  runtime, package manager, and test runner the target repo already uses - none is assumed.
 argument-hint: '[module-or-path]'
 ---
 

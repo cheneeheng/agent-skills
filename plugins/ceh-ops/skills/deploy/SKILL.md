@@ -6,6 +6,10 @@ description: >-
   classifying a change as internal, user-visible, or breaking. Auto-load whenever a deploy pipeline
   is being run, a staging-to-production promotion is planned, or post-deploy verification is needed.
   Not for git tagging mechanics (see ceh-git-workflow/release) or incident rollback (see rollback).
+compatibility: >-
+  Requires a container runtime and CLI (Docker) to build and tag images, credentials for the image
+  registry and the target environment, network access, and the git CLI for the release tag. None
+  is assumed installed. Verification also needs an HTTP client (`curl`) to hit `/health`.
 ---
 
 # Deploy Pipeline

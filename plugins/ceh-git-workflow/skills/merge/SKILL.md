@@ -8,6 +8,10 @@ description: >-
   case (git merge --no-ff into main), the pre-merge gate (CI green, approvals, rebased, clean
   history), merge-commit strategy (no squash/rebase-merge), and post-merge cleanup (delete the local
   branch, report whether the remote branch survived, return to main, pull).
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree. The PR path additionally requires the
+  GitHub CLI (`gh`) installed and authenticated via `gh auth login`, a GitHub remote, push
+  permission, and network access; the local no-PR path needs git alone.
 ---
 
 # Merging

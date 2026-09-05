@@ -5,6 +5,10 @@ description: >-
   appropriate, deciding on pinning strategy, handling a major version upgrade, or running a security
   audit. Auto-load whenever a new package is being added with uv add or bun add, a dependency
   version is being changed, or a vulnerability is found in an existing package.
+compatibility: >-
+  Requires the target project's package manager on PATH and network access to the registry: `uv`
+  with Python 3.12+ for Python projects, `bun` (or Node.js 20+ with npm) for JS/TS projects. Audit
+  commands (`uv run pip-audit`, `bun audit`) need the same. Neither is assumed installed.
 ---
 
 # Dependency Management

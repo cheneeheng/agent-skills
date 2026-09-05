@@ -5,6 +5,11 @@ description: >-
   fix/critical- prefix, keeping the fix minimal in scope, opening a PR with the required approval,
   and tagging a PATCH release after merge. Auto-load whenever a critical bug is being fixed
   directly, a hotfix branch is being created, or a PATCH release is being cut after an urgent fix.
+compatibility: >-
+  Requires the git CLI on PATH, the GitHub CLI (`gh`) installed and authenticated via `gh auth
+  login`, a git repository with a GitHub remote, push permission, and network access. Verifying
+  the fix additionally requires the target repo's own test toolchain, which this skill does not
+  assume is installed.
 ---
 
 # Hotfix Workflow

@@ -8,6 +8,9 @@ description: >-
   release", "ship a release", or "publish a release". Auto-load whenever a version field changes in
   any project manifest (e.g. pyproject.toml, package.json, plugin.json, marketplace.json,
   Cargo.toml, *.csproj, build.gradle), a git tag is being created, or a release is being created.
+compatibility: >-
+  Requires the git CLI on PATH, the GitHub CLI (`gh`) installed and authenticated via `gh auth
+  login`, a git repository with a GitHub remote, permission to push tags, and network access.
 ---
 
 # Release Tagging

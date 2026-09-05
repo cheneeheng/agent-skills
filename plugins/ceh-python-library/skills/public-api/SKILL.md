@@ -5,6 +5,10 @@ description: >-
   __init__.py / __all__, marking internals private, deprecating a symbol, or classifying a change as
   patch/minor/major for semver. Auto-load whenever __init__.py or __all__ is edited, a public
   function signature changes, or a version bump must be classified for a distributable library.
+compatibility: >-
+  Requires Python 3.12+ to run or type-check the code this skill shapes. Verifying the public
+  surface additionally needs `uv` on PATH plus the project's `mypy` and `pytest` dev dependencies,
+  which `uv sync` installs - none is assumed to be present globally.
 ---
 
 # Public API Surface and Semantic Versioning

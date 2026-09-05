@@ -7,6 +7,9 @@ description: >-
   "update the readme", "refresh the docs", "document this feature", "I just shipped X — update
   docs". Not for bug fixes, refactors, or any change that does not affect how someone installs,
   runs, or configures the project; not for changelogs (use update-changelog).
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree, to read what changed via `git diff` and
+  `git status`. Nothing else is needed - the output is Markdown.
 ---
 
 # Update README

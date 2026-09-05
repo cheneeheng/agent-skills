@@ -6,6 +6,10 @@ description: >-
   whenever a table or column is added or a schema is designed. For query, transaction,
   connection-pool, and tenant-isolation code use the asyncpg skill; for migration tooling and safety
   use the alembic skill.
+compatibility: >-
+  Requires a reachable PostgreSQL server (14+) and a client to reach it - `psql` for ad-hoc
+  queries, `asyncpg` for the application path - plus `alembic` for the schema changes described
+  here. None is assumed installed; PostgreSQL is a separate server, not a Python package.
 ---
 
 # PostgreSQL Schema Design

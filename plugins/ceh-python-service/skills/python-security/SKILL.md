@@ -6,6 +6,10 @@ description: >-
   loading, configuring allowed origins, protecting mutation endpoints, or setting up input
   validation with Pydantic. Auto-load whenever secrets management, CORS config, rate limiting, or
   authentication/authorization code is written or reviewed. Not for frontend secret handling.
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access: `uv run pip-
+  audit` fetches the vulnerability database, and password hashing needs `argon2-cffi` (or
+  `bcrypt`) and `pyjwt` installed as project dependencies via `uv sync`. None is assumed globally.
 ---
 
 # Python Security Baseline

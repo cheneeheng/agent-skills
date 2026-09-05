@@ -9,6 +9,10 @@ description: >-
   this", "git bisect", "hotfix", "postmortem action item", or a pasted stack trace or failing
   output. Also load when reviewing a bug-fix PR that ships no test. Not for choosing inputs for new feature tests (use
   design-test-cases) or for judging an existing suite (use audit-test-suite).
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree, since bisection runs `git bisect run`, plus
+  the target project's own test runner (`pytest` via `uv run`, or `vitest` via `bun`) as the
+  reproducer must be runnable at every commit in the range. Neither runner is assumed installed.
 ---
 
 # Test a Bug Fix

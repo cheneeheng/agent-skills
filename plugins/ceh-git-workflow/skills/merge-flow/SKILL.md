@@ -8,6 +8,10 @@ description: >-
   gates between them; each step is delegated to the skill that owns it (update-changelog, commit,
   open-pr, merge). Use ceh-git-workflow:release-flow when the same branch should also bump the
   version and publish a release, and the individual open-pr or merge skills for one step alone.
+compatibility: >-
+  Requires the git CLI on PATH, the GitHub CLI (`gh`) installed and authenticated via `gh auth
+  login`, a git repository with a GitHub remote, push permission, and network access. The steps it
+  delegates to may need the target repo's own toolchain; none is assumed.
 ---
 
 # Merge Flow

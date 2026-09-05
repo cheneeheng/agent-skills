@@ -225,12 +225,19 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 `python3` on `PATH` — required by the hooks in `ceh-advisor` and `ceh-coding-agent`
 (`ceh-fabled`'s SessionStart hook needs only `bash`)
-(stdlib only, no packages). Every other plugin works without it.
+(stdlib only, no packages). No other plugin's **hooks** need it.
 
 This matters most for `ceh-advisor`: its destructive-command guard **fails closed**, so without
 `python3` it blocks every `rm -rf`, `git push --force`, `terraform destroy`, and similar until the
 interpreter is available. Install with `winget install Python.Python.3.12` / `brew install python`
 / `apt install python3`.
+
+Individual **skills** have their own prerequisites, stated in each `SKILL.md`'s `compatibility`
+frontmatter and surfaced when the skill loads: the git and GitHub CLIs for `ceh-git-workflow`,
+Python 3.12 with `uv` for the two Python plugins, Bun or Node for `ceh-web-frontend`, a container
+runtime for `ceh-ops`. Installing a plugin never installs these — a skill whose prerequisite is
+missing says so rather than guessing. Skills that only read files and write Markdown (planning,
+blog, retrospectives, review) declare nothing and need nothing.
 
 ### Step 1 — Add the marketplace
 

@@ -5,6 +5,11 @@ description: >-
   files, applying or rolling back migrations, configuring env.py for asyncpg, or following migration
   safety rules. Auto-load whenever alembic commands are run or migration files are created or
   edited.
+compatibility: >-
+  Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI.
+  `alembic` and `asyncpg` are project dependencies installed by `uv sync`, not assumed globally;
+  every command runs via `uv run`. Generating and applying migrations also needs a reachable
+  PostgreSQL instance and a valid `DATABASE_URL`.
 ---
 
 # Alembic Migrations

@@ -9,7 +9,7 @@ Checks:
   manifests  - plugin.json valid, name matches dir, semver version; marketplace.json
                lists every plugin with a matching version and an existing source path.
   skills     - every skills/<name>/SKILL.md has name + description frontmatter, name == dir,
-               description <= 1024 chars.
+               description <= 1024 chars, optional compatibility <= 500 chars.
   agents     - every agents/<name>.md has name + description frontmatter, description <= 1024 chars.
   scalars    - `description` uses the folded block scalar `>-`; no other frontmatter key is a
                plain scalar containing ': ' (which strict YAML rejects).
@@ -35,6 +35,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
 MAX_DESCRIPTION_LEN = 1024
+MAX_COMPATIBILITY_LEN = 500
 
 errors: list[str] = []
 
@@ -185,6 +186,9 @@ def check_frontmatter_doc(path: Path, expected_name: str | None) -> None:
         fail(where, "frontmatter missing 'description'")
     elif len(desc) > MAX_DESCRIPTION_LEN:
         fail(where, f"description is {len(desc)} chars, exceeds {MAX_DESCRIPTION_LEN} limit")
+    compat = fm.get("compatibility")
+    if compat and len(compat) > MAX_COMPATIBILITY_LEN:
+        fail(where, f"compatibility is {len(compat)} chars, exceeds {MAX_COMPATIBILITY_LEN} limit")
 
 
 def check_skills() -> None:

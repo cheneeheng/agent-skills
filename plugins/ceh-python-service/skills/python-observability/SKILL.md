@@ -6,6 +6,10 @@ description: >-
   Prometheus metrics, defining the health check endpoint, or wiring up correlation ID middleware.
   Auto-load whenever a log call is written, a metric is added, or the /health endpoint is touched.
   Not for frontend/browser logging.
+compatibility: >-
+  Requires Python 3.12+ with `structlog` and the OpenTelemetry packages installed as project
+  dependencies via `uv sync` - not assumed present globally. Exporting traces additionally needs a
+  reachable OTLP collector endpoint; without one, logging still works and tracing is a no-op.
 ---
 
 # Python Observability
