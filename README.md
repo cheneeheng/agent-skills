@@ -66,6 +66,7 @@ The table below is the reference list of what those bundles are made of.
 | Advisor *(experimental)* | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
 | Testing | `ceh-testing` | Stack-agnostic testing technique — reproduce-first bug fixes and bisection, systematic test-case design (partitions, boundaries, properties, metamorphic, fuzzing), suite audits (assertions, mutation, flakiness), behavior-preservation checks for refactors, and a pre-completion risk gate |
 | Usability Audit | `ceh-usability-audit` | Measure whether a non-expert can actually use what you built — cold persona-constrained walkthroughs (`novice-walker`), a five-question interface audit across web UI/CLI/library/app surfaces, error-message rewrites, and a plain-language pass |
+| Git Datastore | `ceh-git-datastore` | Run an app on a bare git repo instead of a database while that still fits — a fit gate that talks you out of it when it does not, a plumbing-only store with atomic writes and lock-free concurrency, and the pinned-snapshot migration to Postgres or SQLite when a trigger fires |
 
 ### Categorization
 
@@ -76,7 +77,7 @@ into four tiers:
 |------|--------|---------|
 | **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-orchestration` *(experimental)* |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 Each plugin is self-contained: a
@@ -167,6 +168,8 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-usability-audit` | First-Run Walkthrough | `/ceh-usability-audit:first-run-walkthrough` | Can a stranger reach first success — install, sign-up, setup, onboarding; cold persona walkers, ranked by observed stalls, milestones capped by an action budget set before the walk, looped to a 5-point gate |
 | `ceh-usability-audit` | Audit Interface | `/ceh-usability-audit:audit-interface` | They are already in — the five questions every web UI/CLI/API/screen must answer unasked, a reject-on-sight anti-pattern sweep, the naming test, and the persona battery |
 | `ceh-usability-audit` | Audit Error Messages | `/ceh-usability-audit:audit-error-messages` | Anything a user reads when something goes wrong — the three-part rule (what happened, what was wrong, what to do next) over every user-reachable string |
+| `ceh-git-datastore` | Build Git Datastore | `/ceh-git-datastore:build-git-datastore` | An app needs persistence but not a database yet — a seven-row fit gate (serverless and right-to-erasure are hard stops), then a bare-repo store: plumbing only, CAS on the ref, one process per operation, sortable ids |
+| `ceh-git-datastore` | Migrate Git Datastore | `/ceh-git-datastore:migrate-git-datastore` | A git-backed or file-based JSON store has to become Postgres or SQLite — is it time at all, target choice, schema inference, pinned-snapshot export, backfill, verification, dual-write, per-project cutover |
 | `ceh-usability-audit` | Plain Language Pass | `/ceh-usability-audit:plain-language-pass` | Labels, help text, empty states, confirmation dialogs, onboarding copy — vocabulary floor, sentence rules, and an explicit never-simplify list |
 | `ceh-fabled` | Fabled Voice | `/ceh-fabled:fabled-voice` | Always-on via SessionStart hook — deliver in fable's writing style — finding-first progress lines, verdict-first advisory answers closing on a calibration, and reports built from bold inline labels, hard numbers, a validated/not-validated ledger, and a standing offer |
 
@@ -261,6 +264,7 @@ in automatically. Install individual plugins only when you want a set no bundle 
 /plugin install ceh-advisor@ceh-plugins --scope user
 /plugin install ceh-testing@ceh-plugins --scope user
 /plugin install ceh-usability-audit@ceh-plugins --scope user
+/plugin install ceh-git-datastore@ceh-plugins --scope user
 ```
 
 Some of those are already dependencies of others: installing `ceh-ops` brings `ceh-coding-agent`,
@@ -311,7 +315,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-advisor" },
     { "path": "~/agent-skills/plugins/ceh-seo" },
     { "path": "~/agent-skills/plugins/ceh-testing" },
-    { "path": "~/agent-skills/plugins/ceh-usability-audit" }
+    { "path": "~/agent-skills/plugins/ceh-usability-audit" },
+    { "path": "~/agent-skills/plugins/ceh-git-datastore" }
   ]
 }
 ```

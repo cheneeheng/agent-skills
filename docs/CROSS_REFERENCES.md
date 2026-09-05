@@ -547,6 +547,23 @@ what exists today, not what was planned or is half-built".
 
 ---
 
+## Git datastore hard stops (serverless / right to erasure)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-git-datastore/skills/build-git-datastore/SKILL.md` | "Start with the gate" section | canonical — the full seven-row fit table plus both hard stops |
+| `plugins/ceh-git-datastore/docs/git-datastore.md` | "Before you start" section | human-facing copy of the two hard stops only; points at the skill for the rest of the gate |
+
+**What is shared:** serverless or multi-node hosting is disqualifying, because the store is a directory on a disk and `update-ref` atomicity does not survive two filesystems; a right-to-erasure obligation is disqualifying, because git history is append-only and erasure means rewriting every commit and invalidating every clone and backup.
+
+**What diverges:**
+- `build-git-datastore` runs the gate as a step with a verdict, and refuses to build when a row fails.
+- `docs/git-datastore.md` carries only the two hard stops as reading material, and links onward to the deployment analysis for the alternative topologies.
+
+---
+
 ## Update Protocol
 
 When changing a shared block:
