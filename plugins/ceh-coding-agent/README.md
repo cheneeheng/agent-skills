@@ -7,6 +7,9 @@ contract automatically at session start, alongside the `write-less-code` minimal
 It also carries the whole-repo passes an agent runs over code it did not write: `explain-codebase`,
 the `repo-tree-mapper` agent, and `refactor-repo`.
 
+It also owns the agent's context economy: `delegate-bulk-reads` and the cheap `bulk-reader`
+agent push I/O-heavy reading onto Haiku so file contents never reach the main context.
+
 > The plan-driven workflow skills (`implement-from-plan`, `review-against-plan`) moved to the
 > `ceh-plan-build-review` plugin, which bundles them with the planning skills.
 
@@ -21,6 +24,7 @@ the `repo-tree-mapper` agent, and `refactor-repo`.
 | `usage-limit-handoff` | When the usage-limit guard hook fires (5h or weekly window past threshold) | Stop-and-summarize protocol: close the current atomic step, start nothing new, write a durable handoff artifact to `.agents_workspace/handoff/` plus a line in the global `~/.claude/handoff/index.md`, end the turn. Subagents report upward instead of writing the artifact. |
 | `explain-until-understood` | On demand — when someone in the session needs a subsystem, design, diff, or unfamiliar tool explained | How an explanation is built and what to do when it misses: assume the reader is new to the project and knows nothing about the subject, and say what floor you are building from; read the real code (never a design doc), foundations before the specific case, plain language (concept before name, every term of art defined at first use, project-local names included), verified output over described output, plain-ASCII pictures for structure and time (no box-drawing or arrow glyphs), a numbered walk of one ordinary case end to end, close on a transferable rule plus a self-test. Ships the escalation ladder — prose → steps → pictures → foundations — with the rule that a miss at pictures means a skipped foundation, not a missing detail; a reader lost on a *word* is not on the ladder at all. Writes no files by default — `.agents_workspace/` scratch notes on request, and one narrow repo path for a subsystem explainer no other skill owns. |
 | `explain-codebase` | Manual only (`/explain-codebase`) — never auto-fires | Whole-repo orientation: what each component does, how they connect, and the key flows, written into a git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` |
+| `delegate-bulk-reads` | Before dispatching `bulk-reader`, and before acting on what it returns | The caller's half of the delegation. How to write the prompt so the answer is usable (one question per call, explicit paths, never ask it to edit), and the verification rules that apply afterwards: read the anchored lines before editing or reporting them, treat an unanchored bullet as unverified, and weight `Not found / uncertain` above `Answer`. When to delegate at all lives in the `bulk-reader` agent's own description; guard tuning lives below. |
 
 **Manual triggers**
 
@@ -31,11 +35,13 @@ the `repo-tree-mapper` agent, and `refactor-repo`.
 - `usage-limit-handoff` — `/usage-limit-handoff`, or say `"wrap up the session"` / `"usage limit handoff"` / `"stop and summarize"`.
 - `explain-until-understood` — `/explain-until-understood [what to explain]`, or ask for something to be explained until it makes sense.
 - `explain-codebase` — `/explain-codebase`, or say `"explain this codebase"` / `"what does this repo do"`.
+- `delegate-bulk-reads` — `/delegate-bulk-reads`, or say `"read these files and tell me..."` / `"where is X handled"` / `"I'm running low on context"`.
 
 ## Agents
 
 | Agent | When to use |
 |-------|-------------|
+| `bulk-reader` | Read large or numerous files and return a compressed, line-anchored answer to one specific question. Runs on `haiku` with `Read`/`Grep`/`Glob` only — the model line is the entire cost saving. Read-only, never edits |
 | `repo-tree-mapper` | Map or document a repository's structure into an annotated tree; auto-triggers on orientation requests |
 
 ## How the skills auto-load
@@ -81,6 +87,37 @@ subagent sees only its own slice of the work.
 > same on Linux, macOS, and Windows; it replaced a bash+`jq` version that needed a POSIX shell and
 > a `jq` binary Windows does not ship. It is advisory, so it fails open: on error it prints one
 > line to stderr and exits 1 (visible warning, nothing blocked).
+
+**Before a read — opt-in** — two `PreToolUse` hooks (`hooks/bulk-read-guard.py` on `Read`,
+`hooks/bulk-read-bash-guard.py` on `Bash`) deny whole-file reads of files at or above a line
+threshold and point the agent at `delegate-bulk-reads` instead. Unlike every other hook here they
+are **inert unless `BULK_READER_MIN_LINES` is set**: this plugin loads in most sessions, and
+denying reads by default is not a decision to make on a user's behalf.
+
+Set it in `~/.claude/settings.json` to switch enforcement on:
+
+```json
+{ "env": { "BULK_READER_MIN_LINES": "350" } }
+```
+
+`350` is a reasonable starting value; below roughly 200 the delegation round-trip costs more than
+it saves. `BULK_READER_ALLOW` takes colon-separated globs that are never blocked
+(`*.lock:*/migrations/*`) on top of the built-in exclusions for lockfiles, minified assets, images
+and archives. `BULK_READER_MIN_LINES=999999` suspends enforcement for a session without
+unregistering the hooks — useful when doing the very things the skill warns against.
+
+Targeted reads always pass: `Read` with `offset`/`limit`, piped or redirected bash
+(`cat f | grep x`), and `head`/`tail` with a small `-n`. Both guards need `python3` on PATH
+(stdlib only) and fail open — unparseable input, a binary file, a missing path, or a crashed
+interpreter allows the read through, because a guard that blocked work on its own bugs would cost
+more than it saves.
+
+Three limits are worth knowing before turning enforcement on. The guards are one-directional: they
+make delegation happen, but nothing verifies the summary was right, which is why the skill requires
+spot-checking anchors before acting. They are a nudge with teeth rather than a sandbox — `sed -n`,
+`awk`, `python -c open(...)` and an editor all still read files, and the bash guard covers only the
+common dumps. And a delegation is a full subagent turn, so on small files it is strictly worse than
+reading directly; that is what the threshold exists to prevent.
 
 ## What the contract enforces
 
