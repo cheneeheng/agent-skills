@@ -17,7 +17,8 @@ FALLBACK_MIN_LINES = 350
 
 # Reading these whole is usually the point, or delegation would mangle them.
 ALWAYS_ALLOW = (
-    "*.lock", "*.svg", "*.min.js", "*.min.css",
+    "*.lock", "package-lock.json", "pnpm-lock.yaml",
+    "*.svg", "*.min.js", "*.min.css",
     "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.ico",
     "*.pdf", "*.zip", "*.tar", "*.gz",
 )

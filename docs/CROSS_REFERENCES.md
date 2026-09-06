@@ -574,6 +574,21 @@ When changing a shared block:
 
 ---
 
+## Bulk-read guard exemption list (`ALWAYS_ALLOW`)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-coding-agent/hooks/bulk-read-guard.py` | `ALWAYS_ALLOW` tuple | canonical — the exemption list both guards apply |
+| `plugins/ceh-coding-agent/hooks/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | verbatim copy |
+
+**What is shared:** the glob tuple itself, verbatim. The two guards cover the same files by two routes (`Read` and `cat`/`head`), so a pattern in one and not the other means the same file is denied on one route and allowed on the other — which is exactly the bug this entry exists to prevent recurring.
+
+**What diverges:** nothing in the list. The surrounding lookup differs only in that the `Read` guard exposes it through a separate `allowlist()` helper. Each hook is a standalone script invoked by path, with no shared module to import from and no import that could fail open, so the list is duplicated rather than extracted.
+
+---
+
 ## Bulk-reader answer format (Answer / Not found / Coverage)
 
 **Files:**

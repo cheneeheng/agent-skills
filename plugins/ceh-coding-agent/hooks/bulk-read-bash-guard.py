@@ -8,7 +8,8 @@ Opt-in: does nothing unless BULK_READER_MIN_LINES is set.
 
 Passes through:
   - piped commands (`cat f | grep x`) — the pipe is doing the narrowing
-  - redirections (`cat f > out`) — not reading into context at all
+  - stdout redirections (`cat f > out`) — not reaching context at all;
+    a stderr redirect (`2>/dev/null`) is not one of these and still gets checked
   - head/tail with a sane line count — already targeted
 
 Fails open on anything it cannot parse.
@@ -26,6 +27,19 @@ DUMP_COMMANDS = {"cat", "less", "more", "bat", "batcat"}
 WINDOW_COMMANDS = {"head", "tail"}
 SEGMENT_SPLIT = re.compile(r"&&|\|\||;")
 
+# A stdout redirect sends the dump to a file instead of to context. `2>` does
+# not, so match a bare `>` or an explicit `1>` and nothing else.
+STDOUT_REDIRECT = re.compile(r"(?<![0-9])>|(?<![0-9])1>")
+
+# Mirrors ALWAYS_ALLOW in bulk-read-guard.py. Both guards must exempt the same
+# files, or `cat uv.lock` is denied while Read on it passes.
+ALWAYS_ALLOW = (
+    "*.lock", "package-lock.json", "pnpm-lock.yaml",
+    "*.svg", "*.min.js", "*.min.css",
+    "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.ico",
+    "*.pdf", "*.zip", "*.tar", "*.gz",
+)
+
 
 def min_lines():
     """Threshold, or None when enforcement is off."""
@@ -39,13 +53,14 @@ def min_lines():
 
 
 def is_allowed(path):
+    patterns = list(ALWAYS_ALLOW)
     extra = os.environ.get("BULK_READER_ALLOW", "").strip()
-    if not extra:
-        return False
+    if extra:
+        patterns.extend(p for p in extra.split(":") if p)
     base = os.path.basename(path)
     return any(
         fnmatch.fnmatch(path, pat) or fnmatch.fnmatch(base, pat)
-        for pat in extra.split(":") if pat
+        for pat in patterns
     )
 
 
@@ -79,7 +94,7 @@ def window_size(tokens):
 
 
 def offending_file(segment, threshold):
-    if "|" in segment or ">" in segment or "<" in segment:
+    if "|" in segment or "<" in segment or STDOUT_REDIRECT.search(segment):
         return None  # narrowed or redirected — not a context dump
 
     try:
