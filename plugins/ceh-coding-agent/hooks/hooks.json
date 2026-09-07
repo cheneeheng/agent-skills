@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/load-contract.sh\""
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/load-contract.sh\""
           }
         ]
       }
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/less-code-payload.sh\""
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/less-code-payload.sh\""
           }
         ]
       }
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/bulk-read-guard.py\"",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/bulk-read-guard.py\"",
             "timeout": 10
           }
         ]
@@ -37,7 +37,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/bulk-read-bash-guard.py\"",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/bulk-read-bash-guard.py\"",
             "timeout": 10
           }
         ]
@@ -48,7 +48,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/usage-limit-watch.py\"",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/usage-limit-watch.py\"",
             "timeout": 10
           }
         ]
