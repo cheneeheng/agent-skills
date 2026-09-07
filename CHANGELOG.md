@@ -5,6 +5,51 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.3.1] — 2026-09-07
+
+The repo documented one plugin layout and shipped two. `hooks/` is meant to hold `hooks.json` and
+nothing else, with the executables it wires living in `scripts/` — but only `ceh-advisor` followed
+that. Six plugins kept their hook scripts next to the JSON, which is how the layout drifted in the
+first place: nothing enforced it, and copying an existing plugin propagated whichever version you
+happened to copy. All seven scripts now sit in `scripts/` and each `hooks.json` points at the new
+path.
+
+The move is worth more than tidiness. `validate.py` syntax-checks `plugins/*/scripts/*` and only
+that, so a script parked in `hooks/` got no `bash -n` and no `py_compile` — including the two bulk-read
+guards and the usage-limit watcher shipped in v6.3.0, where a syntax error means a hook that fails
+on every tool call. Those seven scripts are now covered by CI like every other one.
+
+Skill-bundled scripts under `skills/*/scripts/` were deliberately left alone. They are already in a
+`scripts/` folder, `validate.py` sanctions them through the `${CLAUDE_SKILL_DIR}/` reference form,
+and their SKILL.md bodies address them by skill-relative path — hoisting them to the plugin root
+would break the self-containment that makes a skill copyable.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-architecture` | v3.1.6 |
+| `ceh-coding-agent` | v3.2.4 |
+| `ceh-fabled` | v1.3.6 |
+| `ceh-python-library` | v1.3.2 |
+| `ceh-python-service` | v3.2.2 |
+| `ceh-web-frontend` | v3.4.3 |
+
+### Changed
+
+- **Seven hook scripts moved from `hooks/` to `scripts/`** — `load-invariants.sh` in
+  `ceh-architecture`, `ceh-python-library`, `ceh-python-service` and `ceh-web-frontend`;
+  `load-voice.sh` in `ceh-fabled`; `load-contract.sh`, `less-code-payload.sh`,
+  `usage-limit-watch.py`, `bulk-read-guard.py` and `bulk-read-bash-guard.py` in `ceh-coding-agent`.
+  Every `hooks/` directory in the repo now holds `hooks.json` alone, matching `ceh-advisor` and the
+  structure documented in `CLAUDE.md`.
+- **Each `hooks.json` command repointed** from `${CLAUDE_PLUGIN_ROOT}/hooks/...` to
+  `${CLAUDE_PLUGIN_ROOT}/scripts/...`. The scripts carry no path-relative logic, so the relocation
+  is otherwise inert to them.
+- **Six plugin READMEs and four `docs/CROSS_REFERENCES.md` rows** now cite the new paths.
+
+---
+
 ## [6.3.0] — 2026-09-07
 
 Reading a file is how an agent learns the codebase and also how it runs out of room to think about
