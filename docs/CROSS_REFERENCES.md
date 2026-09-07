@@ -45,7 +45,7 @@ notes live in the detailed entries referenced below.
 | File | Section | Scope |
 |------|---------|-------|
 | `plugins/ceh-architecture/skills/document-architecture/SKILL.md` | "Rules" and "Key Decisions" sections | canonical — full rules, entry template, and supersede protocol |
-| `plugins/ceh-architecture/hooks/load-invariants.sh` | `Architecture doc [document-architecture]` block | compact always-on copy — two lines, injected at SessionStart |
+| `plugins/ceh-architecture/scripts/load-invariants.sh` | `Architecture doc [document-architecture]` block | compact always-on copy — two lines, injected at SessionStart |
 
 **What is shared:** a change that alters the system's shape updates the affected diagram in the same change; choosing or reversing a framework/runtime/persistence/pattern decision appends a `## Key Decisions` entry; never silently diverge from an accepted decision — supersede it on the record.
 
@@ -319,7 +319,7 @@ in all three files.
 | File | Section | Scope |
 |------|---------|-------|
 | `plugins/ceh-coding-agent/skills/write-less-code/SKILL.md` | "The ladder" + "When NOT to be lazy" | canonical — full skill, loaded on demand when code is written |
-| `plugins/ceh-coding-agent/hooks/less-code-payload.sh` | `additionalContext` array | compact digest of the ladder + never-simplify list, injected per-turn by the `UserPromptSubmit` hook |
+| `plugins/ceh-coding-agent/scripts/less-code-payload.sh` | `additionalContext` array | compact digest of the ladder + never-simplify list, injected per-turn by the `UserPromptSubmit` hook |
 
 **What is shared:** the six-rung ladder (YAGNI → stdlib → native platform feature → already-installed
 dependency → one line → minimum that works) and the never-simplify-away list (trust-boundary
@@ -580,8 +580,8 @@ When changing a shared block:
 
 | File | Section | Scope |
 |------|---------|-------|
-| `plugins/ceh-coding-agent/hooks/bulk-read-guard.py` | `ALWAYS_ALLOW` tuple | canonical — the exemption list both guards apply |
-| `plugins/ceh-coding-agent/hooks/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | verbatim copy |
+| `plugins/ceh-coding-agent/scripts/bulk-read-guard.py` | `ALWAYS_ALLOW` tuple | canonical — the exemption list both guards apply |
+| `plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | verbatim copy |
 
 **What is shared:** the glob tuple itself, verbatim. The two guards cover the same files by two routes (`Read` and `cat`/`head`), so a pattern in one and not the other means the same file is denied on one route and allowed on the other — which is exactly the bug this entry exists to prevent recurring.
 

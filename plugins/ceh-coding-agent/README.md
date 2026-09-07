@@ -49,17 +49,17 @@ agent push I/O-heavy reading onto Haiku so file contents never reach the main co
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled —
 no global `settings.json` change or env var required.
 
-**At session start** — a `SessionStart` hook (`hooks/load-contract.sh`) injects a **mandatory**
+**At session start** — a `SessionStart` hook (`scripts/load-contract.sh`) injects a **mandatory**
 directive to load `agent-coding-contract` before any other action, firing on `startup`, `resume`,
 `clear`, and `compact` (so a fresh, resumed, or reset session has it loaded, and it is re-injected
 after compaction).
 
-**Every turn** — a `UserPromptSubmit` hook (`hooks/less-code-payload.sh`) re-injects a compact digest
+**Every turn** — a `UserPromptSubmit` hook (`scripts/less-code-payload.sh`) re-injects a compact digest
 of the `write-less-code` ladder before each prompt. This carries the minimalism reflex on every turn,
 reliably from turn one; the full `write-less-code` skill loads on demand when non-trivial code is
 actually being written.
 
-**Every tool call** — a `PostToolUse` hook (`hooks/usage-limit-watch.py`) samples the account-wide
+**Every tool call** — a `PostToolUse` hook (`scripts/usage-limit-watch.py`) samples the account-wide
 rate-limit percentage, taking whichever window is closest to its cap (the 5-hour and weekly windows
 both count). When it crosses `CEH_USAGE_LIMIT_THRESHOLD` (default 90%), the hook tells the agent to
 stop starting new work and run `usage-limit-handoff`; if ignored, it re-fires every 5 further
@@ -88,8 +88,8 @@ subagent sees only its own slice of the work.
 > a `jq` binary Windows does not ship. It is advisory, so it fails open: on error it prints one
 > line to stderr and exits 1 (visible warning, nothing blocked).
 
-**Before a read — opt-in** — two `PreToolUse` hooks (`hooks/bulk-read-guard.py` on `Read`,
-`hooks/bulk-read-bash-guard.py` on `Bash`) deny whole-file reads of files at or above a line
+**Before a read — opt-in** — two `PreToolUse` hooks (`scripts/bulk-read-guard.py` on `Read`,
+`scripts/bulk-read-bash-guard.py` on `Bash`) deny whole-file reads of files at or above a line
 threshold and point the agent at `delegate-bulk-reads` instead. Unlike every other hook here they
 are **inert unless `BULK_READER_MIN_LINES` is set**: this plugin loads in most sessions, and
 denying reads by default is not a decision to make on a user's behalf.
