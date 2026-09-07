@@ -5,6 +5,74 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.3.0] — 2026-09-07
+
+Reading a file is how an agent learns the codebase and also how it runs out of room to think about
+it. `ceh-coding-agent` now ships the delegation half of that trade: a `bulk-reader` agent on Haiku
+that reads the files and returns a line-anchored answer, and a `delegate-bulk-reads` skill that
+tells the caller how to ask and — the load-bearing part — how much to trust what comes back.
+
+The split between the two halves is not cosmetic, it is what the evaluation measured. On writing
+the delegation prompt, a session with the skill and a session without produced equivalent calls on
+every assertion; the model already knows how to ask a subagent a question. On verifying the answer,
+the skill scored 12/12 assertions against 0/12 for the baseline. Left alone, sessions quoted the
+worker's summary to the user as fact — including one fabricated claim that two runs escalated into a
+`Security:` warning. So the skill is written almost entirely as caller-side verification: an
+unanchored bullet is unverified, `## Not found / uncertain` is the section that matters because
+silent omission is the dominant failure of a summarizing worker, and `## Coverage` is a claim rather
+than a count. That last rule is empirical and unflattering — the worker's own line totals were wrong
+in 8 of 8 runs across three different prompt formulations, so the mitigation was moved to the caller
+instead of iterated on the worker.
+
+The two `PreToolUse` guards are **opt-in and off by default**: they do nothing unless
+`BULK_READER_MIN_LINES` is set, because denying reads is too aggressive a default for a plugin that
+loads in most sessions. They also fail open — anything unexpected allows the read. One covers the
+`Read` tool, the other covers the `cat`/`head`/`tail` route through Bash, and they share an
+`ALWAYS_ALLOW` exemption list verbatim, since a pattern present in one and missing from the other
+denies a file on one route while allowing it on the other. Both guards and the shared answer format
+are registered in `docs/CROSS_REFERENCES.md` for exactly that reason.
+
+Two gaps are shipped knowingly. The `PowerShell` tool is unguarded, so its dump commands pass
+unchecked. And `model: haiku` is both the cost saving and the source of measured 71–95% recall — the
+skill's verification rules are what make that price payable, and using the agent without the skill
+is not the intended configuration.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-coding-agent` | v3.2.3 |
+
+### Added
+
+- **`ceh-coding-agent:delegate-bulk-reads` skill** (69 lines) — how to shape the call to
+  `bulk-reader` (the `QUESTION:`/`FILES:` convention its procedure assumes) and the verification
+  rules that apply to the reply: trust the `path:line` anchors and not the prose, read
+  `## Not found / uncertain` first, treat `## Coverage` as a claim. Loads when a guard denies a read
+  or when one question would otherwise span several large files. Explicitly not for a file about to
+  be edited, debugged, or reviewed — those need a direct `Read` with `offset`/`limit`, because a
+  summary drops the exact text an edit depends on.
+- **`ceh-coding-agent:bulk-reader` agent** (87 lines) — `Read`/`Grep`/`Glob` only, never edits,
+  `model: haiku`. Emits a fixed three-section answer: `## Answer` with one anchored bullet per
+  claim, `## Not found / uncertain` which is never omitted, `## Coverage`.
+- **Two opt-in `PreToolUse` guards** — `bulk-read-guard.py` on the `Read` matcher and
+  `bulk-read-bash-guard.py` on `Bash`. Both are silent unless `BULK_READER_MIN_LINES` is set;
+  `BULK_READER_ALLOW` extends the exemption list with colon-separated globs. Targeted reads pass
+  untouched: `offset`/`limit` on `Read`, a small `-n` window on `head`/`tail`, and any piped or
+  stdout-redirected command, since none of those dump a whole file into context. A `2>` redirect is
+  not a stdout redirect and is still checked.
+- **Two `docs/CROSS_REFERENCES.md` entries** — the `ALWAYS_ALLOW` tuple duplicated across both
+  guards (each hook is a standalone script invoked by path, with no shared module to import and no
+  import that could fail open), and the three-section answer format shared between the agent that
+  emits it and the skill that verifies against it.
+
+### Changed
+
+- **`CLAUDE.md` and both README tables** now list the plugin's context-economy surface alongside its
+  contract, minimalism, refactoring, and orientation skills.
+
+---
+
 ## [6.2.1] — 2026-09-05
 
 Skills that shell out to something now say so before they run. A skill could invoke `gh`, `uv`,
