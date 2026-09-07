@@ -10,7 +10,12 @@ Passes through:
   - piped commands (`cat f | grep x`) — the pipe is doing the narrowing
   - stdout redirections (`cat f > out`) — not reaching context at all;
     a stderr redirect (`2>/dev/null`) is not one of these and still gets checked
-  - head/tail with a sane line count — already targeted
+  - head/tail that actually print a small window — see emitted_lines(), which
+    resolves `-n +N` and `-n -N` (offsets, not counts) and `-c` (bytes) against
+    the real file rather than reading the bare integer as a line count
+
+Several files in one command are summed: `cat a b c` costs their total, not
+their max.
 
 Fails open on anything it cannot parse.
 """
@@ -77,20 +82,48 @@ def count_lines(path):
         return None
 
 
-def window_size(tokens):
-    """Explicit -n/-c value for head/tail, if present."""
+def window_arg(tokens):
+    """(flag, raw value) for an explicit head/tail window, else (None, None)."""
     for i, tok in enumerate(tokens):
         if tok in ("-n", "-c") and i + 1 < len(tokens):
-            try:
-                return abs(int(tokens[i + 1].lstrip("+-")))
-            except ValueError:
-                return None
-        if re.fullmatch(r"-\d+", tok):
-            return abs(int(tok))
-        m = re.fullmatch(r"-[nc](\d+)", tok)
+            return tok, tokens[i + 1]
+        if re.fullmatch(r"-\d+", tok):          # head -20
+            return "-n", tok[1:]
+        m = re.fullmatch(r"-([nc])([+-]?\d+)", tok)   # head -n20, head -c400
         if m:
-            return int(m.group(1))
-    return None
+            return "-" + m.group(1), m.group(2)
+    return None, None
+
+
+def emitted_lines(cmd, tokens, path, total):
+    """Lines this head/tail actually prints, or None when it is already narrow.
+
+    The bare integer is not the answer. `-n +N` and `-n -N` are offsets, so they
+    print most of the file however small N is, and `-c` counts bytes, not lines.
+    """
+    flag, raw = window_arg(tokens)
+    if raw is None:
+        return None  # no explicit window: head/tail default to 10 lines
+    try:
+        n = int(raw)
+    except ValueError:
+        return None
+
+    if flag == "-c":
+        if not total:
+            return None
+        try:
+            avg = max(os.path.getsize(path) / total, 1)
+        except OSError:
+            return None
+        return abs(n) / avg
+    if raw.startswith("+"):
+        # `tail -n +N` prints from line N onward; head treats +N as a plain count.
+        return total - n + 1 if cmd == "tail" else n
+    if n < 0:
+        # `head -n -N` prints all but the last N; `tail -n -N` is just the last N.
+        return total + n if cmd == "head" else -n
+    return n
 
 
 def offending_file(segment, threshold):
@@ -105,21 +138,28 @@ def offending_file(segment, threshold):
         return None
 
     cmd = os.path.basename(tokens[0])
-    if cmd in WINDOW_COMMANDS:
-        size = window_size(tokens)
-        if size is None or size < threshold:
-            return None  # default 10 lines, or an explicitly small window
-    elif cmd not in DUMP_COMMANDS:
+    if cmd not in WINDOW_COMMANDS and cmd not in DUMP_COMMANDS:
         return None
 
+    counted, total = [], 0
     for tok in tokens[1:]:
         if tok.startswith("-") or not tok:
             continue
         if is_allowed(tok):
             continue
         lines = count_lines(tok)
-        if lines is not None and lines >= threshold:
-            return tok, lines
+        if lines is None:
+            continue
+        if cmd in WINDOW_COMMANDS:
+            # head/tail apply their window per file, so no summing here.
+            shown = emitted_lines(cmd, tokens, tok, lines)
+            if shown is not None and shown >= threshold:
+                return [tok], int(shown)
+            continue
+        counted.append(tok)
+        total += lines  # `cat a b c` costs the sum, not the largest
+        if total >= threshold:
+            return counted, total
     return None
 
 
@@ -154,10 +194,14 @@ def main():
     for segment in SEGMENT_SPLIT.split(command):
         hit = offending_file(segment.strip(), threshold)
         if hit:
-            path, lines = hit
+            paths, lines = hit
+            subject = (
+                f"`{paths[0]}` is {lines} lines" if len(paths) == 1
+                else ", ".join(f"`{p}`" for p in paths) + f" total {lines} lines"
+            )
             deny(
-                f"Blocked: `{path}` is {lines} lines (threshold {threshold}) and this "
-                f"command would dump it into context. Decide which you need:\n\n"
+                f"Blocked: {subject} (threshold {threshold}) and this "
+                f"command would dump that into context. Decide which you need:\n\n"
                 f"1. A specific part: narrow it here. Pipe through grep/sed/awk, or use "
                 f"head/tail with a small -n; piped and redirected commands pass through. "
                 f"This is the right branch if you are about to edit, debug, or review this "

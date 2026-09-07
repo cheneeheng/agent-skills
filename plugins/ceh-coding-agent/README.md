@@ -107,7 +107,11 @@ and archives. `BULK_READER_MIN_LINES=999999` suspends enforcement for a session 
 unregistering the hooks — useful when doing the very things the skill warns against.
 
 Targeted reads always pass: `Read` with `offset`/`limit`, piped or redirected bash
-(`cat f | grep x`), and `head`/`tail` with a small `-n`. Both guards need `python3` on PATH
+(`cat f | grep x`), and `head`/`tail` that genuinely print a small window. The bash guard resolves
+that window against the real file rather than reading the bare integer, so `tail -n +1` (an offset
+— it prints the whole file) is blocked while `tail -n +400` on a 500-line file is not, and `-c`
+is measured in bytes. Several files in one command are summed: `cat a b c` costs their total.
+Both guards need `python3` on PATH
 (stdlib only) and fail open — unparseable input, a binary file, a missing path, or a crashed
 interpreter allows the read through, because a guard that blocked work on its own bugs would cost
 more than it saves.
