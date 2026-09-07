@@ -571,3 +571,37 @@ When changing a shared block:
 2. Edit it first — that's the source of truth for the rule.
 3. Propagate the change to every other listed file in the same commit.
 4. Update this file if the scope of sharing changes.
+
+---
+
+## Bulk-read guard exemption list (`ALWAYS_ALLOW`)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-coding-agent/hooks/bulk-read-guard.py` | `ALWAYS_ALLOW` tuple | canonical — the exemption list both guards apply |
+| `plugins/ceh-coding-agent/hooks/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | verbatim copy |
+
+**What is shared:** the glob tuple itself, verbatim. The two guards cover the same files by two routes (`Read` and `cat`/`head`), so a pattern in one and not the other means the same file is denied on one route and allowed on the other — which is exactly the bug this entry exists to prevent recurring.
+
+**What diverges:** nothing in the list. The surrounding lookup differs only in that the `Read` guard exposes it through a separate `allowlist()` helper. Each hook is a standalone script invoked by path, with no shared module to import from and no import that could fail open, so the list is duplicated rather than extracted.
+
+---
+
+## Bulk-reader answer format (Answer / Not found / Coverage)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-coding-agent/agents/bulk-reader.md` | "Output format" section | canonical — the template the agent is required to emit |
+| `plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md` | "Trust the anchors, not the prose" section | names the same three sections so the caller knows what to verify against |
+
+**What is shared:** the three fixed sections and their order — `## Answer` (one bullet per claim, each anchored `path:line`), `## Not found / uncertain` (never omitted; `- Nothing outstanding.` when clean), `## Coverage` (files and lines read, plus anything skipped).
+
+**What diverges:**
+- The agent file gives the empty template plus the rules that enforce it (never guess a line number, do not editorialize, do not soften gaps).
+- The skill file names the sections only (no populated example — the body loads into the main context on every trigger) and carries the caller-side consequence: an unanchored bullet is unverified, and **Not found / uncertain** is the section that matters, because silent omission is the dominant failure mode of a summarizing worker.
+
+Changing the section names or order means changing both files in the same session; the caller's verification rules are written against these exact headings.

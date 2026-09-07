@@ -45,7 +45,7 @@ The table below is the reference list of what those bundles are made of.
 
 | Plugin | Install as | Contents |
 |--------|-----------|---------|
-| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`); whole-repo orientation — `explain-codebase` into `.agents_workspace/CODEBASE_EXPLAINED.md` and the `repo-tree-mapper` agent |
+| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook, and preloaded into the `executor`, `github-actions` and `gitlab-ci` subagents); write-less-code minimalism skill (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff (`usage-limit-handoff`); explaining code to a person until it lands (`explain-until-understood`); whole-repo orientation — `explain-codebase` into `.agents_workspace/CODEBASE_EXPLAINED.md` and the `repo-tree-mapper` agent; context economy — `delegate-bulk-reads` plus the cheap `bulk-reader` agent and its opt-in read guards |
 | Plan Build Review | `ceh-plan-build-review` | Plan-driven development loop: plan a fullstack app, implement from the plan, review against it |
 | Architecture | `ceh-architecture` | Living architecture docs (Mermaid diagrams + Key Decisions) and domain modeling (stack-agnostic design) |
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
@@ -98,6 +98,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-coding-agent` | Refactor Repo | `/ceh-coding-agent:refactor-repo` | Manual only — propose-then-apply refactor campaign over the whole repo or a named module |
 | `ceh-coding-agent` | Usage Limit Handoff | `/ceh-coding-agent:usage-limit-handoff` | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact for the next session, end the turn |
 | `ceh-coding-agent` | Explain Until Understood | `/ceh-coding-agent:explain-until-understood` | Explaining a subsystem, design, or diff to the person in the session, starting from the assumption they are new to the project and know nothing about it: a stated floor, foundations first, plain language, verified claims, plain-ASCII pictures for structure and time, a numbered walk of one real case, and the escalation ladder when an explanation misses |
+| `ceh-coding-agent` | Delegate Bulk Reads | `/ceh-coding-agent:delegate-bulk-reads` | Before dispatching the `bulk-reader` agent, and before acting on its summary — how to write the delegation prompt, and the rules for verifying an answer whose source files never entered this context |
 | `ceh-plan-build-review` | Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning one release at a time — a greenfield skeleton or the next iteration |
 | `ceh-plan-build-review` | Plan Fullstack App to MVP | `/ceh-plan-build-review:plan-fullstack-app-to-mvp` | Planning the complete build to a working MVP in one session |
 | `ceh-plan-build-review` | Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Implementing a SKELETON.md or ITER_NN.md planning document |
@@ -197,6 +198,7 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 | Plugin | Agent | Invoke as | When to use |
 |--------|-------|-----------|-------------|
+| `ceh-coding-agent` | Bulk Reader | `/ceh-coding-agent:bulk-reader` | Read large or numerous files on Haiku and return a compressed, line-anchored answer to one question, keeping the file contents out of the caller's context |
 | `ceh-coding-agent` | Repo Tree Mapper | `/ceh-coding-agent:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests |
 | `ceh-python-service` | Python Unit Tester | `/ceh-python-service:python-unit-tester` | Write isolated pytest unit tests for functions, classes, or modules with mocked dependencies |
 | `ceh-python-service` | Python Integration Tester | `/ceh-python-service:python-integration-tester` | Write tests for real component interactions — DB, HTTP between internal services, service boundaries |
