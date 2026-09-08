@@ -6,9 +6,9 @@
 
 | Run | Direct read | Delegated | Saved | Fact recall | Anchored | No-match | Ghosts | Coverage error |
 |-----|-------------|-----------|-------|-------------|----------|----------|--------|----------------|
-| run-001 | 70908 | 20846 | 71% | 87% (48/55) | 87% | 12/12 | 0 | +30 over 39 rows |
-| run-002 | 70908 | 19084 | 73% | 84% (46/55) | 76% | 12/12 | 0 | +38 over 39 rows |
-| run-003 | 70908 | 17861 | 75% | 87% (48/55) | 73% | 12/12 | 0 | +682 over 39 rows |
+| run-001 | 71287 | 20854 | 71% | 87% (48/55) | 87% | 12/12 | 0 | +30 over 39 rows |
+| run-002 | 71287 | 19186 | 73% | 82% (45/55) | 76% | 12/12 | 0 | +38 over 39 rows |
+| run-003 | 71287 | 17941 | 75% | 87% (48/55) | 73% | 12/12 | 0 | +682 over 39 rows |
 
 ## Per case, across runs
 
@@ -22,7 +22,7 @@
 | C06-plugin-dependencies | -3% | -3% | -4% | 6/6 | 6/6 | 6/6 |
 | C07-js-shared-state | 74% | 50% | 81% | 7/8 | 7/8 | 7/8 |
 | C08-single-large-file-outline | 1% | 2% | 1% | 10/10 | 10/10 | 10/10 |
-| C09-fine-detail-retention | 33% | 35% | 33% | 4/5 | 4/5 | 4/5 |
+| C09-fine-detail-retention | 42% | 40% | 40% | 4/5 | 3/5 | 4/5 |
 | C10-sweep-disable-model-invocation | 86% | 86% | 86% | 5/5 | 5/5 | 5/5 |
 
 ## What was lost, and in how many runs
@@ -40,6 +40,7 @@ A miss in every run is a property of the question. A miss in one is variance.
 | C09-fine-detail-retention / claim-not-count | 3/3 (run-001, run-002, run-003) |
 | C03-guard-deny-conditions / fallback-bash | 1/3 (run-002) |
 | C03-guard-deny-conditions / fallback-read | 1/3 (run-002) |
+| C09-fine-detail-retention / off-by-one | 1/3 (run-002) |
 
 ## run-001 in detail
 
@@ -53,12 +54,12 @@ A miss in every run is a property of the question. A miss in one is variance.
 | C06-plugin-dependencies | sweep | 1456 | 1501 | -3% | 6/6 | 6/6 | 4/4 | 0 | 10/10 | +2 over 10 rows |
 | C07-js-shared-state | semantic | 4774 | 1253 | 74% | 7/8 | 5/8 | 0/0 | 0 | 3/3 | +2 over 3 rows |
 | C08-single-large-file-outline | sweep | 5599 | 5525 | 1% | 10/10 | 10/10 | 0/0 | 0 | 1/1 | +1 over 1 rows |
-| C09-fine-detail-retention | detail | 2242 | 1505 | 33% | 4/5 | 4/5 | 0/0 | 0 | 2/2 | +2 over 2 rows |
+| C09-fine-detail-retention | detail | 2621 | 1513 | 42% | 4/5 | 4/5 | 0/0 | 0 | 2/2 | +2 over 2 rows |
 | C10-sweep-disable-model-invocation | sweep | 12925 | 1761 | 86% | 5/5 | 5/5 | 2/2 | 0 | 7/7 | +7 over 7 rows |
 
-- Saved **71%** (50062 tokens); reply 3447 + verification re-reads 16112 + prompts.
+- Saved **71%** (50433 tokens); reply 3432 + verification re-reads 16135 + prompts.
 - Fact recall **87%** (48/55), anchors within 3 lines **87%**, ghost anchors **0**.
-- Exchange rate: **7151 tokens saved per fact lost**.
+- Exchange rate: **7204 tokens saved per fact lost**.
 
 ## run-002 in detail
 
@@ -72,12 +73,12 @@ A miss in every run is a property of the question. A miss in one is variance.
 | C06-plugin-dependencies | sweep | 1456 | 1500 | -3% | 6/6 | 6/6 | 4/4 | 0 | 10/10 | +9 over 10 rows |
 | C07-js-shared-state | semantic | 4774 | 2374 | 50% | 7/8 | 6/8 | 0/0 | 0 | 3/3 | +3 over 3 rows |
 | C08-single-large-file-outline | sweep | 5599 | 5501 | 2% | 10/10 | 10/10 | 0/0 | 0 | 1/1 | +1 over 1 rows |
-| C09-fine-detail-retention | detail | 2242 | 1464 | 35% | 4/5 | 4/5 | 0/0 | 0 | 2/2 | +2 over 2 rows |
+| C09-fine-detail-retention | detail | 2621 | 1566 | 40% | 3/5 | 4/5 | 0/0 | 0 | 2/2 | +2 over 2 rows |
 | C10-sweep-disable-model-invocation | sweep | 12925 | 1770 | 86% | 5/5 | 5/5 | 2/2 | 0 | 7/7 | +7 over 7 rows |
 
-- Saved **73%** (51824 tokens); reply 2940 + verification re-reads 14857 + prompts.
-- Fact recall **84%** (46/55), anchors within 3 lines **76%**, ghost anchors **0**.
-- Exchange rate: **5758 tokens saved per fact lost**.
+- Saved **73%** (52101 tokens); reply 2970 + verification re-reads 14929 + prompts.
+- Fact recall **82%** (45/55), anchors within 3 lines **76%**, ghost anchors **0**.
+- Exchange rate: **5210 tokens saved per fact lost**.
 
 ## run-003 in detail
 
@@ -91,9 +92,9 @@ A miss in every run is a property of the question. A miss in one is variance.
 | C06-plugin-dependencies | sweep | 1456 | 1509 | -4% | 6/6 | 6/6 | 4/4 | 0 | 10/10 | +5 over 10 rows |
 | C07-js-shared-state | semantic | 4774 | 885 | 81% | 7/8 | 4/8 | 0/0 | 0 | 3/3 | +2 over 3 rows |
 | C08-single-large-file-outline | sweep | 5599 | 5521 | 1% | 10/10 | 10/10 | 0/0 | 0 | 1/1 | +1 over 1 rows |
-| C09-fine-detail-retention | detail | 2242 | 1504 | 33% | 4/5 | 4/5 | 0/0 | 0 | 2/2 | +2 over 2 rows |
+| C09-fine-detail-retention | detail | 2621 | 1584 | 40% | 4/5 | 4/5 | 0/0 | 0 | 2/2 | +2 over 2 rows |
 | C10-sweep-disable-model-invocation | sweep | 12925 | 1760 | 86% | 5/5 | 5/5 | 2/2 | 0 | 7/7 | +656 over 7 rows |
 
-- Saved **75%** (53047 tokens); reply 3247 + verification re-reads 13327 + prompts.
+- Saved **75%** (53346 tokens); reply 3280 + verification re-reads 13374 + prompts.
 - Fact recall **87%** (48/55), anchors within 3 lines **73%**, ghost anchors **0**.
-- Exchange rate: **7578 tokens saved per fact lost**.
+- Exchange rate: **7620 tokens saved per fact lost**.

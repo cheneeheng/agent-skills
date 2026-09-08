@@ -1,8 +1,8 @@
 ## Answer
 
-- Coverage numbers problem in the skill — plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md:62-65: "The rows do add up — the worker sums them correctly — but each file comes back about one line too long, because a trailing newline reads as an extra line. That is the worst shape of wrong: close enough to look right at a glance, never exact enough to prove a file was read to its end."
+- Skill says the bulk-reader's Coverage numbers issue: "each file usually comes back about one line too long, because a trailing newline reads as an extra line" — SKILL.md:81-82, and more critically, "a worker that read only the first 50 lines of a 300-line file reports `50 lines read`, accurately, under an answer that looks finished" — SKILL.md:83-84
 
-- Total production requirement in the agent spec — plugins/ceh-coding-agent/agents/bulk-reader.md:54-55: "`Total` is the rows added up. Write the rows first, then add them; a total you produced any other way is a guess, and the caller treats that number as a coverage guarantee."
+- Agent spec requires Total be produced as: "`Total` is the rows added up. Write the rows first, then add them; a total you produced any other way is a guess, and the caller treats that number as a coverage guarantee." — bulk-reader.md:55-56
 
 ## Not found / uncertain
 
@@ -10,6 +10,6 @@
 
 ## Coverage
 
-- plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md — 72 lines read
-- plugins/ceh-coding-agent/agents/bulk-reader.md — 90 lines read
-- Total: 162 lines across 2 files.
+- plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md — 93 lines read
+- plugins/ceh-coding-agent/agents/bulk-reader.md — 91 lines read
+- Total: 184 lines across 2 files. No sections skipped.

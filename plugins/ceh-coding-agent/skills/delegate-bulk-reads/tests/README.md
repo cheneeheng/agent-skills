@@ -7,6 +7,17 @@ smaller model.
 Corpus is this repo. There are no fixtures — the answer key resolves against the live files,
 so it cannot silently rot.
 
+## Version under test
+
+The three committed runs were taken against **repo tag `v6.3.2`**, with `ceh-coding-agent` at
+**3.2.5** — the skill and agent text as of commit `de112ba`, before any finding here was folded
+back in. The worker ran on Haiku, the model pinned in `agents/bulk-reader.md`.
+
+Two consequences. Later runs are not comparable to these unless the skill, the agent, and the
+worker model are all unchanged — record the tag and plugin version whenever you add a `run-NNN/`.
+And C09's corpus is the skill and agent files themselves, so an edit to either moves the ground
+under that one case; its recorded replies describe `de112ba`, not necessarily HEAD.
+
 ## Run it
 
 ```bash
@@ -70,7 +81,7 @@ Tokens are `len(text) / 4`. Approximate, but applied identically to both arms, s
 | Run | Saved | Fact recall | Usable anchors | No-match | Ghosts | Coverage error |
 |-----|-------|-------------|----------------|----------|--------|----------------|
 | run-001 | 71% | 87% (48/55) | 87% | 12/12 | 0 | +30 over 39 rows |
-| run-002 | 73% | 84% (46/55) | 76% | 12/12 | 0 | +38 over 39 rows |
+| run-002 | 73% | 82% (45/55) | 76% | 12/12 | 0 | +38 over 39 rows |
 | run-003 | 75% | 87% (48/55) | 73% | 12/12 | 0 | +682 over 39 rows |
 
 Full tables in `report.md`.
@@ -104,7 +115,7 @@ Split the 30 replies by what the question asks for, and the two halves behave no
 | Question kind | Cases | Saved | Fact recall | No-match |
 |---------------|-------|-------|-------------|----------|
 | Enumerative (sweep, negative) | C01, C02, C06, C08, C10 | 76% | **100%** (81/81) | 36/36 |
-| Reasoning (semantic, detail) | C03, C04, C07, C09 | 60% | **71%** (55/78) | n/a |
+| Reasoning (semantic, detail) | C03, C04, C07, C09 | 60% | **69%** (54/78) | n/a |
 
 Worth it for enumerative questions over a large corpus. "Which of these files declare X", "does any
 of this import Y", "list every heading" — 81 of 81 facts across three runs, 36 of 36 honest

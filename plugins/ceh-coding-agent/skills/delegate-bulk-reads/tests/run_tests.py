@@ -77,9 +77,11 @@ def anchors(text: str) -> list[tuple[str, int, int]]:
 
 
 def same_file(anchor_path: str, case_path: str) -> bool:
-    """An anchor may be written short (`state.js`) or full. Suffix match on segments."""
+    """An anchor may be written short (`state.js`), repo-relative, or as an absolute path.
+    Suffix match on segments, in whichever direction is shorter."""
     a, c = anchor_path.split("/"), case_path.split("/")
-    return a == c[-len(a):] if len(a) <= len(c) else False
+    n = min(len(a), len(c))
+    return a[-n:] == c[-n:]
 
 
 def mentions(text: str, patterns: list[str]) -> bool:
