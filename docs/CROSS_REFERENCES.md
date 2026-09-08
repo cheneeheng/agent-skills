@@ -602,6 +602,6 @@ When changing a shared block:
 
 **What diverges:**
 - The agent file gives the empty template plus the rules that enforce it (never guess a line number, do not editorialize, do not soften gaps).
-- The skill file names the sections only (no populated example — the body loads into the main context on every trigger) and carries the caller-side consequence: an unanchored bullet is unverified, and **Not found / uncertain** is the section that matters, because silent omission is the dominant failure mode of a summarizing worker.
+- The skill file names the sections only (no populated example — the body loads into the main context on every trigger) and carries the caller-side consequence: an unanchored bullet is unverified, a clean **Not found / uncertain** is distrusted rather than believed (silent omission is the dominant failure mode of a summarizing worker, and this section is the worker's own account of its gaps), and **Coverage** is read as a claim, not a count — its per-file line totals run about one line long each. The caller confirms coverage independently: every path sent owes a verdict in **Answer**, and a `grep -c` checks the rest.
 
 Changing the section names or order means changing both files in the same session; the caller's verification rules are written against these exact headings.

@@ -5,6 +5,63 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.3.2] — 2026-09-08
+
+`delegate-bulk-reads` shipped a rule with a reason that measurement disproved. The rule — treat the
+`bulk-reader` reply's `Coverage` section as a claim, never as a count — is right and stays. The
+justification under it said the worker "does not do the arithmetic the section implies", inferred in
+the v6.3.0 evaluation from line totals that were wrong in 8 of 8 runs. A follow-up evaluation
+isolated the actual cause: the worker sums its rows correctly, and every file comes back about one
+line long because a trailing newline reads as an extra line. The same off-by-one showed up in Sonnet
+agents elsewhere, so it is not the worker's arithmetic and not Haiku. A skill that teaches a false
+cause makes an agent brittle when the cause does not hold, so the reason is replaced and the rule
+kept.
+
+Two copies of that section still asserted the *inverse* rule — that `Not found / uncertain` outranks
+`Answer` — from before v6.3.0 flipped it. `validate.py` cannot see semantic drift, so both survived a
+version bump; they now match. The coverage check also leads with the cheaper of its two tests: every
+path you sent owes a verdict in `Answer`, which costs no tool call and works on a question with no
+greppable pattern, where `grep -c` does not.
+
+The same evaluation found two ways past the Bash read guard, both ordinary commands rather than
+adversarial ones. `cat dir/*.py` was allowed at 1136 lines while naming two of those same files was
+denied, because `shlex.split` leaves a glob literal and an unexpanded token counted as no file at
+all — the form that dumps the most looked like nothing. And `tail -c +100` was predicted at 6.7 lines
+against the 492 it actually emits, because the `-c` branch converted bytes to lines before resolving
+the offset's sign.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-coding-agent` | v3.2.5 |
+
+### Changed
+
+- **`ceh-coding-agent` / `delegate-bulk-reads`** — the `Coverage` rule keeps its wording and gets the
+  measured reason: the rows do add up, but each file reads about one line long from a trailing
+  newline, which is close enough to look right and never exact enough to prove coverage. The coverage
+  check now leads with the free test (every path sent owes a verdict in `Answer`) before `grep -c`.
+- **`ceh-coding-agent` / `bulk-reader`** — the description no longer refuses security-critical code
+  outright. That exclusion collided with the skill's own trigger on questions like "which of these
+  controllers do auth checks", and sent one routing run to no component at all. The agent may now
+  locate and anchor such code; its answer is never the verdict, because the caller reads the anchored
+  lines before concluding.
+- **`plugins/ceh-coding-agent/README.md` and `docs/CROSS_REFERENCES.md`** — both described the rule
+  v6.3.0 replaced. Rewritten to the current one: distrust a clean gaps section and confirm coverage
+  independently.
+
+### Fixed
+
+- **Glob bypass in `bulk-read-bash-guard.py`** — a glob token is expanded with stdlib `glob` before
+  counting, falling back to the literal token when it matches nothing so the guard still fails open.
+  The allowlist applies to the expanded paths, not the pattern.
+- **`-c` offsets in `bulk-read-bash-guard.py`** — `tail -c +N` and `head -c -N` are offsets, not
+  counts. The sign is now resolved in bytes before the line conversion, mirroring the `-n` branch and
+  making the module docstring's claim that `-c` is resolved against the real file true.
+
+---
+
 ## [6.3.1] — 2026-09-07
 
 The repo documented one plugin layout and shipped two. `hooks/` is meant to hold `hooks.json` and
