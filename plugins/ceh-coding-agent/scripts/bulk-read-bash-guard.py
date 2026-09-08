@@ -15,12 +15,13 @@ Passes through:
     the real file rather than reading the bare integer as a line count
 
 Several files in one command are summed: `cat a b c` costs their total, not
-their max.
+their max, and a glob (`cat dir/*.py`) is expanded before summing.
 
 Fails open on anything it cannot parse.
 """
 
 import fnmatch
+import glob
 import json
 import os
 import re
@@ -113,10 +114,18 @@ def emitted_lines(cmd, tokens, path, total):
         if not total:
             return None
         try:
-            avg = max(os.path.getsize(path) / total, 1)
+            size = os.path.getsize(path)
         except OSError:
             return None
-        return abs(n) / avg
+        # Resolve the offset first: `-c +N` and `-c -N` are the same offsets as
+        # their `-n` forms, so reading n as a byte count inverts both.
+        if raw.startswith("+"):
+            shown = size - n + 1 if cmd == "tail" else n
+        elif n < 0:
+            shown = size + n if cmd == "head" else -n
+        else:
+            shown = n
+        return max(shown, 0) / max(size / total, 1)
     if raw.startswith("+"):
         # `tail -n +N` prints from line N onward; head treats +N as a plain count.
         return total - n + 1 if cmd == "tail" else n
@@ -145,21 +154,24 @@ def offending_file(segment, threshold):
     for tok in tokens[1:]:
         if tok.startswith("-") or not tok:
             continue
-        if is_allowed(tok):
-            continue
-        lines = count_lines(tok)
-        if lines is None:
-            continue
-        if cmd in WINDOW_COMMANDS:
-            # head/tail apply their window per file, so no summing here.
-            shown = emitted_lines(cmd, tokens, tok, lines)
-            if shown is not None and shown >= threshold:
-                return [tok], int(shown)
-            continue
-        counted.append(tok)
-        total += lines  # `cat a b c` costs the sum, not the largest
-        if total >= threshold:
-            return counted, total
+        # shlex leaves `dir/*.py` literal, and an unexpanded glob counts as no
+        # file at all — the one form that dumps the most while looking smallest.
+        for path in sorted(glob.glob(tok)) or [tok]:
+            if is_allowed(path):
+                continue
+            lines = count_lines(path)
+            if lines is None:
+                continue
+            if cmd in WINDOW_COMMANDS:
+                # head/tail apply their window per file, so no summing here.
+                shown = emitted_lines(cmd, tokens, path, lines)
+                if shown is not None and shown >= threshold:
+                    return [path], int(shown)
+                continue
+            counted.append(path)
+            total += lines  # `cat a b c` costs the sum, not the largest
+            if total >= threshold:
+                return counted, total
     return None
 
 
