@@ -1,0 +1,214 @@
+{
+  "_comment": [
+    "Answer key for the delegate-bulk-reads / bulk-reader evaluation.",
+    "Ground truth is never a hardcoded line number: each positive fact carries a `locate`",
+    "regex that run_tests.py resolves against the live file, so the key survives edits to",
+    "the corpus. `check` mode fails loudly when a locate stops matching.",
+    "Corpus is this repo itself - no fixtures to keep in sync."
+  ],
+  "chars_per_token": 4,
+  "anchor_tolerance_lines": 3,
+  "verify_window_lines": 20,
+  "cases": [
+    {
+      "id": "C01-sweep-frontmatter-effort",
+      "kind": "sweep",
+      "probes": "Silent omission across many small files - the failure the skill calls dominant.",
+      "question": "Which of these skills declare an `effort:` key in their YAML frontmatter, and what value does each set? List every one.",
+      "files": [
+        "plugins/ceh-evaluation/skills/evaluate-skill/SKILL.md",
+        "plugins/ceh-fabled/skills/fabled/SKILL.md",
+        "plugins/ceh-fabled/skills/fabled-plan-review/SKILL.md",
+        "plugins/ceh-fabled/skills/fabled-stuck/SKILL.md",
+        "plugins/ceh-usability-audit/skills/audit-interface/SKILL.md",
+        "plugins/ceh-usability-audit/skills/first-run-walkthrough/SKILL.md",
+        "plugins/ceh-coding-agent/skills/explain-until-understood/SKILL.md",
+        "plugins/ceh-blog/skills/blog-interviewer/SKILL.md"
+      ],
+      "facts": [
+        {"id": "evaluate-skill", "file": "plugins/ceh-evaluation/skills/evaluate-skill/SKILL.md", "locate": "^effort: xhigh$", "must_mention": ["evaluate-skill", "xhigh"]},
+        {"id": "fabled", "file": "plugins/ceh-fabled/skills/fabled/SKILL.md", "locate": "^effort: max$", "must_mention": ["fabled", "max"]},
+        {"id": "fabled-plan-review", "file": "plugins/ceh-fabled/skills/fabled-plan-review/SKILL.md", "locate": "^effort: xhigh$", "must_mention": ["fabled-plan-review", "xhigh"]},
+        {"id": "fabled-stuck", "file": "plugins/ceh-fabled/skills/fabled-stuck/SKILL.md", "locate": "^effort: xhigh$", "must_mention": ["fabled-stuck", "xhigh"]},
+        {"id": "audit-interface", "file": "plugins/ceh-usability-audit/skills/audit-interface/SKILL.md", "locate": "^effort: xhigh$", "must_mention": ["audit-interface", "xhigh"]},
+        {"id": "first-run", "file": "plugins/ceh-usability-audit/skills/first-run-walkthrough/SKILL.md", "locate": "^effort: xhigh$", "must_mention": ["first-run-walkthrough", "xhigh"]},
+        {"id": "explain-none", "file": "plugins/ceh-coding-agent/skills/explain-until-understood/SKILL.md", "expect": "no-match"},
+        {"id": "blog-none", "file": "plugins/ceh-blog/skills/blog-interviewer/SKILL.md", "expect": "no-match"}
+      ]
+    },
+    {
+      "id": "C02-negative-only",
+      "kind": "negative",
+      "probes": "Fabrication under pressure: the honest answer is that nothing matches, in every file.",
+      "question": "Which of these files import, require, or otherwise use the `requests` HTTP library? Name the import line for each that does.",
+      "files": [
+        "plugins/ceh-coding-agent/scripts/bulk-read-guard.py",
+        "plugins/ceh-coding-agent/scripts/usage-limit-watch.py",
+        "tools/validate-plugins/validate.py",
+        "tools/skills-sync/js/github.js"
+      ],
+      "facts": [
+        {"id": "guard", "file": "plugins/ceh-coding-agent/scripts/bulk-read-guard.py", "expect": "no-match"},
+        {"id": "watch", "file": "plugins/ceh-coding-agent/scripts/usage-limit-watch.py", "expect": "no-match"},
+        {"id": "validate", "file": "tools/validate-plugins/validate.py", "expect": "no-match"},
+        {"id": "github-js", "file": "tools/skills-sync/js/github.js", "expect": "no-match"}
+      ]
+    },
+    {
+      "id": "C03-guard-deny-conditions",
+      "kind": "semantic",
+      "probes": "Two sibling files with near-identical constants - the classic conflation error.",
+      "question": "For each guard: under exactly what conditions does it deny? Name the threshold constant and its fallback value, every environment variable that changes behaviour, and how a path is exempted.",
+      "files": [
+        "plugins/ceh-coding-agent/scripts/bulk-read-guard.py",
+        "plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py"
+      ],
+      "facts": [
+        {"id": "fallback-read", "file": "plugins/ceh-coding-agent/scripts/bulk-read-guard.py", "locate": "^FALLBACK_MIN_LINES = 350$", "must_mention": ["FALLBACK_MIN_LINES", "350"]},
+        {"id": "env-min-read", "file": "plugins/ceh-coding-agent/scripts/bulk-read-guard.py", "locate": "BULK_READER_MIN_LINES\", \"\"", "must_mention": ["BULK_READER_MIN_LINES"]},
+        {"id": "env-allow-read", "file": "plugins/ceh-coding-agent/scripts/bulk-read-guard.py", "locate": "BULK_READER_ALLOW\", \"\"", "must_mention": ["BULK_READER_ALLOW"]},
+        {"id": "allowlist-read", "file": "plugins/ceh-coding-agent/scripts/bulk-read-guard.py", "locate": "^ALWAYS_ALLOW = \\($", "must_mention": ["ALWAYS_ALLOW"]},
+        {"id": "fallback-bash", "file": "plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py", "locate": "^FALLBACK_MIN_LINES = 350$", "must_mention": ["FALLBACK_MIN_LINES"]},
+        {"id": "dump-cmds", "file": "plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py", "locate": "^DUMP_COMMANDS = ", "must_mention": ["DUMP_COMMANDS", "cat"]},
+        {"id": "window-cmds", "file": "plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py", "locate": "^WINDOW_COMMANDS = ", "must_mention": ["WINDOW_COMMANDS", "head", "tail"]},
+        {"id": "deny-payload", "file": "plugins/ceh-coding-agent/scripts/bulk-read-guard.py", "locate": "\"permissionDecision\": \"deny\"", "must_mention": ["permissionDecision"]}
+      ]
+    },
+    {
+      "id": "C04-validate-description-rules",
+      "kind": "semantic",
+      "probes": "One 400-line file, a rule buried in a docstring plus the code that enforces it.",
+      "question": "What does validate.py enforce about a skill's `description` frontmatter field, and what does it enforce about every other frontmatter key? Name the functions and the exact failure messages.",
+      "files": ["tools/validate-plugins/validate.py"],
+      "facts": [
+        {"id": "scalar-fn", "file": "tools/validate-plugins/validate.py", "locate": "^def check_scalar_style", "must_mention": ["check_scalar_style"]},
+        {"id": "folded-required", "file": "tools/validate-plugins/validate.py", "locate": "must use the folded block scalar", "must_mention": ["folded block scalar", ">-"]},
+        {"id": "other-keys", "file": "tools/validate-plugins/validate.py", "locate": "is an unquoted scalar containing", "must_mention": ["unquoted scalar"]},
+        {"id": "max-len", "file": "tools/validate-plugins/validate.py", "locate": "exceeds \\{MAX_DESCRIPTION_LEN\\} limit", "must_mention": ["MAX_DESCRIPTION_LEN"]},
+        {"id": "missing-desc", "file": "tools/validate-plugins/validate.py", "locate": "frontmatter missing 'description'", "must_mention": ["missing 'description'"]}
+      ]
+    },
+    {
+      "id": "C05-exact-literal-for-edit",
+      "kind": "exact-text",
+      "probes": "The skill's own exclusion: a summary cannot give an edit the exact text it needs. Expected to score badly - that is the finding.",
+      "question": "I am about to edit two module-level regex assignments in this file: the one that splits a bash command into segments, and the one that detects stdout redirection. Reproduce the exact source text of both assignment lines, character for character.",
+      "files": ["plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py"],
+      "facts": [
+        {"id": "segment-split", "file": "plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py", "locate": "^SEGMENT_SPLIT = ", "must_mention": ["SEGMENT_SPLIT = re\\.compile\\(r\"&&\\|\\\\\\|\\\\\\||;\"\\)"]},
+        {"id": "stdout-redirect", "file": "plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py", "locate": "^STDOUT_REDIRECT = ", "must_mention": ["STDOUT_REDIRECT = re\\.compile\\(r\"\\(\\?<!\\[0-9\\]\\)>\\|\\(\\?<!\\[0-9\\]\\)1>\"\\)"]}
+      ]
+    },
+    {
+      "id": "C06-plugin-dependencies",
+      "kind": "sweep",
+      "probes": "Ten tiny files. Delegation overhead is highest here - the prompt may cost more than the read.",
+      "question": "Which of these plugin manifests declare a `dependencies` array, and exactly what does each list?",
+      "files": [
+        "plugins/ceh-ops/.claude-plugin/plugin.json",
+        "plugins/ceh-orchestration/.claude-plugin/plugin.json",
+        "plugins/ceh-python-library/.claude-plugin/plugin.json",
+        "plugins/ceh-python-service/.claude-plugin/plugin.json",
+        "plugins/ceh-web-frontend/.claude-plugin/plugin.json",
+        "plugins/ceh-scenario-editorial/.claude-plugin/plugin.json",
+        "plugins/ceh-coding-agent/.claude-plugin/plugin.json",
+        "plugins/ceh-git-workflow/.claude-plugin/plugin.json",
+        "plugins/ceh-testing/.claude-plugin/plugin.json",
+        "plugins/ceh-blog/.claude-plugin/plugin.json"
+      ],
+      "facts": [
+        {"id": "ops", "file": "plugins/ceh-ops/.claude-plugin/plugin.json", "locate": "\"dependencies\"", "must_mention": ["ceh-ops"]},
+        {"id": "orchestration", "file": "plugins/ceh-orchestration/.claude-plugin/plugin.json", "locate": "\"dependencies\"", "must_mention": ["ceh-orchestration"]},
+        {"id": "py-lib", "file": "plugins/ceh-python-library/.claude-plugin/plugin.json", "locate": "\"dependencies\"", "must_mention": ["ceh-python-library"]},
+        {"id": "py-svc", "file": "plugins/ceh-python-service/.claude-plugin/plugin.json", "locate": "\"dependencies\"", "must_mention": ["ceh-python-service"]},
+        {"id": "web", "file": "plugins/ceh-web-frontend/.claude-plugin/plugin.json", "locate": "\"dependencies\"", "must_mention": ["ceh-web-frontend"]},
+        {"id": "editorial", "file": "plugins/ceh-scenario-editorial/.claude-plugin/plugin.json", "locate": "\"dependencies\"", "must_mention": ["ceh-scenario-editorial"]},
+        {"id": "coding-agent-none", "file": "plugins/ceh-coding-agent/.claude-plugin/plugin.json", "expect": "no-match"},
+        {"id": "git-workflow-none", "file": "plugins/ceh-git-workflow/.claude-plugin/plugin.json", "expect": "no-match"},
+        {"id": "testing-none", "file": "plugins/ceh-testing/.claude-plugin/plugin.json", "expect": "no-match"},
+        {"id": "blog-none", "file": "plugins/ceh-blog/.claude-plugin/plugin.json", "expect": "no-match"}
+      ]
+    },
+    {
+      "id": "C07-js-shared-state",
+      "kind": "semantic",
+      "probes": "Cross-file data flow: the answer lives in three files and none of them states it alone.",
+      "question": "Which module declares the shared mutable state object, what fields does it hold, and which other modules write to it?",
+      "files": [
+        "tools/skills-sync/js/state.js",
+        "tools/skills-sync/js/main.js",
+        "tools/skills-sync/js/render.js"
+      ],
+      "facts": [
+        {"id": "declaration", "file": "tools/skills-sync/js/state.js", "locate": "^  SS\\.state = \\{$", "must_mention": ["state\\.js", "SS\\.state"]},
+        {"id": "project-handle", "file": "tools/skills-sync/js/state.js", "locate": "projectHandle: null", "must_mention": ["projectHandle"]},
+        {"id": "source-type", "file": "tools/skills-sync/js/state.js", "locate": "sourceType: \"github\"", "must_mention": ["sourceType"]},
+        {"id": "busy-flag", "file": "tools/skills-sync/js/state.js", "locate": "busy: false", "must_mention": ["busy"]},
+        {"id": "dom-map", "file": "tools/skills-sync/js/state.js", "locate": "^  SS\\.dom = \\{$", "must_mention": ["SS\\.dom"]},
+        {"id": "main-writes", "file": "tools/skills-sync/js/main.js", "locate": "^      state\\.projectHandle = handle;$", "must_mention": ["main\\.js", "projectHandle"]},
+        {"id": "main-source-type", "file": "tools/skills-sync/js/main.js", "locate": "^    state\\.sourceType = checked", "must_mention": ["main\\.js"]},
+        {"id": "render-reads", "file": "tools/skills-sync/js/render.js", "locate": "state\\.", "must_mention": ["render\\.js"]}
+      ]
+    },
+    {
+      "id": "C08-single-large-file-outline",
+      "kind": "sweep",
+      "probes": "Compression ceiling on one 22 KB file, and whether a long tail of headings survives.",
+      "question": "List every second-level (`##`) section heading in this skill, in document order, verbatim.",
+      "files": ["plugins/ceh-web-frontend/skills/ui-design/SKILL.md"],
+      "facts": [
+        {"id": "design-pass", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## The design pass$", "must_mention": ["The design pass"]},
+        {"id": "layout", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## Layout$", "must_mention": ["Layout"]},
+        {"id": "hierarchy", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## Hierarchy$", "must_mention": ["Hierarchy"]},
+        {"id": "states", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## States: design the unhappy paths first$", "must_mention": ["unhappy paths"]},
+        {"id": "command-dock", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## Command dock", "must_mention": ["Command dock"]},
+        {"id": "monograms", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## Identity monograms$", "must_mention": ["Identity monograms"]},
+        {"id": "micro", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## Micro-interactions$", "must_mention": ["Micro-interactions"]},
+        {"id": "anti-patterns", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## Anti-patterns", "must_mention": ["Anti-patterns"]},
+        {"id": "review-pass", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## Review pass$", "must_mention": ["Review pass"]},
+        {"id": "build-contract", "file": "plugins/ceh-web-frontend/skills/ui-design/SKILL.md", "locate": "^## Build UI against the contract$", "must_mention": ["against the contract"]}
+      ]
+    },
+    {
+      "id": "C09-fine-detail-retention",
+      "kind": "detail",
+      "probes": "Two documents whose point is a caveat. A summariser that keeps the gist drops exactly the caveat.",
+      "question": "What does the skill say is wrong with the bulk-reader's Coverage numbers, and what does the agent spec require about how the Total is produced? Quote the operative wording.",
+      "files": [
+        "plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md",
+        "plugins/ceh-coding-agent/agents/bulk-reader.md"
+      ],
+      "facts": [
+        {"id": "off-by-one", "file": "plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md", "locate": "about one line too long", "must_mention": ["one line too long|trailing newline"]},
+        {"id": "claim-not-count", "file": "plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md", "locate": "never as a count", "must_mention": ["never as a count|claim, never"]},
+        {"id": "rows-first", "file": "plugins/ceh-coding-agent/agents/bulk-reader.md", "locate": "Write the rows first, then add them", "must_mention": ["rows first"]},
+        {"id": "total-guess", "file": "plugins/ceh-coding-agent/agents/bulk-reader.md", "locate": "a total you produced any other", "must_mention": ["guess"]},
+        {"id": "empty-section", "file": "plugins/ceh-coding-agent/agents/bulk-reader.md", "locate": "Nothing outstanding", "must_mention": ["Nothing outstanding"]}
+      ]
+    },
+    {
+      "id": "C10-sweep-disable-model-invocation",
+      "kind": "sweep",
+      "probes": "A rule with a silent failure mode downstream - a missed hit costs a broken invocation.",
+      "question": "Which of these skills set `disable-model-invocation: true` in frontmatter? Give the line for each, and state plainly which ones do not set it.",
+      "files": [
+        "plugins/ceh-coding-agent/skills/refactor-repo/SKILL.md",
+        "plugins/ceh-evaluation/skills/evaluate-skill/SKILL.md",
+        "plugins/ceh-lessons-learned/skills/lessons-learned/SKILL.md",
+        "plugins/ceh-orchestration/skills/orchestrate/SKILL.md",
+        "plugins/ceh-summarize-chat/skills/summarize-chat/SKILL.md",
+        "plugins/ceh-coding-agent/skills/shrink-diff/SKILL.md",
+        "plugins/ceh-testing/skills/design-test-cases/SKILL.md"
+      ],
+      "facts": [
+        {"id": "refactor-repo", "file": "plugins/ceh-coding-agent/skills/refactor-repo/SKILL.md", "locate": "^disable-model-invocation: true$", "must_mention": ["refactor-repo"]},
+        {"id": "evaluate-skill", "file": "plugins/ceh-evaluation/skills/evaluate-skill/SKILL.md", "locate": "^disable-model-invocation: true$", "must_mention": ["evaluate-skill"]},
+        {"id": "lessons-learned", "file": "plugins/ceh-lessons-learned/skills/lessons-learned/SKILL.md", "locate": "^disable-model-invocation: true$", "must_mention": ["lessons-learned"]},
+        {"id": "orchestrate", "file": "plugins/ceh-orchestration/skills/orchestrate/SKILL.md", "locate": "^disable-model-invocation: true$", "must_mention": ["orchestrate"]},
+        {"id": "summarize-chat", "file": "plugins/ceh-summarize-chat/skills/summarize-chat/SKILL.md", "locate": "^disable-model-invocation: true$", "must_mention": ["summarize-chat"]},
+        {"id": "shrink-diff-none", "file": "plugins/ceh-coding-agent/skills/shrink-diff/SKILL.md", "expect": "no-match"},
+        {"id": "design-test-cases-none", "file": "plugins/ceh-testing/skills/design-test-cases/SKILL.md", "expect": "no-match"}
+      ]
+    }
+  ]
+}

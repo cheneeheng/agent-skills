@@ -3,8 +3,9 @@ name: bulk-reader
 description: >-
   Use proactively to read large or numerous files and return a compressed, line-anchored answer to
   one specific question, so the file contents never enter the caller's context. Delegate to this
-  whenever a question spans three or more files, a single file is too large to read whole, or a
-  PreToolUse guard has denied a Read or a bash cat/head/tail. Read-only, never edits. Not for
+  when the files run past roughly 400 lines in total, a single file is too large to read whole, or
+  a PreToolUse guard has denied a Read or a bash cat/head/tail. Count lines, not files: several
+  small files cost more to delegate than to read. Read-only, never edits. Not for
   debugging, architecture decisions, or anything about to be edited — those need direct reads,
   because a summary drops exactly the detail they depend on. It may locate and anchor
   security-critical code, but its answer is never the verdict on it: the caller reads those

@@ -5,6 +5,66 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.3.3] — 2026-09-08
+
+`delegate-bulk-reads` told callers to delegate whenever a question spans three or more files. A
+ten-case evaluation, run three times against the real `bulk-reader`, shows that is the wrong axis:
+ten plugin manifests totalling 111 lines cleared the rule and still cost more to delegate than to
+read, in all three runs, and a 352-line pair did the same. The floor is line count, not file count,
+and it sits near 400 — close to the read guards' own 350-line threshold, so the skill, the agent
+description and the hooks now agree.
+
+The same runs split cleanly by what the question asks for. Enumerative questions — which of these
+declare X, does any of this import Y, list every heading — recalled 81 of 81 facts and gave 36 of 36
+honest `no match` verdicts, at 76% of the direct-read cost. Questions whose answer has to be
+assembled recalled 54 of 78, losing the same seven facts in every run while closing with `- Nothing
+outstanding.` each time. The skill now says to split a "why" into several "wheres" rather than trust
+an assembled answer it cannot check.
+
+The `Coverage` rule understated its own failure. v6.3.2 described the error as about one line per
+file from a trailing newline, which is what usually happens; the run that mattered reported `50 lines
+read` for seven files of 59 to 301 lines — a truncated read, reported accurately, under an answer
+that looked finished. The rule now names that case as the expensive one.
+
+Deliberately unchanged: the warning that an anchor can point at a real line and still describe it
+backwards. The harness checks that an anchor is in range, never that it describes the line correctly,
+so zero ghost anchors across 30 replies is not evidence for softening it.
+
+The evaluation ships with the skill. Ground truth is a regex resolved against the live file at
+scoring time rather than a stored line number, so corpus drift fails the harness's own `check`
+instead of quietly producing a wrong score. Delegated cost counts the verification re-reads the skill
+mandates: counting the reply alone reports 95% saved, and the honest figure is 71-75%.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-coding-agent` | v3.2.7 |
+
+### Added
+
+- **`ceh-coding-agent` / `delegate-bulk-reads`** — `tests/`: ten evaluation cases, `run_tests.py`
+  (`check` / `prompts` / `score`, stdlib only, no API key), and three recorded runs against the real
+  `bulk-reader` at `v6.3.2` / plugin `3.2.5`, worker on Haiku. `score` reads every `run-*` directory
+  and separates a fact lost in every run from one lost in a single draw.
+- **`ceh-coding-agent` / `delegate-bulk-reads`** — a size floor: delegate above roughly 400 lines,
+  and higher when the answer will be verified at many anchors, since each anchor pulls its own
+  region back into the caller's context.
+
+### Changed
+
+- **`ceh-coding-agent` / `bulk-reader`** — the description now says to delegate when the files run
+  past roughly 400 lines in total, replacing "three or more files", and to count lines rather than
+  files: several small files cost more to delegate than to read.
+- **`ceh-coding-agent` / `delegate-bulk-reads`** — "prefer two narrow calls" gains the test for when
+  to split. The worker holds up when the question enumerates and thins out when the answer has to be
+  assembled, so a "why" becomes several "wheres".
+- **`ceh-coding-agent` / `delegate-bulk-reads`** — the `Coverage` rule keeps its wording on the usual
+  off-by-one and adds the case that costs: a partial read reported accurately as a small number,
+  under an answer that looks complete.
+
+---
+
 ## [6.3.2] — 2026-09-08
 
 `delegate-bulk-reads` shipped a rule with a reason that measurement disproved. The rule — treat the
