@@ -74,7 +74,8 @@ plugins/                      # All plugins live here — flat, one directory pe
     └── skills/
         └── <skill-name>/
             ├── SKILL.md               # Required — frontmatter + full body, all content inline
-            └── references/            # Sparingly — see Skills below
+            ├── references/            # Sparingly — see Skills below
+            └── tests/                 # Rare — an evaluation harness for skills whose value is measurable (only `delegate-bulk-reads`); `validate.py` ignores it
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
 └── <tool-name>/               # validate-plugins (the CI gate), skills-sync — own README.md, no plugin.json
 ```
