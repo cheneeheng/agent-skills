@@ -5,8 +5,10 @@ description: >-
   one specific question, so the file contents never enter the caller's context. Delegate to this
   whenever a question spans three or more files, a single file is too large to read whole, or a
   PreToolUse guard has denied a Read or a bash cat/head/tail. Read-only, never edits. Not for
-  debugging, architecture decisions, security-critical code, or anything about to be edited —
-  those need direct reads, because a summary drops exactly the detail they depend on.
+  debugging, architecture decisions, or anything about to be edited — those need direct reads,
+  because a summary drops exactly the detail they depend on. It may locate and anchor
+  security-critical code, but its answer is never the verdict on it: the caller reads those
+  anchored lines itself before concluding anything.
 tools: Read, Grep, Glob
 model: haiku
 ---

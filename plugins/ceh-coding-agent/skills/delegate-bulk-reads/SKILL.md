@@ -59,11 +59,13 @@ The reply has three sections: `## Answer` with every claim anchored `path:line`,
   the worker's own account of its gaps, so it fails exactly when you most need it — `- Nothing
   outstanding.` has come back from runs that missed a quarter of the real hits. An empty section on
   a multi-file question is a reason to check, not a reassurance.
-- **Treat `Coverage` as a claim, never as a count.** Its line totals are wrong far more often than
-  they are right, and "all files read in full" gets written next to a number that contradicts it.
-  The worker does not do the arithmetic the section implies, so the figure carries no information
-  about what it actually read.
-- **Confirm coverage with a cheap Grep.** One `grep -c` of the pattern you asked about, against the
-  paths you sent, tells you whether the count matches what came back — and it is the only cheap
-  check that catches a file the worker silently dropped. Do it when the answer is empty, when
+- **Treat `Coverage` as a claim, never as a count.** The rows do add up — the worker sums them
+  correctly — but each file comes back about one line too long, because a trailing newline reads as
+  an extra line. That is the worst shape of wrong: close enough to look right at a glance, never exact
+  enough to prove a file was read to its end.
+- **Check every path got a verdict, then confirm with a cheap Grep.** The free check first: the
+  worker owes every path you sent a verdict in `Answer` — a hit with anchors, or `no match` — so a
+  path appearing in none of the three sections was dropped. That costs no tool call and works on a
+  question with no greppable pattern. Where the question does have one, `grep -c` it against the
+  paths you sent and compare with what came back. Do both when the answer is empty, when
   `Not found / uncertain` is empty, and whenever `Coverage` quotes a number you have not checked.
