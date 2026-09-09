@@ -14,16 +14,16 @@ description: >-
 
 # Delegate Bulk Reads
 
-The `bulk-reader` subagent reads on Haiku and returns anchored bullets. The file contents never
-enter this context, so its answer is all there is to work with. Its own description says when it
-is the wrong tool; this covers how to drive it and how to treat what comes back.
+The `bulk-reader` subagent reads on a small model and returns anchored bullets. The file contents
+never enter this context, so its answer is all there is to work with. Its own description says when
+it is the wrong tool; this covers how to drive it and how to treat what comes back.
 
-**Do not override the worker's model.** Haiku is pinned in the agent file and the `Agent` tool's
-`model` parameter would replace it. Measured over six runs against this repo, a larger worker never
-wins: on enumerative questions Haiku already recalls every fact, so the swap buys nothing and costs
-about ten points of saving; on reasoning questions it recovers part of the missing detail but drops
-the saving from roughly 60% to 25%, and still omits silently. When an answer thins out, narrow the
-question — see below — rather than paying for a bigger reader.
+**Do not override the worker's model.** The agent file pins it; the `Agent` tool's `model`
+parameter would replace that per call. Measured over six runs against this repo, a larger worker
+never wins: on enumerative questions the pinned worker already recalls every fact, so the swap buys
+nothing and costs about ten points of saving; on reasoning questions it recovers part of the
+missing detail but drops the saving from roughly 60% to 25%, and still omits silently. When an
+answer thins out, narrow the question — see below — rather than paying for a bigger reader.
 
 ## Delegate above ~400 lines, not above three files
 

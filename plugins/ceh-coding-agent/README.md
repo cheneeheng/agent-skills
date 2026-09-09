@@ -8,7 +8,7 @@ It also carries the whole-repo passes an agent runs over code it did not write: 
 the `repo-tree-mapper` agent, and `refactor-repo`.
 
 It also owns the agent's context economy: `delegate-bulk-reads` and the cheap `bulk-reader`
-agent push I/O-heavy reading onto Haiku so file contents never reach the main context.
+agent push I/O-heavy reading onto a small model so file contents never reach the main context.
 
 > The plan-driven workflow skills (`implement-from-plan`, `review-against-plan`) moved to the
 > `ceh-plan-build-review` plugin, which bundles them with the planning skills.
