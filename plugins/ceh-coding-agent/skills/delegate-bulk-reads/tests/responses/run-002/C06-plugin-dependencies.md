@@ -1,19 +1,22 @@
 ## Answer
-- **ceh-ops** declares `dependencies: ["ceh-coding-agent"]` — plugins/ceh-ops/.claude-plugin/plugin.json:7
-- **ceh-orchestration** declares `dependencies: ["ceh-coding-agent"]` — plugins/ceh-orchestration/.claude-plugin/plugin.json:7
-- **ceh-python-library** declares `dependencies: ["ceh-testing"]` — plugins/ceh-python-library/.claude-plugin/plugin.json:7
-- **ceh-python-service** declares `dependencies: ["ceh-testing"]` — plugins/ceh-python-service/.claude-plugin/plugin.json:7
-- **ceh-web-frontend** declares `dependencies: ["ceh-testing"]` — plugins/ceh-web-frontend/.claude-plugin/plugin.json:7
-- **ceh-scenario-editorial** declares `dependencies: ["ceh-coding-agent", "ceh-git-workflow", "ceh-blog", "ceh-documentation", "ceh-seo"]` — plugins/ceh-scenario-editorial/.claude-plugin/plugin.json:10-16
-- **ceh-coding-agent** — no `dependencies` field
-- **ceh-git-workflow** — no `dependencies` field
-- **ceh-testing** — no `dependencies` field
-- **ceh-blog** — no `dependencies` field
+
+- **ceh-ops** declares `dependencies` — plugins/.ceh-ops/.claude-plugin/plugin.json:7 — lists `["ceh-coding-agent"]`
+- **ceh-orchestration** declares `dependencies` — plugins/ceh-orchestration/.claude-plugin/plugin.json:7 — lists `["ceh-coding-agent"]`
+- **ceh-python-library** declares `dependencies` — plugins/ceh-python-library/.claude-plugin/plugin.json:7 — lists `["ceh-testing"]`
+- **ceh-python-service** declares `dependencies` — plugins/ceh-python-service/.claude-plugin/plugin.json:7 — lists `["ceh-testing"]`
+- **ceh-web-frontend** declares `dependencies` — plugins/ceh-web-frontend/.claude-plugin/plugin.json:7 — lists `["ceh-testing"]`
+- **ceh-scenario-editorial** declares `dependencies` — plugins/ceh-scenario-editorial/.claude-plugin/plugin.json:10-16 — lists `["ceh-coding-agent", "ceh-git-workflow", "ceh-blog", "ceh-documentation", "ceh-seo"]`
+- **ceh-coding-agent** — no match. No `dependencies` field present.
+- **ceh-git-workflow** — no match. No `dependencies` field present.
+- **ceh-testing** — no match. No `dependencies` field present.
+- **ceh-blog** — no match. No `dependencies` field present.
 
 ## Not found / uncertain
+
 - Nothing outstanding.
 
 ## Coverage
+
 - plugins/ceh-ops/.claude-plugin/plugin.json — 11 lines read
 - plugins/ceh-orchestration/.claude-plugin/plugin.json — 11 lines read
 - plugins/ceh-python-library/.claude-plugin/plugin.json — 11 lines read
@@ -23,5 +26,5 @@
 - plugins/ceh-coding-agent/.claude-plugin/plugin.json — 10 lines read
 - plugins/ceh-git-workflow/.claude-plugin/plugin.json — 10 lines read
 - plugins/ceh-testing/.claude-plugin/plugin.json — 10 lines read
-- plugins/ceh-blog/.claude-plugin/plugin.json — 9 lines read
-- Total: 110 lines across 10 files. All files read fully.
+- plugins/ceh-blog/.claude-plugin/plugin.json — 10 lines read
+- Total: 111 lines across 10 files

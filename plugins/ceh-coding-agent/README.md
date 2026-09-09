@@ -8,7 +8,7 @@ It also carries the whole-repo passes an agent runs over code it did not write: 
 the `repo-tree-mapper` agent, and `refactor-repo`.
 
 It also owns the agent's context economy: `delegate-bulk-reads` and the cheap `bulk-reader`
-agent push I/O-heavy reading onto Haiku so file contents never reach the main context.
+agent push I/O-heavy reading onto a small model so file contents never reach the main context.
 
 > The plan-driven workflow skills (`implement-from-plan`, `review-against-plan`) moved to the
 > `ceh-plan-build-review` plugin, which bundles them with the planning skills.
@@ -122,6 +122,16 @@ spot-checking anchors before acting. They are a nudge with teeth rather than a s
 `awk`, `python -c open(...)` and an editor all still read files, and the bash guard covers only the
 common dumps. And a delegation is a full subagent turn, so on small files it is strictly worse than
 reading directly; that is what the threshold exists to prevent.
+
+**Prior art.** The read-delegation design here follows
+[Portal by Spotify cut my Claude Code token usage by 90%](https://engineering.atspotify.com/2026/9/portal-by-spotify-cut-my-claude-code-token-usage-by-90)
+(Dimitri Mazmanov, September 2026), which pairs a `bulk-reader` worker on a cheaper model with a
+hook that intercepts reads over 350 lines. This plugin keeps the shape and the threshold but not
+the infrastructure: the worker is a plain Claude Code subagent rather than a hosted runtime, and
+the guards are stdlib Python hooks with no service behind them. The 90% figure is theirs and is not
+reproduced here — `skills/delegate-bulk-reads/tests/` measures this implementation against its own
+corpus and finds roughly 78% saved on enumerative questions, where recall is perfect, and 62% on
+reasoning ones, where about three facts in ten go missing.
 
 ## What the contract enforces
 

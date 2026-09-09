@@ -10,4 +10,4 @@
 ## Coverage
 
 - plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py — 230 lines read
-- Total: 230 lines across 1 file. All content read.
+- Total: 230 lines across 1 file.

@@ -1,0 +1,21 @@
+## Answer
+- **bulk-read-guard.py** denies a `Read` tool call when: enforcement is on (`BULK_READER_MIN_LINES` set), `tool_name == "Read"` (plugins/ceh-coding-agent/scripts/bulk-read-guard.py:87), the request has no `offset` and no `limit` (bulk-read-guard.py:96), the path is not on the allowlist (bulk-read-guard.py:99), and `count_lines(path)` returns a non-None value `>= threshold` (bulk-read-guard.py:102-104, deny at 106-119).
+  - Threshold constant: `FALLBACK_MIN_LINES = 350` — bulk-read-guard.py:16. Used only when `BULK_READER_MIN_LINES` is set but fails `int()` parsing — bulk-read-guard.py:29-35.
+  - Env vars: `BULK_READER_MIN_LINES` gates enforcement entirely (unset/empty → guard exits 0, no denial ever) and sets the numeric threshold — bulk-read-guard.py:29-35. `BULK_READER_ALLOW` — colon-separated extra fnmatch patterns appended to the allowlist — bulk-read-guard.py:40-43.
+  - Path exemption: `is_allowed(path)` matches either the full path or `os.path.basename(path)` against `ALWAYS_ALLOW` (`*.lock`, `package-lock.json`, `pnpm-lock.yaml`, `*.svg`, `*.min.js`, `*.min.css`, image types, `*.pdf`, `*.zip`, `*.tar`, `*.gz` — bulk-read-guard.py:19-24) plus any `BULK_READER_ALLOW` patterns via `fnmatch.fnmatch` — bulk-read-guard.py:46-51. Binary files (null byte in first 8192 bytes) or files that fail UTF-8 decode also never deny, since `count_lines` returns `None` — bulk-read-guard.py:54-63, 103.
+  - Malformed/non-Read input, missing `file_path`, or any unexpected condition exits 0 (allow) rather than denying — bulk-read-guard.py:82-93.
+
+- **bulk-read-bash-guard.py** denies a `Bash` tool call when: enforcement is on (`BULK_READER_MIN_LINES` set), `tool_name == "Bash"` (bulk-read-bash-guard.py:199), and any `&&`/`||`/`;`-split segment of the command (bulk-read-bash-guard.py:34, 206) contains a dump/window command whose emitted or summed line count meets/exceeds the threshold, per `offending_file` — bulk-read-bash-guard.py:138-175, deny at 214-224.
+  - Denial requires: the command word (after glob/basename resolution) is in `DUMP_COMMANDS = {"cat","less","more","bat","batcat"}` or `WINDOW_COMMANDS = {"head","tail"}` (bulk-read-bash-guard.py:32-33, 149-150); the segment contains no pipe `|`, no input redirect `<`, and no stdout redirect matching `STDOUT_REDIRECT` (a bare `>` or `1>`, not `2>`) — bulk-read-bash-guard.py:38, 139-140; for `cat`/`less`/`more`/`bat`/`batcat`, the **summed** line count across all non-flag, non-allowlisted, glob-expanded args reaches the threshold (bulk-read-bash-guard.py:153-174); for `head`/`tail`, the **per-file** `emitted_lines()` count (resolving `-n`, `-c`, `-n +N`/`-n -N` offsets, and `-c` byte counts against the real file/size) reaches the threshold (bulk-read-bash-guard.py:99-135, 165-169). A file that fails `count_lines` (missing, binary, non-UTF-8) is skipped, not counted — bulk-read-bash-guard.py:73-83, 163-164.
+  - Threshold constant: `FALLBACK_MIN_LINES = 350` — bulk-read-bash-guard.py:31, used identically on non-integer `BULK_READER_MIN_LINES` — bulk-read-bash-guard.py:50-58.
+  - Env vars: `BULK_READER_MIN_LINES` — same gate/threshold role as in the Read guard — bulk-read-bash-guard.py:50-58. `BULK_READER_ALLOW` — colon-separated extra patterns appended to `ALWAYS_ALLOW` for this guard's own `is_allowed` — bulk-read-bash-guard.py:61-70.
+  - Path exemption: `is_allowed(path)` — same `ALWAYS_ALLOW` list as the Read guard (bulk-read-bash-guard.py:42-47, comment noting the two guards must stay in sync at bulk-read-bash-guard.py:40-41) plus `BULK_READER_ALLOW` patterns, matched via `fnmatch` against full path or basename — bulk-read-bash-guard.py:61-70.
+  - Fails open: empty command, non-Bash tool, unparsable JSON, unparsable shlex segment, empty token list, or a command not in `DUMP_COMMANDS`/`WINDOW_COMMANDS` all skip without denying — bulk-read-bash-guard.py:194-204, 142-151.
+
+## Not found / uncertain
+- Nothing outstanding — both files were read in full and every condition, constant, env var, and exemption path is anchored above.
+
+## Coverage
+- plugins/ceh-coding-agent/scripts/bulk-read-guard.py — 124 lines read
+- plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py — 230 lines read
+- Total: 354 lines across 2 files. Nothing skipped.
