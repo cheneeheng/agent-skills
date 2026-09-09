@@ -5,6 +5,62 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.3.4] — 2026-09-09
+
+v6.3.3's evaluation could not answer the question people actually ask about a cheap-worker design:
+does a bigger worker fix it? Its three runs sat at plugin `3.2.5` and its only larger-model run sat
+at `3.2.7`, so model and skill text moved together and the gap belonged to neither. Re-running all
+six at one commit isolates the model, and the answer is no.
+
+The pinned small worker recalls 85-87% of the answer key at 73-78% of the direct-read cost. A
+larger worker recalls 93-96% at 58-62%. Three facts separate them cleanly — two in the case where a
+rule is split between a docstring and the code enforcing it, one in the case whose entire point is a
+caveat — missed in all three small-worker runs and found in all three larger ones. Four more facts
+went missing under both, so they are a property of the question and no worker size recovers them.
+
+Split by what the question asks for and the trade stops being close. Enumerative questions recall
+81 of 81 facts on either worker, so the swap buys nothing there and costs about ten points of
+saving. Reasoning questions gain 16 points of recall and lose 37 points of saving, landing at 25% —
+and still close with `- Nothing outstanding.` over the facts they dropped. The skill's existing
+remedy, splitting a "why" into several "wheres", beats the swap on both axes, so `delegate-bulk-reads`
+now tells callers not to override the worker's model rather than leaving the option undiscussed.
+
+The skill and the plugin README also stop naming the model in prose. It is a pin in the agent
+frontmatter, not a property of the design, and duplicating the value into two documents makes both
+wrong the day it changes.
+
+Superseded, not corrected: v6.3.3's figures (71-75% saved, 54 of 78 on reasoning questions) describe
+runs at plugin `3.2.5` and stand as the record of that release. The numbers above replace them for
+current behaviour.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-coding-agent` | v3.2.8 |
+
+### Added
+
+- **`ceh-coding-agent` / `delegate-bulk-reads`** — "Do not override the worker's model": the
+  `Agent` tool's `model` parameter replaces the agent file's pin per call, and the six-run matrix
+  shows a larger worker never paying for itself. Names the cost on both question kinds so the
+  decision is not a guess.
+
+### Changed
+
+- **`ceh-coding-agent` / `delegate-bulk-reads`** — `tests/`: runs `001-003` re-recorded and runs
+  `004-006` added, all six at commit `c8cfddc` / plugin `3.2.7`, three per worker model. The old
+  `001-003` (plugin `3.2.5`) are replaced rather than kept, since a run at a different skill version
+  is not comparable to the others and invited exactly the confound it caused.
+- **`ceh-coding-agent` / `delegate-bulk-reads`** — the tests README's version-under-test, results
+  and verdict sections are rewritten against the six-run data, and "What Sonnet changed" is dropped:
+  it existed only to caveat a confound that no longer exists.
+- **`ceh-coding-agent` / `delegate-bulk-reads`** and **`ceh-coding-agent` README** — prose no longer
+  names the worker's model; the agent frontmatter is the single source of truth. The plugin README's
+  prior-art note also carries the six-run figures in place of the three-run ones.
+
+---
+
 ## [6.3.3] — 2026-09-08
 
 `delegate-bulk-reads` told callers to delegate whenever a question spans three or more files. A
