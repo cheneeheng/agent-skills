@@ -2,32 +2,21 @@
 
 **bulk-read-guard.py**
 
-- Threshold constant `FALLBACK_MIN_LINES` — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:16
-  - Value: 350
-  - Set from `BULK_READER_MIN_LINES` environment variable, with fallback when parsing fails — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:27-35
-- Environment variable `BULK_READER_MIN_LINES` — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:29
-  - When unset or empty, enforcement is off (guard passes through all reads) — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:30-31, 79-80
-  - When set to a non-integer value, uses FALLBACK_MIN_LINES instead — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:34-35
-- Environment variable `BULK_READER_ALLOW` — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:40
-  - Colon-separated patterns appended to allowlist — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:40-42
-- Denial conditions: Read tool (line 87) on a whole file (no offset/limit — line 96) that is not allowlisted (line 99) and has >= threshold readable lines (line 103-104) — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:77-119
-- Path exemption: matched against hardcoded ALWAYS_ALLOW patterns (*.lock, package-lock.json, pnpm-lock.yaml, *.svg, *.min.js, *.min.css, image formats, *.pdf, *.zip, *.tar, *.gz) or `BULK_READER_ALLOW` patterns by full path or basename using fnmatch — plugins/ceh-coding-agent/scripts/bulk-read-guard.py:19-24, 38-51
+- Denial condition — path:77-119: Denies a whole-file Read of the Read tool when threshold is set AND path is not allowlisted AND file has countable lines >= threshold AND read has no offset/limit parameter.
+  - Threshold constant: `FALLBACK_MIN_LINES` — 350 — path:16
+  - Controlled by: `BULK_READER_MIN_LINES` environment variable — path:29. If set but invalid, falls back to 350. If not set or empty, enforcement is off (threshold is None) — path:29-35.
+  - Exemption: Path matches any pattern in `ALWAYS_ALLOW` built-in set OR in `BULK_READER_ALLOW` env var (colon-separated) — path:19-24, 40-42. Matching uses full path or basename — path:48-50.
+  - Passes through: Targeted reads with offset or limit parameter — path:96-97.
 
 **bulk-read-bash-guard.py**
 
-- Threshold constant `FALLBACK_MIN_LINES` — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:31
-  - Value: 350
-  - Set from `BULK_READER_MIN_LINES` environment variable, with fallback when parsing fails — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:50-58
-- Environment variable `BULK_READER_MIN_LINES` — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:52
-  - When unset or empty, enforcement is off — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:53-54, 191-192
-  - When set to a non-integer value, uses FALLBACK_MIN_LINES instead — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:57-58
-- Environment variable `BULK_READER_ALLOW` — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:63
-  - Colon-separated patterns appended to allowlist — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:63-65
-- Denial conditions: Bash tool (line 199) with a dump command (cat/less/more/bat/batcat) or window command (head/tail) not piped, redirected from stdin, or redirected to stdout (line 139-140), where the file(s) exceed threshold lines (cumulative for dump commands, per-file after window for head/tail) — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:189-224
-  - Head/tail with explicit small window passes through if emitted lines < threshold — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:165-170
-  - Segment split by `&&`, `||`, `;` and each checked separately — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:34, 206
-  - Unexpanded globs (e.g., `dir/*.py`) treated as single non-matching path and skipped — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:158-159
-- Path exemption: matched against hardcoded ALWAYS_ALLOW patterns (same as bulk-read-guard.py) or `BULK_READER_ALLOW` patterns, full path or basename — plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py:42-47, 61-70
+- Denial condition — path:189-224: Denies a Bash tool invocation when threshold is set AND a command segment (split by && || ;) contains a dump command (cat/less/more/bat/batcat) or window command (head/tail) AND that segment is not piped (no |) AND is not stdin-redirected (no <) AND is not stdout-redirected (no > or 1>) AND a file argument is not allowlisted AND has countable lines AND would emit >= threshold lines in context.
+  - For dump commands (cat etc.): total lines of all file arguments summed — path:172.
+  - For window commands (head/tail): lines actually printed by that command, accounting for -n/-c flags with offset/count resolution — path:167-169.
+  - Threshold constant: `FALLBACK_MIN_LINES` — 350 — path:31. Controlled by same `BULK_READER_MIN_LINES` env var with same fallback logic — path:52-58.
+  - Exemption: Same as bulk-read-guard.py — path:42-47, 63-65. Full path or basename matching — path:67-69.
+  - Passes through: Piped commands (| in segment), stdin redirects (< in segment), stdout redirects (> or 1> in segment) — path:139-140.
+  - Window calculation (head/tail): Resolves `-n +N` / `-n -N` as offsets (not counts), `-c` as bytes (not lines), default 10 lines with no explicit window — path:86-135.
 
 ## Not found / uncertain
 
@@ -37,4 +26,4 @@
 
 - plugins/ceh-coding-agent/scripts/bulk-read-guard.py — 124 lines read
 - plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py — 230 lines read
-- Total: 354 lines across 2 files. All content read in full.
+- Total: 354 lines across 2 files. All lines read in full.
