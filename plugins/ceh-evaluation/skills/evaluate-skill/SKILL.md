@@ -36,11 +36,17 @@ subdirs. The run folder holds both the report and the raw run evidence:
 ```
 .agents_workspace/skill-evals/<target-name>/
 ├── run-001/
-│   ├── SKILL_EVAL.md        # the living report for this run
+│   ├── SKILL_EVAL.md        # the living report for this run — findings only
+│   ├── fixtures/            # inputs: trigger battery, competing descriptions, task fixtures
 │   └── iteration-<N>/       # raw run outputs per fix/re-run loop
 └── run-002/                 # a later re-evaluation — run-001 left untouched
     └── ...
 ```
+
+**The report holds findings, never inputs.** Trigger prompts, competitor descriptions and task
+fixtures go in `fixtures/`, referenced by path; transcripts and generated artifacts go in
+`iteration-<N>/`. A reader opening `SKILL_EVAL.md` wants to know whether the target ships, and every
+line of test design between them and that answer is a line they scroll past.
 
 The reason this skill exists: a skill that "looks fine" on read often under-triggers, restates what
 the model already knows, or makes no measurable difference to outcomes. You only learn which by
@@ -162,9 +168,9 @@ From those, generate the three test inputs the run phase needs:
 
 Show the user the derived criteria and the batteries: *"Here's what I'll measure and the test
 prompts — do these match your intent, or adjust?"* Bad test inputs produce a worthless evaluation,
-so this checkpoint matters. Then write the draft `SKILL_EVAL.md` (schema in
-`references/eval-report-schema.md`) to the current run folder
-(`.agents_workspace/skill-evals/<target-name>/run-<NNN>/`) with `eval_gate: 0/6` and proceed.
+so this checkpoint matters. Save the batteries and fixtures to the run folder's `fixtures/`, then
+write the draft `SKILL_EVAL.md` (schema in `references/eval-report-schema.md`) to the current run
+folder (`.agents_workspace/skill-evals/<target-name>/run-<NNN>/`) with `eval_gate: 0/6` and proceed.
 
 ---
 
@@ -220,9 +226,14 @@ assertions the baseline misses, and is that difference stable across runs?
 
 ## Phase 3 — Report & score the gate
 
-Fold the run evidence into `SKILL_EVAL.md`: per-dimension findings with the supporting evidence
-(trigger counts, cited lines, with/baseline assertion deltas, variance). Then score the **6-point
-readiness gate** (full definition in `references/eval-report-schema.md`):
+Fold the run evidence into `SKILL_EVAL.md` following `references/eval-report-schema.md` — which
+carries the section order, the gate table, and the seven rules that keep the report readable. Write
+it for **someone who has never heard of the target**: say what the target does before reporting
+anything about it, head each dimension with the question it answers, state what every number is out
+of, and quote the failure rather than only counting it. That reader is the point; an evaluation
+nobody reads has measured nothing.
+
+Then score the **6-point readiness gate** (full definition in the schema):
 
 1. **Structurally valid** — all deterministic checks pass.
 2. **Triggers on intent** — positive trigger rate ≥ threshold across runs.
@@ -231,6 +242,12 @@ readiness gate** (full definition in `references/eval-report-schema.md`):
 5. **Behavioral lift** — with-skill beats, or at minimum does not regress, baseline on the derived
    assertions, with acceptable run-to-run variance.
 6. **User confirms.**
+
+All six go in the report's gate table, each carrying its formal name, the plain question, the
+answer (**Yes** / **No** / **Not measured**), the measurement in words, and a remark. The remark is
+`—` unless the criterion is qualified — proxied, inherited from an earlier run, waived, or passed
+against a loosened threshold. A remark records a *qualified* Yes; a criterion that fails outright is
+a **No**, not a Yes with an excuse.
 
 A criterion is **met by evidence** — a trigger count, a cited line, a with/baseline delta — never by
 assertion. **Do not emit a fabricated composite score** (no "Quality: 87/100"). The gate count
