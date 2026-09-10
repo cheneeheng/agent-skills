@@ -1,0 +1,102 @@
+{
+  "skill_name": "commit",
+  "evals": [
+    {
+      "id": 1,
+      "name": "split-unrelated-changes",
+      "prompt": "I fixed the bug where shipped orders could still be cancelled, and while I was in there I fixed a typo in the README. Commit it.",
+      "expected_output": "Two commits, not one: a fix(orders) commit for orders.py and a docs commit for README.md, each with a conventional subject.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "orders.py": "def cancel(order):\n    order.status = \"cancelled\"\n    return order\n",
+            "README.md": "# Shop\n\nA tiny order service.\n\n## Instal\n\nRun `pip install -e .`\n"
+          },
+          "commit": "feat(orders): add cancel"
+        },
+        {
+          "files": {
+            "orders.py": "def cancel(order):\n    if order.status == \"shipped\":\n        raise ValueError(\"cannot cancel a shipped order\")\n    order.status = \"cancelled\"\n    return order\n",
+            "README.md": "# Shop\n\nA tiny order service.\n\n## Install\n\nRun `pip install -e .`\n"
+          }
+        }
+      ],
+      "expectations": [
+        "Exactly two new commits were created: one touching only orders.py and one touching only README.md",
+        "The orders.py commit subject uses type fix with the orders scope, e.g. fix(orders): ...",
+        "The README.md commit subject uses type docs",
+        "Every new commit subject is imperative, lowercase after the type prefix, has no trailing period, and is at most 72 characters",
+        "The working tree is clean afterwards: git status shows no changes and no leftover commit-message file"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "breaking-change-with-issue",
+      "prompt": "I renamed get_user to fetch_user and made include_deleted keyword-only, so callers will have to update. This is for issue #58 in our tracker and it should close when merged. Please commit.",
+      "expected_output": "One commit marked breaking (! or BREAKING CHANGE footer) with migration notes and a Closes #58 footer, written via git commit -F.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "api.py": "USERS = {}\n\n\ndef get_user(user_id, include_deleted=False):\n    user = USERS.get(user_id)\n    if user and user.get(\"deleted\") and not include_deleted:\n        return None\n    return user\n"
+          },
+          "commit": "feat(api): add get_user"
+        },
+        {
+          "files": {
+            "api.py": "USERS = {}\n\n\ndef fetch_user(user_id, *, include_deleted=False):\n    user = USERS.get(user_id)\n    if user and user.get(\"deleted\") and not include_deleted:\n        return None\n    return user\n"
+          }
+        }
+      ],
+      "expectations": [
+        "Exactly one new commit was created and it touches only api.py",
+        "The commit is marked breaking: a ! after the type/scope in the subject, a BREAKING CHANGE: footer, or both",
+        "The commit message tells callers how to migrate: call fetch_user instead of get_user and pass include_deleted by keyword",
+        "The commit message has a footer line reading exactly `Closes #58`",
+        "The transcript shows the multi-line message was passed with git commit -F <file>, not a shell heredoc, a PowerShell here-string, or several -m flags",
+        "No temporary commit-message file is left in the working tree"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "scope-from-history",
+      "prompt": "commit the discount thing i just added",
+      "expected_output": "One feat(billing) commit whose subject names the discount, reusing the scope already in git log for this directory.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "billing/__init__.py": "",
+            "billing/invoice.py": "def total(lines):\n    return sum(qty * price for qty, price in lines)\n"
+          },
+          "commit": "feat(billing): add invoice totals"
+        },
+        {
+          "files": {
+            "auth/__init__.py": "",
+            "auth/login.py": "def login(user, password):\n    return user.check(password)\n"
+          },
+          "commit": "feat(auth): add login"
+        },
+        {
+          "files": {
+            "billing/invoice.py": "def total(lines, tax_rate=0.0):\n    subtotal = sum(qty * price for qty, price in lines)\n    return round(subtotal * (1 + tax_rate), 2)\n"
+          },
+          "commit": "fix(billing): round tax to cents"
+        },
+        {
+          "files": {
+            "billing/invoice.py": "def total(lines, tax_rate=0.0, discount=0.0):\n    subtotal = sum(qty * price for qty, price in lines)\n    subtotal -= subtotal * discount\n    return round(subtotal * (1 + tax_rate), 2)\n"
+          }
+        }
+      ],
+      "expectations": [
+        "Exactly one new commit was created and it touches only billing/invoice.py",
+        "The subject uses type feat and scope billing, matching the scope git log already uses for this directory",
+        "The subject names the discount specifically rather than a vague 'update invoice'",
+        "The subject is imperative, lowercase after the type prefix, has no trailing period, and is at most 72 characters"
+      ]
+    }
+  ]
+}
