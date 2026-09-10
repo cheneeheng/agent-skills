@@ -75,9 +75,10 @@ plugins/                      # All plugins live here — flat, one directory pe
         └── <skill-name>/
             ├── SKILL.md               # Required — frontmatter + full body, all content inline
             ├── references/            # Sparingly — see Skills below
+            ├── evals/                 # Optional — evals.json in skill-creator format plus a `setup` fixture field, run by tools/skill-evals; `validate.py` ignores it
             └── tests/                 # Rare — an evaluation harness for skills whose value is measurable (only `delegate-bulk-reads`); `validate.py` ignores it
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
-└── <tool-name>/               # validate-plugins (the CI gate), skills-sync — own README.md, no plugin.json
+└── <tool-name>/               # validate-plugins (the CI gate), skills-sync, skill-evals (skill-creator evals, Windows-safe and plugin-isolated) — own README.md, no plugin.json
 ```
 
 ## Plugins
