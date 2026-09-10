@@ -5,6 +5,64 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.3.5] — 2026-09-10
+
+`ceh-evaluation` measured skills carefully and then reported the result in a form only its author
+could read. A `SKILL_EVAL.md` opened with counts before ever saying what the target was, put the
+readiness verdict 250 lines down, and leaned on identifiers that mean nothing outside the run that
+produced them — `P08`, `B41`, `D2`, `:37-43` — alongside condition names like `baseline`, `natural`
+and `inlined`. The measurement was sound and the artifact was unreadable, which makes the
+measurement worth very little.
+
+The report schema is rewritten around one constraint: the reader has never heard of the skill being
+evaluated and wants to know in ten seconds whether it ships. Seven rules follow from it. Say what
+the target does before reporting anything about it. Head each section with the question it answers,
+not a label. State what every number is out of, in words. Drop bare codes. Name test conditions in
+plain language. Cap the tables. Quote the failure rather than only counting it.
+
+Section order follows the same reader: the answer, then a short plain-language account of how it was
+tested, then the evidence, then the caveats. The previous schema pushed all method to the bottom,
+which was half right — a first reader cannot interpret "3 of 3" when they hit it, so the method
+summary moved up while the limits stayed down where a challenger will look for them.
+
+The six gate criteria now appear in one table carrying both names, the formal criterion and the
+plain question, plus a Remark column for a pass that is qualified: proxied, inherited from an earlier
+run, waived, or measured against a loosened threshold. A remark records a qualified Yes. A criterion
+that fails outright is a No, never a Yes with an excuse.
+
+Inputs also leave the report. Trigger batteries, competing descriptions and task fixtures live in the
+run folder's `fixtures/`, referenced by path, so `SKILL_EVAL.md` holds findings only.
+
+Measured on `delegate-bulk-reads` run-003 rewritten under the new schema: 290 lines to 176, 64 bare
+identifiers to none, and the gate verdict from line 250 to line 20.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-evaluation` | v1.1.8 |
+
+### Changed
+
+- **`ceh-evaluation` / `evaluate-skill`** — `references/eval-report-schema.md` rewritten: a stated
+  audience, seven writing rules, a new section order, and the gate table's shape. The old §01–§08
+  numbered sections are replaced by question-headed ones.
+- **`ceh-evaluation` / `evaluate-skill`** — Phase 3 now points at the schema for report structure and
+  names the first-time reader as the audience, rather than listing sections. Phase 1 saves the
+  batteries to `fixtures/`, and the run-folder tree documents that the report holds findings, never
+  inputs.
+- **`docs/CROSS_REFERENCES.md`** — records that both evaluation skills restate the six gate criteria
+  inline, with the canonical wording in the schema.
+
+### Fixed
+
+- **`ceh-evaluation` / `evaluate-skill-lite`** — its Phase 3 pointed at `§03`, `§05`, `§06` and `§07`
+  of the shared schema, all four of which stop existing under the rewrite. It now points at the
+  schema itself, and criteria 5 and 6 answer **Not measured** in the gate table rather than being
+  "recorded as unmeasured in §07".
+
+---
+
 ## [6.3.4] — 2026-09-09
 
 v6.3.3's evaluation could not answer the question people actually ask about a cheap-worker design:
