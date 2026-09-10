@@ -7,7 +7,7 @@ eval-viewer/generate_review.py read the result unchanged:
   <workspace>/iteration-<N>/eval-<id>-<name>/
       eval_metadata.json
       <config>/run-<K>/timing.json
-      <config>/run-<K>/outputs/{transcript.jsonl,final_message.md,commits.txt,status.txt}
+      <config>/run-<K>/outputs/{transcript.jsonl,final_message.md,commits.txt,status.txt,refs.txt}
 
 Each run gets a fresh git repo built from the eval's `setup` steps, and a `claude -p` session
 with --setting-sources project, so no user-installed plugin (the one under test included) or
@@ -43,14 +43,22 @@ def git(cwd: Path, *args: str) -> str:
     ).stdout
 
 
-def build_fixture(setup: list[dict]) -> Path:
-    """Fresh repo: each step writes its files, then commits them if the step names a message."""
-    repo = Path(tempfile.mkdtemp(prefix="skill-eval-"))
+def build_fixture(setup: list[dict], remote: bool = False) -> Path:
+    """Fresh repo at <tmp>/repo. Each step switches to its branch, writes its files, commits them
+    if it names a message, then tags. With `remote`, a bare <tmp>/origin.git gets every branch
+    and tag, upstreams set."""
+    repo = Path(tempfile.mkdtemp(prefix="skill-eval-")) / "repo"
+    repo.mkdir()
     git(repo, "init", "-q", "-b", "main")
     git(repo, "config", "user.name", "Eval User")
     git(repo, "config", "user.email", "eval@example.com")
     git(repo, "config", "commit.gpgsign", "false")
     for step in setup:
+        if "branch" in step:
+            try:
+                git(repo, "switch", "-q", step["branch"])
+            except subprocess.CalledProcessError:
+                git(repo, "switch", "-q", "-c", step["branch"])
         for path, content in step.get("files", {}).items():
             f = repo / path
             f.parent.mkdir(parents=True, exist_ok=True)
@@ -58,11 +66,18 @@ def build_fixture(setup: list[dict]) -> Path:
         if "commit" in step:
             git(repo, "add", "-A")
             git(repo, "commit", "-q", "-m", step["commit"])
+        if "tag" in step:
+            git(repo, "tag", "-a", step["tag"], "-m", step["tag"])
+    if remote:
+        git(repo.parent, "init", "-q", "--bare", "-b", "main", "origin.git")
+        git(repo, "remote", "add", "origin", str(repo.parent / "origin.git"))
+        git(repo, "push", "-q", "-u", "origin", "--all")
+        git(repo, "push", "-q", "origin", "--tags")
     return repo
 
 
 def run_one(skill_md: Path, ev: dict, config: str, run_dir: Path, model: str, timeout: int) -> None:
-    repo = build_fixture(ev.get("setup", []))
+    repo = build_fixture(ev.get("setup", []), ev.get("remote", False))
     base = git(repo, "rev-parse", "HEAD").strip()
     prompt = ev["prompt"]
     cmd = [
@@ -99,14 +114,25 @@ def run_one(skill_md: Path, ev: dict, config: str, run_dir: Path, model: str, ti
     }, indent=2), encoding="utf-8")
     (out / "final_message.md").write_text(result.get("result", proc.stderr), encoding="utf-8")
     (out / "commits.txt").write_text(
-        git(repo, "log", "--reverse", "--stat", "--format=commit %H%n%B", f"{base}..HEAD")
+        git(repo, "log", "--reverse", "--stat", "--format=commit %H%nparents %P%n%B", f"{base}..HEAD")
         or "(no new commits)\n", encoding="utf-8",
     )
     (out / "status.txt").write_text(
         git(repo, "status", "--porcelain", "--untracked-files=all") or "(clean)\n", encoding="utf-8"
     )
+    # Branch/tag skills leave their result in refs, not in the working tree: the whole graph,
+    # tag object types (annotated shows as `tag`), and what origin received.
+    refs = [
+        "HEAD: " + git(repo, "rev-parse", "--abbrev-ref", "HEAD"),
+        git(repo, "log", "--graph", "--all", "--oneline", "--decorate"),
+        "tags:\n" + git(repo, "for-each-ref", "--format=%(refname:short) %(objecttype)", "refs/tags"),
+    ]
+    if (repo.parent / "origin.git").is_dir():
+        refs.append("origin:\n" + git(repo.parent / "origin.git", "for-each-ref",
+                                      "--format=%(refname) %(objectname:short)"))
+    (out / "refs.txt").write_text("\n".join(refs), encoding="utf-8")
     # git marks object files read-only, which rmtree cannot delete on Windows without a chmod.
-    shutil.rmtree(repo, onexc=lambda func, path, _: (os.chmod(path, stat.S_IWRITE), func(path)))
+    shutil.rmtree(repo.parent, onexc=lambda func, path, _: (os.chmod(path, stat.S_IWRITE), func(path)))
 
 
 def main() -> None:

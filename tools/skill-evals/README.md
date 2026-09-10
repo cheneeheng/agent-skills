@@ -25,9 +25,17 @@ Each skill keeps its own at `plugins/<plugin>/skills/<skill>/evals/evals.json`, 
 schema with two additions:
 
 - `name` — a kebab-case case name, used for the workspace folder and the viewer heading.
-- `setup` — ordered steps that build the fixture repo. Each step writes `files` (path → content)
-  and, if it has a `commit` message, commits them. Files from a final step without `commit` stay as
-  uncommitted working-tree changes, which is what the prompt then acts on.
+- `setup` — ordered steps that build the fixture repo, which starts on `main`. Each step, in order:
+  switches to `branch` if given (creating it at the current HEAD when it does not exist), writes
+  `files` (path → content), commits them if it has a `commit` message, and adds an annotated `tag`
+  if given. Files from a final step without `commit` stay as uncommitted working-tree changes,
+  which is what the prompt then acts on. The run starts on whichever branch the last step left.
+- `remote` — `true` adds a bare `origin` beside the repo and pushes every branch and tag to it
+  with upstreams set, so `git push`, `git pull`, and remote-branch deletion work and show up in
+  `refs.txt`. It is a local path, not GitHub, so `gh` still has nothing to talk to.
+
+Each run writes `commits.txt` (new commits with parents), `status.txt`, and `refs.txt` (HEAD, the
+full branch graph, tag types, and origin's refs) for the grader, next to the transcript.
 
 ## Run it
 
@@ -67,5 +75,7 @@ PYTHONPATH=<repo>/tools/skill-evals python -m scripts.run_loop \
 - **`~/.claude/CLAUDE.md` still loads** in both arms. Only `--bare` skips it, and `--bare` refuses
   OAuth. It is identical in both arms, so it shifts the baseline without favoring either side.
 - **The default attribution line is present** in both arms, since user settings are skipped.
-- **Permissions are an allowlist** (`ALLOWED_TOOLS`): git, file tools, and `rm`. A skill that calls
-  `gh` or pushes needs that list extended, and a `gh` stand-in, before it gets evals.
+- **Permissions are an allowlist** (`ALLOWED_TOOLS`): git, file tools, and `rm`. Pushing works
+  against the `remote` fixture, but `gh` is denied, so the `ceh-git-workflow` cases that reach a PR
+  or GitHub release step assert that the run reports the step as not done rather than claiming it.
+  Measuring the `gh` calls themselves needs that list extended and a `gh` stand-in.
