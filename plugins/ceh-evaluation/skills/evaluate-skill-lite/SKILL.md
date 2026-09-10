@@ -145,18 +145,19 @@ Cite specific lines as evidence — quotes, not vibes.
 
 ## Phase 3 — Report & score the measurable criteria
 
-Fold the run evidence into `SKILL_EVAL.md` (shared schema, §05 structural, §03 triggering, §06
-content). Score the four criteria lite can measure (definitions in
-`../evaluate-skill/references/eval-report-schema.md`):
+Fold the run evidence into `SKILL_EVAL.md` following the shared schema
+(`../evaluate-skill/references/eval-report-schema.md`) — one question-headed section per dimension
+measured, written for a reader who has never heard of the target. Score the four criteria lite can
+measure (definitions in the same file):
 
 1. **Structurally valid** — all deterministic checks pass.
 2. **Triggers on intent** — positive trigger rate ≥ threshold (single-pass).
 3. **Doesn't over-trigger** — near-miss false-positive rate ≤ threshold.
 4. **Content is delta + moment-framed** — rubric pass, within size norms.
 
-Criteria **5 (behavioral lift)** and **6 (user confirms)** stay **unproven** — record them as
-unmeasured in §07, never as met. Set `eval_gate: N/6` counting only criteria 1–4 as potentially met
-(max `4/6`).
+Criteria **5 (behavioral lift)** and **6 (user confirms)** stay **unproven** — answer them
+**Not measured** in the gate table, never **Yes**. Set `eval_gate: N/6` counting only criteria 1–4
+as potentially met (max `4/6`).
 
 A criterion is **met by evidence** — a trigger count, a cited line — never by assertion. **Do not
 emit a fabricated composite score.** Tell the user the current count and the single

@@ -25,9 +25,15 @@ Validate → flip status to passed; hand off the advisory backlog
 
 The deliverable is a living `SKILL_EVAL.md` in the current run's folder under `.agents_workspace`
 (`.agents_workspace/skill-evals/<target-name>/run-<NNN>/SKILL_EVAL.md`; schema in
-`skills/evaluate-skill/references/eval-report-schema.md`); raw run outputs go in that run folder's
-`iteration-<N>/` subdirectory. Each fresh evaluation gets a new `run-NNN` folder, so re-running never
-overwrites a prior run's report or evidence.
+`skills/evaluate-skill/references/eval-report-schema.md`). **The report holds findings, never
+inputs**: trigger batteries, competing descriptions and task fixtures go in that run folder's
+`fixtures/`, raw run outputs in its `iteration-<N>/`, both referenced from the report by path. Each
+fresh evaluation gets a new `run-NNN` folder, so re-running never overwrites a prior run's report or
+evidence.
+
+The report is written for **someone who has never heard of the target** — it says what the target
+does before reporting anything about it, heads each section with the question it answers, and states
+what every number is out of. An evaluation nobody reads has measured nothing.
 
 **Default gate thresholds** (defaults, not laws — a niche skill sets its own battery size, and the
 threshold actually used is recorded in the report so the score is reproducible): a skill **triggers

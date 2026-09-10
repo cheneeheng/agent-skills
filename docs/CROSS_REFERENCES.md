@@ -370,6 +370,10 @@ for tasks it can't trivially handle alone …").
   rather than copying the rubric or report schema — those are not duplicated.
 - The lite triggering note drops "behavioral and" (lite has no behavioral dimension) and lite runs
   triggering at N=1 vs the full skill's N=3.
+- Both skills restate the **six gate criteria** inline (full: Phase 3; lite: Phase 3, criteria 1–4
+  only, with 5–6 fixed at **Not measured**). The canonical definitions and the gate-table shape live
+  in `references/eval-report-schema.md` — change a criterion's wording there first, then propagate to
+  both Phase 3 lists.
 
 ---
 
