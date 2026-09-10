@@ -1,0 +1,22 @@
+[
+  {"query": "run the release flow", "should_trigger": true},
+  {"query": "do the full release for 2.0.0: bump, changelog, readme, PR, merge, tag, GitHub release", "should_trigger": true},
+  {"query": "ship this release end to end, it's a minor", "should_trigger": true},
+  {"query": "bump version, update docs, open a PR, merge, tag and release", "should_trigger": true},
+  {"query": "we're ready to release everything under Unreleased. take it all the way to a published release through a PR", "should_trigger": true},
+  {"query": "release 1.2.4 properly, the version bump has to go through a reviewed PR before anything gets tagged", "should_trigger": true},
+  {"query": "time for the 0.9.0 release, do the whole thing including changelog and CLAUDE.md", "should_trigger": true},
+  {"query": "full release please, just a patch this time", "should_trigger": true},
+  {"query": "do the release from start to finish and tag the merge commit on main", "should_trigger": true},
+  {"query": "can you run our end-to-end release process, bump in every manifest, PR, merge, then publish", "should_trigger": true},
+  {"query": "tag v2.4.0 on main and publish the GitHub release, the bump already landed", "should_trigger": false},
+  {"query": "commit, open a PR and merge it, no version bump", "should_trigger": false},
+  {"query": "production is down, hotfix the checkout crash and tag the patch", "should_trigger": false},
+  {"query": "update the changelog for the upcoming release", "should_trigger": false},
+  {"query": "what version should the next release be given these commits?", "should_trigger": false},
+  {"query": "open the release PR, I'll merge and tag it myself", "should_trigger": false},
+  {"query": "deploy the 3.1.0 release to production and watch the error rates", "should_trigger": false},
+  {"query": "write release notes for v1.5.0 for our customers, non-technical", "should_trigger": false},
+  {"query": "merge the release PR #120", "should_trigger": false},
+  {"query": "set up a release-please GitHub Action for this repo", "should_trigger": false}
+]

@@ -1,0 +1,97 @@
+{
+  "skill_name": "code-review",
+  "evals": [
+    {
+      "id": 1,
+      "name": "sql-injection-request-changes",
+      "prompt": "review my branch feat/order-search against main before I open the PR",
+      "expected_output": "Summary first, then prefixed comments with the f-string SQL marked [blocking] and the missing test raised, ending on a Request changes verdict. No edits.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "orders/db.py": "def get_order(conn, order_id):\n    return conn.execute(\"SELECT * FROM orders WHERE id = ?\", (order_id,)).fetchone()\n",
+            "tests/test_db.py": "from orders.db import get_order\n\n\ndef test_get_order(conn):\n    assert get_order(conn, 1)[\"id\"] == 1\n"
+          },
+          "commit": "feat(orders): add order lookup"
+        },
+        {
+          "branch": "feat/order-search",
+          "files": {
+            "orders/db.py": "def get_order(conn, order_id):\n    return conn.execute(\"SELECT * FROM orders WHERE id = ?\", (order_id,)).fetchone()\n\n\ndef search_orders(conn, customer_name, limit=50):\n    query = f\"SELECT * FROM orders WHERE customer_name LIKE '%{customer_name}%' LIMIT {limit}\"\n    return conn.execute(query).fetchall()\n"
+          },
+          "commit": "feat(orders): add order search by customer name"
+        }
+      ],
+      "expectations": [
+        "The review opens with a one- or two-sentence summary that leads with the blocking problem",
+        "Every review comment carries one of the prefixes [blocking], [advisory], or [question]",
+        "The f-string SQL query in search_orders is marked [blocking] as an injection risk and anchored to its line in orders/db.py",
+        "The review notes that search_orders has no test",
+        "The review ends with an explicit Request changes verdict and says what must change to flip it to approve",
+        "No files were edited and no commits were created: status is clean"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "approve-with-nits",
+      "prompt": "can you review the last commit on feat/retry-backoff and tell me if it's good to approve?",
+      "expected_output": "Approve, with any nits prefixed [advisory]; no invented blockers.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "client/http.py": "import time\n\nMAX_RETRIES = 3\n\n\ndef get_with_retry(session, url):\n    for attempt in range(MAX_RETRIES):\n        resp = session.get(url, timeout=5)\n        if resp.status_code < 500:\n            return resp\n        time.sleep(1)\n    return resp\n",
+            "tests/test_http.py": "from client.http import get_with_retry\n\n\ndef test_returns_first_success(fake_session):\n    fake_session.queue(200)\n    assert get_with_retry(fake_session, \"/x\").status_code == 200\n"
+          },
+          "commit": "feat(client): retry 5xx responses"
+        },
+        {
+          "branch": "feat/retry-backoff",
+          "files": {
+            "client/http.py": "import time\n\nMAX_RETRIES = 3\n\n\ndef get_with_retry(session, url):\n    for attempt in range(MAX_RETRIES):\n        resp = session.get(url, timeout=5)\n        if resp.status_code < 500:\n            return resp\n        time.sleep(0.5 * 2 ** attempt)\n    return resp\n",
+            "tests/test_http.py": "from client.http import get_with_retry\n\n\ndef test_returns_first_success(fake_session):\n    fake_session.queue(200)\n    assert get_with_retry(fake_session, \"/x\").status_code == 200\n\n\ndef test_backs_off_exponentially(fake_session, sleeps):\n    fake_session.queue(503, 503, 200)\n    get_with_retry(fake_session, \"/x\")\n    assert sleeps == [0.5, 1.0]\n"
+          },
+          "commit": "feat(client): back off exponentially between retries"
+        }
+      ],
+      "expectations": [
+        "The review ends with an explicit Approve verdict",
+        "No comment is prefixed [blocking]",
+        "Any suggestions are prefixed [advisory] or [question] and do not hold up approval",
+        "The review does not comment on formatting or style a linter would catch",
+        "No files were edited and no commits were created: status is clean"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "respect-key-decisions",
+      "prompt": "please review feat/order-pagination vs main",
+      "expected_output": "The off-by-one in the page offset is [blocking]; the synchronous DB call recorded in ARCHITECTURE.md Key Decisions is not re-litigated. Request changes.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "ARCHITECTURE.md": "# Architecture\n\n## Key Decisions\n\n### KD-3: Synchronous database access\n\nThe API uses synchronous sqlite3 calls, not asyncio. Traffic is under 5 rps and one worker process\nis enough; async would add complexity for no measured gain. Revisit above 50 rps.\n",
+            "orders/api.py": "def list_orders(conn):\n    return conn.execute(\"SELECT * FROM orders ORDER BY id\").fetchall()\n"
+          },
+          "commit": "feat(orders): list orders"
+        },
+        {
+          "branch": "feat/order-pagination",
+          "files": {
+            "orders/api.py": "PAGE_SIZE = 20\n\n\ndef list_orders(conn, page=1):\n    \"\"\"Return one page of orders; pages start at 1.\"\"\"\n    offset = page * PAGE_SIZE\n    return conn.execute(\n        \"SELECT * FROM orders ORDER BY id LIMIT ? OFFSET ?\", (PAGE_SIZE, offset)\n    ).fetchall()\n"
+          },
+          "commit": "feat(orders): paginate order list"
+        }
+      ],
+      "expectations": [
+        "The offset calculation page * PAGE_SIZE is flagged [blocking] because page 1 skips the first 20 orders, with (page - 1) * PAGE_SIZE or equivalent as the fix",
+        "The review does not raise the synchronous sqlite3 access as a [blocking] issue, consistent with KD-3 in ARCHITECTURE.md",
+        "Every review comment carries one of the prefixes [blocking], [advisory], or [question]",
+        "The review ends with an explicit Request changes verdict",
+        "No files were edited and no commits were created: status is clean"
+      ]
+    }
+  ]
+}

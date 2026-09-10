@@ -1,0 +1,22 @@
+[
+  {"query": "open a pull request for this branch, the description should explain we added rate limiting to the public API", "should_trigger": true},
+  {"query": "raise a PR for fix/cancel-shipped-orders, it closes #342", "should_trigger": true},
+  {"query": "push my branch and put it up for review", "should_trigger": true},
+  {"query": "write the PR description for feat/order-notes, I never know what goes in the testing section", "should_trigger": true},
+  {"query": "make a draft PR while CI runs, I'm still tweaking the tests", "should_trigger": true},
+  {"query": "is a 900 line PR too big? it's the whole invoicing feature, schema and API and all", "should_trigger": true},
+  {"query": "submit a merge request for these changes", "should_trigger": true},
+  {"query": "create the PR and set it to merge automatically when checks pass", "should_trigger": true},
+  {"query": "what should the title of my pull request be? the branch adds bulk cancel for orders", "should_trigger": true},
+  {"query": "send a PR for the discounts branch", "should_trigger": true},
+  {"query": "commit this, open a PR and merge it, I'm done with this branch", "should_trigger": false},
+  {"query": "merge PR #57 now, CI is green", "should_trigger": false},
+  {"query": "review PR #57 and leave comments", "should_trigger": false},
+  {"query": "reply to the review comments on my PR, the reviewer wants the helper extracted", "should_trigger": false},
+  {"query": "write a commit message for the staged changes", "should_trigger": false},
+  {"query": "cut the 1.5.0 release and publish it on GitHub", "should_trigger": false},
+  {"query": "close all the stale PRs older than 90 days", "should_trigger": false},
+  {"query": "set up a GitHub Actions workflow that runs on pull_request", "should_trigger": false},
+  {"query": "what's the status of the CI checks on PR #88", "should_trigger": false},
+  {"query": "create an issue for the flaky checkout test", "should_trigger": false}
+]

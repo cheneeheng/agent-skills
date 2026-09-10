@@ -1,0 +1,22 @@
+[
+  {"query": "tag v2.4.0 on main and publish the GitHub release", "should_trigger": true},
+  {"query": "cut a release", "should_trigger": true},
+  {"query": "bump the version and tag it, we added the csv export since the last release", "should_trigger": true},
+  {"query": "is removing a public function a minor or a major version bump?", "should_trigger": true},
+  {"query": "I changed version in package.json to 1.5.0, what else do I need to do to ship it", "should_trigger": true},
+  {"query": "tag a release candidate for 3.1.0 so staging can pick it up", "should_trigger": true},
+  {"query": "git tag v1.2.0 fails with 'no tag message', how do I fix it", "should_trigger": true},
+  {"query": "bump the versions in plugin.json and marketplace.json to 2.3.0", "should_trigger": true},
+  {"query": "publish a release on GitHub for the tag I pushed yesterday, use the changelog section as notes", "should_trigger": true},
+  {"query": "ship a release, we're on 0.8.1 and there are only bug fixes since then", "should_trigger": true},
+  {"query": "run the full release flow: bump, docs, PR, merge, tag, release", "should_trigger": false},
+  {"query": "write the changelog entry for the upcoming release", "should_trigger": false},
+  {"query": "production is broken, get a critical fix out and tag the patch", "should_trigger": false},
+  {"query": "commit, open a PR and merge it, no release needed", "should_trigger": false},
+  {"query": "deploy v2.4.0 to production", "should_trigger": false},
+  {"query": "delete the v2.4.0 tag, I tagged the wrong commit", "should_trigger": false},
+  {"query": "what's in the latest release of fastapi? should we upgrade", "should_trigger": false},
+  {"query": "set up semantic-release in CI so versions bump automatically from commits", "should_trigger": false},
+  {"query": "list all tags in this repo sorted by date", "should_trigger": false},
+  {"query": "merge the release PR, CI is green", "should_trigger": false}
+]

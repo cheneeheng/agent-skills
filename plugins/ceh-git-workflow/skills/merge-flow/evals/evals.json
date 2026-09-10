@@ -1,0 +1,101 @@
+{
+  "skill_name": "merge-flow",
+  "evals": [
+    {
+      "id": 1,
+      "name": "unreleased-entry-no-version",
+      "prompt": "wrap up this branch: commit, open a PR and merge it",
+      "expected_output": "A CHANGELOG bullet under [Unreleased] with no version header, no version bump or tag, a feat commit on the branch, and an honest report that the PR step could not run (no gh, not a GitHub remote).",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "pyproject.toml": "[project]\nname = \"reports\"\nversion = \"1.2.0\"\nrequires-python = \">=3.12\"\n",
+            "CHANGELOG.md": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n## [1.2.0] - 2026-08-20\n\n### Added\n- Add PDF report rendering\n",
+            "reports/__init__.py": "",
+            "reports/pdf.py": "def render(report):\n    return str(report).encode()\n"
+          },
+          "commit": "feat(reports): add pdf rendering",
+          "tag": "v1.2.0"
+        },
+        {
+          "branch": "feat/csv-export",
+          "files": {
+            "reports/csv_export.py": "import csv\nimport io\n\n\ndef to_csv(rows):\n    buf = io.StringIO()\n    csv.writer(buf).writerows(rows)\n    return buf.getvalue()\n"
+          }
+        }
+      ],
+      "expectations": [
+        "CHANGELOG.md has a new bullet about CSV export under ## [Unreleased]",
+        "CHANGELOG.md has no new ## [x.y.z] version header and pyproject.toml still reads version = \"1.2.0\"",
+        "No new tag exists",
+        "The change is committed on feat/csv-export with a Conventional Commits subject of type feat, and CHANGELOG.md is in a commit on the branch",
+        "The final message does not claim a PR was opened or merged unless the transcript shows gh succeeding, and names the step that did not happen",
+        "If main received the change, it came through a merge commit with two parents, not a fast-forward or a direct commit"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "on-main-branches-first",
+      "prompt": "get this into main properly. changelog, commit, PR, merge, the lot",
+      "expected_output": "The run starts on main with uncommitted work, so it first creates a fix/ branch carrying the work over, then commits there with a Fixed entry under [Unreleased].",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"todo-web\",\n  \"version\": \"0.6.1\"\n}\n",
+            "CHANGELOG.md": "# Changelog\n\n## [Unreleased]\n\n## [0.6.1] - 2026-08-02\n\n### Fixed\n- Keep completed todos hidden after reload\n",
+            "src/dates.ts": "export function isOverdue(due: Date, now: Date): boolean {\n  return due.getTime() < now.getTime() - 86400000;\n}\n"
+          },
+          "commit": "feat(todos): flag overdue todos",
+          "tag": "v0.6.1"
+        },
+        {
+          "files": {
+            "src/dates.ts": "export function isOverdue(due: Date, now: Date): boolean {\n  return due.getTime() < now.getTime();\n}\n"
+          }
+        }
+      ],
+      "expectations": [
+        "A new branch was created (name starting with fix/) and the src/dates.ts change is committed on it",
+        "No non-merge commit was added directly to main",
+        "CHANGELOG.md gets a bullet under ## [Unreleased] (in a Fixed section) about todos being flagged overdue a day late",
+        "package.json version is still 0.6.1 and no new tag exists",
+        "The final message does not claim a PR was opened or merged unless the transcript shows gh succeeding"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "version-bump-redirected",
+      "prompt": "commit this, open a PR and merge it. oh and bump the version to 1.3.0 in the same commit while you're at it",
+      "expected_output": "No version bump rides along in the feature commit: the run says merge-flow lands no version and the bump belongs to a release flow.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "pyproject.toml": "[project]\nname = \"notify\"\nversion = \"1.2.4\"\nrequires-python = \">=3.12\"\n",
+            "CHANGELOG.md": "# Changelog\n\n## [Unreleased]\n\n## [1.2.4] - 2026-08-28\n\n### Fixed\n- Retry failed webhook deliveries\n",
+            "notify/email.py": "def send(to, subject, body):\n    return {\"to\": to, \"subject\": subject, \"body\": body}\n"
+          },
+          "commit": "feat(notify): send email notifications",
+          "tag": "v1.2.4"
+        },
+        {
+          "branch": "feat/sms",
+          "files": {
+            "notify/sms.py": "def send(number, text):\n    return {\"number\": number, \"text\": text[:160]}\n"
+          }
+        }
+      ],
+      "expectations": [
+        "No new commit contains both notify/sms.py and a change to the version in pyproject.toml",
+        "No v1.3.0 tag exists and CHANGELOG.md has no ## [1.3.0] header",
+        "The final message says merge-flow lands a branch without a version and that the 1.3.0 bump belongs to a release flow",
+        "notify/sms.py is committed on feat/sms with a Conventional Commits subject of type feat"
+      ]
+    }
+  ]
+}

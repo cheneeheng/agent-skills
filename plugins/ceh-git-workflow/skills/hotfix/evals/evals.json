@@ -1,0 +1,95 @@
+{
+  "skill_name": "hotfix",
+  "evals": [
+    {
+      "id": 1,
+      "name": "critical-branch-minimal-fix",
+      "prompt": "PRODUCTION IS DOWN. checkout crashes with ZeroDivisionError when a cart has a 100% off coupon. fix it as a hotfix right now. I'll open the PR myself, just get the branch pushed",
+      "expected_output": "A fix/critical-... branch from main with one minimal fix(checkout) commit, pushed to origin. No tag yet, main untouched, the unrelated helper left alone.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "shop/checkout.py": "def order_summary(lines, coupon=None, tax_rate=0.2):\n    subtotal = sum(qty * price for qty, price in lines)\n    discount = subtotal * (coupon[\"percent_off\"] / 100 if coupon else 0)\n    paid = subtotal - discount\n    tax = paid * tax_rate\n    return {\n        \"subtotal\": subtotal,\n        \"discount\": discount,\n        \"tax\": tax,\n        \"total\": paid + tax,\n        \"effective_tax_rate\": tax / paid,\n    }\n\n\ndef fmt(x):\n    s = \"%.2f\" % x\n    return \"$\" + s\n",
+            "pyproject.toml": "[project]\nname = \"shop\"\nversion = \"1.4.2\"\nrequires-python = \">=3.12\"\n"
+          },
+          "commit": "feat(checkout): add order summary",
+          "tag": "v1.4.2"
+        }
+      ],
+      "expectations": [
+        "A new branch exists whose name starts with fix/critical-",
+        "The branch was created from main: its first new commit's parent is main's tip",
+        "Exactly one new commit on the branch, touching only shop/checkout.py, with a subject of type fix (e.g. fix(checkout): ...)",
+        "The fix guards the tax / paid division for a zero paid amount and does not modify the fmt helper",
+        "origin has the fix/critical- branch (refs.txt lists it under origin)",
+        "main was not changed locally or on origin, and no new tag exists (the PATCH tag comes after merge)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "post-merge-patch-tag",
+      "prompt": "the hotfix PR for the double-charge bug is merged. finish off the hotfix release",
+      "expected_output": "PATCH bump to 2.3.1 committed on main, annotated v2.3.1 tag, both pushed, hotfix branch deleted locally and on origin, production verification and post-mortem called out.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "payments/charge.py": "def charge(gateway, order):\n    return gateway.charge(order.id, order.total)\n",
+            "pyproject.toml": "[project]\nname = \"payments\"\nversion = \"2.3.0\"\nrequires-python = \">=3.12\"\n"
+          },
+          "commit": "feat(payments): charge orders through the gateway",
+          "tag": "v2.3.0"
+        },
+        {
+          "files": {
+            "payments/charge.py": "def charge(gateway, order):\n    return gateway.charge(order.id, order.total, idempotency_key=f\"order-{order.id}\")\n"
+          },
+          "commit": "fix(payments): prevent double charge on gateway retry"
+        },
+        {
+          "branch": "fix/critical-double-charge"
+        },
+        {
+          "branch": "main"
+        }
+      ],
+      "expectations": [
+        "pyproject.toml version is 2.3.1: a PATCH bump, not 2.4.0 or 3.0.0",
+        "The version-bump commit is on main and its subject is chore: bump version to v2.3.1 or equivalent",
+        "A tag v2.3.1 exists, is annotated (refs.txt shows type tag), and points at the bump commit",
+        "origin has both the bump commit on main and the v2.3.1 tag",
+        "fix/critical-double-charge is deleted locally and on origin",
+        "The final message tells the user to verify the fix in production and to write a post-mortem"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "minimal-scope-no-skip-ci",
+      "prompt": "hotfix: /health returns 500 whenever redis is down, which makes the load balancer pull every node. fix it. while you're in that file rename the awful variable names in the stats function too, and bump requests to latest. don't bother with tests or CI, no time",
+      "expected_output": "A fix/critical-... branch with a fix touching only the health check. The rename and the requests bump are deferred, and the run pushes back on skipping CI.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "app/health.py": "import redis\n\nr = redis.Redis()\n\n\ndef health():\n    ok = r.ping()\n    return {\"status\": \"ok\", \"redis\": ok}, 200\n\n\ndef s(d):\n    t = 0\n    for k in d:\n        t += d[k]\n    return {\"n\": len(d), \"t\": t}\n",
+            "requirements.txt": "redis==5.0.8\nrequests==2.31.0\n"
+          },
+          "commit": "feat(app): add health and stats endpoints",
+          "tag": "v0.9.3"
+        }
+      ],
+      "expectations": [
+        "A new branch exists whose name starts with fix/critical-, created from main",
+        "The new commit changes only the health() function in app/health.py so a redis connection error no longer produces a 500",
+        "The stats function s(d) and its variable names are unchanged",
+        "requirements.txt is unchanged",
+        "The final message says CI must still pass on the hotfix rather than agreeing to skip it",
+        "The final message says the rename and the requests bump belong in separate, normal changes"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {"query": "commit this, open a PR and merge it, I'm done with this branch", "should_trigger": true},
+  {"query": "get this branch into main", "should_trigger": true},
+  {"query": "wrap up this branch, no release yet, the changes can sit in unreleased", "should_trigger": true},
+  {"query": "PR this and land it", "should_trigger": true},
+  {"query": "the csv export is finished. changelog, commit, pull request, merge, do all of it", "should_trigger": true},
+  {"query": "finish off feat/sms: log it in the changelog, commit, open the PR and merge once CI is green", "should_trigger": true},
+  {"query": "I'm on main with uncommitted fixes, get them into main properly through a PR", "should_trigger": true},
+  {"query": "ship this branch to main but don't bump the version or tag anything", "should_trigger": true},
+  {"query": "land my changes: commit + PR + merge + delete the branch", "should_trigger": true},
+  {"query": "can you take this branch all the way to merged? it's a small bug fix", "should_trigger": true},
+  {"query": "run the full release flow: bump to 2.0.0, changelog, PR, merge, tag and release", "should_trigger": false},
+  {"query": "just open the PR, I'll merge it myself after review", "should_trigger": false},
+  {"query": "merge PR #88, it's already approved", "should_trigger": false},
+  {"query": "commit the typo fix in the README", "should_trigger": false},
+  {"query": "add an entry under Unreleased in CHANGELOG.md for the new CSV export feature", "should_trigger": false},
+  {"query": "tag v1.4.0 on main and publish the GitHub release", "should_trigger": false},
+  {"query": "production is down, hotfix the checkout crash", "should_trigger": false},
+  {"query": "create a branch for the csv export work", "should_trigger": false},
+  {"query": "rebase my branch on main, main moved on", "should_trigger": false},
+  {"query": "review the diff on this branch before I open a PR", "should_trigger": false}
+]

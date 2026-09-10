@@ -1,0 +1,85 @@
+{
+  "skill_name": "dependency-management",
+  "evals": [
+    {
+      "id": 1,
+      "name": "lockfile-with-manifest",
+      "prompt": "commit the zod bump",
+      "expected_output": "No commit of package.json without bun.lock: the run notices the lockfile still resolves the old zod and asks for it to be regenerated and committed together.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"shop-api\",\n  \"version\": \"0.4.0\",\n  \"dependencies\": {\n    \"hono\": \"4.6.3\",\n    \"zod\": \"3.22.4\"\n  },\n  \"devDependencies\": {\n    \"vitest\": \"^2.1.4\"\n  }\n}\n",
+            "bun.lock": "{\n  \"lockfileVersion\": 1,\n  \"workspaces\": {\n    \"\": {\n      \"name\": \"shop-api\",\n      \"dependencies\": {\n        \"hono\": \"4.6.3\",\n        \"zod\": \"3.22.4\"\n      },\n      \"devDependencies\": {\n        \"vitest\": \"^2.1.4\"\n      }\n    }\n  },\n  \"packages\": {\n    \"hono\": [\"hono@4.6.3\", \"\", {}, \"sha512-hono463\"],\n    \"vitest\": [\"vitest@2.1.4\", \"\", {}, \"sha512-vitest214\"],\n    \"zod\": [\"zod@3.22.4\", \"\", {}, \"sha512-zod3224\"]\n  }\n}\n",
+            "src/index.ts": "import { Hono } from \"hono\";\n\nexport const app = new Hono();\n"
+          },
+          "commit": "feat: scaffold shop api"
+        },
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"shop-api\",\n  \"version\": \"0.4.0\",\n  \"dependencies\": {\n    \"hono\": \"4.6.3\",\n    \"zod\": \"3.23.8\"\n  },\n  \"devDependencies\": {\n    \"vitest\": \"^2.1.4\"\n  }\n}\n"
+          }
+        }
+      ],
+      "expectations": [
+        "No new commit changes package.json without also changing bun.lock",
+        "The final message points out that bun.lock still resolves zod@3.22.4 and was not updated",
+        "The final message tells the user to regenerate the lockfile (bun install or bun update zod) and commit it in the same commit as package.json",
+        "The run does not hand-edit bun.lock to fake the new resolution"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "pinning-policy",
+      "prompt": "our package.json pins are a mess. fix them up to match what bun.lock actually resolved",
+      "expected_output": "Runtime deps pinned exact, dev deps as caret ranges, no * or latest left.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"shop-api\",\n  \"version\": \"0.4.0\",\n  \"dependencies\": {\n    \"hono\": \"latest\",\n    \"zod\": \"*\"\n  },\n  \"devDependencies\": {\n    \"@types/bun\": \"*\",\n    \"vitest\": \"latest\"\n  }\n}\n",
+            "bun.lock": "{\n  \"lockfileVersion\": 1,\n  \"workspaces\": {\n    \"\": {\n      \"name\": \"shop-api\",\n      \"dependencies\": {\n        \"hono\": \"latest\",\n        \"zod\": \"*\"\n      },\n      \"devDependencies\": {\n        \"@types/bun\": \"*\",\n        \"vitest\": \"latest\"\n      }\n    }\n  },\n  \"packages\": {\n    \"@types/bun\": [\"@types/bun@1.1.13\", \"\", {}, \"sha512-typesbun1113\"],\n    \"hono\": [\"hono@4.6.3\", \"\", {}, \"sha512-hono463\"],\n    \"vitest\": [\"vitest@2.1.4\", \"\", {}, \"sha512-vitest214\"],\n    \"zod\": [\"zod@3.23.8\", \"\", {}, \"sha512-zod3238\"]\n  }\n}\n",
+            "src/index.ts": "import { Hono } from \"hono\";\n\nexport const app = new Hono();\n"
+          },
+          "commit": "feat: scaffold shop api"
+        }
+      ],
+      "expectations": [
+        "package.json pins the runtime dependencies exactly: \"hono\": \"4.6.3\" and \"zod\": \"3.23.8\", with no ^ or ~",
+        "package.json pins the dev dependencies at minor level with a caret: \"@types/bun\": \"^1.1.13\" and \"vitest\": \"^2.1.4\"",
+        "No * or latest remains anywhere in package.json",
+        "The final message says bun.lock must be regenerated (bun install) and committed together with package.json"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "major-upgrade-not-bundled",
+      "prompt": "I'm adding the CSV export endpoint on this branch. while I'm at it bump pydantic to 2.9.2 in pyproject.toml and commit everything together",
+      "expected_output": "The pydantic 1->2 bump is kept out of the feature commit: a dedicated PR, an ARCHITECTURE.md Key Decisions entry, and a full test run are called for.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "pyproject.toml": "[project]\nname = \"orders\"\nversion = \"1.8.0\"\nrequires-python = \">=3.12\"\ndependencies = [\n    \"fastapi==0.99.1\",\n    \"pydantic==1.10.13\",\n]\n",
+            "ARCHITECTURE.md": "# Architecture\n\n## Key Decisions\n\n### KD-1: FastAPI with pydantic v1\n\nPinned to pydantic 1.10 while the order models use v1 validators.\n",
+            "orders/models.py": "from pydantic import BaseModel, validator\n\n\nclass Order(BaseModel):\n    id: int\n    total: float\n\n    @validator(\"total\")\n    def non_negative(cls, v):\n        if v < 0:\n            raise ValueError(\"total must be >= 0\")\n        return v\n"
+          },
+          "commit": "feat(orders): add order model"
+        },
+        {
+          "branch": "feat/csv-export",
+          "files": {
+            "orders/export.py": "import csv\nimport io\n\n\ndef orders_to_csv(orders):\n    buf = io.StringIO()\n    writer = csv.writer(buf)\n    writer.writerow([\"id\", \"total\"])\n    for o in orders:\n        writer.writerow([o.id, o.total])\n    return buf.getvalue()\n"
+          }
+        }
+      ],
+      "expectations": [
+        "No single new commit contains both the pydantic version change and orders/export.py",
+        "The final message says a major-version upgrade gets its own dedicated PR rather than riding along with feature work",
+        "The final message calls for, or the run drafts, an ARCHITECTURE.md Key Decisions entry covering the pydantic 2 upgrade and its breaking changes (e.g. v1 validators)",
+        "The final message says the full test suite must pass after the upgrade"
+      ]
+    }
+  ]
+}
