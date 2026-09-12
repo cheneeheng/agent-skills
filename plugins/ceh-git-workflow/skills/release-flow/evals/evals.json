@@ -1,0 +1,109 @@
+{
+  "skill_name": "release-flow",
+  "evals": [
+    {
+      "id": 1,
+      "name": "release-branch-and-commit-body",
+      "prompt": "run the release flow",
+      "expected_output": "chore/release-v0.9.0 from main with the bump and a changelog section, committed as chore: release v0.9.0 with a full body. No tag while the PR/merge step cannot complete (no gh).",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "pyproject.toml": "[project]\nname = \"catalog\"\nversion = \"0.8.1\"\nrequires-python = \">=3.12\"\n",
+            "CHANGELOG.md": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n## [0.8.1] - 2026-08-10\n\n### Fixed\n- Stop duplicate products in category pages\n",
+            "catalog/__init__.py": ""
+          },
+          "commit": "fix(catalog): stop duplicate products in category pages",
+          "tag": "v0.8.1"
+        },
+        {
+          "files": {
+            "catalog/search.py": "import difflib\n\n\ndef fuzzy(term, names):\n    return difflib.get_close_matches(term, names, n=5)\n"
+          },
+          "commit": "feat(search): add fuzzy matching for product names"
+        },
+        {
+          "files": {
+            "catalog/cart.py": "def remove_coupon(cart):\n    cart.coupon = None\n    return cart\n"
+          },
+          "commit": "fix(cart): keep quantities when a coupon is removed"
+        }
+      ],
+      "expectations": [
+        "A branch chore/release-v0.9.0 exists and was created from main's tip",
+        "pyproject.toml on that branch reads version = \"0.9.0\": MINOR because of the feat commit",
+        "CHANGELOG.md on that branch has a ## [0.9.0] - YYYY-MM-DD section with the fuzzy matching under Added and the cart fix under Fixed",
+        "The release commit's subject is chore: release v0.9.0 and its body names what ships, the bump level with its reason, and which manifests moved",
+        "No v0.9.0 tag exists, because the release commit never reached main through a merge",
+        "The final message does not claim a PR was opened, merged, or released, and names where the flow stopped"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "patch-every-manifest",
+      "prompt": "do the full release, it's just a patch",
+      "expected_output": "1.2.4 in package.json, plugin.json, and marketplace.json, all in one release commit on chore/release-v1.2.4.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"lint-kit\",\n  \"version\": \"1.2.3\"\n}\n",
+            ".claude-plugin/plugin.json": "{\n  \"name\": \"lint-kit\",\n  \"version\": \"1.2.3\",\n  \"description\": \"Lint presets\"\n}\n",
+            ".claude-plugin/marketplace.json": "{\n  \"name\": \"lint-kit-marketplace\",\n  \"plugins\": [\n    {\n      \"name\": \"lint-kit\",\n      \"source\": \"./\",\n      \"version\": \"1.2.3\",\n      \"description\": \"Lint presets\"\n    }\n  ]\n}\n",
+            "CHANGELOG.md": "# Changelog\n\n## [Unreleased]\n\n## [1.2.3] - 2026-07-30\n\n### Fixed\n- Ignore generated files\n",
+            "presets/base.json": "{\n  \"rules\": {\"no-console\": \"warn\"}\n}\n"
+          },
+          "commit": "fix(presets): ignore generated files",
+          "tag": "v1.2.3"
+        },
+        {
+          "files": {
+            "presets/base.json": "{\n  \"rules\": {\"no-console\": \"warn\", \"eqeqeq\": \"error\"}\n}\n"
+          },
+          "commit": "fix(presets): enforce strict equality"
+        }
+      ],
+      "expectations": [
+        "A branch chore/release-v1.2.4 exists",
+        "package.json, .claude-plugin/plugin.json, and the lint-kit entry in .claude-plugin/marketplace.json all read 1.2.4 on that branch",
+        "All three manifest changes and the changelog section land in one commit with the subject chore: release v1.2.4",
+        "CHANGELOG.md on that branch has a ## [1.2.4] section with the strict-equality fix under Fixed",
+        "No v1.2.4 tag exists unless main contains the release commit through a merge"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "red-gate-no-tag",
+      "prompt": "ship this release end to end. heads up, CI on main is red on the lint job right now, just push through it",
+      "expected_output": "No merge, tag, or release on a red gate: the run surfaces the failing lint job and stops rather than tagging around it.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "pyproject.toml": "[project]\nname = \"inventory\"\nversion = \"4.2.0\"\nrequires-python = \">=3.12\"\n",
+            "CHANGELOG.md": "# Changelog\n\n## [Unreleased]\n\n## [4.2.0] - 2026-08-25\n\n### Added\n- Add stock alerts\n",
+            "inventory/stock.py": "def low(items, threshold=5):\n    return [i for i in items if i.qty < threshold]\n"
+          },
+          "commit": "feat(stock): add stock alerts",
+          "tag": "v4.2.0"
+        },
+        {
+          "files": {
+            "inventory/stock.py": "def low(items, threshold=5):\n    return [i for i in items if i.qty <= threshold]\n"
+          },
+          "commit": "fix(stock): alert at the threshold, not just below it"
+        }
+      ],
+      "expectations": [
+        "No new tag exists",
+        "main has no new commits locally or on origin",
+        "The final message says it will not merge or tag while CI is red and names the failing lint job as what must go green first",
+        "The final message does not claim a release was published"
+      ]
+    }
+  ]
+}

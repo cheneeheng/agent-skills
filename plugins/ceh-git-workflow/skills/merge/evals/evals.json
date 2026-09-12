@@ -1,0 +1,121 @@
+{
+  "skill_name": "merge",
+  "evals": [
+    {
+      "id": 1,
+      "name": "local-merge-no-ff",
+      "prompt": "merge feat/invoice-pdf into main and clean up. no PR for this one, it's my solo repo",
+      "expected_output": "A --no-ff merge commit on main with a Conventional Commits subject (main had not moved, so a default merge would fast-forward), main pushed, branch deleted locally and on origin.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "billing/invoice.py": "def total(lines):\n    return sum(qty * price for qty, price in lines)\n"
+          },
+          "commit": "feat(billing): add invoice totals"
+        },
+        {
+          "branch": "feat/invoice-pdf",
+          "files": {
+            "billing/pdf.py": "def render(invoice):\n    return f\"INVOICE {invoice['id']}\\nTOTAL {invoice['total']:.2f}\\n\".encode()\n"
+          },
+          "commit": "feat(billing): render invoices as pdf bytes"
+        },
+        {
+          "files": {
+            "billing/pdf.py": "def render(invoice):\n    lines = [f\"INVOICE {invoice['id']}\", f\"TOTAL {invoice['total']:.2f}\"]\n    return \"\\n\".join(lines).encode()\n"
+          },
+          "commit": "refactor(billing): build pdf lines from a list"
+        }
+      ],
+      "expectations": [
+        "main's tip is a merge commit with two parents (commits.txt shows two hashes on its parents line), not a fast-forward",
+        "The merge commit subject is not git's default \"Merge branch 'feat/invoice-pdf'\": it reuses a Conventional Commits subject, e.g. feat(billing): ...",
+        "origin's main points at the merge commit",
+        "feat/invoice-pdf is deleted locally and on origin",
+        "HEAD is on main at the end of the run",
+        "The transcript does not use git branch -D (capital D)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "unclean-history-gate",
+      "prompt": "merge feat/export into main",
+      "expected_output": "The wip/debug/typo commits never reach main: the history is cleaned into Conventional Commits first, or the merge is withheld with the gate named.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "reports/export.py": "def export(rows):\n    raise NotImplementedError\n"
+          },
+          "commit": "feat(reports): stub export"
+        },
+        {
+          "branch": "feat/export",
+          "files": {
+            "reports/export.py": "import csv\nimport io\n\n\ndef export(rows):\n    buf = io.StringIO()\n    csv.writer(buf).writerows(rows)\n    return buf.getvalue()\n"
+          },
+          "commit": "feat(reports): add csv export"
+        },
+        {
+          "files": {
+            "reports/export.py": "import csv\nimport io\n\n\ndef export(rows):\n    print(\"DEBUG rows\", rows)\n    buf = io.StringIO()\n    csv.writer(buf).writerows(rows)\n    return buf.getvalue()\n"
+          },
+          "commit": "wip"
+        },
+        {
+          "files": {
+            "reports/export.py": "import csv\nimport io\n\n\ndef export(rows):\n    \"\"\"Serialise rows as CSV text.\"\"\"\n    print(\"DEBUG rows\", rows)\n    buf = io.StringIO()\n    csv.writer(buf).writerows(rows)\n    return buf.getvalue()\n"
+          },
+          "commit": "fix typo lol"
+        }
+      ],
+      "expectations": [
+        "No commit whose subject is wip or fix typo lol is reachable from main at the end of the run",
+        "Either the branch history was rewritten into Conventional Commits before any merge, or main is unchanged and the final message names the unclean history as the reason the merge was not done",
+        "The final message or the cleaned history deals with the leftover print(\"DEBUG rows\", ...) statement rather than landing it silently",
+        "If a merge happened, main's tip is a merge commit with two parents, not a fast-forward"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "conflict-resolved-by-rebase",
+      "prompt": "merge feat/timeout-config into main. if they clash keep the branch's timeout value",
+      "expected_output": "The conflict is resolved by rebasing the branch onto main, not inside the merge commit, then a --no-ff merge. config.py ends with TIMEOUT = 60 and main's RETRIES line.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "app/config.py": "TIMEOUT = 30\n"
+          },
+          "commit": "feat(config): add request timeout"
+        },
+        {
+          "branch": "feat/timeout-config",
+          "files": {
+            "app/config.py": "TIMEOUT = 60\n"
+          },
+          "commit": "feat(config): raise request timeout to 60s"
+        },
+        {
+          "branch": "main",
+          "files": {
+            "app/config.py": "TIMEOUT = 45\nRETRIES = 3\n"
+          },
+          "commit": "feat(config): add retries"
+        },
+        {
+          "branch": "feat/timeout-config"
+        }
+      ],
+      "expectations": [
+        "The transcript resolves the conflict during git rebase onto main, not during git merge",
+        "The rebased branch commit's parent is main's feat(config): add retries commit",
+        "main's tip is a merge commit with two parents, not a fast-forward",
+        "app/config.py on main contains TIMEOUT = 60 and RETRIES = 3 and no conflict markers",
+        "feat/timeout-config is deleted locally and HEAD is on main at the end of the run"
+      ]
+    }
+  ]
+}

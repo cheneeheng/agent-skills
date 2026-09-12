@@ -1,0 +1,22 @@
+[
+  {"query": "review PR #88 and leave comments, I'm mostly worried about the raw SQL in the repository layer", "should_trigger": true},
+  {"query": "can you look over my teammate's branch feat/bulk-cancel and tell me if I should approve it", "should_trigger": true},
+  {"query": "I left a review comment saying 'maybe extract this helper?' and the author thinks it blocks the merge. how should I have worded it", "should_trigger": true},
+  {"query": "give me a code review of the diff between main and feat/order-pagination", "should_trigger": true},
+  {"query": "the reviewer marked 3 things as blocking on my PR and I disagree with one of them, how do I respond", "should_trigger": true},
+  {"query": "is it ok to approve a PR that still has a couple of tiny naming nits?", "should_trigger": true},
+  {"query": "what should I look at first when reviewing a 400 line PR, I never know where to start", "should_trigger": true},
+  {"query": "write up review feedback for PR #12, it adds the webhook signature check", "should_trigger": true},
+  {"query": "do a review pass on the last commit on this branch as if it were a PR", "should_trigger": true},
+  {"query": "someone asked me to review their migration PR, should I request changes if there are no tests for the down migration?", "should_trigger": true},
+  {"query": "open a PR for my branch with a good description", "should_trigger": false},
+  {"query": "merge PR #88 now that it's approved", "should_trigger": false},
+  {"query": "fix the SQL injection in search_orders that the reviewer flagged", "should_trigger": false},
+  {"query": "refactor this repository class, it's 900 lines and does everything", "should_trigger": false},
+  {"query": "run the linter and fix whatever it complains about", "should_trigger": false},
+  {"query": "explain what the auth middleware in this repo does, I'm new here", "should_trigger": false},
+  {"query": "write a commit message for the pagination fix", "should_trigger": false},
+  {"query": "can you make my diff on this branch smaller before I ask for review?", "should_trigger": false},
+  {"query": "set up a GitHub Action that runs pytest on every pull request", "should_trigger": false},
+  {"query": "audit our test suite, I think half the tests don't assert anything", "should_trigger": false}
+]

@@ -75,9 +75,10 @@ plugins/                      # All plugins live here — flat, one directory pe
         └── <skill-name>/
             ├── SKILL.md               # Required — frontmatter + full body, all content inline
             ├── references/            # Sparingly — see Skills below
+            ├── evals/                 # Optional — evals.json in skill-creator format plus a `setup` fixture field, run by tools/skill-evals; `validate.py` ignores it
             └── tests/                 # Rare — an evaluation harness for skills whose value is measurable (only `delegate-bulk-reads`); `validate.py` ignores it
 tools/                         # Standalone meta-tooling, not itself a plugin/skill/agent
-└── <tool-name>/               # validate-plugins (the CI gate), skills-sync — own README.md, no plugin.json
+└── <tool-name>/               # validate-plugins (the CI gate), skills-sync, skill-evals (skill-creator evals, Windows-safe and plugin-isolated) — own README.md, no plugin.json
 ```
 
 ## Plugins
@@ -182,8 +183,9 @@ layered; `validate.py` checks acyclicity directly rather than relying on the rul
 Where a dependency exists, the referencing skill body calls the target **explicitly** —
 `Invoke the Skill tool with skill="ceh-testing:design-test-cases"` — instead of naming a trigger
 phrase and hoping the description matches. `validate.py` rejects such a call if the target does not
-resolve, is not in a declared dependency, or sets `disable-model-invocation: true` (6 of 77 skills
-do, and the resulting failed call is silent).
+resolve, is not in a declared dependency, or sets `disable-model-invocation: true` (list them with
+`grep -l 'disable-model-invocation: true' plugins/*/skills/*/SKILL.md`, and the resulting failed
+call is silent).
 
 Do not convert every backtick-quoted skill name into an invocation: most references are advisory,
 and a sweep would pull a 6-plugin closure into a single install.
@@ -225,6 +227,10 @@ grep '"name"' plugins/ceh-*/.claude-plugin/plugin.json .claude-plugin/marketplac
 # Validate the whole repo — CI runs this too
 python tools/validate-plugins/validate.py
 ```
+
+`validate.py` also fails on any `ceh-<plugin>:<name>` mention, prose included, that no longer
+resolves, so renaming a skill means grepping for its old name. It shellchecks `scripts/*.sh` only
+when `shellcheck` is installed. CI has it, so a local green run on Windows can still fail CI.
 
 ## Versioning
 

@@ -1,0 +1,22 @@
+[
+  {"query": "what should I name the branch for fixing the login redirect bug?", "should_trigger": true},
+  {"query": "start a new branch off main for the stripe webhook work", "should_trigger": true},
+  {"query": "I'm going to add tests for the rate limiter, no source changes. which prefix do I use for the branch?", "should_trigger": true},
+  {"query": "is 'Chris-Fixes_Final2' an ok branch name? my lead says no but won't say why", "should_trigger": true},
+  {"query": "can I branch my new feature off feat/checkout-v2 since it needs some of that code? it's not merged yet", "should_trigger": true},
+  {"query": "main moved a lot since I branched, should I merge main into my branch or rebase?", "should_trigger": true},
+  {"query": "git checkout -b something for the dependency bumps, pick a sensible name", "should_trigger": true},
+  {"query": "I rebased my feature branch locally, how do I push it without clobbering anything if someone else pushed?", "should_trigger": true},
+  {"query": "create a branch for documenting the onboarding flow and switch to it", "should_trigger": true},
+  {"query": "I'm about to start pulling the auth middleware out into its own module, no behavior change. set me up a branch", "should_trigger": true},
+  {"query": "commit what I have on this branch with a proper message", "should_trigger": false},
+  {"query": "merge feat/invoice-pdf into main and delete it afterwards", "should_trigger": false},
+  {"query": "open a PR for my branch, it adds the csv export", "should_trigger": false},
+  {"query": "prod is down, checkout throws on 100% discount coupons, do the hotfix now", "should_trigger": false},
+  {"query": "list all the branches that have already been merged into main so I can clean them up", "should_trigger": false},
+  {"query": "why does git say 'detached HEAD' after I checked out that tag?", "should_trigger": false},
+  {"query": "my branch has 14 wip commits, squash them into something reviewable", "should_trigger": false},
+  {"query": "cut the 2.4.0 release from main", "should_trigger": false},
+  {"query": "set up branch protection on main so nobody can push directly", "should_trigger": false},
+  {"query": "cherry-pick the null-check fix from feat/payments onto main", "should_trigger": false}
+]

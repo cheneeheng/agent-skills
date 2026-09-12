@@ -1,0 +1,102 @@
+{
+  "skill_name": "open-pr",
+  "evals": [
+    {
+      "id": 1,
+      "name": "pr-description-template",
+      "prompt": "there's no GitHub remote set up yet, so don't push. write the PR for this branch into PR.md instead: title on the first line, then the description. it closes #342. I ran pytest locally and it's green, that's all I ran",
+      "expected_output": "PR.md holds a Conventional Commits title and a What/Why/How/Testing/Checklist body with the root cause, Closes #342, and only pytest claimed as tested.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "orders/cancel.py": "def cancel(order):\n    order.status = \"cancelled\"\n    return order\n",
+            "tests/test_cancel.py": "from orders.cancel import cancel\n\n\ndef test_cancel_pending(order):\n    assert cancel(order).status == \"cancelled\"\n"
+          },
+          "commit": "feat(orders): add cancel"
+        },
+        {
+          "branch": "fix/cancel-shipped-orders",
+          "files": {
+            "orders/cancel.py": "def cancel(order):\n    if order.status == \"shipped\":\n        raise ValueError(\"cannot cancel a shipped order\")\n    order.status = \"cancelled\"\n    return order\n"
+          },
+          "commit": "fix(orders): reject cancelling shipped orders"
+        },
+        {
+          "files": {
+            "tests/test_cancel.py": "import pytest\n\nfrom orders.cancel import cancel\n\n\ndef test_cancel_pending(order):\n    assert cancel(order).status == \"cancelled\"\n\n\ndef test_cancel_shipped_raises(shipped_order):\n    with pytest.raises(ValueError):\n        cancel(shipped_order)\n"
+          },
+          "commit": "test(orders): cover cancelling a shipped order"
+        }
+      ],
+      "expectations": [
+        "The first line of PR.md is a Conventional Commits title of type fix: imperative, lowercase after the prefix, no trailing period, at most 72 characters",
+        "PR.md has ## What, ## Why, ## How, ## Testing, and ## Checklist sections in that order",
+        "The Why section contains Closes #342",
+        "The body states the root cause: cancel() did not check whether the order had already shipped",
+        "The Testing section names pytest and the added shipped-order test, and does not claim any other check (mypy, lint, integration tests) was run",
+        "The run did not push and does not claim a PR was created"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "migration-split",
+      "prompt": "open a PR for this branch",
+      "expected_output": "The migration and the app changes are flagged for separate PRs, and the run reports that it could not push or open the PR (no remote, no gh).",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "migrations/0006_create_orders.py": "def upgrade(op):\n    op.create_table(\"orders\", (\"id\", \"integer\"), (\"total\", \"numeric\"))\n\n\ndef downgrade(op):\n    op.drop_table(\"orders\")\n",
+            "orders/service.py": "def create_order(db, total):\n    return db.insert(\"orders\", total=total)\n",
+            "orders/api.py": "from orders.service import create_order\n\n\ndef post_order(db, payload):\n    return create_order(db, payload[\"total\"])\n"
+          },
+          "commit": "feat(orders): create orders"
+        },
+        {
+          "branch": "feat/order-notes",
+          "files": {
+            "migrations/0007_add_order_notes.py": "def upgrade(op):\n    op.add_column(\"orders\", \"notes\", \"text\", nullable=True)\n\n\ndef downgrade(op):\n    op.drop_column(\"orders\", \"notes\")\n",
+            "orders/service.py": "def create_order(db, total, notes=None):\n    return db.insert(\"orders\", total=total, notes=notes)\n",
+            "orders/api.py": "from orders.service import create_order\n\n\ndef post_order(db, payload):\n    return create_order(db, payload[\"total\"], payload.get(\"notes\"))\n"
+          },
+          "commit": "feat(orders): add notes to orders"
+        }
+      ],
+      "expectations": [
+        "The final message says the migration (migrations/0007_add_order_notes.py) belongs in its own PR, separate from the service and API changes",
+        "The final message proposes the split: migration PR first, then the app-change PR",
+        "The final message does not claim a PR was opened, and says why it could not be (no remote or gh unavailable)",
+        "No file other than a PR-body draft was changed"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "self-review-catches-leftovers",
+      "prompt": "open the PR for feat/discounts",
+      "expected_output": "The author self-review flags the debug print, the TODO with no ticket, and the commented-out code before the PR goes up.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "cart/pricing.py": "def price(lines):\n    return sum(qty * unit for qty, unit in lines)\n"
+          },
+          "commit": "feat(cart): add pricing"
+        },
+        {
+          "branch": "feat/discounts",
+          "files": {
+            "cart/pricing.py": "def price(lines, discount=None):\n    subtotal = sum(qty * unit for qty, unit in lines)\n    print(\"DEBUG subtotal\", subtotal)\n    # TODO: handle stacking discounts\n    if discount:\n        subtotal -= subtotal * discount\n    # old = sum(q * u for q, u in lines)\n    # return old\n    return round(subtotal, 2)\n"
+          },
+          "commit": "feat(cart): apply a percentage discount"
+        }
+      ],
+      "expectations": [
+        "The final message flags the print(\"DEBUG subtotal\", ...) debug statement",
+        "The final message flags the TODO as having no linked ticket",
+        "The final message flags the commented-out code",
+        "The final message does not claim a PR was opened"
+      ]
+    }
+  ]
+}

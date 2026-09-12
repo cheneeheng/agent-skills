@@ -1,0 +1,22 @@
+[
+  {"query": "add an entry under Unreleased in CHANGELOG.md for the new CSV export feature", "should_trigger": true},
+  {"query": "update the changelog for the next release", "should_trigger": true},
+  {"query": "generate a changelog for this project, we've never had one", "should_trigger": true},
+  {"query": "what changed since the last release? write it up in the changelog", "should_trigger": true},
+  {"query": "write release notes for 1.5.0 from the commits since v1.4.2", "should_trigger": true},
+  {"query": "log this under unreleased, we're not cutting a version yet", "should_trigger": true},
+  {"query": "our CHANGELOG.md has entries like 'Added stuff' and 'fixed bug', clean up the 2.1.0 section to the proper format", "should_trigger": true},
+  {"query": "document this release in CHANGELOG.md, it has a breaking API change", "should_trigger": true},
+  {"query": "which section of the changelog does a perf improvement go under?", "should_trigger": true},
+  {"query": "the compare links at the bottom of CHANGELOG.md are wrong since we added 3.0.0, fix the entry and the links", "should_trigger": true},
+  {"query": "tag v2.4.0 on main and publish the GitHub release", "should_trigger": false},
+  {"query": "run the full release flow for 1.3.0", "should_trigger": false},
+  {"query": "update the README with the new --dry-run flag", "should_trigger": false},
+  {"query": "summarize what we did in this session so the next agent can pick it up", "should_trigger": false},
+  {"query": "show me git log for the last week, one line each", "should_trigger": false},
+  {"query": "write a blog post announcing the 2.0 launch", "should_trigger": false},
+  {"query": "commit the changelog edit I just made", "should_trigger": false},
+  {"query": "bump the version in pyproject.toml to 1.4.0", "should_trigger": false},
+  {"query": "write a retrospective on the migration project, what went well and what didn't", "should_trigger": false},
+  {"query": "what does fastapi's changelog say changed in 0.115?", "should_trigger": false}
+]

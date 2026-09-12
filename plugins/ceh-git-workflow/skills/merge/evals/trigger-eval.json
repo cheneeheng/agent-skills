@@ -1,0 +1,22 @@
+[
+  {"query": "merge PR #88, CI is green and it has two approvals", "should_trigger": true},
+  {"query": "merge feat/invoice-pdf into main and delete the branch, no PR needed it's my solo project", "should_trigger": true},
+  {"query": "land #104 and clean up the branch afterwards", "should_trigger": true},
+  {"query": "should I squash or do a merge commit when I merge this PR?", "should_trigger": true},
+  {"query": "gh pr checks gives me HTTP 403 when I try to see if CI passed before merging, is the build red?", "should_trigger": true},
+  {"query": "queue PR #57 to merge itself once the checks pass", "should_trigger": true},
+  {"query": "my branch conflicts with main in settings.py, I want to merge it. how do I handle the conflict", "should_trigger": true},
+  {"query": "I merged the PR through the GitHub UI, now clean up my local branches and get me back on main", "should_trigger": true},
+  {"query": "merge it", "should_trigger": true},
+  {"query": "integrate feat/search-filters into main with a proper merge commit message, not the default one", "should_trigger": true},
+  {"query": "commit this, open a PR and merge it, I'm done with this branch", "should_trigger": false},
+  {"query": "open a pull request for feat/csv-export", "should_trigger": false},
+  {"query": "run the release flow for 2.1.0", "should_trigger": false},
+  {"query": "review PR #88 before I approve it", "should_trigger": false},
+  {"query": "resolve this rebase conflict in models.py, I'm in the middle of git rebase and it stopped", "should_trigger": false},
+  {"query": "combine these two pandas dataframes on customer_id", "should_trigger": false},
+  {"query": "tag the merge commit as v3.2.0 and publish the release", "should_trigger": false},
+  {"query": "my feature branch is behind main, just update it, don't merge anything yet", "should_trigger": false},
+  {"query": "git log shows a merge commit I don't understand, what did it bring in?", "should_trigger": false},
+  {"query": "undo the merge I just pushed to main, it broke the build", "should_trigger": false}
+]

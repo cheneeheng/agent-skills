@@ -5,6 +5,53 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.3.6] — 2026-09-12
+
+`ceh-git-workflow` had eleven skills and no way to tell whether any of them worked. skill-creator
+ships an eval loop that would answer that, but two things stop it running against this repo. Its
+runs are `Agent` subagents, which inherit every installed plugin, so the "without skill" arm can
+still load the skill it is supposed to be blind to — the baseline measures nothing. And its trigger
+eval calls `select.select()` on a subprocess pipe, which raises `WinError 10093` on Windows.
+
+`tools/skill-evals` fixes both. Each arm runs as `claude -p --setting-sources project` from a
+throwaway git repo, which drops user settings and with them every user-enabled plugin and hook, so
+the baseline is genuinely skill-free. A reader thread replaces `select()`. Both patches sit in a
+vendored copy of skill-creator's scripts, marked `# Patch:` and licensed Apache-2.0.
+
+Git skills need a repo to act on, not a blank directory, so eval definitions carry a `setup` field
+the upstream schema has no equivalent for: ordered steps that build a fixture repo — branches,
+files, commits, annotated tags — and leave the working tree in whatever state the prompt expects.
+`remote: true` adds a bare `origin` beside it so pushes, pulls and remote-branch deletion behave.
+Each run writes `commits.txt`, `status.txt` and `refs.txt` next to the transcript, which is what
+the grader reads instead of guessing from prose.
+
+All eleven `ceh-git-workflow` skills now carry `evals/evals.json` and `evals/trigger-eval.json`.
+Nothing is graded yet; the definitions and the harness are what this release ships.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.3.2 |
+
+### Added
+
+- **`tools/skill-evals`** — behavioral eval runner (`run_behavior.py`) plus a patched copy of
+  skill-creator's trigger-eval scripts. Windows-safe, and isolates runs from installed plugins.
+- **`ceh-git-workflow`** — `evals/` definitions for all eleven skills: `branch`, `code-review`,
+  `commit`, `dependency-management`, `hotfix`, `merge`, `merge-flow`, `open-pr`, `release`,
+  `release-flow`, `update-changelog`.
+
+### Changed
+
+- **`CLAUDE.md`** — documents the new `skills/<name>/evals/` directory and `tools/skill-evals`,
+  and records two `validate.py` behaviours that cost a session each: it fails on stale
+  `ceh-<plugin>:<name>` mentions in prose, and it shellchecks `scripts/*.sh` only where
+  `shellcheck` exists, so a green local run on Windows can still fail CI.
+- **`README.md`** — `skill-evals` added to the Tools table.
+
+---
+
 ## [6.3.5] — 2026-09-10
 
 `ceh-evaluation` measured skills carefully and then reported the result in a form only its author

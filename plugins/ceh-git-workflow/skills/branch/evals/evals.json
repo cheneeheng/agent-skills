@@ -1,0 +1,98 @@
+{
+  "skill_name": "branch",
+  "evals": [
+    {
+      "id": 1,
+      "name": "branch-from-main-not-current",
+      "prompt": "start a new branch for fixing the login redirect bug. after login it sends people to /home instead of the page they came from",
+      "expected_output": "A fix/ branch of 3-5 lowercase hyphenated words, created from main's tip even though the session starts on an unmerged feature branch.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "auth/login.py": "def after_login(request):\n    return redirect(\"/home\")\n",
+            "README.md": "# Portal\n"
+          },
+          "commit": "feat(auth): add login redirect"
+        },
+        {
+          "branch": "feat/csv-export",
+          "files": {
+            "export/csv.py": "import csv\n\n\ndef write_rows(fh, rows):\n    csv.writer(fh).writerows(rows)\n"
+          },
+          "commit": "feat(export): add csv writer"
+        }
+      ],
+      "expectations": [
+        "A new branch exists whose name starts with fix/",
+        "The part after fix/ is 3 to 5 lowercase words joined by hyphens",
+        "The new branch points at main's tip and does not contain the feat(export): add csv writer commit",
+        "HEAD is on the new branch at the end of the run",
+        "feat/csv-export still exists and still points at its original commit",
+        "No new commits were created"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "test-only-prefix",
+      "prompt": "I'm about to add the missing tests for the rate limiter, no changes to the limiter itself. make me a branch for it",
+      "expected_output": "A test/ branch (not feat/, chore/, or tests/) created from main.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "api/ratelimit.py": "import time\n\n\nclass RateLimiter:\n    def __init__(self, per_second):\n        self.per_second = per_second\n        self.last = 0.0\n\n    def allow(self):\n        now = time.monotonic()\n        if now - self.last >= 1 / self.per_second:\n            self.last = now\n            return True\n        return False\n",
+            "tests/__init__.py": ""
+          },
+          "commit": "feat(api): add rate limiter"
+        }
+      ],
+      "expectations": [
+        "A new branch exists whose name starts with test/, not feat/, chore/, or tests/",
+        "The part after test/ is 3 to 5 lowercase words joined by hyphens and mentions the rate limiter",
+        "The new branch was created from main and HEAD is on it at the end of the run",
+        "No new commits were created"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "rebase-onto-main",
+      "prompt": "main moved on since I branched feat/search-filters. bring my branch up to date with it",
+      "expected_output": "feat/search-filters rebased onto main (linear, no merge commit); any push of the rewritten branch uses --force-with-lease.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "search/query.py": "def build(term):\n    return {\"q\": term}\n"
+          },
+          "commit": "feat(search): add query builder"
+        },
+        {
+          "branch": "feat/search-filters",
+          "files": {
+            "search/filters.py": "def by_price(results, max_price):\n    return [r for r in results if r[\"price\"] <= max_price]\n"
+          },
+          "commit": "feat(search): add price filter"
+        },
+        {
+          "branch": "main",
+          "files": {
+            "search/query.py": "def build(term, limit=20):\n    return {\"q\": term, \"limit\": limit}\n"
+          },
+          "commit": "feat(search): add result limit"
+        },
+        {
+          "branch": "feat/search-filters"
+        }
+      ],
+      "expectations": [
+        "feat/search-filters now contains the feat(search): add result limit commit from main",
+        "The price-filter commit sits on top of main's tip: the branch history is linear with no merge commit",
+        "main was not changed: it still points at feat(search): add result limit",
+        "If the transcript pushes the rewritten branch, it uses --force-with-lease and never a bare --force or -f",
+        "HEAD is on feat/search-filters at the end of the run"
+      ]
+    }
+  ]
+}

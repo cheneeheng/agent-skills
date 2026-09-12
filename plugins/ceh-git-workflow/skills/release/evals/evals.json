@@ -1,0 +1,115 @@
+{
+  "skill_name": "release",
+  "evals": [
+    {
+      "id": 1,
+      "name": "minor-bump-annotated-tag",
+      "prompt": "cut a release",
+      "expected_output": "feat since v1.4.2 means 1.5.0: changelog section, a multi-line bump commit via -F, annotated v1.5.0 tag on it, main and tag pushed. The GitHub release step is reported as not done (no gh).",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "pyproject.toml": "[project]\nname = \"reports\"\nversion = \"1.4.2\"\nrequires-python = \">=3.12\"\n",
+            "CHANGELOG.md": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n## [1.4.2] - 2026-08-14\n\n### Fixed\n- Keep report column order stable\n",
+            "reports/__init__.py": ""
+          },
+          "commit": "fix(reports): keep column order stable",
+          "tag": "v1.4.2"
+        },
+        {
+          "files": {
+            "reports/csv_export.py": "import csv\nimport io\n\n\ndef to_csv(rows):\n    buf = io.StringIO()\n    csv.writer(buf).writerows(rows)\n    return buf.getvalue()\n"
+          },
+          "commit": "feat(reports): add csv export"
+        },
+        {
+          "files": {
+            "reports/auth.py": "def session_valid(session, user):\n    return session.created_at > user.password_changed_at\n"
+          },
+          "commit": "fix(auth): expire sessions after a password change"
+        }
+      ],
+      "expectations": [
+        "pyproject.toml version is 1.5.0: a MINOR bump because of the feat commit",
+        "CHANGELOG.md has a ## [1.5.0] section with the CSV export under Added and the session fix under Fixed",
+        "A new commit on main has the subject chore: bump version to v1.5.0 (or equivalent) and a body saying what ships and why the bump is MINOR",
+        "The transcript passes that commit message with git commit -F <file>, not -m, and no message file is left in the working tree",
+        "A tag v1.5.0 exists, is annotated (refs.txt shows type tag), and points at the bump commit",
+        "origin has main at the bump commit and the v1.5.0 tag",
+        "The final message does not claim a GitHub release was published"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "breaking-major-every-manifest",
+      "prompt": "bump the versions and tag it",
+      "expected_output": "A breaking commit since v2.7.1 forces 3.0.0 in both package.json and .claude-plugin/plugin.json in one commit, then an annotated v3.0.0 tag.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"orders-sdk\",\n  \"version\": \"2.7.1\"\n}\n",
+            ".claude-plugin/plugin.json": "{\n  \"name\": \"orders-sdk\",\n  \"version\": \"2.7.1\",\n  \"description\": \"Orders SDK plugin\"\n}\n",
+            "src/v1.ts": "export const listOrdersV1 = () => fetch(\"/v1/orders\");\n",
+            "src/v2.ts": "export const listOrders = () => fetch(\"/v2/orders\");\n"
+          },
+          "commit": "feat(api): add v2 order listing",
+          "tag": "v2.7.1"
+        },
+        {
+          "files": {
+            "src/v1.ts": ""
+          },
+          "commit": "feat(api)!: drop the v1 order endpoints\n\nBREAKING CHANGE: listOrdersV1 is removed. Call listOrders instead."
+        },
+        {
+          "files": {
+            "src/v2.ts": "export const listOrders = (limit = 50) => fetch(`/v2/orders?limit=${limit}`);\n"
+          },
+          "commit": "fix(api): send the limit parameter on order listing"
+        }
+      ],
+      "expectations": [
+        "package.json and .claude-plugin/plugin.json both read version 3.0.0: a MAJOR bump because of the breaking change",
+        "Both manifest changes land in one new commit",
+        "A tag v3.0.0 exists, is annotated (refs.txt shows type tag), and points at the bump commit",
+        "origin has the bump commit on main and the v3.0.0 tag",
+        "The bump commit message has a body naming the breaking change that forces MAJOR"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "release-candidate-tag",
+      "prompt": "tag a release candidate for 3.1.0 so we can put it on staging first",
+      "expected_output": "package.json at 3.1.0-rc.1 and an annotated v3.1.0-rc.1 tag, not a final v3.1.0.",
+      "remote": true,
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"todo-web\",\n  \"version\": \"3.0.4\"\n}\n",
+            "src/app.ts": "export const app = () => \"todos\";\n"
+          },
+          "commit": "fix(app): trim whitespace from titles",
+          "tag": "v3.0.4"
+        },
+        {
+          "files": {
+            "src/share.ts": "export const shareLink = (id: string) => `/share/${id}`;\n"
+          },
+          "commit": "feat(share): add share links for lists"
+        }
+      ],
+      "expectations": [
+        "package.json version is 3.1.0-rc.1 (a semver pre-release suffix of the form -rc.N)",
+        "A tag v3.1.0-rc.1 exists and is annotated (refs.txt shows type tag)",
+        "No v3.1.0 tag exists",
+        "The tag message has the form v3.1.0-rc.1 followed by a short summary",
+        "origin has the bump commit on main and the v3.1.0-rc.1 tag"
+      ]
+    }
+  ]
+}

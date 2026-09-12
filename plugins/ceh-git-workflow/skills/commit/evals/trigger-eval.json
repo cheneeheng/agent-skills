@@ -1,0 +1,22 @@
+[
+  {"query": "ok I'm done with the retry logic in api/client.py, can you commit it? the change is that we now back off exponentially instead of hammering the server with immediate retries", "should_trigger": true},
+  {"query": "write me a commit message for what's staged. I renamed the get_user helper to fetch_user everywhere it's used", "should_trigger": true},
+  {"query": "is 'Fixed stuff in the parser.' an ok commit message? feels lazy but idk what else to put", "should_trigger": true},
+  {"query": "what conventional commit type do I use for bumping the timeout in .github/workflows/test.yml from 10 to 20 minutes, chore or ci?", "should_trigger": true},
+  {"query": "I removed the deprecated /v1/orders endpoint, clients have to use /v2 now. how do I mark that as breaking in the commit so release tooling picks it up", "should_trigger": true},
+  {"query": "stage the alembic migration and the model change in models/invoice.py together and commit them, but leave scratch.ipynb out of it", "should_trigger": true},
+  {"query": "commit the fix for the null timezone crash and make it close issue #412", "should_trigger": true},
+  {"query": "before I commit, look at what I've got staged and tell me whether it should be one commit or split into two", "should_trigger": true},
+  {"query": "I usually just do git commit -m 'wip' lol. can you do it properly this time for the changes under src/auth", "should_trigger": true},
+  {"query": "my teammate says our commit subjects are way too long. what's the rule, and can you rewrite this one: 'Added a new feature that allows users to export their dashboard data as CSV files from the settings page'", "should_trigger": true},
+  {"query": "commit this, open a PR and merge it, I'm done with this branch", "should_trigger": false},
+  {"query": "open a pull request for this branch, the description should explain we added rate limiting to the public API", "should_trigger": false},
+  {"query": "add an entry under Unreleased in CHANGELOG.md for the new CSV export feature", "should_trigger": false},
+  {"query": "review PR #88 and leave comments, I'm mostly worried about the raw SQL in the repository layer", "should_trigger": false},
+  {"query": "what should I name the branch for fixing the login redirect bug?", "should_trigger": false},
+  {"query": "git log shows a bunch of commits from last week touching billing/, can you summarize what actually changed in the billing module", "should_trigger": false},
+  {"query": "I accidentally committed our Stripe secret key last commit and already pushed it to GitHub. what do I do right now", "should_trigger": false},
+  {"query": "tag v2.4.0 on main and publish the GitHub release", "should_trigger": false},
+  {"query": "resolve the merge conflict in settings.py, both sides changed the DATABASE_URL default and I want to keep theirs but with our port", "should_trigger": false},
+  {"query": "undo my last commit but keep the changes in my working tree, I want to redo it", "should_trigger": false}
+]

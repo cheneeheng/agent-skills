@@ -1,0 +1,22 @@
+[
+  {"query": "add httpx to the project, I need it for the new payments client", "should_trigger": true},
+  {"query": "should I pull in a library to left-pad invoice numbers or just write it?", "should_trigger": true},
+  {"query": "pip-audit flagged a high severity CVE in jinja2 2.11, what do I do before the release tomorrow", "should_trigger": true},
+  {"query": "bump pydantic from 1.10 to 2.9 in pyproject.toml", "should_trigger": true},
+  {"query": "our package.json has a bunch of \"latest\" and \"*\" versions, what should we pin to?", "should_trigger": true},
+  {"query": "bun add zod for the request validation, and tell me if it should be a dev dep", "should_trigger": true},
+  {"query": "we don't use requests anymore since moving to httpx, drop it from the deps", "should_trigger": true},
+  {"query": "is this GPL licensed package ok to use in our closed-source SaaS backend?", "should_trigger": true},
+  {"query": "I changed the fastapi version in pyproject but forgot about uv.lock, does that matter for the commit?", "should_trigger": true},
+  {"query": "upgrade just vitest to the newest version in its allowed range, leave everything else alone", "should_trigger": true},
+  {"query": "uv sync fails with 'No solution found when resolving dependencies', here's the output, help", "should_trigger": false},
+  {"query": "set up a new python library project with uv, ruff and pytest", "should_trigger": false},
+  {"query": "import error: ModuleNotFoundError: No module named 'app' when running pytest", "should_trigger": false},
+  {"query": "commit the README typo fix", "should_trigger": false},
+  {"query": "write the changelog entry for the 2.4.0 release", "should_trigger": false},
+  {"query": "our docker image is 1.2GB, how do I make it smaller", "should_trigger": false},
+  {"query": "bump the version to 1.5.0 and tag it", "should_trigger": false},
+  {"query": "explain the difference between dependencies and peerDependencies in a component library's package.json", "should_trigger": false},
+  {"query": "review the PR that adds the redis cache layer", "should_trigger": false},
+  {"query": "configure dependabot to open PRs weekly for github actions only", "should_trigger": false}
+]

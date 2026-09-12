@@ -1,0 +1,138 @@
+{
+  "skill_name": "update-changelog",
+  "evals": [
+    {
+      "id": 1,
+      "name": "versioned-section-from-log",
+      "prompt": "update the changelog for the next release",
+      "expected_output": "A ## [1.4.0] - YYYY-MM-DD section directly under [Unreleased], with the feature under Added and the fix under Fixed, imperative bullets, CI and style commits skipped, only CHANGELOG.md modified.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "pyproject.toml": "[project]\nname = \"catalog\"\nversion = \"1.3.0\"\nrequires-python = \">=3.12\"\n",
+            "CHANGELOG.md": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n## [1.3.0] - 2026-08-01\n\n### Added\n- Add category pages\n\n[Unreleased]: https://github.com/acme/catalog/compare/v1.3.0...HEAD\n[1.3.0]: https://github.com/acme/catalog/compare/v1.2.0...v1.3.0\n",
+            "catalog/__init__.py": ""
+          },
+          "commit": "feat(catalog): add category pages",
+          "tag": "v1.3.0"
+        },
+        {
+          "files": {
+            "catalog/search.py": "import difflib\n\n\ndef fuzzy(term, names):\n    return difflib.get_close_matches(term, names, n=5)\n"
+          },
+          "commit": "feat(search): add fuzzy matching for product names"
+        },
+        {
+          "files": {
+            ".github/workflows/test.yml": "name: test\non: [push]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n"
+          },
+          "commit": "ci: run tests on push"
+        },
+        {
+          "files": {
+            "catalog/cart.py": "def remove_coupon(cart):\n    cart.coupon = None\n    return cart\n"
+          },
+          "commit": "fix(cart): keep quantities when a coupon is removed"
+        },
+        {
+          "files": {
+            "catalog/cart.py": "def remove_coupon(cart):\n    cart.coupon = None\n\n    return cart\n"
+          },
+          "commit": "style: reformat cart module"
+        }
+      ],
+      "expectations": [
+        "CHANGELOG.md has a new ## [1.4.0] - YYYY-MM-DD header (MINOR because of the feat commit) placed directly below ## [Unreleased] and above ## [1.3.0]",
+        "The new section lists the fuzzy matching under ### Added and the coupon/quantity fix under ### Fixed",
+        "Bullets use imperative mood (Add ..., Keep ...), not past tense",
+        "No bullet mentions the CI workflow or the reformatting commit, and no bullet describes a change absent from git log",
+        "The comparison links at the bottom gain a [1.4.0] line and [Unreleased] now compares from v1.4.0",
+        "CHANGELOG.md is the only modified file: pyproject.toml is unchanged and no tag or commit was created"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "unreleased-mode",
+      "prompt": "log what's changed since the last release under Unreleased in the changelog. we're not releasing yet, so no version",
+      "expected_output": "Bullets under the existing ## [Unreleased] heading with no new version or date header and the comparison links untouched.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"gateway\",\n  \"version\": \"2.0.0\"\n}\n",
+            "CHANGELOG.md": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n## [Unreleased]\n\n## [2.0.0] - 2026-08-18\n\n### Removed\n- Remove the v1 routes\n\n[Unreleased]: https://github.com/acme/gateway/compare/v2.0.0...HEAD\n[2.0.0]: https://github.com/acme/gateway/compare/v1.9.0...v2.0.0\n",
+            "src/routes.ts": "export const routes = [\"/v2/orders\"];\n"
+          },
+          "commit": "feat(api)!: remove the v1 routes",
+          "tag": "v2.0.0"
+        },
+        {
+          "files": {
+            "src/ratelimit.ts": "export const headers = (left: number) => ({ \"X-RateLimit-Remaining\": String(left) });\n"
+          },
+          "commit": "feat(api): add rate-limit headers to responses"
+        },
+        {
+          "files": {
+            "src/ratelimit.ts": "export const headers = (left: number) => ({ \"X-RateLimit-Remaining\": String(left) });\nexport const tooMany = () => new Response(\"Too Many Requests\", { status: 429 });\n"
+          },
+          "commit": "fix(api): return 429 instead of 500 when the rate limit is hit"
+        }
+      ],
+      "expectations": [
+        "The rate-limit headers and the 429 fix appear as bullets under ## [Unreleased], grouped into Added and Fixed",
+        "No new ## [x.y.z] header and no new dated header was added",
+        "The [Unreleased] and [2.0.0] comparison link lines are unchanged",
+        "CHANGELOG.md is the only modified file: package.json still reads 2.0.0"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "create-from-scratch",
+      "prompt": "generate a changelog for this project",
+      "expected_output": "A new CHANGELOG.md in Keep a Changelog form: intro, an [Unreleased] heading, and a [0.3.0] section taken from package.json since there are no tags. Only evidenced changes, with merge and formatting commits skipped.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"todo-web\",\n  \"version\": \"0.3.0\"\n}\n",
+            "src/app.ts": "export const app = () => \"todos\";\n"
+          },
+          "commit": "feat: scaffold todo app"
+        },
+        {
+          "files": {
+            "src/due.ts": "export type Todo = { title: string; due?: Date };\n"
+          },
+          "commit": "feat(todos): add due dates"
+        },
+        {
+          "files": {
+            "src/sort.ts": "import type { Todo } from \"./due\";\n\nexport const byDue = (a: Todo, b: Todo) => (a.due?.getTime() ?? Infinity) - (b.due?.getTime() ?? Infinity);\n"
+          },
+          "commit": "fix(todos): sort overdue todos first"
+        },
+        {
+          "files": {
+            "src/app.ts": "export const app = () => 'todos';\n"
+          },
+          "commit": "Merge branch 'feat/due-dates'"
+        },
+        {
+          "files": {
+            "src/app.ts": "export const app = () => \"todos\";\n"
+          },
+          "commit": "chore: format with prettier"
+        }
+      ],
+      "expectations": [
+        "CHANGELOG.md exists and opens with a # Changelog title and an intro citing Keep a Changelog and Semantic Versioning",
+        "It has a ## [Unreleased] heading above a ## [0.3.0] - YYYY-MM-DD section, the version taken from package.json",
+        "The [0.3.0] section lists due dates (and the scaffold) under Added and the overdue sort under Fixed",
+        "No bullet describes the Merge branch commit or the prettier formatting commit, and no bullet describes a change absent from git log",
+        "CHANGELOG.md is the only new or modified file"
+      ]
+    }
+  ]
+}

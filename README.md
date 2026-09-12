@@ -336,6 +336,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 
 | Tool | Path | Purpose |
 |------|------|---------|
+| skill-evals | `tools/skill-evals/` | Run skill-creator's behavioral and trigger evals against a skill in this repo. Builds a git fixture repo per run from the eval's `setup`, and runs each arm as `claude -p --setting-sources project` so the baseline arm cannot load installed plugins. Windows-safe. Stdlib-only Python. |
 | skills-sync | `tools/skills-sync/` | Copy individual skills (from this repo or any other) into a project's `.claude/skills/` directory — install, update, add, remove, list. Python, bash, PowerShell, and browser-based HTML implementations. |
 | validate-plugins | `tools/validate-plugins/` | Repo-integrity checker run by CI (`.github/workflows/validate.yml`): validates plugin manifests, skill/agent frontmatter (including a 1024-char cap on `description`), file and skill references, and script syntax. Stdlib-only Python. |
 
