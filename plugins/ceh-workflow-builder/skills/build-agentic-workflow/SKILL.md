@@ -27,7 +27,9 @@ down for portability.
 
 ## Assumed capabilities
 
-The emitted artifact may rely on these and nothing else. State in the artifact which ones it uses.
+The emitted artifact may rely on these and nothing else. Do not list them in the artifact — they are
+always present in Claude Code, so declaring them is noise. `compatibility` is for the software the
+*machine* may lack, which is a different question.
 
 | Capability | Tool | Watch out |
 |---|---|---|
@@ -76,6 +78,10 @@ question has an answer.
 5. **Tooling.** Which CLIs, credentials, services, or network access does each step need?
 6. **Done.** What is true at the end that was not true at the start?
 7. **Interruption.** Does this run in one sitting, or can it stop partway and need resuming?
+8. **Re-runs.** If it fails halfway and you start over, which steps would do damage if they ran a
+   second time? Name them — this is the question people forget, and it is the one that corrupts data.
+9. **Irreversible steps.** Which steps touch something outside this machine that cannot be taken
+   back: sending mail, charging a card, publishing, deleting?
 
 ## Phase 2 — One skill or a workflow
 
@@ -89,7 +95,9 @@ question has an answer.
 6. One step's output is another step's input — the handoff needs a declared contract.
 
 "It has several paragraphs" is not a reason. If none hold, write one skill from the single-skill
-template below and stop — skip phases 3 to 5 entirely.
+template below: skip phases 3 and 4, and from Phase 5 keep only the destination and the
+confirm-before-writing step. A single skill has no schemas, no scripts to order, and no run
+directory to ignore.
 
 **Naming.** Derive `<name>` from the moment as a short kebab verb phrase the user would recognise
 (`prepublish`, `onboard-tenant`, `rotate-keys`), never from the domain noun. Confirm it with the user
@@ -134,6 +142,9 @@ artifact nobody downstream reads, gets no schema.
   the one schema file rather than restating its fields, or the contract drifts between them.
 - **Preconditions are checked twice.** The producer's gate proves the artifact was valid when
   written; each consumer re-asserts it exists before reading, since intervening steps can fail.
+- **Never a secret.** A run artifact is plaintext on disk, git-ignored or not. A step that produces a
+  credential writes a *reference* to where it lives — a secret-manager key, an env var name — and the
+  schema says so. The consuming step resolves the reference itself.
 
 **Where it lives.** `.claude/skills/<name>-flow/references/<artifact>-schema.md`. Form is a Markdown
 doc: required fields, optional fields, one complete worked example, and the list of consuming steps.
@@ -144,7 +155,7 @@ runs a script — never add a dependency for this.
 exists and carries every required field in `plan-schema.md`". Phrase gates that way wherever a schema
 exists.
 
-## Resumption
+## Resumption, re-runs and irreversible steps
 
 Emit a run-state file only when the interview said the run can stop partway — otherwise skip this,
 since a flow that finishes in one sitting does not need one.
@@ -153,10 +164,19 @@ since a flow that finishes in one sitting does not need one.
 path it wrote. The flow's first instruction becomes "read `run-state.md` if it exists and skip to the
 first step that is not `done`".
 
-A step whose own work is long — the fact-check loop over twenty claims — must also be resumable
+A step whose own work is long — a fact-check loop over twenty claims — must also be resumable
 *inside* itself. Say so explicitly in that step skill: append each unit of work to its output file as
 it completes, rather than holding results in context and writing once at the end. Context that dies
 mid-step takes unwritten results with it.
+
+**Re-running is not the same as resuming.** `run-state.md` tells you where a run stopped only if it
+survived the failure, so a step named in interview question 8 cannot rely on it. Such a step opens by
+checking the world, not the ledger: does this schema already exist, has this row already been
+inserted? Write that check into the step itself and make it the step's first instruction.
+
+**Irreversible steps** from question 9 get two rules. They go as late in the pipeline as the data flow
+allows, so a failure upstream costs nothing outside the machine. And the flow pauses for explicit user
+confirmation immediately before each one — never on a re-run path where it could fire twice unnoticed.
 
 ## Phase 5 — Emit
 
@@ -204,8 +224,8 @@ compatibility: >-
 
 ## Procedure
 
-1. <step> — <how to tell it worked>
-2. <step> — <how to tell it worked>
+1. <step>
+2. <step> — <how to tell it worked, only where that is not self-evident>
 
 ## Done when
 
@@ -301,6 +321,9 @@ optional and this skill does not depend on it.
 - [ ] Every cross-step handoff is a file under the run directory, with a schema.
 - [ ] Every `Reads` has an earlier `Writes`, and every cross-step `Reads` has an existing schema.
 - [ ] Run-state file emitted if and only if the run can stop partway; long steps resume internally.
+- [ ] Every step that is unsafe to run twice opens by checking the world, not `run-state.md`.
+- [ ] No run artifact holds a secret — only a reference to where one lives.
+- [ ] Irreversible steps sit as late as the data flow allows and pause for confirmation.
 - [ ] Every delegated skill exists and is model-invocable.
 - [ ] No step skill survives that only ever runs inside the flow and needed no own context.
 - [ ] `compatibility` present if and only if a step needs software the machine may lack.
