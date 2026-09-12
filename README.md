@@ -66,6 +66,7 @@ The table below is the reference list of what those bundles are made of.
 | Advisor *(experimental)* | `ceh-advisor` | Stronger-model second-opinion subagent for decision points, failure loops, irreversible actions, and pre-completion gates — plus hook backstops (destructive-command guard, failure watch) |
 | Testing | `ceh-testing` | Stack-agnostic testing technique — reproduce-first bug fixes and bisection, systematic test-case design (partitions, boundaries, properties, metamorphic, fuzzing), suite audits (assertions, mutation, flakiness), behavior-preservation checks for refactors, and a pre-completion risk gate |
 | Usability Audit | `ceh-usability-audit` | Measure whether a non-expert can actually use what you built — cold persona-constrained walkthroughs (`novice-walker`), a five-question interface audit across web UI/CLI/library/app surfaces, error-message rewrites, and a plain-language pass |
+| Workflow Builder | `ceh-workflow-builder` | Turn a repetitive multi-step task into a runnable artifact — interview it, decide one skill vs a gated workflow, declare the schema for every step-to-step handoff, and emit the set into the target repo's `.claude/skills/` |
 | Git Datastore | `ceh-git-datastore` | Run an app on a bare git repo instead of a database while that still fits — a fit gate that talks you out of it when it does not, a plumbing-only store with atomic writes and lock-free concurrency, and the pinned-snapshot migration to Postgres or SQLite when a trigger fires |
 
 ### Categorization
@@ -77,7 +78,7 @@ into four tiers:
 |------|--------|---------|
 | **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-orchestration` *(experimental)* |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 Each plugin is self-contained: a
@@ -154,6 +155,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-coding-agent` | Explain Codebase | `/ceh-coding-agent:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and key flows into git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` (per-file detail only on request) |
 | `ceh-seo` | Web Discoverability | `/ceh-seo:web-discoverability` | Shipping a public web page/route — head checklist, sitemap/robots/llms.txt, JSON-LD, SSR/prerender, GEO citation rules |
 | `ceh-seo` | Text Discoverability | `/ceh-seo:text-discoverability` | Writing public-facing repo/package text — README first screen, one-liner, GitHub topics, PyPI/npm descriptions and keywords |
+| `ceh-workflow-builder` | Build Agentic Workflow | `/ceh-workflow-builder:build-agentic-workflow` | Turn a repetitive multi-step task into a reusable artifact — interview it, apply the one-skill-vs-workflow gate, declare a schema for every step-to-step handoff, emit leaf-first into `.claude/skills/` |
 | `ceh-orchestration` | Orchestrate | `/ceh-orchestration:orchestrate` | Decompose and delegate a big multi-step task — plan/delegate-only main session, cheap isolated workers, to cap context/token cost |
 | `ceh-business-plan` | Develop Business Plan | `/ceh-business-plan:develop-business-plan` | Draft a business plan proactively from app plans or a product idea, then loop interview→revise until the product-market-fit readiness gate passes |
 | `ceh-evaluation` | Evaluate Skill | `/ceh-evaluation:evaluate-skill` | Evaluate a skill or plugin you wrote — derive its criteria, measure structure/triggering/content/behavioral lift with evidence, loop fix→re-run until a 6-point gate passes |
@@ -266,6 +268,7 @@ in automatically. Install individual plugins only when you want a set no bundle 
 /plugin install ceh-lessons-learned@ceh-plugins --scope user
 /plugin install ceh-blog@ceh-plugins --scope user
 /plugin install ceh-documentation@ceh-plugins --scope user
+/plugin install ceh-workflow-builder@ceh-plugins --scope user
 /plugin install ceh-orchestration@ceh-plugins --scope user
 /plugin install ceh-business-plan@ceh-plugins --scope user
 /plugin install ceh-evaluation@ceh-plugins --scope user
@@ -325,7 +328,8 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-seo" },
     { "path": "~/agent-skills/plugins/ceh-testing" },
     { "path": "~/agent-skills/plugins/ceh-usability-audit" },
-    { "path": "~/agent-skills/plugins/ceh-git-datastore" }
+    { "path": "~/agent-skills/plugins/ceh-git-datastore" },
+    { "path": "~/agent-skills/plugins/ceh-workflow-builder" }
   ]
 }
 ```
