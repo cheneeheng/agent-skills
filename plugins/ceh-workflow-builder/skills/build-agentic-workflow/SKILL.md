@@ -88,7 +88,12 @@ question has an answer.
 5. A step is already owned by an existing skill worth delegating to.
 6. One step's output is another step's input — the handoff needs a declared contract.
 
-"It has several paragraphs" is not a reason. If none hold, write one skill and stop here.
+"It has several paragraphs" is not a reason. If none hold, write one skill from the single-skill
+template below and stop — skip phases 3 to 5 entirely.
+
+**Naming.** Derive `<name>` from the moment as a short kebab verb phrase the user would recognise
+(`prepublish`, `onboard-tenant`, `rotate-keys`), never from the domain noun. Confirm it with the user
+before emitting, because every filename depends on it.
 
 ## Phase 3 — What each step becomes
 
@@ -96,7 +101,7 @@ Decide per step, in this order — stop at the first that fits:
 
 | Becomes | When |
 |---|---|
-| An existing skill | Something already owns this step. Delegate to it |
+| An existing skill | Something already owns this step. Check it is installed in this session and model-invocable *before* choosing this row; if it is not, drop to the next row rather than emitting a call that fails silently |
 | A script | The step is mechanical and deterministic |
 | Its own step skill | The step is independently triggerable, or needs its own context window |
 | Inline prose in the flow | Nothing above fits — the default |
@@ -139,6 +144,20 @@ runs a script — never add a dependency for this.
 exists and carries every required field in `plan-schema.md`". Phrase gates that way wherever a schema
 exists.
 
+## Resumption
+
+Emit a run-state file only when the interview said the run can stop partway — otherwise skip this,
+since a flow that finishes in one sitting does not need one.
+
+`<run-dir>/<name>/run-state.md`: one line per step recording `pending` / `done` plus the artifact
+path it wrote. The flow's first instruction becomes "read `run-state.md` if it exists and skip to the
+first step that is not `done`".
+
+A step whose own work is long — the fact-check loop over twenty claims — must also be resumable
+*inside* itself. Say so explicitly in that step skill: append each unit of work to its output file as
+it completes, rather than holding results in context and writing once at the end. Context that dies
+mid-step takes unwritten results with it.
+
 ## Phase 5 — Emit
 
 Leaf-first, so every reference resolves the moment it is written:
@@ -156,9 +175,45 @@ Then run both checks:
   fails silently.
 - **Dependency.** Every `Reads` entry names an artifact some *earlier* step `Writes`. This is the
   likeliest generation bug once handoffs stop being adjacent.
+- **Schema coverage.** Every `Reads` entry that names another step has a schema, and that schema file
+  exists. A `—` in the Schema column is only legal when the artifact came from outside the flow.
+
+Show the user the file list and the step/gate table before writing, and write only after they agree.
+Emission creates several files in their repo; a wrong `<name>` means cleaning all of them up.
 
 Default destination is `.claude/skills/` in the target repo — no install step, picked up immediately.
 Offer plugin packaging only when the user says the workflow is shared across repos.
+
+## The single-skill template
+
+The Phase 2 default, and the path most tasks end on.
+
+```markdown
+---
+name: <name>
+description: >-
+  <The moment, as a verb.> Trigger on "<phrase>", "<phrase>". Not for <nearest neighbour>, use
+  <that> instead.
+compatibility: >-
+  <Only if it needs a CLI, service, credential, or network.>
+---
+
+# <Name>
+
+<One paragraph: what this does and the one thing it gets right that doing it ad hoc does not.>
+
+## Procedure
+
+1. <step> — <how to tell it worked>
+2. <step> — <how to tell it worked>
+
+## Done when
+
+<The falsifiable end condition from interview question 6.>
+```
+
+No pipeline table, no run directory, no schemas: a single skill runs in one context and hands nothing
+off. Adding those is the over-engineering Phase 2 exists to prevent.
 
 ## The flow skill template
 
@@ -211,6 +266,9 @@ finds, so a concrete example here would fail the repo's own gate. Do not "fix" e
 name: <name>-<step>
 description: >-
   <The moment.> Called by `<name>-flow` as step N; not for direct use outside that flow.
+compatibility: >-
+  <Only if this step needs a CLI, service, credential, or network. A step is the usual place such a
+  need appears, so check before omitting.>
 ---
 
 # <Name>: <Step>
@@ -241,7 +299,8 @@ optional and this skill does not depend on it.
 - [ ] Workflow emitted only because a Phase 2 condition holds — otherwise one skill.
 - [ ] Every step's gate is falsifiable, stated against a schema where one exists.
 - [ ] Every cross-step handoff is a file under the run directory, with a schema.
-- [ ] Every `Reads` has an earlier `Writes`.
+- [ ] Every `Reads` has an earlier `Writes`, and every cross-step `Reads` has an existing schema.
+- [ ] Run-state file emitted if and only if the run can stop partway; long steps resume internally.
 - [ ] Every delegated skill exists and is model-invocable.
 - [ ] No step skill survives that only ever runs inside the flow and needed no own context.
 - [ ] `compatibility` present if and only if a step needs software the machine may lack.
