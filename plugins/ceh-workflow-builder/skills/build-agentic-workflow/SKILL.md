@@ -36,9 +36,12 @@ always present in Claude Code, so declaring them is noise. `compatibility` is fo
 | Read, write, edit files | `Read` / `Write` / `Edit` | — |
 | Run commands | `Bash` | Any CLI a step invokes belongs in the artifact's `compatibility` |
 | Search | `Glob` / `Grep` | — |
-| Call another skill | `Skill` | Target must exist and be model-invocable |
-| Give a step its own context window | `Agent` | A subagent cannot see the caller's transcript |
-| Ask the user | `AskUserQuestion` | Stripped from every subagent — a delegated step can never ask |
+| Call another skill | `Skill` | Loads into the **caller's** context — it does not get its own |
+| Give a step its own context window | `Agent` | The only way to isolate a step; a subagent cannot see the caller's transcript |
+| Ask the user | `AskUserQuestion` | Stripped from every subagent, so only the flow itself can ask |
+
+`Skill` and `Agent` are not interchangeable, and the difference decides two things later: whether a
+step can be isolated (Phase 3) and whether it can pause for confirmation (Phase 4).
 
 ## Directories
 
@@ -89,7 +92,8 @@ question has an answer.
 
 1. A step has a gate that can fail and must block the next step.
 2. Steps need different tools or permissions.
-3. A step is big enough to deserve its own context window.
+3. Several steps are big enough to deserve their own context windows. One such step does not qualify:
+   a single skill can dispatch one subagent itself, and that is the smaller artifact.
 4. The run must survive interruption and resume.
 5. A step is already owned by an existing skill worth delegating to.
 6. One step's output is another step's input — the handoff needs a declared contract.
@@ -111,8 +115,14 @@ Decide per step, in this order — stop at the first that fits:
 |---|---|
 | An existing skill | Something already owns this step. Check it is installed in this session and model-invocable *before* choosing this row; if it is not, drop to the next row rather than emitting a call that fails silently |
 | A script | The step is mechanical and deterministic |
-| Its own step skill | The step is independently triggerable, or needs its own context window |
+| Its own step skill | The step is independently triggerable outside the flow, or the flow will dispatch it in a subagent |
 | Inline prose in the flow | Nothing above fits — the default |
+
+**Isolation comes from `Agent`, not from being a skill.** A step skill invoked with the `Skill` tool
+runs in the flow's own context and saves it nothing. A step that needs its own context window — it
+reads a lot, or its working notes would crowd the rest of the run — is dispatched with `Agent`,
+either carrying its instructions inline or told to load the step skill. Choose that only when the
+step's output is a file, because the subagent's context dies with it.
 
 **A step earns its own skill only on the third row.** A step that only ever runs inside one flow,
 and fits in the flow's own context, is inline prose or a script. Three skills beat six: every skill
@@ -134,8 +144,13 @@ finds, infers it wrong, and the run keeps producing garbage past a green gate.
 N+1 — and one artifact may have several consumers. A step that produces nothing, or a terminal
 artifact nobody downstream reads, gets no schema.
 
-- **Handoff is always a file.** Never conversation state: a delegated step cannot see the caller's
-  transcript, and compaction drops anything held only in context.
+- **Handoff is always a file.** Never conversation state: a step dispatched with `Agent` cannot see
+  the caller's transcript, and compaction drops anything held only in context — including a
+  `Skill`-invoked step's output, which does start out in the flow's own context.
+- **A fan-out writes one file per worker.** When a step runs N subagents over N items, each writes
+  its own `<run-dir>/<name>/<artifact>/<item>.md` and a following inline step merges them. Two
+  concurrent workers appending to one artifact interleave and lose lines, and nothing downstream can
+  tell that it happened.
 - **Artifacts live for the whole run.** Nothing is cleaned up at a step boundary; the consumer may be
   four steps away.
 - **One writer, many readers.** The schema belongs to the producing step. Every consumer points at
@@ -154,6 +169,24 @@ runs a script — never add a dependency for this.
 **Schemas make gates falsifiable.** Replace "the plan is complete" with "`<run-dir>/<flow>/plan.md`
 exists and carries every required field in `plan-schema.md`". Phrase gates that way wherever a schema
 exists.
+
+## What a gate does when it fails
+
+"Do not proceed past a red gate" is a prohibition, not a behaviour, and a generated flow that stops
+there leaves the agent inventing one at the worst possible moment. Every gate resolves into exactly
+one of two shapes, and the flow says which:
+
+- **Stop.** The default. Report the failing step and why to the user and end the run, recording both
+  in `run-state.md` if the flow emits one. Never continue in degraded mode, and never skip a step to
+  reach a later one — the pipeline's ordering is the only reason the later step's inputs are valid.
+- **Retry.** Only where re-running the step can plausibly change the outcome: a fix-then-re-run loop
+  such as upgrade → test → fix → test. Then the flow must state **what changes between attempts**,
+  **the bound** (a specific attempt count, usually 2 or 3), and **what happens when the bound is
+  spent** — which is the Stop shape above. A retry loop with no bound is how a run burns a whole
+  session on a failure that was never going to clear.
+
+Mark a retrying gate in the pipeline table as `<condition> — retry up to N, then stop`, so the bound
+is visible where the gate is rather than buried in prose.
 
 ## Resumption, re-runs and irreversible steps
 
@@ -177,6 +210,11 @@ inserted? Write that check into the step itself and make it the step's first ins
 **Irreversible steps** from question 9 get two rules. They go as late in the pipeline as the data flow
 allows, so a failure upstream costs nothing outside the machine. And the flow pauses for explicit user
 confirmation immediately before each one — never on a re-run path where it could fire twice unnoticed.
+
+**The confirmation belongs to the flow, not to the step.** `AskUserQuestion` is stripped from every
+subagent, so a step dispatched with `Agent` cannot ask and would proceed straight through the pause.
+Put the prompt in the flow, immediately before the dispatch, and never inside a step that might run
+isolated.
 
 ## Phase 5 — Emit
 
@@ -258,11 +296,12 @@ Run state and step artifacts live in `$CEH_WORKFLOW_RUN_DIR/<name>/`, defaulting
 
 ## Pipeline
 
-Run top to bottom. Each step gates the next — do not proceed past a red gate.
+Run top to bottom. A red gate stops the run: report which gate failed and why, never continue in
+degraded mode or skip ahead.
 
 | # | Step | Delegate to | Gate before next step |
 |---|------|-------------|-----------------------|
-| 1 | <what happens> | the Skill tool with `skill="<step-skill>"`, or `scripts/<x>.sh`, or "— inline" | <falsifiable condition> |
+| 1 | <what happens> | the Skill tool with `skill="<step-skill>"`, or the Agent tool with `subagent_type="<agent>"`, or `scripts/<x>.sh`, or "— inline" | <falsifiable condition>, or `<condition> — retry up to N, then stop` |
 
 ## Data contracts
 
@@ -318,13 +357,15 @@ optional and this skill does not depend on it.
 - [ ] Trigger is a moment, not a topic.
 - [ ] Workflow emitted only because a Phase 2 condition holds — otherwise one skill.
 - [ ] Every step's gate is falsifiable, stated against a schema where one exists.
+- [ ] Every gate either stops the run or retries with a stated bound and a stop at the end of it.
 - [ ] Every cross-step handoff is a file under the run directory, with a schema.
 - [ ] Every `Reads` has an earlier `Writes`, and every cross-step `Reads` has an existing schema.
 - [ ] Run-state file emitted if and only if the run can stop partway; long steps resume internally.
 - [ ] Every step that is unsafe to run twice opens by checking the world, not `run-state.md`.
 - [ ] No run artifact holds a secret — only a reference to where one lives.
-- [ ] Irreversible steps sit as late as the data flow allows and pause for confirmation.
+- [ ] Irreversible steps sit as late as the data flow allows, and the flow — not the step — asks.
+- [ ] Any fan-out gives each worker its own output file, merged by a later step.
 - [ ] Every delegated skill exists and is model-invocable.
-- [ ] No step skill survives that only ever runs inside the flow and needed no own context.
+- [ ] No step skill survives that is neither triggerable on its own nor dispatched in a subagent.
 - [ ] `compatibility` present if and only if a step needs software the machine may lack.
 - [ ] Run directory declared, defaulted, and actually present in the target repo's `.gitignore`.
