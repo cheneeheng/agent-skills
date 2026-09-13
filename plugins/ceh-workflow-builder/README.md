@@ -40,8 +40,9 @@ step-earns-a-skill test, data-contract schemas for non-adjacent handoffs
 | Run time | `$CEH_WORKFLOW_RUN_DIR` | `.agents_workspace/` | a generated workflow's step artifacts and run state |
 
 Two variables on purpose. Building one workflow must not collide with running
-another. Run-time paths are `<run-dir>/<flow-name>/`, and that directory is
-expected to be git-ignored.
+another. Each run gets its own `<run-dir>/<name>/<run-id>/`, so a second run
+never reads the first one's artifacts, and that directory is expected to be
+git-ignored.
 
 ## Not this plugin
 

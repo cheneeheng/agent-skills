@@ -53,9 +53,17 @@ Two directories, two variables, two lifetimes. Do not conflate them.
 | Run time | `$CEH_WORKFLOW_RUN_DIR` | `.agents_workspace/` | the generated workflow's step artifacts and run state |
 
 Both default to the same place, so both namespace by name: the interview spec is
-`<build-dir>/<name>-workflow-spec.md` and run-time paths are `<run-dir>/<flow-name>/`. Use a
+`<build-dir>/<name>-workflow-spec.md` and run-time paths are under `<run-dir>/<name>/`. Use a
 provisional slug for the spec until the name is settled, then rename it — otherwise building a second
 workflow overwrites the first one's spec.
+
+**One directory per run, not per flow.** Each run writes to `<run-dir>/<name>/<run-id>/`, with
+`<run-id>` the start time (`20260913-0930`), and creating it is the flow's first instruction. Below,
+`<run>` means that directory. A flow that runs every week into a fixed `<run-dir>/<name>/` finds last
+week's artifacts in place: a consumer's exists-check passes on a stale file, and a finished
+`run-state.md` makes the new run skip every step. State that must outlive a run, such as a
+last-processed watermark, sits one level up in `<run-dir>/<name>/` and is written only after every
+step it summarises has succeeded.
 
 The generated flow **names the run-time variable and its default in its own body** — the agent that
 runs it is not the agent that built it and has none of this context.
@@ -77,7 +85,8 @@ question has an answer.
 3. **Preconditions and proof.** Per step: what has to be true before it starts, and how do you know
    it worked? An answer you cannot check is not a gate.
 4. **Data flow.** Per step: what does it read, what does it leave behind, and which *later* step
-   reads that? Name the producing step, not just the artifact.
+   reads that? Name the producing step, not just the artifact. And what does a run start from: an
+   argument passed at invocation, or something the previous run left behind?
 5. **Tooling.** Which CLIs, credentials, services, or network access does each step need?
 6. **Done.** What is true at the end that was not true at the start?
 7. **Interruption.** Does this run in one sitting, or can it stop partway and need resuming?
@@ -122,7 +131,8 @@ Decide per step, in this order — stop at the first that fits:
 runs in the flow's own context and saves it nothing. A step that needs its own context window — it
 reads a lot, or its working notes would crowd the rest of the run — is dispatched with `Agent`,
 either carrying its instructions inline or told to load the step skill. Choose that only when the
-step's output is a file, because the subagent's context dies with it.
+step's output is a file, because the subagent's context dies with it. The dispatch prompt carries
+`<run>` and every input path, since the subagent sees nothing else.
 
 **A step earns its own skill only on the third row.** A step that only ever runs inside one flow,
 and fits in the flow's own context, is inline prose or a script. Three skills beat six: every skill
@@ -148,9 +158,10 @@ artifact nobody downstream reads, gets no schema.
   the caller's transcript, and compaction drops anything held only in context — including a
   `Skill`-invoked step's output, which does start out in the flow's own context.
 - **A fan-out writes one file per worker.** When a step runs N subagents over N items, each writes
-  its own `<run-dir>/<name>/<artifact>/<item>.md` and a following inline step merges them. Two
-  concurrent workers appending to one artifact interleave and lose lines, and nothing downstream can
-  tell that it happened.
+  its own `<run>/<artifact>/<item>.md` and a following inline step merges them. Two concurrent
+  workers appending to one artifact interleave and lose lines, and nothing downstream can tell that
+  it happened. The merge step's gate counts files against the item list, because a worker that died
+  leaves no file rather than a failing one, and a resumed run dispatches only the items with no file.
 - **Artifacts live for the whole run.** Nothing is cleaned up at a step boundary; the consumer may be
   four steps away.
 - **One writer, many readers.** The schema belongs to the producing step. Every consumer points at
@@ -166,7 +177,7 @@ doc: required fields, optional fields, one complete worked example, and the list
 Reach for JSON Schema and a validator only when the artifact is genuinely JSON and that step already
 runs a script — never add a dependency for this.
 
-**Schemas make gates falsifiable.** Replace "the plan is complete" with "`<run-dir>/<flow>/plan.md`
+**Schemas make gates falsifiable.** Replace "the plan is complete" with "`<run>/plan.md`
 exists and carries every required field in `plan-schema.md`". Phrase gates that way wherever a schema
 exists.
 
@@ -193,9 +204,10 @@ is visible where the gate is rather than buried in prose.
 Emit a run-state file only when the interview said the run can stop partway — otherwise skip this,
 since a flow that finishes in one sitting does not need one.
 
-`<run-dir>/<name>/run-state.md`: one line per step recording `pending` / `done` plus the artifact
-path it wrote. The flow's first instruction becomes "read `run-state.md` if it exists and skip to the
-first step that is not `done`".
+`<run>/run-state.md`: one line per step recording `pending` / `done` plus the artifact path it
+wrote. The flow's first instruction becomes "find the newest run under `<run-dir>/<name>/`; if its
+`run-state.md` has a step that is not `done`, ask whether to resume that run or start a new one, and
+on resume skip to that step". A flow without a run-state file always starts a new run.
 
 A step whose own work is long — a fact-check loop over twenty claims — must also be resumable
 *inside* itself. Say so explicitly in that step skill: append each unit of work to its output file as
@@ -210,6 +222,9 @@ inserted? Write that check into the step itself and make it the step's first ins
 **Irreversible steps** from question 9 get two rules. They go as late in the pipeline as the data flow
 allows, so a failure upstream costs nothing outside the machine. And the flow pauses for explicit user
 confirmation immediately before each one — never on a re-run path where it could fire twice unnoticed.
+A batch, such as one comment on each of thirty issues, gets one confirmation that shows the whole
+batch, not thirty prompts. A declined confirmation is the Stop shape with the step left `pending`, so
+a resumed run asks again instead of firing.
 
 **The confirmation belongs to the flow, not to the step.** `AskUserQuestion` is stripped from every
 subagent, so a step dispatched with `Agent` cannot ask and would proceed straight through the pause.
@@ -221,11 +236,16 @@ isolated.
 Leaf-first, so every reference resolves the moment it is written:
 
 1. Schema docs → `references/`
-2. Scripts → `scripts/`
+2. Scripts → `.claude/skills/<name>-flow/scripts/`
 3. Step skills → `.claude/skills/<name>-<step>/SKILL.md`
 4. The flow skill → `.claude/skills/<name>-flow/SKILL.md`
 
-Then run both checks:
+Reference a script through `${CLAUDE_SKILL_DIR}`, which Claude Code substitutes with the calling
+skill's own directory: the flow reaches `scripts/<x>.sh` beneath it, a step skill goes up one level to
+`<name>-flow/scripts/<x>.sh`. A bare `scripts/<x>.sh` resolves against the repo root, where `Bash`
+runs, and finds a different file or none.
+
+Then run these checks:
 
 - **Resolution.** A generated step skill must have a directory that now exists under
   `.claude/skills/`. A pre-existing skill delegated to is a different check: it must be installed in
@@ -285,23 +305,25 @@ description: >-
 compatibility: >-
   <Only if a step needs a CLI, service, credential, or network. Name the tool, its minimum version,
   and what fails without it.>
+argument-hint: '<Only if a run starts from an argument, e.g. [repo]>'
 ---
 
 # <Name> Flow
 
 <One paragraph: the pipeline as an arrow chain, and what this adds over running the steps ad hoc.>
 
-Run state and step artifacts live in `$CEH_WORKFLOW_RUN_DIR/<name>/`, defaulting to
-`.agents_workspace/<name>/`. That directory is git-ignored.
+Each run writes its state and step artifacts to `$CEH_WORKFLOW_RUN_DIR/<name>/<run-id>/`, defaulting
+to `.agents_workspace/<name>/<run-id>/`, with `<run-id>` the start time. Create it first and pass its
+path to every step. The directory is git-ignored.
 
 ## Pipeline
 
-Run top to bottom. A red gate stops the run: report which gate failed and why, never continue in
-degraded mode or skip ahead.
+Run top to bottom. A red gate stops the run unless its row states a retry bound: report which gate
+failed and why, never continue in degraded mode or skip ahead.
 
 | # | Step | Delegate to | Gate before next step |
 |---|------|-------------|-----------------------|
-| 1 | <what happens> | the Skill tool with `skill="<step-skill>"`, or the Agent tool with `subagent_type="<agent>"`, or `scripts/<x>.sh`, or "— inline" | <falsifiable condition>, or `<condition> — retry up to N, then stop` |
+| 1 | <what happens> | the Skill tool with `skill="<step-skill>"`, or the Agent tool with `subagent_type="<agent>"`, or `scripts/<x>.sh` via `${CLAUDE_SKILL_DIR}`, or "— inline" | <falsifiable condition>, or `<condition> — retry up to N, then stop` |
 
 ## Data contracts
 
@@ -332,8 +354,8 @@ compatibility: >-
 
 # <Name>: <Step>
 
-Reads `<artifact>` at `$CEH_WORKFLOW_RUN_DIR/<name>/<file>` per `<schema>`; writes `<artifact>` to
-`<path>`. <Omit whichever half does not apply.>
+Reads `<artifact>` at `<run>/<file>` per `<schema>`, where `<run>` is the run directory the flow
+passes in; writes `<artifact>` to `<run>/<file>`. <Omit whichever half does not apply.>
 
 <The step's actual instructions.>
 
@@ -363,8 +385,11 @@ optional and this skill does not depend on it.
 - [ ] Run-state file emitted if and only if the run can stop partway; long steps resume internally.
 - [ ] Every step that is unsafe to run twice opens by checking the world, not `run-state.md`.
 - [ ] No run artifact holds a secret — only a reference to where one lives.
-- [ ] Irreversible steps sit as late as the data flow allows, and the flow — not the step — asks.
-- [ ] Any fan-out gives each worker its own output file, merged by a later step.
+- [ ] Irreversible steps sit as late as the data flow allows, and the flow — not the step — asks,
+      once per batch, and a "no" stops with the step still `pending`.
+- [ ] Any fan-out gives each worker its own output file, merged by a later step that counts them.
+- [ ] Each run writes to its own `<run-id>` directory; only cross-run state sits beside them.
+- [ ] Every script is referenced through `${CLAUDE_SKILL_DIR}`, never a bare `scripts/` path.
 - [ ] Every delegated skill exists and is model-invocable.
 - [ ] No step skill survives that is neither triggerable on its own nor dispatched in a subagent.
 - [ ] `compatibility` present if and only if a step needs software the machine may lack.
