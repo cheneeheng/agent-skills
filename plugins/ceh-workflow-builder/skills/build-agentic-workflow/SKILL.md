@@ -41,7 +41,7 @@ always present in Claude Code, so declaring them is noise. `compatibility` is fo
 | Ask the user | `AskUserQuestion` | Stripped from every subagent, so only the flow itself can ask |
 
 `Skill` and `Agent` are not interchangeable, and the difference decides two things later: whether a
-step can be isolated (Phase 3) and whether it can pause for confirmation (Phase 4).
+step can be isolated (Phase 3) and whether it can pause for confirmation (Resumption, re-runs and irreversible steps).
 
 ## Directories
 
@@ -111,7 +111,10 @@ question has an answer.
 "It has several paragraphs" is not a reason. If none hold, write one skill from the single-skill
 template below: skip phases 3 and 4, and from Phase 5 keep only the destination and the
 confirm-before-writing step. A single skill has no schemas, no scripts to order, and no run
-directory to ignore.
+directory to ignore. Three rules from the skipped sections still apply, because they guard the
+world rather than a handoff: never write a secret to disk, only a reference to where it lives; a step
+from interview question 8 opens by checking the world; and the skill pauses for user confirmation
+immediately before a step from question 9. It runs in the main context, so it can ask.
 
 **Naming.** Derive `<name>` from the moment as a short kebab verb phrase the user would recognise
 (`prepublish`, `onboard-tenant`, `rotate-keys`), never from the domain noun. Confirm it with the user
@@ -298,6 +301,7 @@ compatibility: >-
 
 1. <step>
 2. <step> — <how to tell it worked, only where that is not self-evident>
+3. <irreversible step> — <confirm with the user first, showing exactly what will be sent or changed>
 
 ## Done when
 
