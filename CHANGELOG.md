@@ -5,6 +5,48 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.4.0] — 2026-09-13
+
+Turning a procedure you repeat by hand into something an agent runs has two hard parts, and writing
+the `SKILL.md` is neither. The first is deciding whether the task is one skill or a multi-step
+workflow: most tasks should end as one skill, and a workflow built for a task that did not need one
+is overhead in every later session. The second is the handoff between steps. When a later step gets
+no declared shape for an earlier step's output, it infers one from whatever file it finds, infers it
+wrong, and the run keeps producing garbage past a green gate.
+
+`ceh-workflow-builder` ships one skill, `build-agentic-workflow`, for both. It interviews the task,
+defaults to one skill and emits a workflow only when a stated condition holds, then writes the
+artifact leaf-first into the target repo's `.claude/skills/`, so there is no install step.
+
+Seven dry runs shaped the rules before release: a blog pre-publication check, a task that should stay
+one skill, secret-bearing provisioning, a dependency sweep with a retry loop, a weekly issue triage,
+a rebuild of `release-flow`, and an incident postmortem. Each gap they exposed became a rule —
+`Skill` loads into the caller's context and only `Agent` isolates a step, every gate either stops or
+retries with a bound, each run gets its own directory, a fan-out writes one file per worker, a
+committed repo file is read in place, and an irreversible step is confirmed by the flow, which a
+subagent cannot do.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-workflow-builder` | v1.0.0 (new) |
+
+### Added
+
+- **`ceh-workflow-builder`** — new use-case plugin with the `build-agentic-workflow` skill: the
+  interview, the one-skill-vs-workflow gate, the per-step decision between an existing skill, a
+  script, a step skill and inline prose, per-artifact handoff schemas, Stop and bounded-Retry gates,
+  resumption and re-run safety, and templates for the single skill, the flow skill and a step skill.
+
+### Changed
+
+- **`README.md`** — `ceh-workflow-builder` added to the plugin, tier and skill tables and to both
+  install snippets.
+- **`CLAUDE.md`** — `ceh-workflow-builder` added to the use-case tier and the plugin table.
+
+---
+
 ## [6.3.6] — 2026-09-12
 
 `ceh-git-workflow` had eleven skills and no way to tell whether any of them worked. skill-creator

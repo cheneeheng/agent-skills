@@ -229,6 +229,16 @@
       "keywords": ["agent", "datastore", "git", "database", "migration", "postgres", "sqlite", "prototype"]
     },
     {
+      "name": "ceh-workflow-builder",
+      "source": "./plugins/ceh-workflow-builder",
+      "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a gated workflow skill that delegates each step and declares its handoff schemas — emitted into the target repo's .claude/skills/.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "workflow", "skill-authoring", "orchestration", "automation", "schema"]
+    },
+    {
       "name": "ceh-scenario-service-greenfield",
       "source": "./plugins/ceh-scenario-service-greenfield",
       "description": "CEH scenario bundle: starting a Python backend service from nothing — everything in the -iterate bundle plus planning and scaffolding.",
