@@ -58,7 +58,8 @@ provisional slug for the spec until the name is settled, then rename it — othe
 workflow overwrites the first one's spec.
 
 **One directory per run, not per flow.** Each run writes to `<run-dir>/<name>/<run-id>/`, with
-`<run-id>` the start time (`20260913-0930`), and creating it is the flow's first instruction. Below,
+`<run-id>` the start time (`20260913-0930`), and creating it is the flow's first instruction —
+unless no step writes a run artifact, in which case the flow has no run directory at all. Below,
 `<run>` means that directory. A flow that runs every week into a fixed `<run-dir>/<name>/` finds last
 week's artifacts in place: a consumer's exists-check passes on a stale file, and a finished
 `run-state.md` makes the new run skip every step. State that must outlive a run, such as a
@@ -68,7 +69,7 @@ step it summarises has succeeded.
 The generated flow **names the run-time variable and its default in its own body** — the agent that
 runs it is not the agent that built it and has none of this context.
 
-Run artifacts are never committed. Before finishing, check the target repo actually ignores the run
+Run artifacts are never committed. When the flow has a run directory, before finishing check the target repo actually ignores the run
 directory and append it to `.gitignore` if it does not; stating the requirement in prose is not the
 same as meeting it.
 
@@ -122,7 +123,7 @@ Decide per step, in this order — stop at the first that fits:
 
 | Becomes | When |
 |---|---|
-| An existing skill | Something already owns this step. Check it is installed in this session and model-invocable *before* choosing this row; if it is not, drop to the next row rather than emitting a call that fails silently |
+| An existing skill | Something already owns this step. Check it is installed in this session and model-invocable *before* choosing this row; if it is not, drop to the next row rather than emitting a call that fails silently. A skill from a plugin rather than the target repo's `.claude/skills/` may be absent where the flow later runs, so its row names a fallback: `<skill> if installed, else <next row>` |
 | A script | The step is mechanical and deterministic |
 | Its own step skill | The step is independently triggerable outside the flow, or the flow will dispatch it in a subagent |
 | Inline prose in the flow | Nothing above fits — the default |
@@ -131,8 +132,10 @@ Decide per step, in this order — stop at the first that fits:
 runs in the flow's own context and saves it nothing. A step that needs its own context window — it
 reads a lot, or its working notes would crowd the rest of the run — is dispatched with `Agent`,
 either carrying its instructions inline or told to load the step skill. Choose that only when the
-step's output is a file, because the subagent's context dies with it. The dispatch prompt carries
-`<run>` and every input path, since the subagent sees nothing else.
+step's output outlives the subagent — a file, or state the flow can check with a command, such as a
+commit, an open PR, or a tag — because the subagent's context dies with it. The dispatch prompt
+carries `<run>`, every input path, and the path of every schema the step reads or writes, since the
+subagent sees nothing else.
 
 **A step earns its own skill only on the third row.** A step that only ever runs inside one flow,
 and fits in the flow's own context, is inline prose or a script. Three skills beat six: every skill
@@ -162,10 +165,16 @@ artifact nobody downstream reads, gets no schema.
   workers appending to one artifact interleave and lose lines, and nothing downstream can tell that
   it happened. The merge step's gate counts files against the item list, because a worker that died
   leaves no file rather than a failing one, and a resumed run dispatches only the items with no file.
+- **A repo file is its own handoff.** When a step writes a committed project file in a format that
+  already has an owner — `CHANGELOG.md` per the changelog skill, a manifest — the consumer reads it in
+  place and the Schema column names that owner. Copying it into the run directory, or restating its
+  format in a schema, makes a second version that can drift.
 - **Artifacts live for the whole run.** Nothing is cleaned up at a step boundary; the consumer may be
   four steps away.
 - **One writer, many readers.** The schema belongs to the producing step. Every consumer points at
-  the one schema file rather than restating its fields, or the contract drifts between them.
+  the one schema file rather than restating its fields, or the contract drifts between them. When a
+  later step must amend the artifact — adding ticket links to a drafted document — the schema names
+  that step and the part it owns. An undeclared second writer is the bug this rule exists to catch.
 - **Preconditions are checked twice.** The producer's gate proves the artifact was valid when
   written; each consumer re-asserts it exists before reading, since intervening steps can fail.
 - **Never a secret.** A run artifact is plaintext on disk, git-ignored or not. A step that produces a
@@ -174,6 +183,8 @@ artifact nobody downstream reads, gets no schema.
 
 **Where it lives.** `.claude/skills/<name>-flow/references/<artifact>-schema.md`. Form is a Markdown
 doc: required fields, optional fields, one complete worked example, and the list of consuming steps.
+Name each required field as a literal heading or key, so a gate can check it with `Grep` rather than
+by judgement.
 Reach for JSON Schema and a validator only when the artifact is genuinely JSON and that step already
 runs a script — never add a dependency for this.
 
@@ -202,7 +213,8 @@ is visible where the gate is rather than buried in prose.
 ## Resumption, re-runs and irreversible steps
 
 Emit a run-state file only when the interview said the run can stop partway — otherwise skip this,
-since a flow that finishes in one sitting does not need one.
+since a flow that finishes in one sitting does not need one. Emit it even when most steps leave a
+trace in git: work the user never committed leaves none, so git alone cannot show where a run stopped.
 
 `<run>/run-state.md`: one line per step recording `pending` / `done` plus the artifact path it
 wrote. The flow's first instruction becomes "find the newest run under `<run-dir>/<name>/`; if its
@@ -224,7 +236,8 @@ allows, so a failure upstream costs nothing outside the machine. And the flow pa
 confirmation immediately before each one — never on a re-run path where it could fire twice unnoticed.
 A batch, such as one comment on each of thirty issues, gets one confirmation that shows the whole
 batch, not thirty prompts. A declined confirmation is the Stop shape with the step left `pending`, so
-a resumed run asks again instead of firing.
+a resumed run asks again instead of firing. Irreversible steps that follow each other with only a
+mechanical gate between them — merge, then tag — share one confirmation placed before the first.
 
 **The confirmation belongs to the flow, not to the step.** `AskUserQuestion` is stripped from every
 subagent, so a step dispatched with `Agent` cannot ask and would proceed straight through the pause.
@@ -254,7 +267,8 @@ Then run these checks:
 - **Dependency.** Every `Reads` entry names an artifact some *earlier* step `Writes`. This is the
   likeliest generation bug once handoffs stop being adjacent.
 - **Schema coverage.** Every `Reads` entry that names another step has a schema, and that schema file
-  exists. A `—` in the Schema column is only legal when the artifact came from outside the flow.
+  exists. A `—` in the Schema column is only legal when the artifact came from outside the flow, and
+  a repo file with an established format names its owner instead.
 
 Show the user the file list and the step/gate table before writing, and write only after they agree.
 Emission creates several files in their repo; a wrong `<name>` means cleaning all of them up.
@@ -314,7 +328,8 @@ argument-hint: '<Only if a run starts from an argument, e.g. [repo]>'
 
 Each run writes its state and step artifacts to `$CEH_WORKFLOW_RUN_DIR/<name>/<run-id>/`, defaulting
 to `.agents_workspace/<name>/<run-id>/`, with `<run-id>` the start time. Create it first and pass its
-path to every step. The directory is git-ignored.
+path to every step. The directory is git-ignored. <Omit this paragraph when no step writes a run
+artifact.>
 
 ## Pipeline
 
@@ -323,7 +338,7 @@ failed and why, never continue in degraded mode or skip ahead.
 
 | # | Step | Delegate to | Gate before next step |
 |---|------|-------------|-----------------------|
-| 1 | <what happens> | the Skill tool with `skill="<step-skill>"`, or the Agent tool with `subagent_type="<agent>"`, or `scripts/<x>.sh` via `${CLAUDE_SKILL_DIR}`, or "— inline" | <falsifiable condition>, or `<condition> — retry up to N, then stop` |
+| 1 | <what happens> | the Skill tool with `skill="<step-skill>"` (plus `if installed, else <fallback>` for a plugin skill), or the Agent tool with `subagent_type="<agent>"`, or `scripts/<x>.sh` via `${CLAUDE_SKILL_DIR}`, or "— inline" | <falsifiable condition>, or `<condition> — retry up to N, then stop` |
 
 ## Data contracts
 
@@ -390,7 +405,8 @@ optional and this skill does not depend on it.
 - [ ] Any fan-out gives each worker its own output file, merged by a later step that counts them.
 - [ ] Each run writes to its own `<run-id>` directory; only cross-run state sits beside them.
 - [ ] Every script is referenced through `${CLAUDE_SKILL_DIR}`, never a bare `scripts/` path.
-- [ ] Every delegated skill exists and is model-invocable.
+- [ ] Every delegated skill exists and is model-invocable, and a plugin skill's row names a fallback.
+- [ ] A committed repo file is read in place, and every second writer is declared in the schema.
 - [ ] No step skill survives that is neither triggerable on its own nor dispatched in a subagent.
 - [ ] `compatibility` present if and only if a step needs software the machine may lack.
-- [ ] Run directory declared, defaulted, and actually present in the target repo's `.gitignore`.
+- [ ] Run directory, if any, declared, defaulted, and actually present in the target repo's `.gitignore`.
