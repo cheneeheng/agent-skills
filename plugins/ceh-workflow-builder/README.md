@@ -44,6 +44,25 @@ another. Each run gets its own `<run-dir>/<name>/<run-id>/`, so a second run
 never reads the first one's artifacts, and that directory is expected to be
 git-ignored.
 
+## Packaging a generated workflow as a plugin
+
+Not automated yet. Keep the output in `.claude/skills/` unless the workflow is
+shared across repos. To package it by hand:
+
+1. Create `<plugin>/.claude-plugin/plugin.json` with `name`, `version`, and
+   `description`.
+2. Move every `<name>-*` skill directory into `<plugin>/skills/`. Script paths
+   through `${CLAUDE_SKILL_DIR}` keep resolving, because `skills/` stays flat.
+3. Prefix every Skill tool call with the plugin name: `skill="<name>-step"`
+   becomes `skill="<plugin>:<name>-step"`. Plugin skills are namespaced, so an
+   unprefixed call no longer resolves. This is the one step a plain copy gets
+   wrong.
+4. Check that every call now names a skill that exists in the plugin.
+
+A copy script was considered and rejected: steps 1 and 2 are a few shell
+commands, and step 3 needs to tell a call from a mention, which the agent that
+built the workflow already knows.
+
 ## Not this plugin
 
 - Evaluating a skill that already exists — `ceh-evaluation:evaluate-skill`.
