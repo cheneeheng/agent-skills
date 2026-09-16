@@ -4,9 +4,10 @@ description: >-
   Load this skill when shipping or creating a public-facing web page or route — a landing page,
   marketing page, docs site, blog page, or any HTML surface that crawlers and AI engines will see.
   Trigger on "add SEO", "make this page discoverable", "meta tags", "open graph", "structured data",
-  "sitemap", "robots.txt", "llms.txt", or when a new public route is created in a SvelteKit or React
-  app. Not for README, package-listing, or repo text (use text-discoverability) and not for writing
-  the page's content itself (use ceh-blog or ceh-documentation).
+  "sitemap", "robots.txt", or when a new public route is created in a SvelteKit or React app. Not
+  for README, package-listing, or repo text (use text-discoverability), not for authoring the
+  llms.txt file itself (use write-llms-txt), and not for writing the page's content itself (use
+  ceh-blog or ceh-documentation).
 ---
 
 # Web Discoverability
@@ -41,8 +42,9 @@ Every indexable page ships with:
 - **`robots.txt`** — allow by default; block only genuinely private paths. Blocking AI
   crawlers (GPTBot, ClaudeBot, PerplexityBot) is a product decision, not a default — flag it
   to the user rather than deciding either way silently.
-- **`llms.txt`** at the site root — a markdown map of what the product is plus links to the
-  key pages. The GEO analogue of the sitemap; keep it current when public pages are added.
+- **`llms.txt`** at the site root — a curated markdown reading list for AI agents, shipped
+  alongside the sitemap and kept current as public pages change. `write-llms-txt` owns its
+  format and curation.
 - **404s return HTTP 404.** An SPA fallback serving every unknown path as 200 poisons the
   index with phantom pages.
 - **Moved pages get a 301** at the server/adapter level — no redirect chains, no client-side
