@@ -5,6 +5,50 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.6.0] — 2026-09-18
+
+`build-agentic-workflow` used to interview the user and design from the answers in one pass, which
+meant the design phases read from conversation state. Whatever the user skipped was simply absent,
+and the two questions people skip are re-run damage and irreversible steps — the two whose absence
+emits a workflow that corrupts data or publishes twice. The interview now lives in its own skill,
+`interview-workflow-task`, and writes a spec file with nine fixed headings. The builder's Phase 1
+became an intake gate that checks those headings and delegates back for any row that fails, and a
+row the user explicitly declines is recorded as `Declined` so the gate takes a conservative reading
+instead of asking again forever.
+
+Three rules in the new skill come from simulated interviews run against draft wordings rather than
+from theory. A proof under question 3 may be a declared human go/no-go gate: some steps turn on
+judgement, and without that allowance both the interview's completion bar and the builder's intake
+reject such a spec with no `Declined` escape for that row. An answer to question 8 that is about
+order rather than repetition is a precondition, so it gets tightened under question 3 and
+cross-referenced — the builder reads heading 8 as a run-once guard and would never gate an ordering
+hazard left there. And on an existing spec every row is labelled ok/gate/fails before anything is
+asked, because agents sweeping by eye stopped at the first soft proof and then asserted the
+completion bar was met against a file that failed it.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-workflow-builder` | v1.0.0 —> v1.1.0 |
+
+### Added
+
+- **`ceh-workflow-builder:interview-workflow-task`** — new skill that asks the nine questions a
+  workflow artifact needs answered and writes them to `<name>-workflow-spec.md`: the fixed
+  headings, writing each answer to disk as it arrives, resuming from a partial spec instead of
+  re-asking, `Declined` for a refused question, and never writing a credential into the spec.
+- **Cross-reference entry** for the human go/no-go gate, which both the interview's question 3 and
+  the builder's intake row 3 must accept — tightening either alone deadlocks a task with a genuine
+  judgement step.
+
+### Changed
+
+- **`ceh-workflow-builder:build-agentic-workflow`** — Phase 1 is an intake gate rather than an
+  interview: a table of the nine answers with what does not satisfy each, an explicit delegation to
+  `interview-workflow-task` for a failing row, and a conservative fallback per declined row. Its
+  description and body now say it designs from a spec.
+
 ## [6.5.0] — 2026-09-18
 
 An `llms.txt` is a short markdown index at a site root telling an agent what a product is and which

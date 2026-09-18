@@ -2,20 +2,21 @@
 name: build-agentic-workflow
 description: >-
   Load this skill to turn a repetitive multi-step task into something an agent runs instead of
-  something a human drives by hand: interview the task, decide whether it is one skill or a gated
-  multi-step workflow, and emit the artifact into the target repo's `.claude/skills/`. Trigger on
-  "turn this into a skill", "turn this into a workflow", "build an agentic workflow", "automate this
-  process", "make this repeatable", "I do this by hand every time", "wrap these steps into something
-  the agent can run", or "I need a skill that calls other skills". Covers the one-skill-vs-workflow
-  gate, the pipeline + gate table, per-step data-contract schemas for handoffs, and leaf-first
-  emission. Not for evaluating a skill that already exists (use ceh-evaluation:evaluate-skill), not
-  for adding a component to this plugin repo, and not for running a workflow that has already been
-  built.
+  something a human drives by hand: design it from a workflow spec, decide whether it is one
+  skill or a gated multi-step workflow, and emit the artifact into the target repo's
+  `.claude/skills/`. Trigger on "turn this into a skill", "turn this into a workflow", "build an
+  agentic workflow", "automate this process", "make this repeatable", "I do this by hand every
+  time", or "I need a skill that calls other skills". Covers the one-skill-vs-workflow gate, the
+  pipeline + gate table, per-step data-contract schemas for handoffs, and leaf-first emission.
+  An intake gate delegates to ceh-workflow-builder:interview-workflow-task when the task is not
+  yet described, so this stays the entry point even with nothing written down. Not for
+  evaluating a skill that already exists (use ceh-evaluation:evaluate-skill), not for adding a
+  component to this plugin repo, and not for running a workflow that has already been built.
 ---
 
 # Build an Agentic Workflow
 
-Interview a fuzzy, repetitive task into a runnable artifact. Two possible outputs, and choosing
+Turn a specified repetitive task into a runnable artifact. Two possible outputs, and choosing
 between them is the main decision this skill makes:
 
 - **One skill** — the default. A single `SKILL.md` the agent loads and follows.
@@ -49,10 +50,10 @@ Two directories, two variables, two lifetimes. Do not conflate them.
 
 | | Variable | Default | Holds |
 |---|---|---|---|
-| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/` | this skill's interview spec and notes |
+| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/` | the workflow spec and build notes |
 | Run time | `$CEH_WORKFLOW_RUN_DIR` | `.agents_workspace/` | the generated workflow's step artifacts and run state |
 
-Both default to the same place, so both namespace by name: the interview spec is
+Both default to the same place, so both namespace by name: the workflow spec is
 `<build-dir>/<name>-workflow-spec.md` and run-time paths are under `<run-dir>/<name>/`. Use a
 provisional slug for the spec until the name is settled, then rename it — otherwise building a second
 workflow overwrites the first one's spec.
@@ -73,28 +74,42 @@ Run artifacts are never committed. When the flow has a run directory, before fin
 directory and append it to `.gitignore` if it does not; stating the requirement in prose is not the
 same as meeting it.
 
-## Phase 1 — Interview
+## Phase 1 — Intake
 
-Write the answers to `<build-dir>/<name>-workflow-spec.md` as you go. Batch enumerable choices
-through `AskUserQuestion`; ask the open-ended ones plainly. Do not start designing until every
-question has an answer.
+This skill designs from a spec; it does not conduct the interview. Before anything else, establish
+that the nine answers exist — in `<build-dir>/<name>-workflow-spec.md`, or given directly in this
+conversation, in which case write them to that file now so the rest of the phases have one source.
 
-1. **The moment.** What happens right before you would want this to run? This becomes the trigger,
-   and it must be a verb. If the answer is a topic rather than a moment, the artifact will never
-   auto-fire and the interview is not done.
-2. **The manual procedure.** Walk it step by step in the order you actually do it.
-3. **Preconditions and proof.** Per step: what has to be true before it starts, and how do you know
-   it worked? An answer you cannot check is not a gate.
-4. **Data flow.** Per step: what does it read, what does it leave behind, and which *later* step
-   reads that? Name the producing step, not just the artifact. And what does a run start from: an
-   argument passed at invocation, or something the previous run left behind?
-5. **Tooling.** Which CLIs, credentials, services, or network access does each step need?
-6. **Done.** What is true at the end that was not true at the start?
-7. **Interruption.** Does this run in one sitting, or can it stop partway and need resuming?
-8. **Re-runs.** If it fails halfway and you start over, which steps would do damage if they ran a
-   second time? Name them — this is the question people forget, and it is the one that corrupts data.
-9. **Irreversible steps.** Which steps touch something outside this machine that cannot be taken
-   back: sending mail, charging a card, publishing, deleting?
+| # | Must be answered | Not satisfied by |
+|---|------------------|------------------|
+| 1 | Moment | a topic or domain noun. A schedule ("every Friday") passes — recast it as the moment it fires |
+| 2 | Manual procedure, step by step | "the usual release process" |
+| 3 | Preconditions and proof per step | a proof no command or file check can settle, unless it is a declared human go/no-go gate |
+| 4 | Data flow per step, naming the *producing* step | an artifact named with no producer |
+| 5 | Tooling: CLIs, credentials, services, network | — |
+| 6 | Done: what is true at the end that was not at the start | — |
+| 7 | Interruption: one sitting, or resumable | — |
+| 8 | Which steps damage something if they run twice | silence |
+| 9 | Which steps are irreversible outside this machine | silence |
+
+**A gap is not a "none".** Invoke the Skill tool with
+`skill="ceh-workflow-builder:interview-workflow-task"` to fill any row above, then re-check this
+table against what it wrote. Never infer a missing answer and continue: an assumed-empty 8 emits a
+workflow with no re-run guard, and an assumed-empty 9 emits one that publishes without pausing.
+Those are the two rows a user volunteering their task unprompted almost never covers.
+
+**A declined row is different, and it ends the loop.** When the spec records `Declined` under a
+heading, do not invoke the interview again — that is how these two skills bounce off each other
+forever. Take the conservative reading instead, write it into the spec as an assumption, and tell
+the user what it costs them:
+
+| Declined | Assume | Costs |
+|---|---|---|
+| 8 | every step is unsafe to run twice | each step opens by checking the world |
+| 9 | every step with an outside effect is irreversible | the flow pauses for confirmation before each |
+| any other row | nothing — these cannot be assumed safely | stop and say which row blocked the build |
+
+Do not start designing until every row passes or carries a recorded assumption.
 
 ## Phase 2 — One skill or a workflow
 
@@ -113,7 +128,7 @@ template below: skip phases 3 and 4, and from Phase 5 keep only the destination 
 confirm-before-writing step. A single skill has no schemas, no scripts to order, and no run
 directory to ignore. Three rules from the skipped sections still apply, because they guard the
 world rather than a handoff: never write a secret to disk, only a reference to where it lives; a step
-from interview question 8 opens by checking the world; and the skill pauses for user confirmation
+from spec question 8 opens by checking the world; and the skill pauses for user confirmation
 immediately before a step from question 9. It runs in the main context, so it can ask.
 
 **Naming.** Derive `<name>` from the moment as a short kebab verb phrase the user would recognise
@@ -215,7 +230,7 @@ is visible where the gate is rather than buried in prose.
 
 ## Resumption, re-runs and irreversible steps
 
-Emit a run-state file only when the interview said the run can stop partway — otherwise skip this,
+Emit a run-state file only when spec question 7 said the run can stop partway — otherwise skip this,
 since a flow that finishes in one sitting does not need one. Emit it even when most steps leave a
 trace in git: work the user never committed leaves none, so git alone cannot show where a run stopped.
 
@@ -230,11 +245,11 @@ it completes, rather than holding results in context and writing once at the end
 mid-step takes unwritten results with it.
 
 **Re-running is not the same as resuming.** `run-state.md` tells you where a run stopped only if it
-survived the failure, so a step named in interview question 8 cannot rely on it. Such a step opens by
+survived the failure, so a step named in spec question 8 cannot rely on it. Such a step opens by
 checking the world, not the ledger: does this schema already exist, has this row already been
 inserted? Write that check into the step itself and make it the step's first instruction.
 
-**Irreversible steps** from question 9 get two rules. They go as late in the pipeline as the data flow
+**Irreversible steps** from spec question 9 get two rules. They go as late in the pipeline as the data flow
 allows, so a failure upstream costs nothing outside the machine. And the flow pauses for explicit user
 confirmation immediately before each one — never on a re-run path where it could fire twice unnoticed.
 A batch, such as one comment on each of thirty issues, gets one confirmation that shows the whole
@@ -305,7 +320,7 @@ compatibility: >-
 
 ## Done when
 
-<The falsifiable end condition from interview question 6.>
+<The falsifiable end condition from spec question 6.>
 ```
 
 No pipeline table, no run directory, no schemas: a single skill runs in one context and hands nothing
@@ -395,6 +410,8 @@ optional and this skill does not depend on it.
 
 ## Final checklist
 
+- [ ] All nine intake rows answered — by the spec or by the interview skill, never by silent
+      assumption; a declined row carries its conservative reading written into the spec.
 - [ ] Trigger is a moment, not a topic.
 - [ ] Workflow emitted only because a Phase 2 condition holds — otherwise one skill.
 - [ ] Every step's gate is falsifiable, stated against a schema where one exists.
