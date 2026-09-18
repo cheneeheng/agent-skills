@@ -6,12 +6,13 @@ landing copy.
 
 ## Scope
 
-Discoverability is one activity applied to many surfaces. The two skills split on surface
+Discoverability is one activity applied to many surfaces. The skills split on surface
 mechanics, which is also where their trigger moments and file types are disjoint:
 
 | Skill | Surface | Moment |
 |-------|---------|--------|
-| `web-discoverability` | HTML pages and routes | Shipping or creating a public web page — meta/OG/canonical, structured data, sitemap/robots, `llms.txt`, rendering strategy |
+| `web-discoverability` | HTML pages and routes | Shipping or creating a public web page — meta/OG/canonical, structured data, sitemap/robots, rendering strategy |
+| `write-llms-txt` | The `llms.txt` index | Creating or updating the markdown reading list that tells AI agents which pages to read |
 | `text-discoverability` | Public-facing text | Writing the README first screen, package description/keywords, GitHub topics, marketplace listings, landing copy |
 
 Both carry a GEO layer: content structured so AI engines can extract and cite it — answer-first
@@ -29,5 +30,6 @@ sections, standalone quotable facts, question-shaped headings.
 
 | Skill | Description |
 |-------|-------------|
-| `web-discoverability` | Per-page head checklist, site-level surfaces (sitemap, robots, llms.txt), JSON-LD structured data, SSR/prerender requirements, GEO citation rules |
+| `web-discoverability` | Per-page head checklist, site-level surfaces (sitemap, robots), JSON-LD structured data, SSR/prerender requirements, GEO citation rules |
+| `write-llms-txt` | The positional llms.txt format, what earns a link, the reserved `## Optional` section, pointing at markdown over HTML, `llms-full.txt`, keeping it current |
 | `text-discoverability` | The excerpt rule, the canonical one-liner, per-surface checklist (GitHub/PyPI/npm/marketplaces), GEO writing rules, anti-patterns |

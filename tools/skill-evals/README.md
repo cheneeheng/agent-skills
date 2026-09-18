@@ -11,13 +11,22 @@ Two problems stop skill-creator's own flow from working here:
   repo instead, which drops user settings and with them every user-enabled plugin and hook.
 - **`select()` on Windows.** `scripts/run_eval.py` (the trigger eval behind `run_loop.py`) calls
   `select.select()` on a subprocess pipe, which raises `WinError 10093` on Windows.
+- **Trigger runs contaminating each other.** Every parallel run wrote its uniquely-named copy of the
+  same command into one shared `.claude/commands/`, so a session could invoke a sibling's copy and
+  the name-match detection scored it as "did not trigger". The false-negative rate rose with
+  `--num-workers`: at 6 workers a skill that triggers 3/3 serially scored 0/3. `run_eval.py` now
+  gives each run its own temp project root.
+- **cp1252 mangling the description under test.** `read_text()` with no encoding uses the locale
+  encoding, so on Windows an em dash in a `description:` reached `claude -p` as `â€”`. Every
+  read and write in `scripts/` is now explicitly utf-8. Fixing only the read would have been
+  worse: cp1252 round-trips an em dash but cannot encode `→`, so the write would raise.
 
 ## Contents
 
 | Path | What |
 |------|------|
 | `run_behavior.py` | Behavioral eval: builds a fixture repo per run from the eval's `setup`, runs the with-skill and without-skill arms, writes skill-creator's workspace layout plus `timing.json` |
-| `scripts/` | Copy of skill-creator's trigger-eval scripts (`claude-plugins-official/skill-creator`, cache revision `3ea32df27be7`), Apache-2.0, see `LICENSE.txt`. Two patches in `run_eval.py`, each marked `# Patch:` — a reader thread replaces `select()`, and `--setting-sources project` is added to the `claude -p` call |
+| `scripts/` | Copy of skill-creator's trigger-eval scripts (`claude-plugins-official/skill-creator`, cache revision `3ea32df27be7`), Apache-2.0, see `LICENSE.txt`. Four patches, each marked `# Patch:`. Three in `run_eval.py`: a reader thread replaces `select()`, `--setting-sources project` is added to the `claude -p` call, and each run gets its own `tempfile.mkdtemp()` project root instead of a shared one (which drops `find_project_root()` and the `project_root` argument threaded through `run_eval()`, so `run_loop.py` no longer passes one). The fourth spans all five files: every `read_text`/`write_text` passes `encoding="utf-8"` |
 
 ## Eval definitions
 
@@ -60,14 +69,22 @@ PYTHONIOENCODING=utf-8 python $SC/eval-viewer/generate_review.py $WS/iteration-1
   --benchmark $WS/iteration-1/benchmark.json
 ```
 
-Trigger eval and description tuning run from a scratch directory holding an empty `.claude/`, so
-`find_project_root()` writes its temporary command file there and not into this repo:
+Trigger eval and description tuning run from anywhere: each run builds its own temp project root,
+so nothing is written into this repo and no scratch directory is needed.
 
 ```bash
-mkdir -p /tmp/trig/.claude && cd /tmp/trig
 PYTHONPATH=<repo>/tools/skill-evals python -m scripts.run_loop \
   --eval-set <trigger-eval.json> --skill-path <repo>/plugins/ceh-git-workflow/skills/commit \
   --model claude-opus-5 --max-iterations 5 --verbose
+```
+
+`run_eval.py` prints its JSON to stdout and saves nothing, so redirect it. `--verbose` progress
+goes to stderr and stays on screen:
+
+```bash
+python -m scripts.run_eval --eval-set <trigger-eval.json> --skill-path <skill> \
+  --model claude-sonnet-5 --runs-per-query 3 --timeout 180 --verbose \
+  > .agents_workspace/skill-evals/<skill>/trigger/$(date +%Y%m%d-%H%M%S).json
 ```
 
 ## What isolation does not cover

@@ -1,0 +1,131 @@
+{
+  "skill_name": "write-llms-txt",
+  "evals": [
+    {
+      "id": 1,
+      "name": "create-from-docs-site",
+      "prompt": "we want agents to be able to read our docs site without crawling it. add an llms.txt for docs.pipevalve.dev",
+      "expected_output": "A new llms.txt inside docs/ so MkDocs publishes it at the site root: H1, a one-sentence blockquote summary, a curated link section ordered quickstart then concepts then guides then reference, and contributing plus changelog demoted to a trailing ## Optional. Every URL is one the MkDocs build actually serves.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "mkdocs.yml": "site_name: Pipevalve\nsite_url: https://docs.pipevalve.dev/\nrepo_url: https://github.com/pipevalve/pipevalve\ndocs_dir: docs\ntheme:\n  name: material\nnav:\n  - Home: index.md\n  - Quickstart: quickstart.md\n  - Concepts:\n      - Streams: concepts/streams.md\n      - Consumers: concepts/consumers.md\n  - Guides:\n      - Deploy on Fly.io: guides/deploy-fly.md\n      - Tuning backpressure: guides/backpressure-tuning.md\n  - Reference:\n      - HTTP API: api/http.md\n      - CLI: api/cli.md\n  - Contributing: contributing.md\n  - Changelog: changelog.md\n",
+            "README.md": "# Pipevalve\n\nBackpressure-aware job queue for Python services. Workers pull only what they can finish, so a slow\ndownstream never fills the queue faster than it drains.\n\nDocs live in `docs/` and publish to https://docs.pipevalve.dev/ on every push to main.\n",
+            ".github/workflows/docs.yml": "name: docs\non:\n  push:\n    branches: [main]\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: pip install mkdocs-material\n      - run: mkdocs gh-deploy --force\n",
+            "docs/index.md": "# Pipevalve\n\nPipevalve is a backpressure-aware job queue for Python services. A worker leases\nonly as much work as it can finish inside its lease window, so a slow database never\nturns into an unbounded backlog.\n",
+            "docs/quickstart.md": "# Quickstart\n\n`uv add pipevalve`, point it at a Postgres URL, start a worker, enqueue a job.\nUnder two minutes from an empty project to a job that ran.\n",
+            "docs/concepts/streams.md": "# Streams\n\nA stream is an ordered, partitioned log of jobs. Partitions decide ordering\nguarantees and how far a single slow consumer can fall behind before the producer is\nthrottled.\n",
+            "docs/concepts/consumers.md": "# Consumers\n\nConsumer groups, leases, at-least-once delivery, and how acks, retries and the\ndead-letter stream interact.\n",
+            "docs/guides/deploy-fly.md": "# Deploy on Fly.io\n\nRun workers as a Fly process group with an attached Postgres, size the lease\nwindow against the machine's CPU quota, and drain cleanly on deploy.\n",
+            "docs/guides/backpressure-tuning.md": "# Tuning backpressure\n\nHow to pick lease windows and prefetch counts from your p99 job duration, and\nwhat the throttle metrics mean once producers start blocking.\n",
+            "docs/api/http.md": "# HTTP API\n\nEvery endpoint, with request and response shapes, status codes, idempotency keys,\nand cursor pagination.\n",
+            "docs/api/cli.md": "# CLI\n\nEvery `pipevalve` subcommand, its flags, its exit codes, and the environment variables\neach one reads.\n",
+            "docs/contributing.md": "# Contributing\n\nDev setup with uv, the test matrix, and what a reviewable pull request looks like\nhere.\n",
+            "docs/changelog.md": "# Changelog\n\n## 2.1.0\n\n- Add the dead-letter stream\n\n## 2.0.0\n\n- Leases replace visibility timeouts\n"
+          },
+          "commit": "docs: publish the Pipevalve documentation site"
+        }
+      ],
+      "expectations": [
+        "llms.txt is created inside docs/ (the mkdocs docs_dir) so it publishes at https://docs.pipevalve.dev/llms.txt, and it is the only new or modified file",
+        "The file opens with a single H1 naming Pipevalve, then a '> ' blockquote of one sentence saying what it is and who it is for, with no marketing superlatives; any prose sits between the blockquote and the first H2 and contains no headings",
+        "Every H2 section contains only '- [name](url)' bullets with absolute https://docs.pipevalve.dev/ URLs: no bare bullets, no page content pasted inline, and no bullet whose destination is the site index or a section index rather than a page that answers a question",
+        "The quickstart bullet precedes the concepts, guides and reference bullets, and each note after the colon says what the reader will learn instead of restating the page title",
+        "Contributing and the changelog sit under a '## Optional' heading placed last, not among the main links",
+        "Every link resolves to a path this MkDocs site actually serves (page URLs such as /quickstart/); the run does not invent '.md' URLs that would 404, or, if it links '.md', it also adds the plugin or build step that serves them"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "update-after-docs-change",
+      "prompt": "we shipped the webhooks guide today, and the v1 migration page has been gone for a while. bring our llms.txt up to date",
+      "expected_output": "public/llms.txt with a Webhooks bullet added to the Docs section following the existing .md URL convention, the dead Migrating from v1 bullet removed, and everything else unchanged.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"tideline-docs\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"build\": \"node build.mjs\"\n  },\n  \"dependencies\": {\n    \"marked\": \"^12.0.0\"\n  }\n}\n",
+            "build.mjs": "import { readdir, readFile, writeFile, mkdir, cp } from \"node:fs/promises\";\nimport { marked } from \"marked\";\n\n// Every page ships twice: rendered HTML at /<slug>/ and the raw markdown at /<slug>.md, so an\n// agent can fetch the markdown without paying for the nav, the banner and the footer.\nconst files = (await readdir(\"content\")).filter((f) => f.endsWith(\".md\"));\n\nfor (const file of files) {\n  const slug = file.replace(/\\.md$/, \"\");\n  const src = await readFile(`content/${file}`, \"utf8\");\n  await mkdir(`dist/${slug}`, { recursive: true });\n  await writeFile(`dist/${slug}/index.html`, `<!doctype html><title>${slug}</title>${marked(src)}`);\n  await writeFile(`dist/${slug}.md`, src);\n}\n\nawait cp(\"public\", \"dist\", { recursive: true });\n",
+            "public/llms.txt": "# Tideline\n\n> Tideline is a product-analytics SDK for web apps: one script tag, events you name in your own\n> code, and no cookie banner.\n\nEvery page is also served as clean markdown: append `.md` to the path.\n\n## Docs\n\n- [Quickstart](https://docs.tideline.sh/quickstart.md): Add the snippet and send your first event in under five minutes.\n- [Events](https://docs.tideline.sh/events.md): Naming events, attaching properties, and the limits ingest enforces.\n- [HTTP API](https://docs.tideline.sh/api.md): Every endpoint, with request and response shapes.\n- [Migrating from v1](https://docs.tideline.sh/migrate-v1.md): Mapping v1 event names onto the v2 schema.\n\n## Optional\n\n- [Changelog](https://docs.tideline.sh/changelog.md)\n",
+            "content/quickstart.md": "# Quickstart\n\nDrop the script tag in your layout, call `tideline.track('signup_completed')`, and\nwatch it land in the live feed.\n",
+            "content/events.md": "# Events\n\nEvent names, property types, the 40-property ceiling per event, and what ingest does\nwith an event it cannot parse.\n",
+            "content/api.md": "# HTTP API\n\nEvery endpoint, with request and response shapes, auth headers, and rate limits.\n",
+            "content/changelog.md": "# Changelog\n\n## 2.4.0\n\n- Webhook deliveries are signed\n"
+          },
+          "commit": "docs: build the Tideline docs site"
+        },
+        {
+          "files": {
+            "content/webhooks.md": "# Webhooks\n\nSubscribe to `funnel.completed` and `alert.fired`, verify the HMAC signature on every\ndelivery, and plan for retries: a failed delivery is retried six times over an hour\nbefore it is parked.\n"
+          },
+          "commit": "docs: add the webhooks guide"
+        }
+      ],
+      "expectations": [
+        "public/llms.txt gains a Webhooks bullet in the '## Docs' section, not under Optional, and its note is drawn from the new page's body rather than its title: it names at least one specific the page carries, such as an event name (funnel.completed, alert.fired), the HMAC signature, or the retry schedule, so a generic 'webhook documentation' note fails",
+        "The 'Migrating from v1' bullet is removed, because no page under content/ produces that URL any more and the link would 404",
+        "The new link follows the file's existing convention exactly: an absolute https://docs.tideline.sh/<slug>.md URL matching the '.md' files build.mjs writes, with no mixing of HTML and markdown links",
+        "The H1, the blockquote, the prose line, the section names and the order of the surviving bullets are unchanged: no restructure and no rewritten summary",
+        "'## Optional' still holds the changelog and is still the last section",
+        "public/llms.txt is the only modified file: no llms-full.txt was created, no page under content/ was edited, and build.mjs is untouched"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "curate-not-sitemap-dump",
+      "prompt": "take everything in our sitemap and turn it into an llms.txt at the site root so the AI crawlers know what we have. do an llms-full.txt too",
+      "expected_output": "public/llms.txt holding a curated shortlist rather than the sitemap's 28 URLs: getting started and install first, reference and integrations after, pricing/legal/changelog and anything else off the critical path demoted to a trailing ## Optional rather than filling the main sections. llms-full.txt is either generated by a build step or declined with a reason, never hand-pasted.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            "package.json": "{\n  \"name\": \"beacon-site\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"build\": \"node build.mjs\"\n  },\n  \"dependencies\": {\n    \"marked\": \"^12.0.0\"\n  }\n}\n",
+            "build.mjs": "import { readdir, readFile, writeFile, mkdir, cp } from \"node:fs/promises\";\nimport { marked } from \"marked\";\n\n// content/**.md and pages/**.md render to dist/<path>/index.html; public/ is copied verbatim,\n// so anything that has to be served at the site root belongs in public/.\nasync function render(dir) {\n  for (const entry of await readdir(dir, { withFileTypes: true, recursive: true })) {\n    if (!entry.isFile() || !entry.name.endsWith(\".md\")) continue;\n    const src = `${entry.parentPath}/${entry.name}`;\n    const out = `dist/${src.replace(/^(content|pages)\\//, \"\").replace(/\\.md$/, \"\")}`;\n    await mkdir(out, { recursive: true });\n    await writeFile(`${out}/index.html`, marked(await readFile(src, \"utf8\")));\n  }\n}\n\nawait render(\"content\");\nawait render(\"pages\");\nawait cp(\"public\", \"dist\", { recursive: true });\n",
+            "public/sitemap.xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>https://beacon.build/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/pricing/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/about/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/careers/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/changelog/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/legal/terms/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/legal/privacy/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/legal/dpa/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/getting-started/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/install/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/self-hosting/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/status-pages/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/incidents/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/subscribers/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/api/authentication/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/api/events/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/api/webhooks/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/api/rate-limits/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/api/errors/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/integrations/slack/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/integrations/pagerduty/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/integrations/datadog/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/docs/integrations/webhooks/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/blog/why-status-pages-lie/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/blog/incident-comms-that-work/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/blog/our-2026-uptime/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/blog/hiring-an-sre/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n  <url>\n    <loc>https://beacon.build/blog/beacon-2-0/</loc>\n    <lastmod>2026-08-30</lastmod>\n  </url>\n</urlset>\n",
+            "public/robots.txt": "User-agent: *\nAllow: /\nSitemap: https://beacon.build/sitemap.xml\n",
+            "content/docs/getting-started.md": "# Getting started\n\nCreate a status page, invite your team, and post your first incident. Ten minutes, no\ncard.\n",
+            "content/docs/install.md": "# Install the agent\n\nOne binary per host. Install it, drop a token in the environment, and checks start\nreporting within thirty seconds.\n",
+            "content/docs/self-hosting.md": "# Self-hosting\n\nRun Beacon on your own Postgres and object store: the compose file, the migrations, and\nthe backup you actually need.\n",
+            "content/docs/status-pages.md": "# Status pages\n\nComponents, groups, custom domains, and what subscribers see during a partial outage.\n",
+            "content/docs/incidents.md": "# Incidents\n\nThe incident lifecycle, templated updates, and how a postmortem attaches to a resolved\nincident.\n",
+            "content/docs/subscribers.md": "# Subscribers\n\nEmail, SMS and webhook subscribers, double opt-in, and per-component subscriptions.\n",
+            "content/docs/api/authentication.md": "# Authentication\n\nAPI keys, scopes, rotation, and how a key is bound to a single status page.\n",
+            "content/docs/api/events.md": "# Events API\n\nEvery event endpoint, with request and response shapes and cursor pagination.\n",
+            "content/docs/api/webhooks.md": "# Webhooks API\n\nRegistering endpoints, the signature header, and the retry schedule for failed\ndeliveries.\n",
+            "content/docs/api/rate-limits.md": "# Rate limits\n\nPer-key buckets, the headers that report the remaining budget, and what a 429 carries.\n",
+            "content/docs/api/errors.md": "# Errors\n\nEvery error code, what causes it, and whether retrying it can possibly help.\n",
+            "content/docs/integrations/slack.md": "# Slack\n\nPost incident updates to a channel and open an incident from a slash command.\n",
+            "content/docs/integrations/pagerduty.md": "# PagerDuty\n\nMirror a PagerDuty incident onto a status page, and resolve both at once.\n",
+            "content/docs/integrations/datadog.md": "# Datadog\n\nTurn a Datadog monitor into a Beacon component check.\n",
+            "content/docs/integrations/webhooks.md": "# Outgoing webhooks\n\nSend every incident transition to your own endpoint.\n",
+            "content/blog/why-status-pages-lie.md": "# Why status pages lie\n\nA green dot is a product decision, not a measurement.\n",
+            "content/blog/incident-comms-that-work.md": "# Incident comms that work\n\nWrite for the customer who is already angry.\n",
+            "content/blog/our-2026-uptime.md": "# Our 2026 uptime\n\nEvery minute we were down, and why.\n",
+            "content/blog/hiring-an-sre.md": "# Hiring an SRE\n\nWhat the role looks like here.\n",
+            "content/blog/beacon-2-0.md": "# Beacon 2.0\n\nThe subscriber pipeline rewrite, and what it changes for you.\n",
+            "pages/index.md": "# Beacon\n\nStatus pages and incident comms for teams that would rather not build either.\n",
+            "pages/pricing.md": "# Pricing\n\nFree for one page, $29 a month per extra page, self-hosting is source-available.\n",
+            "pages/about.md": "# About\n\nFour people, one Postgres, since 2023.\n",
+            "pages/careers.md": "# Careers\n\nWe are hiring one SRE.\n",
+            "pages/changelog.md": "# Changelog\n\n## 2.0.0\n\n- Rewrite the subscriber pipeline\n",
+            "pages/legal/terms.md": "# Terms of service\n\nThe usual.\n",
+            "pages/legal/privacy.md": "# Privacy policy\n\nWhat we store, and for how long.\n",
+            "pages/legal/dpa.md": "# Data processing addendum\n\nSubprocessors and transfer mechanisms.\n"
+          },
+          "commit": "feat(site): build the Beacon marketing and docs site"
+        }
+      ],
+      "expectations": [
+        "The sections above '## Optional' hold a curated shortlist of at most 12 bullets, and none of the five blog posts, careers or about appears among them: 'demote rather than delete' makes '## Optional' a legitimate home for those, so the failure is a flat dump of the sitemap into the main sections, not their presence in the file",
+        "The pages a newcomer needs come first (getting started, install), with the API and integration reference pages after them",
+        "Pricing, the legal pages and the changelog, where they appear at all, sit under a '## Optional' heading placed last",
+        "Every H2 section contains nothing but '- [name](url)' bullets and no page content is pasted into llms.txt, and each note that is present says what the reader will learn instead of restating the title: notes are optional in the spec, so a bullet without one is not a failure",
+        "llms.txt reaches the site root at https://beacon.build/llms.txt: either as a static public/llms.txt, which build.mjs copies verbatim into dist/, or as a build step in build.mjs that writes dist/llms.txt itself",
+        "The links point at what build.mjs actually serves: it renders every page to dist/<path>/index.html and emits no markdown, so either the bullets link those HTML URLs and the run says why it is not linking markdown, or it adds the build step that emits the .md files it links: bare .md URLs that would 404 are a failure",
+        "llms-full.txt is either produced by a build step added to build.mjs that concatenates the docs from source, or explicitly skipped with the reason that a hand-maintained copy goes stale within a release: it is not a static file hand-pasted from page contents",
+        "robots.txt and sitemap.xml are unchanged"
+      ]
+    }
+  ]
+}
