@@ -234,8 +234,9 @@ resolves, so renaming a skill means grepping for its old name. It shellchecks `s
 when `shellcheck` is installed. CI has it, so a local green run on Windows can still fail CI.
 
 `tools/skill-evals/scripts/` is a **patched** copy of skill-creator's trigger-eval scripts, not a
-mirror: three fixes marked `# Patch:` (Windows `select()`, `--setting-sources project`, a per-run
-temp project root so parallel runs stop invoking each other's command file). Never refresh it from
+mirror: four fixes marked `# Patch:` (Windows `select()`, `--setting-sources project`, a per-run
+temp project root so parallel runs stop invoking each other's command file, and explicit utf-8 on
+every file read/write so cp1252 stops mangling the description under test). Never refresh it from
 upstream without re-applying them, and pass `--timeout 180` — the stock 30s default scores a slow
 run as "did not trigger". Details in `tools/skill-evals/README.md`.
 

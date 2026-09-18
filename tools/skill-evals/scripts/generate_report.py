@@ -311,12 +311,15 @@ def main():
     if args.input == "-":
         data = json.load(sys.stdin)
     else:
-        data = json.loads(Path(args.input).read_text())
+        # Patch: explicit utf-8 on every read/write in this file. The stock calls use the
+        # locale encoding, which is cp1252 on Windows: it silently mangles any non-ASCII
+        # character on read, and raises UnicodeEncodeError on write for one it lacks.
+        data = json.loads(Path(args.input).read_text(encoding="utf-8"))
 
     html_output = generate_html(data, skill_name=args.skill_name)
 
     if args.output:
-        Path(args.output).write_text(html_output)
+        Path(args.output).write_text(html_output, encoding="utf-8")
         print(f"Report written to {args.output}", file=sys.stderr)
     else:
         print(html_output)

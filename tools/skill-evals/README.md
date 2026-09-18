@@ -16,13 +16,17 @@ Two problems stop skill-creator's own flow from working here:
   the name-match detection scored it as "did not trigger". The false-negative rate rose with
   `--num-workers`: at 6 workers a skill that triggers 3/3 serially scored 0/3. `run_eval.py` now
   gives each run its own temp project root.
+- **cp1252 mangling the description under test.** `read_text()` with no encoding uses the locale
+  encoding, so on Windows an em dash in a `description:` reached `claude -p` as `â€”`. Every
+  read and write in `scripts/` is now explicitly utf-8. Fixing only the read would have been
+  worse: cp1252 round-trips an em dash but cannot encode `→`, so the write would raise.
 
 ## Contents
 
 | Path | What |
 |------|------|
 | `run_behavior.py` | Behavioral eval: builds a fixture repo per run from the eval's `setup`, runs the with-skill and without-skill arms, writes skill-creator's workspace layout plus `timing.json` |
-| `scripts/` | Copy of skill-creator's trigger-eval scripts (`claude-plugins-official/skill-creator`, cache revision `3ea32df27be7`), Apache-2.0, see `LICENSE.txt`. Three patches in `run_eval.py`, each marked `# Patch:` — a reader thread replaces `select()`, `--setting-sources project` is added to the `claude -p` call, and each run gets its own `tempfile.mkdtemp()` project root instead of a shared one. The third drops `find_project_root()` and the `project_root` argument threaded through `run_eval()`, so `run_loop.py` no longer passes one |
+| `scripts/` | Copy of skill-creator's trigger-eval scripts (`claude-plugins-official/skill-creator`, cache revision `3ea32df27be7`), Apache-2.0, see `LICENSE.txt`. Four patches, each marked `# Patch:`. Three in `run_eval.py`: a reader thread replaces `select()`, `--setting-sources project` is added to the `claude -p` call, and each run gets its own `tempfile.mkdtemp()` project root instead of a shared one (which drops `find_project_root()` and the `project_root` argument threaded through `run_eval()`, so `run_loop.py` no longer passes one). The fourth spans all five files: every `read_text`/`write_text` passes `encoding="utf-8"` |
 
 ## Eval definitions
 
