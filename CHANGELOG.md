@@ -5,6 +5,64 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [6.5.0] — 2026-09-18
+
+An `llms.txt` is a short markdown index at a site root telling an agent what a product is and which
+pages are worth reading. Writing one is mostly judgment about what to leave out: a sitemap lists
+every URL, an `llms.txt` earns its keep by listing eight pages instead of forty. `ceh-seo` gains
+`write-llms-txt` for that call — the positional spec format, which pages earn a link, the reserved
+`## Optional` section, markdown links over HTML, and what to revisit when a docs section lands.
+
+The same release repairs the harness meant to prove the skill works. `tools/skill-evals` vendored
+skill-creator's trigger eval in v6.3.6, and the first real run against `write-llms-txt` exposed two
+defects that had been quietly scoring skills as untriggered. Parallel runs shared one
+`.claude/commands/` directory, so a session could invoke a sibling run's copy of the command while
+the detector watched for its own name — at six workers a skill that triggers 3/3 serially scored
+0/3. And `parse_skill_md` read `SKILL.md` with the locale encoding, so on Windows every em dash in a
+description reached `claude -p` as mojibake. Neither raised an error. Both produced plausible low
+scores, which is the worse failure: a description tuned through `run_loop` was tuned against them.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-seo` | v1.0.2 —> v1.1.0 |
+
+### Added
+
+- **`ceh-seo:write-llms-txt`** — new skill for creating and updating an `llms.txt`: the positional
+  spec format, curating which pages earn a link, the reserved `## Optional` section, markdown over
+  HTML links, `llms-full.txt`, and keeping the file current.
+- **Eval sets for `write-llms-txt`** — behavioural cases in `evals/evals.json` and a 20-query
+  trigger set in `evals/trigger-eval.json`. Six trigger queries have been run serially against
+  Sonnet at three runs each and passed 6/6; the remaining fourteen are unrun.
+
+### Changed
+
+- **`ceh-seo:web-discoverability`** — routes `llms.txt` work to the new skill and keeps
+  `sitemap.xml`, `robots.txt` and head tags for itself.
+- **`README.md`, `plugins/ceh-seo/README.md`** — `write-llms-txt` added to the skill tables.
+- **`CLAUDE.md`** — notes that `tools/skill-evals/scripts/` is a patched copy of skill-creator's
+  trigger eval, not a mirror, and that the stock 30s `--timeout` scores a slow run as a miss.
+- **`tools/skill-evals/README.md`** — documents where trigger results are saved. `run_eval.py`
+  prints JSON to stdout and persists nothing, so the documented command redirects into the
+  git-ignored `.agents_workspace/skill-evals/<skill>/trigger/` tree rather than growing a
+  `--results-dir` flag it does not need.
+
+### Fixed
+
+- **Trigger runs contaminating each other** — each run now builds its own `tempfile.mkdtemp()`
+  project root instead of sharing one, so concurrent runs stop invoking each other's command file.
+  This also removes the scratch-directory requirement: nothing is written into the repo wherever you
+  invoke it from.
+- **cp1252 mangling the description under test** — every `read_text`/`write_text` in
+  `tools/skill-evals/scripts/` now passes `encoding="utf-8"`. Fixing only the read would have been a
+  regression rather than a partial fix: cp1252 round-trips an em dash, which is why the corruption
+  stayed silent, but it cannot encode `→`, so a corrected read feeding an uncorrected write raises
+  `UnicodeEncodeError`.
+
+---
+
 ## [6.4.0] — 2026-09-13
 
 Turning a procedure you repeat by hand into something an agent runs has two hard parts, and writing
