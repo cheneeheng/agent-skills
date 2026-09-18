@@ -1,0 +1,22 @@
+[
+  {"query": "our docs live at docs.pipevalve.dev, built with mkdocs material. add the file that tells claude and chatgpt which pages are worth reading so they stop crawling the whole site", "should_trigger": true},
+  {"query": "write an llms.txt for beacon.build. the sitemap has ~30 urls but most of them are blog posts and legal pages", "should_trigger": true},
+  {"query": "we just shipped a whole webhooks section in the docs and dropped the v1 migration guide last sprint. does llms.txt need anything?", "should_trigger": true},
+  {"query": "can you look at our llms.txt? the blockquote reads like marketing copy and i don't think the Optional section is doing anything useful", "should_trigger": true},
+  {"query": "is it worth shipping an llms-full.txt alongside llms.txt, and how do we keep it from going stale between releases?", "should_trigger": true},
+  {"query": "starlight site, every page also renders as .md at the same path. i want an index at the root that lists the 8 pages an agent should actually read", "should_trigger": true},
+  {"query": "a lot of our api docs traffic is cursor and claude code users. what's the standard file for pointing coding agents at the right reference pages? add it if we don't have one", "should_trigger": true},
+  {"query": "should the file go at /llms.txt or /docs/llms.txt? marketing is at the root and the docs are under /docs", "should_trigger": true},
+  {"query": "here's the nav config from our docs generator - turn it into the agent reading list at the docs root, quickstart first, changelog last", "should_trigger": true},
+  {"query": "we're at 40 docs pages now and the agent index i wrote in january still lists 12. regenerate it from the current docs tree", "should_trigger": true},
+  {"query": "add meta description and og:image tags to the marketing pages, they look terrible when someone pastes a link in slack", "should_trigger": false},
+  {"query": "generate a sitemap.xml covering every page under /docs and reference it from robots.txt", "should_trigger": false},
+  {"query": "legal wants our content out of training sets - block GPTBot and CCBot in robots.txt", "should_trigger": false},
+  {"query": "rewrite the first screen of the README, nobody can tell what this package does in the first five seconds", "should_trigger": false},
+  {"query": "our pypi description is empty and the github repo has no topics set. fix both so people can actually find it", "should_trigger": false},
+  {"query": "add JSON-LD SoftwareApplication structured data to the landing page so we get a rich result", "should_trigger": false},
+  {"query": "we only have an api reference, there's no quickstart page at all. write one for the docs site", "should_trigger": false},
+  {"query": "set up an MCP server that serves our docs so claude can query them directly instead of fetching pages", "should_trigger": false},
+  {"query": "chunk the markdown under docs/ and load it into pgvector so the support bot can retrieve from it", "should_trigger": false},
+  {"query": "docs search is useless, swap it for algolia docsearch and wire up the crawler config", "should_trigger": false}
+]
