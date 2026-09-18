@@ -609,3 +609,29 @@ When changing a shared block:
 - The skill file names the sections only (no populated example — the body loads into the main context on every trigger) and carries the caller-side consequence: an unanchored bullet is unverified, a clean **Not found / uncertain** is distrusted rather than believed (silent omission is the dominant failure mode of a summarizing worker, and this section is the worker's own account of its gaps), and **Coverage** is read as a claim, not a count — its per-file line totals run about one line long each. The caller confirms coverage independently: every path sent owes a verdict in **Answer**, and a `grep -c` checks the rest.
 
 Changing the section names or order means changing both files in the same session; the caller's verification rules are written against these exact headings.
+
+---
+
+## Workflow spec — the nine questions
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-workflow-builder/skills/interview-workflow-task/SKILL.md` | "The nine questions" section | canonical — full wording, the quality check on each answer, and the fixed spec headings |
+| `plugins/ceh-workflow-builder/skills/build-agentic-workflow/SKILL.md` | "Phase 1 — Intake" table | compact gate — one label per question, plus what does not satisfy it |
+
+**What is shared:** the nine questions, their numbering, and that numbering carrying through to the spec's `## 1.` – `## 9.` headings. Later sections of `build-agentic-workflow` cite them as "spec question 6/7/8/9", so renumbering means editing both files plus those citations.
+
+**What diverges:**
+- The interview skill carries the full question wording, how to ask, and the rule that an unanswered question is recorded as unanswered rather than as "none".
+- The builder carries only the label and its falsifier, because it is checking answers rather than eliciting them, and it delegates back to the interview skill for any row that fails.
+
+A human go/no-go gate is the one proof form question 3 accepts that no command can settle, and both
+files have to accept it: the interview records it, the builder's intake row 3 exempts it. Tightening
+either one alone deadlocks a task with a genuine judgement step, because question 3 has no `Declined`
+escape.
+
+The `Declined` marker is the one piece of the spec format both files act on: the interview writes it under a heading the user refuses to answer and then stops asking, and the builder reads it as "take the conservative reading and stop delegating". Changing that literal, or either half of its meaning, means changing both files — the pair loops forever if only one of them knows the convention.
+
+Both files also name `$CEH_WORKFLOW_BUILD_DIR` and its `.agents_workspace/` default — the interview skill has to be usable without the builder loaded, so it cannot rely on the builder's Directories table.

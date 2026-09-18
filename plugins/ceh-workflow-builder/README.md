@@ -13,16 +13,37 @@ producing garbage past a green gate.
 Target runtime is **Claude Code**. The emitted artifact lands in the target
 repo's `.claude/skills/`, so there is no install step.
 
-## Skill
+## Skills
+
+| Skill | Invoke | Does |
+|---|---|---|
+| `interview-workflow-task` | `/ceh-workflow-builder:interview-workflow-task` | Asks the nine questions, writes the workflow spec |
+| `build-agentic-workflow` | `/ceh-workflow-builder:build-agentic-workflow` | Designs and emits the artifact from that spec |
+
+Either one is a valid entry point. `build-agentic-workflow` opens with an
+intake gate and calls the interview itself when the task is not yet described,
+so a user who has nothing written down can still start there.
+
+### `interview-workflow-task`
+
+Pulls the task out of the user's head and onto disk as
+`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.md`, under nine fixed headings
+the builder gates on by name. Records unanswered questions as unanswered
+rather than as "none" — questions 8 (which steps damage something if run
+twice) and 9 (which steps are irreversible) are the two people skip, and
+assuming them empty is what produces a workflow with no re-run guard that
+publishes without pausing.
+
+**Auto-triggers on:** "interview me about this task", "ask me what you need to
+automate this", "help me spec out this workflow", or "I'm not sure what you
+need to know".
 
 ### `build-agentic-workflow`
 
-Interviews the task, applies the one-skill-vs-workflow gate, decides per step
-whether it becomes an existing skill, a script, inline prose, or its own step
-skill, then emits the set leaf-first so every reference resolves as it is
-written.
-
-**Invoke:** `/ceh-workflow-builder:build-agentic-workflow`
+Checks the nine answers exist, applies the one-skill-vs-workflow gate, decides
+per step whether it becomes an existing skill, a script, inline prose, or its
+own step skill, then emits the set leaf-first so every reference resolves as it
+is written.
 
 **Auto-triggers on:** "turn this into a skill", "turn this into a workflow",
 "build an agentic workflow", "automate this process", "make this repeatable",
