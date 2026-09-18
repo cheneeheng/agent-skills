@@ -74,6 +74,15 @@ PYTHONPATH=<repo>/tools/skill-evals python -m scripts.run_loop \
   --model claude-opus-5 --max-iterations 5 --verbose
 ```
 
+`run_eval.py` prints its JSON to stdout and saves nothing, so redirect it. `--verbose` progress
+goes to stderr and stays on screen:
+
+```bash
+python -m scripts.run_eval --eval-set <trigger-eval.json> --skill-path <skill> \
+  --model claude-sonnet-5 --runs-per-query 3 --timeout 180 --verbose \
+  > .agents_workspace/skill-evals/<skill>/trigger/$(date +%Y%m%d-%H%M%S).json
+```
+
 ## What isolation does not cover
 
 - **`~/.claude/CLAUDE.md` still loads** in both arms. Only `--bare` skips it, and `--bare` refuses
