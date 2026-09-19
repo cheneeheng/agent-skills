@@ -7,7 +7,7 @@ eval-viewer/generate_review.py read the result unchanged:
   <workspace>/iteration-<N>/eval-<id>-<name>/
       eval_metadata.json
       <config>/run-<K>/timing.json
-      <config>/run-<K>/outputs/{transcript.jsonl,final_message.md,commits.txt,status.txt,refs.txt}
+      <config>/run-<K>/outputs/{transcript.jsonl,final_message.md,commits.txt,status.txt,refs.txt,worktree.txt}
 
 Each run gets a fresh git repo built from the eval's `setup` steps, and a `claude -p` session
 with --setting-sources project, so no user-installed plugin (the one under test included) or
@@ -131,6 +131,18 @@ def run_one(skill_md: Path, ev: dict, config: str, run_dir: Path, model: str, ti
         refs.append("origin:\n" + git(repo.parent / "origin.git", "for-each-ref",
                                       "--format=%(refname) %(objectname:short)"))
     (out / "refs.txt").write_text("\n".join(refs), encoding="utf-8")
+    # The fixture is deleted below, so graders would otherwise have to reconstruct what the run
+    # emitted from the Write/Edit calls in the transcript. Dump the diff and every untracked file
+    # while the repo still exists.
+    tree = [git(repo, "diff", "HEAD")]
+    for rel in git(repo, "ls-files", "--others", "--exclude-standard").splitlines():
+        path = repo / rel
+        try:
+            body = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError) as exc:
+            body = f"(unreadable: {exc})"
+        tree.append(f"=== {rel} ===\n{body}")
+    (out / "worktree.txt").write_text("\n".join(tree) or "(clean)\n", encoding="utf-8")
     # git marks object files read-only, which rmtree cannot delete on Windows without a chmod.
     shutil.rmtree(repo.parent, onexc=lambda func, path, _: (os.chmod(path, stat.S_IWRITE), func(path)))
 

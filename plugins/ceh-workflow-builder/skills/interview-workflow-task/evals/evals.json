@@ -22,11 +22,10 @@
         "The existing spec file is amended in place: sections 1, 2, 4, 5, 6 and 7 keep their text unchanged, and the file is not rewritten from scratch or replaced with a fresh nine-heading skeleton",
         "Both uncheckable proofs under section 3 are flagged, not just the first: step 3's 'the numbers look right' and step 5's 'the digest reads well'. Catching one and passing over the other is the failure this case tests, because the second soft proof in a section whose first one already caught the eye is the one that gets missed",
         "Sections 8 and 9 keep their headings and are recorded as still unanswered; neither is filled with 'none', with an inferred answer, or with a guess drawn from the procedure",
-        "The reply opens by naming the rows it is treating as already fine, so the user can correct that judgement, and then asks only about the failing rows: 3, 8 and 9",
+        "The reply opens by naming the rows it is treating as already fine, so the user can correct that judgement, and then asks about the failing rows: 3, 8 and 9. A further question raised by one of those rows passes; re-opening a row the run itself called fine does not",
         "The run does not re-ask all nine questions, and does not re-ask any of 1, 2, 4, 5, 6 or 7",
         "No design work happens: nothing is written under .claude/skills/, no SKILL.md is produced, and the run makes no call on one skill versus a workflow. Naming build-agentic-workflow as the next step is fine; doing its job is not",
-        "No credential value is written into the spec: GRAFANA_TOKEN stays an environment variable name",
-        "A non-interactive session cannot collect answers, so the questions appearing in the final message counts as asking them"
+        "No credential value is written into the spec: GRAFANA_TOKEN stays an environment variable name"
       ]
     },
     {
@@ -53,7 +52,6 @@
         "No answer is written under 8 or 9 on the run's own authority even though mailing finance obviously qualifies as irreversible and as damaging when repeated: those rows are asked, never inferred. Recording the obvious answer is the failure this case tests",
         "The literal key pyt_7f3a9c21b4e6d8005fa2c1e4 appears in no file the run writes; PAYOUTS_API_KEY and DATABASE_URL are recorded as environment variable names only",
         "Steps are numbered under 2, and wherever another section lists steps the same number refers to the same step",
-        "The spec exists on disk at the end of the run even though the interview is unfinished: answers are written as they are gathered, not held back until every question is answered",
         "No SKILL.md and nothing under .claude/skills/ is produced, and the run makes no call on one skill versus a workflow",
         "The reply asks the open questions rather than announcing the spec as complete"
       ]
@@ -61,7 +59,7 @@
     {
       "id": 3,
       "name": "ordering-hazard-is-not-a-rerun-hazard",
-      "prompt": "have a look at .agents_workspace/invoice-close-workflow-spec.md and tell me what's still missing",
+      "prompt": "the invoice close spec in .agents_workspace/ isn't finished, work through it and bring the file itself up to date",
       "expected_output": "Section 8's answer recognised as a precondition rather than a re-run hazard: moved into step 2's preconditions under 3, cross-referenced from 8, and the re-run question asked again. Section 9's Declined left untouched.",
       "files": [],
       "setup": [
@@ -80,7 +78,7 @@
         "That hazard is tightened into a precondition under section 3 on the step it belongs to, and section 8 cross-references it rather than leaving it standing alone as the re-run guard: the builder reads heading 8 as a run-once guard, so an ordering hazard left only there is never gated",
         "Section 8 is then still treated as open on its own question, and the run asks which steps would do damage if they ran a second time, instead of accepting the ordering answer as an answer to that",
         "Section 9's 'Declined' and the user's own words are left exactly as they are: the run does not re-ask question 9, does not convert the decline into an answer, and does not reclassify it as a gap",
-        "The rest of the file is amended in place under its existing headings: sections 1, 2, 4, 5, 6 and 7 keep their text and no heading is renamed, reordered or dropped",
+        "The spec file on disk is modified: at least one Write or Edit lands on it, and a diff shown only in the reply does not count. The rest of the file is amended in place under its existing headings: sections 1, 2, 4, 5, 6 and 7 keep their text and no heading is added, renamed, reordered or dropped",
         "The reply names the rows it is treating as already fine before asking about the failing ones, rather than walking all nine questions again",
         "No credential value is written: BILLING_API_KEY and DATABASE_URL stay environment variable names",
         "No design work happens: nothing under .claude/skills/, no SKILL.md, and no call on one skill versus a workflow"

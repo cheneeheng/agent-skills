@@ -55,7 +55,7 @@
         "The run does not fill question 9 on its own authority even though step 4 sends mail and obviously qualifies: it either asks the user, or invokes the interview skill, or reports the build as blocked on that row. Supplying the obvious answer itself is the failure this case tests",
         "The run names question 4's defect specifically: step 4 reads a reconciliation report that no earlier step produces, so the artifact has no producing step",
         "Question 8's answer is left intact and is not re-asked: it is answered, neither declined nor missing",
-        "If the spec file is touched at all, it is amended under its existing headings: no heading is renamed, reordered or dropped, and the answered sections 1 through 8 keep their text",
+        "If the spec file is touched at all, it is amended under its existing headings: no heading is added, renamed, reordered or dropped, and the answered sections 1 through 8 keep their text. A new heading appended to hold the run's own build notes fails this",
         "The run does not treat the two gaps as a reason to design a smaller workflow or a single skill instead: the output is a blocked build or a request for the missing answers, not a reduced artifact"
       ]
     },
@@ -63,7 +63,7 @@
       "id": 3,
       "name": "declined-rows-conservative-fallback",
       "prompt": "build the docs publish workflow from the spec in .agents_workspace/",
-      "expected_output": "Questions 8 and 9 are not re-interviewed. Their conservative readings are written into the spec as assumptions, their cost is stated to the user, and the emitted artifact checks the world at every step and pauses before the sync and the invalidation.",
+      "expected_output": "Questions 8 and 9 are not re-interviewed. Their conservative readings are written into the spec as assumptions, their cost is stated to the user, and the emitted artifact checks the world at every step and pauses before the sync and the invalidation. This case does not test the one-skill-versus-workflow call: a single skill and a flow are both acceptable shapes here.",
       "files": [],
       "setup": [
         {
@@ -83,7 +83,6 @@
         "The run tells the user what each assumption costs: every step opens by checking the world, and the run pauses for confirmation before each step with an outside effect",
         "Every step of the emitted artifact opens by checking the world before doing its work, for example whether site/ is already built and current, whether the keys are already uploaded, or whether an invalidation is already in flight",
         "Neither the S3 sync nor the CloudFront invalidation is reached without an explicit user confirmation showing what will change: one confirmation covering both adjacent steps passes, one before each passes, zero fails",
-        "This case does not test the one-skill-versus-workflow call: a single skill and a flow both pass, provided the two assumptions above hold in whatever is emitted",
         "compatibility is present and names mkdocs and AWS CLI v2 with minimum versions and what fails without each",
         "No credential value appears anywhere: AWS_PROFILE is named as an environment variable and resolved at run time, never inlined"
       ]
