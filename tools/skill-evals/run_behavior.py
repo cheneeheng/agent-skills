@@ -76,7 +76,8 @@ def build_fixture(setup: list[dict], remote: bool = False) -> Path:
     return repo
 
 
-def run_one(skill_md: Path, ev: dict, config: str, run_dir: Path, model: str, timeout: int) -> None:
+def run_one(skill_md: Path, ev: dict, config: str, run_dir: Path, model: str, timeout: int,
+            skip_permissions: bool = False) -> None:
     repo = build_fixture(ev.get("setup", []), ev.get("remote", False))
     base = git(repo, "rev-parse", "HEAD").strip()
     prompt = ev["prompt"]
@@ -87,7 +88,15 @@ def run_one(skill_md: Path, ev: dict, config: str, run_dir: Path, model: str, ti
     if config == "with_skill":
         prompt = f"Before you start, read the skill at {skill_md} and follow it.\n\n{prompt}"
         cmd += ["--add-dir", str(skill_md.parent)]
-    cmd += ["--allowedTools", *ALLOWED_TOOLS]  # variadic, so it goes last; the prompt is stdin
+    # Claude Code applies a safetyCheck to any path under `.claude/` that no allowlist entry,
+    # permission rule or PreToolUse allow-hook satisfies, so a skill that emits into
+    # `.claude/skills/` cannot write its own deliverable in a -p session. Bypassing that check
+    # takes the whole permission system with it, which is why this is opt-in: every run then has
+    # unrestricted Bash in the fixture repo. See README, "Skills that emit into .claude/".
+    if skip_permissions:
+        cmd += ["--dangerously-skip-permissions"]
+    else:
+        cmd += ["--allowedTools", *ALLOWED_TOOLS]  # variadic, so it goes last; the prompt is stdin
 
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
     start = time.time()
@@ -157,7 +166,14 @@ def main() -> None:
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--timeout", type=int, default=600, help="seconds per run")
     ap.add_argument("--only", type=int, nargs="*", help="eval ids to run (default: all)")
+    ap.add_argument("--skip-permissions", action="store_true",
+                    help="drop the tool allowlist and run with --dangerously-skip-permissions. "
+                         "Needed only for a skill that emits into .claude/, which Claude Code "
+                         "refuses to write in a -p session. Every run then has unrestricted Bash.")
     args = ap.parse_args()
+    if args.skip_permissions:
+        print("WARNING: --skip-permissions is set. Each run is an unsandboxed session with every "
+              "permission check off, in a throwaway fixture repo under the system temp directory.")
 
     skill_md = (args.skill_dir / "SKILL.md").resolve()
     evals = json.loads((args.skill_dir / "evals/evals.json").read_text(encoding="utf-8"))["evals"]
@@ -180,7 +196,8 @@ def main() -> None:
 
     with ThreadPoolExecutor(args.workers) as pool:
         futures = {
-            pool.submit(run_one, skill_md, ev, cfg, rd, args.model, args.timeout): rd
+            pool.submit(run_one, skill_md, ev, cfg, rd, args.model, args.timeout,
+                        args.skip_permissions): rd
             for ev, cfg, rd in jobs
         }
         for f in as_completed(futures):

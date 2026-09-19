@@ -99,3 +99,30 @@ python -m scripts.run_eval --eval-set <trigger-eval.json> --skill-path <skill> \
   against the `remote` fixture, but `gh` is denied, so the `ceh-git-workflow` cases that reach a PR
   or GitHub release step assert that the run reports the step as not done rather than claiming it.
   Measuring the `gh` calls themselves needs that list extended and a `gh` stand-in.
+
+## Skills that emit into `.claude/`
+
+Claude Code applies a `safetyCheck` to every path under `.claude/`. It is not an allowlist question:
+`--allowedTools "Write(.claude/**)"`, `--permission-mode acceptEdits`, an absolute-path
+`permissions.allow` rule in a settings file, and a `PreToolUse` hook returning
+`permissionDecision: "allow"` were each tested and each still denied. The hook demonstrably fires and
+grants ordinary paths, so the check sits above the permission system, and in a `-p` session there is
+nobody to approve the prompt.
+
+A skill that emits into `.claude/skills/<name>/` therefore cannot write its own deliverable, and the
+run grades as though it produced nothing or produced something in the wrong place — a false negative
+that looks exactly like a skill defect. `ceh-workflow-builder`'s first graded round lost most of its
+destination assertions this way.
+
+`--skip-permissions` is the only route that measures it. It drops the allowlist and runs with
+`--dangerously-skip-permissions`, so each session has unrestricted `Bash` in the fixture repo:
+
+```bash
+python tools/skill-evals/run_behavior.py plugins/ceh-workflow-builder/skills/build-agentic-workflow \
+  --workspace .agents_workspace/skill-evals/build-agentic-workflow/skill-creator \
+  --iteration 3 --timeout 900 --skip-permissions
+```
+
+The fixture is a throwaway git repo under the system temp directory, deleted after each run, but the
+session is not otherwise sandboxed. Use it only for a skill whose emission destination is the thing
+under test, and never with an eval whose `setup` writes anything you care about.
