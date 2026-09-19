@@ -5,6 +5,41 @@ Versions refer to the Marketplace versions.
 
 ---
 
+## [Unreleased]
+
+Behavioural evals run against both `ceh-workflow-builder` skills found the same defect in each: the
+rule that neither skill may answer an intake question for the user did not survive an answer the
+model found self-evident. `interview-workflow-task` read a step that mails finance and recorded
+question 9 as answered; `build-agentic-workflow` wrote "Left blank by the author" under question 9,
+supplied the answer underneath it as "an assumption", and reported the build finished. Two
+independent graders caught it in two skills, which makes it a wording gap rather than a bad run: the
+old rule only forbade recording a gap as "none", and an inferred answer is not a "none".
+
+Both rules now say that an obvious answer is still the model's answer, not the user's, and that
+relabelling it "partial" or "assumed" does not transfer it. The builder additionally may not route
+an unanswered row through the declined-row fallback, which was the exact path the failing run took,
+and must name every blocking row and stop rather than report a finished artifact. The spec's nine
+headings are also closed in both skills — neither may add a tenth — after runs appended their own
+build-notes and open-questions sections to a file whose consumer gates on heading names.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-workflow-builder` | 1.1.1 |
+
+### Fixed
+
+- **`interview-workflow-task`** — the never-answer-for-the-user rule now covers an answer the model
+  derived from the procedure, not only a gap recorded as "none".
+- **`build-agentic-workflow`** — the intake gate now rejects an unanswered row converted into an
+  assumption, forbids the declined-row fallback on a gap, and requires a blocked build to name every
+  row that blocked it.
+- **Both skills** — the spec's nine headings are closed: build notes and open-question lists go in
+  the reply, not into a new section of the spec file.
+- **`build-agentic-workflow`** — the emission checklist now requires each tool named in
+  `compatibility` to carry a minimum version and what fails without it.
+
 ## [6.6.0] — 2026-09-18
 
 `build-agentic-workflow` used to interview the user and design from the answers in one pass, which

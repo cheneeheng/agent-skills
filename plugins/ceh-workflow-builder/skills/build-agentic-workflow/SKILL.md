@@ -98,6 +98,13 @@ table against what it wrote. Never infer a missing answer and continue: an assum
 workflow with no re-run guard, and an assumed-empty 9 emits one that publishes without pausing.
 Those are the two rows a user volunteering their task unprompted almost never covers.
 
+An obvious answer is still your answer, not theirs. A gap never takes the declined-row fallback
+below: writing the conservative reading under an unanswered heading and calling it an assumption is
+the same failure wearing a label, because the user never chose it. Naming a row as unanswered and
+then answering it in the next sentence does not clear the gate either. When a row cannot be filled,
+the build is blocked — name every row that blocked it and stop. Reporting a finished artifact while
+a row is open is the failure this gate exists to prevent.
+
 **A declined row is different, and it ends the loop.** When the spec records `Declined` under a
 heading, do not invoke the interview again — that is how these two skills bounce off each other
 forever. Take the conservative reading instead, write it into the spec as an assumption, and tell
@@ -108,6 +115,10 @@ the user what it costs them:
 | 8 | every step is unsafe to run twice | each step opens by checking the world |
 | 9 | every step with an outside effect is irreversible | the flow pauses for confirmation before each |
 | any other row | nothing — these cannot be assumed safely | stop and say which row blocked the build |
+
+Whatever you write into the spec goes under the heading it belongs to. Do not add a heading: the
+consumer gates on the nine by name, and a tenth section holding your own build notes is not part of
+that contract. Build notes belong in the reply.
 
 Do not start designing until every row passes or carries a recorded assumption.
 
@@ -429,5 +440,7 @@ optional and this skill does not depend on it.
 - [ ] Every delegated skill exists and is model-invocable, and a plugin skill's row names a fallback.
 - [ ] A committed repo file is read in place, and every second writer is declared in the schema.
 - [ ] No step skill survives that is neither triggerable on its own nor dispatched in a subagent.
-- [ ] `compatibility` present if and only if a step needs software the machine may lack.
+- [ ] `compatibility` present if and only if a step needs software the machine may lack, and each
+      tool it names carries a minimum version and what fails without it. "Runnable through `uv run`"
+      is neither.
 - [ ] Run directory, if any, declared, defaulted, and actually present in the target repo's `.gitignore`.
