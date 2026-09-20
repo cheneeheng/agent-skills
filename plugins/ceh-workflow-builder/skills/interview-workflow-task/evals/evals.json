@@ -23,7 +23,7 @@
         "Both uncheckable proofs under section 3 are flagged, not just the first: step 3's 'the numbers look right' and step 5's 'the digest reads well'. Catching one and passing over the other is the failure this case tests, because the second soft proof in a section whose first one already caught the eye is the one that gets missed",
         "Sections 8 and 9 keep their headings and are recorded as still unanswered; neither is filled with 'none', with an inferred answer, or with a guess drawn from the procedure",
         "The reply opens by naming the rows it is treating as already fine, so the user can correct that judgement, and then asks about the failing rows: 3, 8 and 9. A further question raised by one of those rows passes; re-opening a row the run itself called fine does not",
-        "The run does not re-ask all nine questions, and does not re-ask any of 1, 2, 4, 5, 6 or 7",
+        "The run does not restart the interview: it does not re-ask all nine questions, and does not walk rows 1, 2, 4, 5, 6 and 7 again as a group. A pinpoint question about one specific defect the run itself named in one of those rows passes — that is the run doing its job, not re-opening the row",
         "No design work happens: nothing is written under .claude/skills/, no SKILL.md is produced, and the run makes no call on one skill versus a workflow. Naming build-agentic-workflow as the next step is fine; doing its job is not",
         "No credential value is written into the spec: GRAFANA_TOKEN stays an environment variable name"
       ]
