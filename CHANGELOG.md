@@ -26,7 +26,7 @@ build-notes and open-questions sections to a file whose consumer gates on headin
 
 | Plugin | Version |
 |--------|---------|
-| `ceh-workflow-builder` | 1.1.1 |
+| `ceh-workflow-builder` | 1.1.2 |
 
 ### Fixed
 
@@ -39,6 +39,10 @@ build-notes and open-questions sections to a file whose consumer gates on headin
   the reply, not into a new section of the spec file.
 - **`build-agentic-workflow`** — the emission checklist now requires each tool named in
   `compatibility` to carry a minimum version and what fails without it.
+- **Both skills** — the never-answer rule is now stated per row rather than anchored on questions
+  8 and 9. A verified run applied it to 8 and 9, then derived question 4's whole data-flow chain
+  from the manual procedure under question 2 and labelled it "partial" — the same violation, missed
+  because the old wording read as scoped to the two rows its examples named.
 
 ## [6.6.0] — 2026-09-18
 
