@@ -7,6 +7,8 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.6.1] — 2026-09-22
+
 Behavioural evals run against both `ceh-workflow-builder` skills found the same defect in each: the
 rule that neither skill may answer an intake question for the user did not survive an answer the
 model found self-evident. `interview-workflow-task` read a step that mails finance and recorded
@@ -22,11 +24,31 @@ and must name every blocking row and stop rather than report a finished artifact
 headings are also closed in both skills — neither may add a tenth — after runs appended their own
 build-notes and open-questions sections to a file whose consumer gates on heading names.
 
+Measured on the four `build-agentic-workflow` evals after both fixes, the skill passes 97.5% of
+assertions against a 48.0% baseline, up from a +0.27 delta to +0.49. The intake-gap case, the only
+one where loading the skill had made things worse, moved from 1/7 to 7/7. Getting a trustworthy
+number took three harness and fixture repairs: Claude Code denies every `Write` under `.claude/` in a
+`-p` session whatever the allowlist says, so the skills could never land their deliverable; a run
+that committed its output showed a clean working tree; and eval 1's fixture spec contradicted its
+own proof and asked for a confirmation a single-turn session cannot give.
+
 ### Plugin versions
 
 | Plugin | Version |
 |--------|---------|
-| `ceh-workflow-builder` | 1.1.2 |
+| `ceh-workflow-builder` | v1.1.0 —> v1.1.2 |
+
+### Added
+
+- **Eval sets for `build-agentic-workflow` and `interview-workflow-task`** — behavioural cases in
+  each skill's `evals/evals.json` and a trigger set in `evals/trigger-eval.json`. Four builder cases
+  cover one-skill-versus-workflow from both sides, an intake gap that must block the build, and a
+  declined row that must take the conservative fallback; three interview cases cover amending an
+  existing spec, never answering for the user, and an ordering hazard filed as a re-run hazard.
+- **`tools/skill-evals/run_behavior.py --skip-permissions`** — opt-in flag that runs each session
+  with `--dangerously-skip-permissions`, off by default. Skills that emit into `.claude/` need it,
+  because no allowlist entry, permission rule or allow-hook lifts the `.claude/` write denial in a
+  `-p` session. Documented under "Skills that emit into `.claude/`" in `tools/skill-evals/README.md`.
 
 ### Fixed
 
@@ -43,6 +65,14 @@ build-notes and open-questions sections to a file whose consumer gates on headin
   8 and 9. A verified run applied it to 8 and 9, then derived question 4's whole data-flow chain
   from the manual procedure under question 2 and labelled it "partial" — the same violation, missed
   because the old wording read as scoped to the two rows its examples named.
+- **`tools/skill-evals/run_behavior.py`** — `worktree.txt` now diffs from the fixture's starting
+  commit instead of `HEAD`, so a run that commits its emission still shows the files in full.
+  Before, it read `(clean)`, and a grader told that meant nothing was emitted would fail a real
+  artifact.
+- **`ceh-workflow-builder` evals** — assertions corrected where graders showed them contradicting
+  the skill or each other, and eval 1's fixture made buildable: its survey template carried a
+  placeholder no spec row sourced, and its prompt now waives the confirm-before-emitting step that a
+  single-turn session can never satisfy.
 
 ## [6.6.0] — 2026-09-18
 
