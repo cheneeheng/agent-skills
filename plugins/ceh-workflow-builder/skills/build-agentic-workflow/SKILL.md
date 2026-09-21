@@ -94,9 +94,24 @@ conversation, in which case write them to that file now so the rest of the phase
 
 **A gap is not a "none".** Invoke the Skill tool with
 `skill="ceh-workflow-builder:interview-workflow-task"` to fill any row above, then re-check this
-table against what it wrote. Never infer a missing answer and continue: an assumed-empty 8 emits a
-workflow with no re-run guard, and an assumed-empty 9 emits one that publishes without pausing.
-Those are the two rows a user volunteering their task unprompted almost never covers.
+table against what it wrote. Never infer a missing answer and continue.
+
+**Check this row by row, all nine.** It bites hardest on the rows you can nearly answer. An
+assumed-empty 8 emits a workflow with no re-run guard and an assumed-empty 9 emits one that
+publishes without pausing, so those two fail loudly, and they are the rows a user volunteering
+their task unprompted almost never covers. Rows 1-7 fail quietly, because the procedure under 2
+makes them look already answered: deriving row 4's data flow from what each step appears to read
+and leave behind is the same violation, and it is the one that gets through, because the chain you
+derived reads plausibly. Plausible is not answered. Only the user knows whether step 3 pulls its
+input from somewhere no step names.
+
+An obvious answer is still your answer, not theirs. A gap never takes the declined-row fallback
+below: writing the conservative reading under an unanswered heading and calling it an assumption is
+the same failure wearing a label, because the user never chose it. Marking a row `Partial` and then
+supplying the missing half yourself is that same move at half scale. Naming a row as unanswered and
+then answering it in the next sentence does not clear the gate either. When a row cannot be filled,
+the build is blocked — name every row that blocked it and stop. Reporting a finished artifact while
+a row is open is the failure this gate exists to prevent.
 
 **A declined row is different, and it ends the loop.** When the spec records `Declined` under a
 heading, do not invoke the interview again — that is how these two skills bounce off each other
@@ -108,6 +123,10 @@ the user what it costs them:
 | 8 | every step is unsafe to run twice | each step opens by checking the world |
 | 9 | every step with an outside effect is irreversible | the flow pauses for confirmation before each |
 | any other row | nothing — these cannot be assumed safely | stop and say which row blocked the build |
+
+Whatever you write into the spec goes under the heading it belongs to. Do not add a heading: the
+consumer gates on the nine by name, and a tenth section holding your own build notes is not part of
+that contract. Build notes belong in the reply.
 
 Do not start designing until every row passes or carries a recorded assumption.
 
@@ -429,5 +448,7 @@ optional and this skill does not depend on it.
 - [ ] Every delegated skill exists and is model-invocable, and a plugin skill's row names a fallback.
 - [ ] A committed repo file is read in place, and every second writer is declared in the schema.
 - [ ] No step skill survives that is neither triggerable on its own nor dispatched in a subagent.
-- [ ] `compatibility` present if and only if a step needs software the machine may lack.
+- [ ] `compatibility` present if and only if a step needs software the machine may lack, and each
+      tool it names carries a minimum version and what fails without it. "Runnable through `uv run`"
+      is neither.
 - [ ] Run directory, if any, declared, defaulted, and actually present in the target repo's `.gitignore`.

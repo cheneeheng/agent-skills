@@ -42,9 +42,16 @@ rows failed. Re-asking all nine there is the failure mode this section prevents.
 - Write each answer into the spec as you get it, not at the end. An interview that dies halfway
   should leave eight answers on disk, not zero.
 - Batch enumerable choices through `AskUserQuestion`; ask the open-ended ones plainly.
-- **Never answer for the user.** An unanswered question is recorded as unanswered, not as "none".
-  Silence on question 8 becomes a workflow with no re-run guard; silence on 9 becomes one that
-  publishes without pausing.
+- **Never answer for the user, least of all when the answer looks obvious.** This applies to each of
+  the nine separately, not just the two that read as risky. An unanswered question is recorded as
+  unanswered: not as "none", not as what the procedure plainly implies, and not as an assumption of
+  your own. Reading step 4, seeing that it mails finance, and writing that under 9 is the loud
+  version, and relabelling it "partial" or "assumed" does not make it theirs — they may know the
+  address is a dead alias. Deriving question 4's data flow from the steps listed under 2 is the
+  quiet version, and the one that gets through, because the chain reads plausibly and nobody
+  re-checks whether step 3's input has a producer at all. Silence on 8 becomes a workflow with no
+  re-run guard, silence on 9 becomes one that publishes without pausing, and a guessed 4 becomes one
+  whose steps hand each other data the user never said they hand.
 - **A decline is not a gap.** When the user says they do not know or will not answer — most often
   on 8 or 9 — write `Declined` under that heading with their words, and stop asking. Re-asking a
   declined question is how the interview and the builder's intake gate bounce off each other
@@ -81,7 +88,8 @@ rows failed. Re-asking all nine there is the failure mode this section prevents.
 ## The spec file
 
 Fixed headings, in this order, one per question. The consumer gates on them by name, so do not
-rename, reorder, or drop one — an unanswered question keeps its heading and says so underneath.
+add, rename, reorder, or drop one — an unanswered question keeps its heading and says so underneath.
+Anything you want to say that no heading covers belongs in the reply, not in a tenth section.
 
 ```markdown
 # <name> workflow spec

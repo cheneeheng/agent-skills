@@ -43,8 +43,12 @@ schema with two additions:
   with upstreams set, so `git push`, `git pull`, and remote-branch deletion work and show up in
   `refs.txt`. It is a local path, not GitHub, so `gh` still has nothing to talk to.
 
-Each run writes `commits.txt` (new commits with parents), `status.txt`, and `refs.txt` (HEAD, the
-full branch graph, tag types, and origin's refs) for the grader, next to the transcript.
+Each run writes `commits.txt` (new commits with parents), `status.txt`, `refs.txt` (HEAD, the
+full branch graph, tag types, and origin's refs), and `worktree.txt` for the grader, next to the
+transcript. `worktree.txt` holds the diff from the fixture's starting commit, so a run that
+commits its emission still shows it, plus the full text of every untracked file,
+captured before the fixture is deleted: without it a grader has to reconstruct what the run emitted
+from the `Write`/`Edit` calls in the transcript, and `status.txt` gives only the changed paths.
 
 ## Run it
 
@@ -96,3 +100,30 @@ python -m scripts.run_eval --eval-set <trigger-eval.json> --skill-path <skill> \
   against the `remote` fixture, but `gh` is denied, so the `ceh-git-workflow` cases that reach a PR
   or GitHub release step assert that the run reports the step as not done rather than claiming it.
   Measuring the `gh` calls themselves needs that list extended and a `gh` stand-in.
+
+## Skills that emit into `.claude/`
+
+Claude Code applies a `safetyCheck` to every path under `.claude/`. It is not an allowlist question:
+`--allowedTools "Write(.claude/**)"`, `--permission-mode acceptEdits`, an absolute-path
+`permissions.allow` rule in a settings file, and a `PreToolUse` hook returning
+`permissionDecision: "allow"` were each tested and each still denied. The hook demonstrably fires and
+grants ordinary paths, so the check sits above the permission system, and in a `-p` session there is
+nobody to approve the prompt.
+
+A skill that emits into `.claude/skills/<name>/` therefore cannot write its own deliverable, and the
+run grades as though it produced nothing or produced something in the wrong place — a false negative
+that looks exactly like a skill defect. `ceh-workflow-builder`'s first graded round lost most of its
+destination assertions this way.
+
+`--skip-permissions` is the only route that measures it. It drops the allowlist and runs with
+`--dangerously-skip-permissions`, so each session has unrestricted `Bash` in the fixture repo:
+
+```bash
+python tools/skill-evals/run_behavior.py plugins/ceh-workflow-builder/skills/build-agentic-workflow \
+  --workspace .agents_workspace/skill-evals/build-agentic-workflow/skill-creator \
+  --iteration 3 --timeout 900 --skip-permissions
+```
+
+The fixture is a throwaway git repo under the system temp directory, deleted after each run, but the
+session is not otherwise sandboxed. Use it only for a skill whose emission destination is the thing
+under test, and never with an eval whose `setup` writes anything you care about.

@@ -624,8 +624,10 @@ Changing the section names or order means changing both files in the same sessio
 **What is shared:** the nine questions, their numbering, and that numbering carrying through to the spec's `## 1.` – `## 9.` headings. Later sections of `build-agentic-workflow` cite them as "spec question 6/7/8/9", so renumbering means editing both files plus those citations.
 
 **What diverges:**
-- The interview skill carries the full question wording, how to ask, and the rule that an unanswered question is recorded as unanswered rather than as "none".
+- The interview skill carries the full question wording and how to ask.
 - The builder carries only the label and its falsifier, because it is checking answers rather than eliciting them, and it delegates back to the interview skill for any row that fails.
+- Both carry a form of the never-answer-for-the-user rule, stated for what each one does: the interview skill must not record an obvious answer as the user's, and the builder must not convert an unanswered row into an assumption or take the declined-row fallback on it. Behavioural evals caught both skills failing this on a self-evident answer, so the two wordings are deliberately parallel and should be edited together. Both are also scoped to all nine rows on purpose, each naming the quiet row-4 case alongside the loud 8/9 one — an earlier pair anchored only on 8 and 9 read as scoped to them, and a graded run duly inferred row 4.
+- The fixed headings are closed in both: neither skill may add a heading to the spec, so build notes and open-question lists go in the reply.
 
 A human go/no-go gate is the one proof form question 3 accepts that no command can settle, and both
 files have to accept it: the interview records it, the builder's intake row 3 exempts it. Tightening
