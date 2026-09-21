@@ -143,7 +143,7 @@ def run_one(skill_md: Path, ev: dict, config: str, run_dir: Path, model: str, ti
     # The fixture is deleted below, so graders would otherwise have to reconstruct what the run
     # emitted from the Write/Edit calls in the transcript. Dump the diff and every untracked file
     # while the repo still exists.
-    tree = [git(repo, "diff", "HEAD")]
+    tree = [git(repo, "diff", base)]  # base, not HEAD: a committed emission must still show
     for rel in git(repo, "ls-files", "--others", "--exclude-standard").splitlines():
         path = repo / rel
         try:

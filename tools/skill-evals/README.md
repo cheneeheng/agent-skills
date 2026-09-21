@@ -45,7 +45,8 @@ schema with two additions:
 
 Each run writes `commits.txt` (new commits with parents), `status.txt`, `refs.txt` (HEAD, the
 full branch graph, tag types, and origin's refs), and `worktree.txt` for the grader, next to the
-transcript. `worktree.txt` holds the `git diff HEAD` plus the full text of every untracked file,
+transcript. `worktree.txt` holds the diff from the fixture's starting commit, so a run that
+commits its emission still shows it, plus the full text of every untracked file,
 captured before the fixture is deleted: without it a grader has to reconstruct what the run emitted
 from the `Write`/`Edit` calls in the transcript, and `status.txt` gives only the changed paths.
 
