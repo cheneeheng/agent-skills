@@ -7,6 +7,31 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.9.1] — 2026-09-22
+
+The repo-local `add-plugin-component` skill covered adding a component to an existing plugin but
+not creating a new one, so "create a plugin" loaded only the generic `plugin-dev:create-plugin`
+workflow. That workflow contradicts this repo in ways that break CI or drift: lean skills with
+`references/`, unfolded descriptions, hook scripts in `examples/`, a `0.1.0` start with an optional
+marketplace entry, and a confirmation stop at every phase. The skill now owns new plugins too and
+states where it overrides plugin-dev advice.
+
+No plugin changed, so no plugin version moved. `CLAUDE.md` and `.claude/skills/` are repo-level
+contributor documentation — they ship in neither the marketplace nor any plugin.
+
+### Plugin versions
+
+None. This release touches repo-level documentation only.
+
+### Changed
+
+- `.claude/skills/add-plugin-component/SKILL.md` — a **New plugin** section (manifest, marketplace
+  entry, README and `CLAUDE.md` tables, install lists, scenario bundle wiring) and a **When
+  plugin-dev skills are also loaded** override table. Also adds the `compatibility` field, the
+  cross-plugin `dependencies` rules, and the MINOR/MAJOR bump cases for dependency changes and
+  renames. The description now triggers on "create a plugin" and "new ceh plugin".
+- `CLAUDE.md` — the Adding a Component pointer names the new scope.
+
 ## [6.9.0] — 2026-09-22
 
 `ceh-git-workflow` no longer ships its four delegation agents. `merge-flow` and `release-flow` gave
