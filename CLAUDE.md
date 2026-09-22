@@ -98,7 +98,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-blog` | Interview-driven blog post writing |
-| `ceh-documentation` | User guides, operator runbooks, install/config and troubleshooting docs; README maintenance |
+| `ceh-documentation` | A whole `docs/` set under one shared docs standard (guides, operations runbooks, concepts, API reference, examples, migration) or any one section alone; README maintenance |
 | `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents |
 | `ceh-business-plan` | Interview-driven business plan: draft from an app plan or idea, loop until a product-market-fit gate passes |
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive criteria, measure structure/triggering/content/behavioral lift with evidence, loop until a readiness gate passes |
@@ -116,7 +116,8 @@ Each skill is a self-contained SKILL.md with frontmatter and inline content. Def
 
 - **A schema or template used by several skills** — `plan-schema.md` has four consumer copies:
   `implement-from-plan`, `review-against-plan`, `patch-built-version`, and — the only cross-plugin
-  one — `ceh-business-plan:develop-business-plan`. All four are word-for-word identical.
+  one — `ceh-business-plan:develop-business-plan`. All four are word-for-word identical. Likewise
+  `docs-standard.md`, copied into each of the four `ceh-documentation` `write-*` skills.
 - **A standards set too large to inline** — `ceh-fabled:fabled` splits six standards files out;
   `ceh-web-frontend:ui-design` keeps design-system examples there.
 

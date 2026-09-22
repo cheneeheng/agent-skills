@@ -57,7 +57,7 @@ The table below is the reference list of what those bundles are made of.
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
-| Documentation | `ceh-documentation` | End-user/operator docs — user guides, runbooks, install/config, troubleshooting; changelog & README maintenance |
+| Documentation | `ceh-documentation` | End-user/operator docs in one fixed format — a whole docs set under `docs/` (guides, operations runbook, concepts, API reference, examples, migration), or any one section on its own; plus README maintenance |
 | SEO | `ceh-seo` | SEO/GEO discoverability for anything internet-exposed — public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
 | Orchestration *(experimental)* | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) |
 | Business Plan | `ceh-business-plan` | Turn a product idea or app plan into a validated business plan via a product-market-fit interview loop — draft, interrogate the weakest assumption, revise until a PMF gate passes |
@@ -150,8 +150,11 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-blog` | Blog Writer | `/ceh-blog:blog-writer` | Draft straight from existing notes, bullets, or outline — no interview |
 | `ceh-blog` | Blog Editor | `/ceh-blog:blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
 | `ceh-blog` | Blog Repurpose | `/ceh-blog:blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
-| `ceh-documentation` | User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
+| `ceh-documentation` | Write Guides and Runbooks | `/ceh-documentation:write-guides-and-runbooks` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
 | `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
+| `ceh-documentation` | Write Project Docs | `/ceh-documentation:write-project-docs` | Write a full Markdown docs set for the current workspace or a given project path — survey, one-job-per-page plan, then reference → concepts → guides → examples/migration → front pages → link pass |
+| `ceh-documentation` | Write API Reference | `/ceh-documentation:write-api-reference` | Exhaustive reference for every public function, endpoint, CLI flag, config key, and error — coverage counted against the public surface, "Added in" markers for recent releases |
+| `ceh-documentation` | Write Concept Docs | `/ceh-documentation:write-concept-docs` | User-facing concept pages: the mental model plus why it is built that way, every rationale traced to a design record, commit, or changelog entry |
 | `ceh-coding-agent` | Explain Codebase | `/ceh-coding-agent:explain-codebase` | Go through a whole repo and write what each component does, how they connect, and key flows into git-ignored `.agents_workspace/CODEBASE_EXPLAINED.md` (per-file detail only on request) |
 | `ceh-seo` | Web Discoverability | `/ceh-seo:web-discoverability` | Shipping a public web page/route — head checklist, sitemap/robots/llms.txt, JSON-LD, SSR/prerender, GEO citation rules |
 | `ceh-seo` | Write llms.txt | `/ceh-seo:write-llms-txt` | Creating or updating an llms.txt — the positional spec format, curating which pages earn a link, the reserved `## Optional` section, markdown-over-HTML links, keeping it current |

@@ -637,3 +637,20 @@ escape.
 The `Declined` marker is the one piece of the spec format both files act on: the interview writes it under a heading the user refuses to answer and then stops asking, and the builder reads it as "take the conservative reading and stop delegating". Changing that literal, or either half of its meaning, means changing both files — the pair loops forever if only one of them knows the convention.
 
 Both files also name `$CEH_WORKFLOW_BUILD_DIR` and its `.agents_workspace/` default — the interview skill has to be usable without the builder loaded, so it cannot rely on the builder's Directories table.
+
+---
+
+## Documentation standard (`references/docs-standard.md`)
+
+**Files:** — all four are word-for-word identical
+
+| File | Scope |
+|------|-------|
+| `plugins/ceh-documentation/skills/write-project-docs/references/docs-standard.md` | canonical |
+| `plugins/ceh-documentation/skills/write-guides-and-runbooks/references/docs-standard.md` | copy |
+| `plugins/ceh-documentation/skills/write-api-reference/references/docs-standard.md` | copy |
+| `plugins/ceh-documentation/skills/write-concept-docs/references/docs-standard.md` | copy |
+
+**What is shared:** the whole file — docs layout, page modes, file naming and the fixed prefix table, page anatomy (H1, breadcrumb, summary, footer, hubs), Markdown and link rules, marker literals, voice, frontmatter, and the report shape. Each skill ships its own copy so it works when loaded alone; `update-readme` does not use it.
+
+**What diverges:** nothing in the file. The skills cite it by section number (`§3`, `§4`, `§10`), so renumbering a section means grepping `docs-standard.md §` across the four `SKILL.md` files. Verify identity with `md5sum plugins/ceh-documentation/skills/*/references/docs-standard.md`.
