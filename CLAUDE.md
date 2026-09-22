@@ -195,9 +195,10 @@ and a sweep would pull a 6-plugin closure into a single install.
 ## Adding a Component
 
 The repo-local skill `.claude/skills/add-plugin-component/` is the single checklist for adding or
-changing a skill, agent, hook, or script — plugin choice, frontmatter traps, plugin-agent gotchas,
-both README tables, `docs/CROSS_REFERENCES.md`, the two-manifest version bump, and the validator. It
-auto-loads when a `SKILL.md` or `agents/*.md` is created; load it explicitly if it has not.
+changing a skill, agent, hook, script, or a whole new plugin — plugin choice, frontmatter traps,
+plugin-agent gotchas, both README tables, `docs/CROSS_REFERENCES.md`, the two-manifest version
+bump, the validator, and where it overrides `plugin-dev` advice. It auto-loads when a `SKILL.md` or
+`agents/*.md` is created; load it explicitly if it has not.
 
 Whatever else gets skipped, these four land in the **same commit** or CI fails:
 

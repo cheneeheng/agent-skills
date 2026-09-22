@@ -1,12 +1,14 @@
 ---
 name: add-plugin-component
 description: >-
-  The checklist for adding or changing a skill, agent, hook, or script in this plugin repo — which
-  plugin it belongs in, the frontmatter it needs, and every registration chore that must land in the
-  same commit (README tables, docs/CROSS_REFERENCES.md, plugin.json + marketplace.json version bumps,
-  validate.py). Load whenever a new SKILL.md or agents/*.md is being created, an existing one is
-  being renamed or moved between plugins, or the user says "add a skill", "add an agent", "new
-  plugin component", or asks why validate.py is failing.
+  The checklist for adding or changing a skill, agent, hook, script, or a whole new ceh-* plugin in
+  this plugin repo — which plugin it belongs in, the frontmatter it needs, and every registration
+  chore that must land in the same commit (README tables, docs/CROSS_REFERENCES.md, plugin.json +
+  marketplace.json version bumps, validate.py). Overrides plugin-dev advice that conflicts with this
+  repo. Load whenever a new SKILL.md or agents/*.md is being created, an existing one is being
+  renamed or moved between plugins, a new plugin directory is being added under plugins/, or the
+  user says "add a skill", "add an agent", "new plugin component", "create a plugin", "new ceh
+  plugin", or asks why validate.py is failing.
 argument-hint: '[skill-or-agent-name]'
 ---
 
@@ -29,6 +31,9 @@ use case, so each must be self-contained.
   extracted into a shared base plugin. Register the duplication (step 4).
 - App-specific patterns are not standards. Anything bound to one application's schema or design
   gets removed, not filed as a niche plugin.
+
+If no existing plugin owns the use case, create one first — see [New plugin](#new-plugin) — then
+continue at step 2.
 
 ## 2. Write the component
 
@@ -64,6 +69,15 @@ Frontmatter worth reaching for before writing prose that does the same job:
 | `argument-hint` | Any `disable-model-invocation: true` skill | Cosmetic but free |
 | `${CLAUDE_SKILL_DIR}` | Referencing a bundled script | Substituted in the body *and* in `allowed-tools` Bash rules; `${CLAUDE_PLUGIN_ROOT}` is **not** substituted in skill bodies |
 | `memory` | Agents that should learn across sessions | Auto-enables Read/Write/Edit on that agent |
+| `compatibility` | Skills that need software the machine may lack (`git`, `gh`, `uv`, `bun`, a server, network) | `>-` scalar, max 500 chars. Name runtime + minimum version and what fails without it. Omit for read-files-emit-Markdown skills |
+
+**Cross-plugin calls** — when a skill must call a skill in another plugin on *every* run, add the
+target plugin to `dependencies` in `plugin.json` (never in `marketplace.json`; bare strings, no
+ranges) and call it explicitly: `Invoke the Skill tool with skill="ceh-<plugin>:<skill>"`.
+Conditional handoffs and negative routing ("Not for X, use ...") stay prose with no dependency. A
+cross-cutting plugin may depend only on other cross-cutting plugins. `validate.py` rejects a call
+whose target does not resolve, is not a declared dependency, or sets
+`disable-model-invocation: true`.
 
 **Plugin-agent gotchas** — Claude Code ignores `permissionMode`, `hooks`, and `mcpServers` on
 plugin agents (security restriction). Do not add them; they read as working config and are not.
@@ -104,7 +118,8 @@ Same commit, both files, or CI fails:
 - `plugins/ceh-<plugin>/.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 
-**PATCH** for content/description updates, **MINOR** for a new skill or agent. Bump at commit
+**PATCH** for content/description updates, **MINOR** for a new skill or agent or for adding or
+removing a `dependencies` entry, **MAJOR** for renaming or removing the plugin. Bump at commit
 time, not during iterative edits. The repo git tag is a separate, independent layer — cut it after
 the plugin bumps land.
 
@@ -123,3 +138,43 @@ resolve, and that bundled `*.sh` / `*.py` scripts parse.
 The validator only requires `name` and `description` in frontmatter, so a typo in any other field
 passes validation and fails silently at runtime. Check new fields against the Claude Code docs
 rather than trusting a green run.
+
+## New plugin
+
+Only when step 1 finds no plugin that owns the use case. Decide the tier first (scenario bundle,
+cross-cutting, use-case workflow, stack/build — see `CLAUDE.md`), then:
+
+1. `plugins/ceh-<name>/.claude-plugin/plugin.json` — copy the shape of an existing one (`name`
+   matching the directory, `version: "1.0.0"`, `description`, `author`, `repository`, `license`,
+   `keywords`) plus `dependencies` if any. The directory sits flat under `plugins/`, no tier folder.
+2. `plugins/ceh-<name>/README.md` with the plugin's own skill/agent table.
+3. `.claude-plugin/marketplace.json` — a new entry whose `source`, `version`, and `description`
+   mirror `plugin.json`. `validate.py` fails on a plugin missing from the marketplace or a version
+   mismatch.
+4. Root `README.md` — a row in the **Plugins** table, the plugin in the **Categorization** tier
+   table, its Skills/Agents rows, and a line in both install lists (`/plugin install` and the
+   manual `path` list).
+5. `CLAUDE.md` — a row in the **Plugins** table and the plugin in the tier table.
+6. A `ceh-scenario-*` bundle, only if the plugin belongs in that situation's install set. A bundle
+   holds `plugin.json` (with `dependencies`) and `README.md` and nothing else — `validate.py`
+   enforces it. Update `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` §4 locally for any new edge.
+
+The repo tag bumps MINOR and `CHANGELOG.md` lists the plugin at `1.0.0` under `### Added`.
+
+## When plugin-dev skills are also loaded
+
+`plugin-dev:create-plugin`, `skill-development`, `agent-development`, and `hook-development` trigger
+on the same phrases and give generic advice. Where it conflicts with this repo, this skill wins:
+
+| plugin-dev says | This repo does |
+|---|---|
+| Lean SKILL.md, detail in `references/` and `examples/` | Content inline. `references/` only for shared schemas or oversized standards |
+| "This skill should be used when…" descriptions, any scalar style | `>-` folded scalar, "Load this skill when…" |
+| Hook scripts in `examples/` | `scripts/`, referenced as `${CLAUDE_PLUGIN_ROOT}/scripts/...` |
+| New plugin at `0.1.0`, marketplace entry optional | `1.0.0`, marketplace entry in the same commit |
+| `plugin-validator` agent, `validate-agent.sh`, `validate-hook-schema.sh` | `python tools/validate-plugins/validate.py` is the gate |
+| Agent `<example>` blocks and `color` | Prose `description`, no `<example>` blocks; `color` optional |
+| Wait for user confirmation at each phase, ask where to create, `git init` | Autonomous mode, flat `plugins/`, existing repo |
+
+plugin-dev stays useful for Claude Code mechanics this skill does not cover — hook event payloads,
+MCP server config, settings files.
