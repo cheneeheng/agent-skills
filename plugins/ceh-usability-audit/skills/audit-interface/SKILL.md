@@ -217,4 +217,4 @@ Mark an unmeasurable criterion **N/A with a reason** and report the gate out of 
 | The finding is wording | `plain-language-pass` |
 | Layout, hierarchy, spacing, theme | `ceh-web-frontend:ui-design` |
 | Keyboard, contrast, ARIA, focus | `ceh-web-frontend:accessibility` |
-| The fix is a doc, not the product | `ceh-documentation:write-guides-and-runbooks` |
+| The fix is a doc, not the product | `ceh-documentation:write-guides-and-runbooks` when the reader needed a task or a runbook, `ceh-documentation:write-api-reference` when they needed a lookup |

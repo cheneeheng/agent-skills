@@ -142,6 +142,6 @@ less, not vaguer.**
 | The string is an error message | `audit-error-messages` |
 | The wording is a symptom of a confusing flow | `audit-interface` |
 | Does a newcomer get far enough to read this at all? | `first-run-walkthrough` |
-| It's a docs page, not in-product copy | `ceh-documentation:write-guides-and-runbooks` |
+| It's a docs page, not in-product copy | `ceh-documentation:write-guides-and-runbooks` for a guide or runbook, `ceh-documentation:write-concept-docs` for an explanation |
 | It's the README first screen or a package description | `ceh-seo:text-discoverability` |
 | The label is unreadable to a screen reader or has no accessible name | `ceh-web-frontend:accessibility` |

@@ -300,5 +300,6 @@ passing.
 | The stall was an error message | `audit-error-messages` |
 | The stall was wording | `plain-language-pass` |
 | The stall was a missing/incorrect doc | `ceh-documentation:write-guides-and-runbooks`, `ceh-documentation:update-readme` |
+| The project has no docs set at all | `ceh-documentation:write-project-docs` |
 | The stall was keyboard, contrast, or screen-reader | `ceh-web-frontend:accessibility` |
 | The README's first screen does not say what this is | `ceh-seo:text-discoverability` |
