@@ -98,7 +98,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-blog` | Interview-driven blog post writing |
-| `ceh-documentation` | A whole `docs/` set under one shared docs standard (guides, operations runbooks, concepts, API reference, examples, migration) or any one section alone; README maintenance |
+| `ceh-documentation` | A whole `docs/` set under one shared docs standard (guides, operations runbooks, concepts, API reference, examples, migration) or any one section alone; runnable `examples/` programs (feature tour + copy-paste recipes); README maintenance |
 | `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents |
 | `ceh-business-plan` | Interview-driven business plan: draft from an app plan or idea, loop until a product-market-fit gate passes |
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive criteria, measure structure/triggering/content/behavioral lift with evidence, loop until a readiness gate passes |

@@ -7,6 +7,37 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.8.0] — 2026-09-22
+
+`write-project-docs` documents example programs but only ones that already exist, so a project with
+none shipped docs without any runnable code for users. The new `write-examples` skill writes that
+code under `examples/` in two tracks that never share a file. A numbered `tour/` shows a new user the
+three to five most important features in a few minutes. `recipes/` holds self-contained blocks an
+integrator copies into their own project, with configuration from the environment, the project's
+real errors handled, and every value to change marked. Every file is run before it is kept, never
+against production, and never by adding a dependency to the project.
+
+`write-project-docs` does not call it. When a repo has no example worth a page, it leaves an open
+item pointing the user at `/ceh-documentation:write-examples`, because writing new programs is a
+separate decision from documenting the ones that exist.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-documentation` | v1.3.0 —> v1.4.0 |
+
+### Added
+
+- **`ceh-documentation:write-examples`**: writes runnable examples under `examples/` for the
+  workspace or a given path, a feature tour for new users plus copy-paste integration recipes, each
+  run before it is kept.
+
+### Changed
+
+- **`ceh-documentation:write-project-docs`**: when no example is worth a page, reports an open item
+  pointing to `write-examples` instead of silently skipping the section.
+
 ## [6.7.0] — 2026-09-22
 
 `ceh-documentation` could write guides and a README, but a coding agent asked to document a project

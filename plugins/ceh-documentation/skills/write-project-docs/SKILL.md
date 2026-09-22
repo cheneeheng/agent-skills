@@ -126,7 +126,10 @@ linking to the error's reference entry, or to the reference entry of the input t
 instead of explaining it inline.
 
 **Examples:** only programs that already exist in the repo (`examples/`, runnable snippets from
-tests) and that you ran successfully — an example that did not run is cut, not marked. Each page:
+tests) and that you ran successfully — an example that did not run is cut, not marked. This skill
+never writes new example programs. When the repo has none worth a page, skip `examples/` and add an
+open item telling the user to run `/ceh-documentation:write-examples` (a feature tour plus
+copy-paste recipes under `<root>/examples/`), then rerun this step. Do not invoke it yourself. Each page:
 
 ```text
 # EX-01 — <What it builds>
