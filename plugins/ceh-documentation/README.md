@@ -11,6 +11,7 @@ Claude Code plugin for writing end-user and operator-facing documentation — ta
 | `write-project-docs` | Write a full docs set under `docs/` for the current workspace or a given project path — index, why, quickstart, guides, concepts, reference, examples, migration — one job per page; sequences the three skills below and itself |
 | `write-api-reference` | The exhaustive layer: every public item, counted against the surface, alphabetical within kind, "Added in" markers for the last three releases, rationale behind "Why" links |
 | `write-concept-docs` | The "why" layer: mental model per concept, design rationale sourced from ADRs, commits, and the changelog, never invented |
+| `write-examples` | Write new runnable programs under `examples/` in two tracks — a numbered `tour/` showing new users the top features, and `recipes/` a user copies into their own project — each run before it is kept |
 
 Invoke manually:
 
@@ -30,6 +31,12 @@ Invoke manually:
 - `"create documentation for <path>"` / `"our docs are out of date, redo them"`
 
 Pass a path to document another project: `/ceh-documentation:write-project-docs ../my-lib`
+
+**write-examples** loads automatically when you say:
+- `"write examples for this project"` / `"add usage examples"`
+- `"show new users how to use this"` / `"give users something to copy into their app"`
+
+Pass a path to write examples for another project: `/ceh-documentation:write-examples ../my-lib`
 
 **update-readme** loads automatically when you say:
 - `"update the readme"` / `"refresh the docs"`
