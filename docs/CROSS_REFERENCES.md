@@ -637,3 +637,21 @@ escape.
 The `Declined` marker is the one piece of the spec format both files act on: the interview writes it under a heading the user refuses to answer and then stops asking, and the builder reads it as "take the conservative reading and stop delegating". Changing that literal, or either half of its meaning, means changing both files — the pair loops forever if only one of them knows the convention.
 
 Both files also name `$CEH_WORKFLOW_BUILD_DIR` and its `.agents_workspace/` default — the interview skill has to be usable without the builder loaded, so it cannot rely on the builder's Directories table.
+
+---
+
+## Docs page naming + furniture (`<PREFIX>-<NN>` files, breadcrumb, prev/next footer)
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-documentation/skills/user-operator-guide/SKILL.md` | "Phase 3 — Structure" naming rules and "Phase 4 — Page furniture" | canonical — full naming scheme, renumbering rule, footer and line-break rules |
+| `plugins/ceh-documentation/skills/write-concept-docs/SKILL.md` | "Step 4 — Layout and furniture" | compact copy applied to `docs/concepts/` with prefix `CO` |
+| `plugins/ceh-documentation/skills/write-project-docs/SKILL.md` | "Examples" paragraph | one-line use of the scheme for `docs/examples/` with prefix `EX` |
+
+**What is shared:** subfolder files are `<PREFIX>-<NN>-<kebab-name>.md`, two digits, contiguous from `01`, the number carrying reading order; a subfolder needs at least two files; the H1 repeats the ID; a breadcrumb under the H1 and a prev/next footer within the subfolder.
+
+**What diverges:**
+- `write-concept-docs` gives `docs/concepts/` its own `index.md` hub and points the breadcrumb at it, because the concepts tree hangs off the site front page rather than off `docs/guide/index.md`.
+- `write-api-reference` deliberately does **not** use the scheme: reference pages are looked up by name, not read in order, so they are named after the code module. Do not "fix" that divergence.

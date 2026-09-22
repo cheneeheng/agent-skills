@@ -8,6 +8,9 @@ Claude Code plugin for writing end-user and operator-facing documentation — ta
 |-------|-------------|
 | `user-operator-guide` | Write or revise user guides and operator runbooks — distinguishes the two audiences, picks the right document type, and enforces task-oriented, verifiable procedures |
 | `update-readme` | Keep `README.md` accurate after significant changes (new features, CLI changes, config changes) |
+| `write-project-docs` | Write a full docs set under `docs/` for the current workspace or a given project path — index, why, quickstart, guides, concepts, reference, examples, migration — one job per page; sequences the three skills below and itself |
+| `write-api-reference` | The exhaustive layer: every public item, counted against the surface, alphabetical within kind, "Added in" markers for the last three releases, rationale behind "Why" links |
+| `write-concept-docs` | The "why" layer: mental model per concept, design rationale sourced from ADRs, commits, and the changelog, never invented |
 
 Invoke manually:
 
@@ -21,6 +24,12 @@ Invoke manually:
 - `"getting-started guide"` / `"installation guide"`
 - `"document how to use this"` / `"document how to operate this"`
 - `"admin manual"` / `"configuration guide"`
+
+**write-project-docs** loads automatically when you say:
+- `"document this project"` / `"write the docs for this library"`
+- `"create documentation for <path>"` / `"our docs are out of date, redo them"`
+
+Pass a path to document another project: `/ceh-documentation:write-project-docs ../my-lib`
 
 **update-readme** loads automatically when you say:
 - `"update the readme"` / `"refresh the docs"`
