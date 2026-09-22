@@ -6,7 +6,7 @@ Claude Code plugin for writing end-user and operator-facing documentation — ta
 
 | Skill | Description |
 |-------|-------------|
-| `user-operator-guide` | Write or revise user guides and operator runbooks — distinguishes the two audiences, picks the right document type, and enforces task-oriented, verifiable procedures |
+| `write-guides-and-runbooks` | Write or revise user guides (`docs/guide/`) and operator runbooks (`docs/operations/`) — one section per audience, the right document type, task-oriented verifiable procedures |
 | `update-readme` | Keep `README.md` accurate after significant changes (new features, CLI changes, config changes) |
 | `write-project-docs` | Write a full docs set under `docs/` for the current workspace or a given project path — index, why, quickstart, guides, concepts, reference, examples, migration — one job per page; sequences the three skills below and itself |
 | `write-api-reference` | The exhaustive layer: every public item, counted against the surface, alphabetical within kind, "Added in" markers for the last three releases, rationale behind "Why" links |
@@ -15,10 +15,10 @@ Claude Code plugin for writing end-user and operator-facing documentation — ta
 Invoke manually:
 
 ```
-/ceh-documentation:user-operator-guide
+/ceh-documentation:write-guides-and-runbooks
 ```
 
-**user-operator-guide** loads automatically when you say:
+**write-guides-and-runbooks** loads automatically when you say:
 - `"write a user guide"` / `"write a user manual"`
 - `"write an operator guide"` / `"write an ops runbook"`
 - `"getting-started guide"` / `"installation guide"`
@@ -46,7 +46,8 @@ Markdown under `docs/` in one fixed format, whichever skill writes the page. The
 (`update-readme` excepted) so each works when loaded alone:
 
 - **Layout** — `docs/index.md` front page, site-level `why.md` / `migration.md`, and the sections
-  `guide/`, `concepts/`, `reference/`, `examples/`, each with an `index.md` hub
+  `guide/` (the user's tasks), `operations/` (the operator's runbook), `concepts/`, `reference/`,
+  `examples/`, each with an `index.md` hub
 - **One mode per page** — tutorial, how-to, concept, reference, or example; a page needing two is two pages
 - **File naming** — numbered folders use `<PREFIX>-<NN>-<name>.md` with fixed prefixes (`HT`, `OP`,
   `TS`, `CO`, `EX`), contiguous from `01`; reference pages are named after the code, never numbered

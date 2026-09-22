@@ -8,8 +8,8 @@ description: >-
   library", "create documentation for <path>", "write docs for our SDK/API/CLI", "build out the
   docs folder", or "our docs are missing or out of date, redo them". This skill surveys, plans the
   page set, and sequences it: the reference goes to write-api-reference, concept and
-  design-rationale pages to write-concept-docs, guides to user-operator-guide. Not for one guide or
-  runbook alone (use user-operator-guide), a README refresh (use update-readme), or a maintainer
+  design-rationale pages to write-concept-docs, guides to write-guides-and-runbooks. Not for one guide or
+  runbook alone (use write-guides-and-runbooks), a README refresh (use update-readme), or a maintainer
   architecture doc (use ceh-architecture:document-architecture).
 argument-hint: '[project-path]'
 compatibility: >-
@@ -71,15 +71,16 @@ prerequisites, and sources from the table instead of re-deriving them.
 
 Map the survey onto the layout of standard §1, annotated here with who writes what. **Cut every
 page that has no real content** — no `migration.md` without a breaking release in history, no
-`examples/` without a runnable example, no `guide/operations/` for a library. A design record under
+`examples/` without a runnable example, no `operations/` for a library. A design record under
 `docs/` (ADRs, decision logs) stays where it is and is linked, not restyled (standard §1). An empty section costs the reader a click and trust.
 
 ```text
 docs/
 ├── index.md          # front page: what it is, one code sample, where to go next  (this skill)
 ├── why.md            # why X, X vs alternatives, when NOT to use it, limitations   (this skill)
-├── guide/            # getting-started (the quickstart), how-to/, troubleshooting, operations/
-│                     #                                           (user-operator-guide)
+├── guide/            # getting-started (the quickstart), how-to/, troubleshooting
+│                     #                                           (write-guides-and-runbooks)
+├── operations/       # the operator's runbook, OP-NN pages       (write-guides-and-runbooks)
 ├── concepts/         # the mental model + why it is built this way   (write-concept-docs)
 ├── reference/        # every public item, exhaustively               (write-api-reference)
 ├── examples/         # complete runnable programs, EX-NN-<name>.md   (this skill)
@@ -106,12 +107,14 @@ report; this skill merges them into the one report at the end.
 |---|-------|-------------|-----------------------|
 | 1 | `docs/reference/` | Invoke the Skill tool with skill="ceh-documentation:write-api-reference" — pass `<root>` and the survey table | Every surface item counted in its coverage check has an entry, or is listed as an open item |
 | 2 | `docs/concepts/` | Invoke the Skill tool with skill="ceh-documentation:write-concept-docs" — pass `<root>`, the survey table, the reference page list | Each concept page has a "Why it works this way" section with a cited source, or an open item |
-| 3 | `docs/guide/` | Invoke the Skill tool with skill="ceh-documentation:user-operator-guide" — pass `<root>`, the audience, and the brief below | Getting-started reaches a working result; every how-to ends in a verify step |
+| 3 | `docs/guide/`, `docs/operations/` | Invoke the Skill tool with skill="ceh-documentation:write-guides-and-runbooks" — pass `<root>`, the audience, and the brief below | Getting-started reaches a working result; every how-to ends in a verify step |
 | 4 | `docs/examples/`, `docs/migration.md` | this skill — see below | Each example ran, and its shown output is what it printed |
 | 5 | `docs/why.md`, `docs/index.md` | this skill — see below | Index links every section; no page unreachable from it |
 | 6 | Link pass | this skill — see below | Zero broken relative links |
 
-**Brief for `user-operator-guide`:** its `docs/guide/` means `<root>/docs/guide/`, and its
+**Brief for `write-guides-and-runbooks`:** its `docs/guide/` and `docs/operations/` mean
+`<root>/docs/guide/` and `<root>/docs/operations/`; write `operations/` only when the project is
+deployed and operated, never for a library. Its
 `getting-started.md` *is* the site quickstart — the shortest path to a first working result for the
 **primary audience** (for a library, install to first call; for a hosted API, the caller's first
 request, not the server install), at most 7 steps, no options, each optional knob replaced by a link
@@ -166,6 +169,7 @@ file links to that file (`concepts.md`, not `concepts/index.md`):
 
 - **New here?** [Get started](guide/getting-started.md) — a working result in minutes.
 - **Doing a specific task?** [Guides](guide/index.md)
+- **Deploying or operating it?** [Operations](operations/index.md)
 - **Want to understand how it works and why?** [Concepts](concepts/index.md)
 - **Looking up a function, flag, or setting?** [Reference](reference/index.md)
 - **Want a whole working program?** [Examples](examples/index.md)

@@ -14,12 +14,13 @@ docs/
 ├── index.md              # site front page — no breadcrumb
 ├── why.md                # site-level page
 ├── migration.md          # site-level page
-├── guide/                # section: tutorials, how-to, troubleshooting, operations
+├── guide/                # section: tutorials, how-to, troubleshooting — the user's tasks
 │   ├── index.md          # section hub
 │   ├── getting-started.md
 │   ├── troubleshooting.md
-│   ├── how-to/           # HT-NN pages
-│   └── operations/       # OP-NN pages; nested folders chain the prefix (OP-DB-NN)
+│   └── how-to/           # HT-NN pages
+├── operations/           # section: the operator's runbook, OP-NN pages
+│   └── index.md          # nested folders chain the prefix (OP-DB-NN)
 ├── concepts/             # section: CO-NN pages
 │   └── index.md
 ├── reference/            # section: pages named after the code, never numbered
@@ -51,7 +52,7 @@ Every page has exactly one mode. A page that needs two modes is two pages.
 | Mode | Answers | Lives in | Voice |
 |------|---------|----------|-------|
 | Tutorial | "Get me to a first success" | `guide/getting-started.md` | Imperative, no options |
-| How-to | "How do I do this task?" | `guide/how-to/`, `guide/operations/`, `guide/troubleshooting*`, `migration.md` | Imperative, numbered steps |
+| How-to | "How do I do this task?" | `guide/how-to/`, `operations/`, `guide/troubleshooting*`, `migration.md` | Imperative, numbered steps |
 | Concept | "How does this work, and why?" | `concepts/`, `why.md` | Explanatory, no procedures |
 | Reference | "What exactly does this item do?" | `reference/` | Terse, complete, no teaching |
 | Example | "Show me a whole working program" | `examples/` | Code first, one-line framing |
@@ -76,7 +77,7 @@ the report's Mode column.
   | Folder | Prefix |
   |--------|--------|
   | `guide/how-to/` | `HT` |
-  | `guide/operations/` | `OP` |
+  | `operations/` | `OP` |
   | `guide/troubleshooting/` | `TS` |
   | `concepts/` | `CO` |
   | `examples/` | `EX` |
@@ -124,16 +125,15 @@ Reset a user's password from the admin console. Use this when a user is locked o
    | Page in a nested subfolder | `[← Guide](../../index.md)` |
    | Page in a numbered section (`concepts/CO-02-…`) | `[← Concepts](index.md)` |
 
-   The label is the hub's name: Docs home, Guide, Concepts, Reference, Examples.
+   The label is the hub's name: Docs home, Guide, Operations, Concepts, Reference, Examples.
 3. **Summary** — one or two sentences: what the page answers and when to read it. No heading.
 4. **Body** — `##` and below, never skipping a level.
 5. **Footer** — numbered pages only: a `---` rule, then prev · hub · next, following `NN` order
    **within the page's own folder**. The first page drops prev, the last drops next. Never link
    across two folders' chains. Unnumbered pages and hubs have no footer.
 
-**Hub pages** list every page of their section — grouped by audience first when the section serves
-two (callers, operators), then by subfolder; a hub with a single group drops the group heading — in
-`NN` order, each as
+**Hub pages** list every page of their section — grouped by subfolder; a hub with a single group
+drops the group heading — in `NN` order, each as
 `- [<ID> <Title>](<path>) — read this when <situation>.` An unnumbered page drops the ID:
 `- [Troubleshooting](troubleshooting.md) — read this when <situation>.` The site `index.md` routes to the section
 hubs and site-level pages; it does not list every page.

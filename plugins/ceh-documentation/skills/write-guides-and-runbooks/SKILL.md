@@ -1,5 +1,5 @@
 ---
-name: user-operator-guide
+name: write-guides-and-runbooks
 description: >-
   Load this skill when writing or revising end-user or operator-facing documentation — user guides,
   user manuals, getting-started guides, how-to manuals, operator runbooks,
@@ -11,9 +11,9 @@ description: >-
   update-readme).
 ---
 
-# User & Operator Guide
+# Write Guides and Runbooks
 
-Write task-oriented docs that let a reader reach a goal without already knowing the system. Two audiences — never blur them. When a request covers both (common for internal tools), keep them in separate sections/files; never interleave end-user steps with privileged operator commands.
+Write task-oriented docs that let a reader reach a goal without already knowing the system. Two audiences — never blur them. When a request covers both (common for internal tools), the user's tasks go in `docs/guide/` and the operator's in `docs/operations/`; never interleave end-user steps with privileged operator commands.
 
 | | **User guide** | **Operator guide / runbook** |
 |---|---|---|
@@ -67,8 +67,9 @@ format. Everything below is what is specific to guides.
 ### Where files go
 
 Work against `<root>`: the project path the caller or user gave, else the current working
-directory. New guides go under `<root>/docs/guide/`, the **Guide** section of the standard, with
-`index.md` as its hub. Docs that already live elsewhere are edited in place, never relocated.
+directory. This skill writes **two sections of the standard**, one per audience: user tasks under
+`<root>/docs/guide/` and operator content under `<root>/docs/operations/`, each with its own
+`index.md` hub. Docs that already live elsewhere are edited in place, never relocated.
 
 A focused single-topic guide is one file, `docs/guide.md` (standard §1). Anything broader is a tree:
 
@@ -77,21 +78,23 @@ docs/guide/
 ├── index.md            # hub: every page, grouped, each with "read this when…"
 ├── getting-started.md
 ├── troubleshooting.md
-├── how-to/             # HT-NN
-│   ├── HT-01-reset-password.md
-│   └── HT-02-export-data.md
-└── operations/         # OP-NN — operator content, its own subtree, never interleaved
-    ├── OP-01-install.md
-    ├── OP-02-configure.md
-    └── database/       # OP-DB-NN
-        ├── OP-DB-01-backup.md
-        └── OP-DB-02-restore.md
+└── how-to/             # HT-NN
+    ├── HT-01-reset-password.md
+    └── HT-02-export-data.md
+
+docs/operations/        # OP-NN — the operator's own section, never interleaved with the guide
+├── index.md            # hub
+├── OP-01-install.md
+├── OP-02-configure.md
+└── database/           # OP-DB-NN
+    ├── OP-DB-01-backup.md
+    └── OP-DB-02-restore.md
 ```
 
-- **User-only guide:** drop `operations/`.
-- **Operator-only runbook:** keep `operations/`, drop `how-to/` and `getting-started.md` — the
-  operator's first success is the install page. Symptom-keyed entries live in the incidents page,
-  so `troubleshooting.md` is dropped too unless end users also hit errors.
+- **User-only guide:** write `guide/` alone; no `operations/` section.
+- **Operator-only runbook:** write `operations/` alone — the operator's first success is the
+  install page, so there is no `getting-started.md`. Symptom-keyed entries live in the incidents
+  page, so `troubleshooting.md` is dropped too unless end users also hit errors.
 
 Numbering, prefixes, the two-page minimum for a folder, and renumbering all follow the standard's §3.
 A **runbook page** (the multi-procedure `OP` pages) is thin when it would hold one procedure of
@@ -198,10 +201,10 @@ Step standards:
 - [ ] Spine is tasks, not a feature dump.
 - [ ] Terminology is consistent throughout.
 - [ ] Every page passes `references/docs-standard.md`: file names and prefixes (§3), H1 + breadcrumb + summary + footer (§4), Markdown rules (§5), every link and anchor resolves (§6), markers verbatim (§7).
-- [ ] `index.md` lists every page of the guide, grouped, in reading order.
+- [ ] Each section's `index.md` lists every page of that section, grouped, in reading order.
 
 ## Output
 
-Files under `<root>/docs/guide/` in the layout of Phase 3. End the reply with the report of
+Files under `<root>/docs/guide/` and `<root>/docs/operations/` in the layout of Phase 3. End the reply with the report of
 `references/docs-standard.md` §10 — or, when `write-project-docs` called this skill, return only the
 rows and open items for it to merge. Never bury an assumed or invented detail in confident prose.

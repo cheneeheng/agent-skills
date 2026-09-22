@@ -66,7 +66,7 @@ head afterwards — a subsystem, a design, a release's worth of change.
 | A repo-wide orientation file, component by component | `ceh-coding-agent:explain-codebase` |
 | One line per path, fast structure map | `ceh-coding-agent:repo-tree-mapper` agent |
 | Diagrams and decision records that live in the repo | `ceh-architecture:document-architecture` |
-| Docs for people who *use* or *operate* the product | `ceh-documentation:user-operator-guide` |
+| Docs for people who *use* or *operate* the product | `ceh-documentation:write-guides-and-runbooks` |
 | Someone in this session needs to understand something now | **this skill** |
 
 ## Procedure

@@ -9,7 +9,7 @@ description: >-
   this way — put it in the docs", or when ceh-documentation:write-project-docs delegates its
   concepts step. Not for a maintainer architecture doc with diagrams and a decision log (use
   ceh-architecture:document-architecture), a per-module codebase walkthrough (use
-  ceh-coding-agent:explain-codebase), task steps (use user-operator-guide), or lookups (use
+  ceh-coding-agent:explain-codebase), task steps (use write-guides-and-runbooks), or lookups (use
   write-api-reference).
 compatibility: >-
   Reads the target project's files. Uses the git CLI on PATH to mine commit and merge messages for

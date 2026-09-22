@@ -150,7 +150,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-blog` | Blog Writer | `/ceh-blog:blog-writer` | Draft straight from existing notes, bullets, or outline — no interview |
 | `ceh-blog` | Blog Editor | `/ceh-blog:blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
 | `ceh-blog` | Blog Repurpose | `/ceh-blog:blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
-| `ceh-documentation` | User & Operator Guide | `/ceh-documentation:user-operator-guide` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
+| `ceh-documentation` | Write Guides and Runbooks | `/ceh-documentation:write-guides-and-runbooks` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
 | `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
 | `ceh-documentation` | Write Project Docs | `/ceh-documentation:write-project-docs` | Write a full Markdown docs set for the current workspace or a given project path — survey, one-job-per-page plan, then reference → concepts → guides → examples/migration → front pages → link pass |
 | `ceh-documentation` | Write API Reference | `/ceh-documentation:write-api-reference` | Exhaustive reference for every public function, endpoint, CLI flag, config key, and error — coverage counted against the public surface, "Added in" markers for recent releases |

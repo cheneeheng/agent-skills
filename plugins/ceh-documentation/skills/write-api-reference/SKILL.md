@@ -8,7 +8,7 @@ description: >-
   "document every endpoint", "document all the CLI flags", "reference docs for this library",
   "document the config options", or when ceh-documentation:write-project-docs delegates its
   reference step. Counts the public surface first and reports coverage against it. Not for guides
-  or tutorials (use user-operator-guide), explanations of design (use write-concept-docs), or the
+  or tutorials (use write-guides-and-runbooks), explanations of design (use write-concept-docs), or the
   README (use update-readme).
 compatibility: >-
   Reads source files of the target project. Uses the git CLI on PATH for "Added in" markers

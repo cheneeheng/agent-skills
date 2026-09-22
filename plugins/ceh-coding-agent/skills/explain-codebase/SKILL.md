@@ -35,7 +35,7 @@ you report, not an omission you make quietly.
 |------|-----|
 | One line per path, clickable tree, fast orientation | `ceh-coding-agent:repo-tree-mapper` agent |
 | Diagrams of the system's shape + decision log | `ceh-architecture:document-architecture` |
-| Docs for people who *use* or *operate* the product | `ceh-documentation:user-operator-guide` |
+| Docs for people who *use* or *operate* the product | `ceh-documentation:write-guides-and-runbooks` |
 | Explain one subsystem to someone who is in the session and can say "still blurry" | `ceh-coding-agent:explain-until-understood` |
 | Explain what is in the repo and how it works, component by component | **this skill** |
 

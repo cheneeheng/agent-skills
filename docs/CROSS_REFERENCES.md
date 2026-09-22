@@ -647,7 +647,7 @@ Both files also name `$CEH_WORKFLOW_BUILD_DIR` and its `.agents_workspace/` defa
 | File | Scope |
 |------|-------|
 | `plugins/ceh-documentation/skills/write-project-docs/references/docs-standard.md` | canonical |
-| `plugins/ceh-documentation/skills/user-operator-guide/references/docs-standard.md` | copy |
+| `plugins/ceh-documentation/skills/write-guides-and-runbooks/references/docs-standard.md` | copy |
 | `plugins/ceh-documentation/skills/write-api-reference/references/docs-standard.md` | copy |
 | `plugins/ceh-documentation/skills/write-concept-docs/references/docs-standard.md` | copy |
 
