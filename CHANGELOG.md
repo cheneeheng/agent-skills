@@ -7,6 +7,72 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.7.0] — 2026-09-22
+
+`ceh-documentation` could write guides and a README, but a coding agent asked to document a project
+had no way to produce the whole set: the guide skill explicitly excluded the API reference, and
+nothing covered concepts, examples, or migration. The plugin now writes a complete `docs/` site.
+`write-project-docs` surveys a project, plans one job per page, and sequences three section skills:
+`write-api-reference` for the exhaustive layer, `write-concept-docs` for the mental model with
+sourced rationale, and the renamed `write-guides-and-runbooks` for quickstart, how-to,
+troubleshooting and operations. Only the reference is exhaustive. Every other page links into it,
+which is how the set stays concise without dropping coverage.
+
+Pages from different skills used to drift in layout, naming and furniture, so a set built across
+runs did not read as one site. A shared `references/docs-standard.md` now fixes layout, page modes,
+naming, page anatomy, link rules, markers and the report shape, with one identical copy per writing
+skill so each still works loaded alone. Seven simulated runs over three fixture projects surfaced
+about 80 ambiguities in it, all resolved before this release, and a confirmation run found three more
+defects that are fixed here.
+
+Operator pages moved to their own top-level `docs/operations/` section, because the old guide section
+served two audiences and sent an on-call reader through the user's hub. The guide skill is renamed to
+match: `/ceh-documentation:user-operator-guide` is now `/ceh-documentation:write-guides-and-runbooks`,
+with no alias, since a stub would compete for the same triggers.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-documentation` | v1.2.1 —> v1.3.0 |
+| `ceh-coding-agent` | v3.2.8 —> v3.2.9 |
+| `ceh-usability-audit` | v1.0.4 —> v1.0.5 |
+
+### Added
+
+- **`ceh-documentation:write-project-docs`**: composite skill that writes a full Markdown docs set
+  for the current workspace or a given path. It runs survey, a one-job-per-page plan, then reference,
+  concepts, guides, examples and migration, front pages, and a link pass.
+- **`ceh-documentation:write-api-reference`**: exhaustive reference for every public function,
+  endpoint, CLI flag, config key and error. Coverage is counted against the public surface, and
+  recent releases get "Added in" markers.
+- **`ceh-documentation:write-concept-docs`**: user-facing concept pages whose every design
+  rationale traces to a design record, commit or changelog entry, never invented.
+- **Shared docs standard** (`references/docs-standard.md`) in all four writing skills, registered
+  in `docs/CROSS_REFERENCES.md` as word-for-word identical copies.
+
+### Changed
+
+- **BREAKING: `user-operator-guide` renamed to `write-guides-and-runbooks`.** Operator runbooks now
+  live in a top-level `docs/operations/` section with their own hub. The `OP` prefix and page shapes
+  are unchanged, and the front page gained a "Deploying or operating it?" route.
+- **`ceh-coding-agent`, `ceh-usability-audit`**: every hand-off to `ceh-documentation` names the
+  skill that owns the case (`write-project-docs`, `write-api-reference` or `write-concept-docs`)
+  instead of routing everything to the guide skill. They are still prose hand-offs with no declared
+  dependency.
+- **Root README and CLAUDE.md**: the `ceh-documentation` rows describe the whole docs set, and the
+  README row no longer credits the plugin with changelog maintenance. CLAUDE.md lists
+  `docs-standard.md` as a shared `references/` file.
+
+### Fixed
+
+- **`write-project-docs`**: the Examples template's closing fence no longer swallows the next
+  sentence, the scratch `npm install` gets its own `package.json` so it cannot install into a parent
+  directory, and the migration rule has a subject again.
+- **Docs skills vs the standard**: four disagreements fixed. The page-mode list now matches the
+  standard's seven, a one-page guide is one file, a solo-run concepts page no longer breadcrumbs to
+  a missing `docs/index.md`, and the front page links a single-file concepts section correctly.
+
 ## [6.6.1] — 2026-09-22
 
 Behavioural evals run against both `ceh-workflow-builder` skills found the same defect in each: the
