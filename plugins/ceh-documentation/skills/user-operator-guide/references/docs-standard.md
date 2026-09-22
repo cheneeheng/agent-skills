@@ -117,7 +117,7 @@ Reset a user's password from the admin console. Use this when a user is locked o
    | Page | Breadcrumb |
    |------|------------|
    | `docs/index.md` | none |
-   | Site-level page (`why.md`) | `[← Docs home](index.md)` |
+   | Site-level page (`why.md`, a one-file section such as `concepts.md`) | `[← Docs home](index.md)`, only when `docs/index.md` exists or is written in the same run |
    | Section hub (`guide/index.md`) | `[← Docs home](../index.md)`, only when `docs/index.md` exists or is written in the same run |
    | Section-level page (`guide/getting-started.md`) | `[← Guide](index.md)` |
    | Page in a subfolder (`guide/how-to/HT-02-…`) | `[← Guide](../index.md)` |

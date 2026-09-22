@@ -87,7 +87,7 @@ docs/
 ```
 
 Write the plan as a table — **Page | Mode | The one question it answers | Source** — and hold it in
-the session. Modes are *tutorial*, *how-to*, *concept*, *reference*. A page that needs two modes is
+the session. Modes are the seven names of standard §2. A page that needs two modes is
 two pages. A page whose question you cannot state in one line is not planned yet.
 
 **Existing docs:** edit in place and fill gaps. Map each existing page to a mode, keep its path, and
@@ -152,7 +152,8 @@ everything smaller; never copy the changelog into the docs.
 its own: inline placeholder values (`<your-api-key>`) instead of variables set in an earlier step.
 When one already exists, merge into this shape: keep its
 sentences that are still true, and add a route line for every extra audience (a "**Deploying
-it?**" line for operators). Drop every link whose target was cut, and every line left with no link:
+it?**" line for operators). Drop every link whose target was cut, and every line left with no link. A section written as one
+file links to that file (`concepts.md`, not `concepts/index.md`):
 
 ````markdown
 # <Project>

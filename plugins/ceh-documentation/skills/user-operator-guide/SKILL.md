@@ -70,7 +70,7 @@ Work against `<root>`: the project path the caller or user gave, else the curren
 directory. New guides go under `<root>/docs/guide/`, the **Guide** section of the standard, with
 `index.md` as its hub. Docs that already live elsewhere are edited in place, never relocated.
 
-A focused single-topic guide is `docs/guide/index.md` alone. Anything broader is a tree:
+A focused single-topic guide is one file, `docs/guide.md` (standard §1). Anything broader is a tree:
 
 ```text
 docs/guide/
