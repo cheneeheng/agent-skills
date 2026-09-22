@@ -7,6 +7,22 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.9.0] — 2026-09-22
+
+`ceh-git-workflow` no longer ships its four delegation agents. `merge-flow` and `release-flow` gave
+two instructions for the same steps, invoke the owning skill or dispatch the matching agent, so the
+agents ran about half the time. The agents were built to save tokens by keeping git mechanics out of
+the main session, but prompt caching makes that context cheap to re-read, while every agent started
+a fresh uncached context. Both flows now run every step inline, which also removes a second copy of
+the git rules that had to be kept in sync with the skills.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-git-workflow` | v3.3.2 —> v3.4.0 |
+| `ceh-fabled` | v1.3.6 —> v1.3.7 |
+
 ### Removed
 
 - **`ceh-git-workflow`** — the `commit-author`, `pr-opener`, `branch-merger`, and `release-cutter`
@@ -15,9 +31,12 @@ Versions refer to the Marketplace versions.
   dispatch happened about half the time. The harness's own rule against spawning agents unasked
   pushed the rest inline. Prompt caching already makes the main-session context the agents were
   meant to save cheap to re-read, while each agent paid a fresh uncached context, so the flows now
-  run every step inline. Plugin v3.3.2 —> v3.4.0.
+  run every step inline.
+
+### Changed
+
 - **`ceh-fabled` / `fabled-voice`** — the progress-line example no longer names the removed
-  `pr-opener` agent. Plugin v1.3.6 —> v1.3.7.
+  `pr-opener` agent.
 
 ## [6.8.0] — 2026-09-22
 
