@@ -7,6 +7,18 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+### Removed
+
+- **`ceh-git-workflow`** — the `commit-author`, `pr-opener`, `branch-merger`, and `release-cutter`
+  agents, plus the "Delegating steps to subagents" sections of `merge-flow` and `release-flow`. The
+  flows told the model both to invoke each step's skill and to dispatch the matching agent, so
+  dispatch happened about half the time. The harness's own rule against spawning agents unasked
+  pushed the rest inline. Prompt caching already makes the main-session context the agents were
+  meant to save cheap to re-read, while each agent paid a fresh uncached context, so the flows now
+  run every step inline. Plugin v3.3.2 —> v3.4.0.
+- **`ceh-fabled` / `fabled-voice`** — the progress-line example no longer names the removed
+  `pr-opener` agent. Plugin v1.3.6 —> v1.3.7.
+
 ## [6.8.0] — 2026-09-22
 
 `write-project-docs` documents example programs but only ones that already exist, so a project with

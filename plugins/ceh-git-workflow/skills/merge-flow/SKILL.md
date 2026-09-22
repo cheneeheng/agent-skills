@@ -48,19 +48,6 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 
 Stop at step 6. Tagging and publishing are `ceh-git-workflow:release-flow`'s job, on a later run.
 
-## Delegating steps 4–6 to subagents
-
-Steps 4–6 are mechanical once the docs are written: their input is the branch state, not the
-conversation. Dispatch each to the subagent that owns it — `commit-author` (4), `pr-opener` (5),
-`branch-merger` (6) — to keep the main session lean. Dispatch each on the model and effort declared
-in its frontmatter: **Claude Sonnet at medium reasoning effort** for all three. The steps are
-mechanical but write to `main` — do not downgrade to a smaller model or lower effort. Each agent
-preloads its owning skill and derives what changed from git itself; pass only what the diff cannot
-show (the why, issue refs, what was tested). The gates stay **here**: check each step's gate on the
-agent's report before dispatching the next. Steps 1–3 stay in the main session — they need the
-session's context to write correct docs. Without the agents, invoke each step's skill from the main
-session exactly as the table specifies.
-
 ## Hard rules
 
 - **No version anywhere.** No manifest version changes, no `## [X.Y.Z]` changelog header, no tag,

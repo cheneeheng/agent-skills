@@ -66,25 +66,6 @@ entry — the user-visible change, not "bumped files".>
 That is a multi-line message: write it to a temp file and `git commit -F`, never `-m`. Omit the
 attribution footer only when settings supply none.
 
-## Delegating steps 7–10 to subagents
-
-Steps 7–10 are mechanical once the docs are written: their input is the branch state, not the
-conversation. Dispatch each to the subagent that owns it — `commit-author` (7),
-`pr-opener` (8), `branch-merger` (9), `release-cutter` (10, pass "tag-only" since the bump landed
-via the PR) — to keep the main session lean. Dispatch each on the
-model and effort declared in its frontmatter: **Claude Sonnet at medium reasoning effort** for all
-four. The steps are mechanical but write to `main` — do not downgrade to a smaller model or lower
-effort. Each agent preloads its owning skill and derives what changed from git itself; pass only
-what the diff cannot show (the vX.Y.Z, issue refs, the changelog notes file for step 10). For step
-7 that emphatically includes **the body content above** — what shipped, the bump level and its
-justification, which manifests and docs moved. A subagent handed only `chore: release vX.Y.Z` will
-commit exactly that and nothing more; it cannot recover the release's rationale from a diff of
-version strings. Pass the body text, or pass the changelog section and tell it to summarize from
-there. The gates stay **here**: check
-each step's gate on the agent's report before dispatching the next. Steps 1–6 stay in the main
-session — they need the session's context (what changed and why) to write correct docs. Without
-the agents, invoke each step's skill from the main session exactly as the table specifies.
-
 ## Step 10 detail — tag and release *after* merge
 
 The release skill commits the bump to `main` directly; here the bump already landed via the PR, so
