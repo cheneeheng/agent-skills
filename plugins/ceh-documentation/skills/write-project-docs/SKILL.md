@@ -44,7 +44,8 @@ Every read is from `<root>`; every git command is `git -C <root> …`. Every wri
 written into the workspace the agent happens to be running in when `<root>` is somewhere else.
 Checking a sample must not leave files behind in `<root>`. Install from a copy of `<root>` into a
 scratch environment — a virtualenv for Python, a scratch project running `npm install <copy>` for
-Node — and delete the copy afterwards. Never leave `build/`, `*.egg-info`, `node_modules/`, a
+Node, given its own `package.json` first (`npm init -y`) so npm does not walk up and install into
+a parent directory — and delete the copy afterwards. Never leave `build/`, `*.egg-info`, `node_modules/`, a
 lockfile, or a cache directory in `<root>`.
 
 ## Step 1 — Survey
@@ -133,14 +134,15 @@ tests) and that you ran successfully — an example that did not run is cut, not
 ## Draws on    — bullets linking the guide and reference pages it uses
 ---
 <footer>
-``` `examples/EX-NN-<name>.md` with an
-`examples/index.md` hub; a single example folds into a how-to instead.
+```
+
+Name each page `examples/EX-NN-<name>.md`, with an `examples/index.md` hub; a single example folds into a how-to instead.
 
 **Migration:** one section per **breaking release** — a major version, a release the changelog or a
 commit marks breaking (`BREAKING`, `!:`), or, before 1.0, a minor version whose changes make
 existing calls fail or return different results — newest first. A post-1.0 minor that changes
 output without being marked breaking gets a `*Changed in <version>: …*` marker and a concept-page
-note, not a migration section. A release that only added things gets nothing here. — what broke,
+note, not a migration section. A release that only added things gets nothing here. Each section gives what broke,
 the before/after code, and the "why" link to its concept or decision. Link `CHANGELOG.md` for
 everything smaller; never copy the changelog into the docs.
 
