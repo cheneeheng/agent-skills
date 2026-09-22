@@ -104,23 +104,6 @@ notes live in the detailed entries referenced below.
 
 ---
 
-## Reading CI status (gh run, not gh pr checks)
-
-**Files:**
-
-| File | Section | Scope |
-|------|---------|-------|
-| `plugins/ceh-git-workflow/skills/merge/SKILL.md` | "Reading CI status" under "Pre-Merge Gate" | canonical — full command set plus the three traps |
-| `plugins/ceh-git-workflow/agents/branch-merger.md` | "Inputs" bullet | one-line echo of the working commands + the `gh pr checks` prohibition, pointing back at the skill |
-
-**What is shared:** read the gate with `gh run list -c "$(git rev-parse HEAD)"` (commit-anchored, Actions API); never `gh pr checks` or `gh pr view --json statusCheckRollup`, which return 403 on a fine-grained PAT lacking `checks=read` — a permissions error, not a red gate.
-
-**What diverges:**
-- `merge` adds `gh run watch --exit-status`, `gh run view --log-failed`, the legacy-Commit-Statuses trap (`commits/<sha>/status` returns 200 with `total_count: 0` forever), the third-party-checks blind spot, and the `mergeStateStatus` gate-vs-diagnose distinction.
-- `branch-merger` carries only the prohibition and the two commands it needs, since it preloads the merge skill via frontmatter.
-
----
-
 ## PR Checklist Items
 
 **Files:**
@@ -415,16 +398,14 @@ Keep a Changelog section each level maps to; `merge-flow` reaches none of this �
 
 **What is shared:** the rule that `chore: release vX.Y.Z` is the subject and not the whole message,
 the commit-message template (what shipped / `Bump:` / `Manifests:` / `Docs:` / attribution footer),
-the `git commit -F` requirement, and the delegation warning that a subagent handed only the subject
-will commit exactly that.
+and the `git commit -F` requirement.
 
 **Why this entry survives with one copy:** the near-verbatim second copy lived in
 `direct-release-flow`, deleted with the `ceh-release-flow` plugin. What remains is not duplication
-but three files that must agree in *intent*: `plugins/ceh-git-workflow/skills/release/SKILL.md`
-step 1 states the same "always multi-line, body required" rule in its own command-block comment, and
-`plugins/ceh-git-workflow/agents/commit-author.md` states that a required subject constrains the
-subject line only. Keep all three consistent when the rule changes; delete this entry if the block
-ever becomes single-site in intent too.
+but two files that must agree in *intent*: `plugins/ceh-git-workflow/skills/release/SKILL.md`
+step 1 states the same "always multi-line, body required" rule in its own command-block comment.
+Keep both consistent when the rule changes; delete this entry if the block ever becomes single-site
+in intent too.
 
 ---
 

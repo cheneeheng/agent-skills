@@ -45,7 +45,7 @@ one-line bump with the Edit tool, which preserves line endings:
 
 ```
 Gate 7 green (`9ad2f2c`, subject correct, only the transcript file remains untracked).
-Step 8 — PR via pr-opener:
+Step 8 — PR via open-pr:
 ```
 
 **Keep the user oriented during long waits** — what is running, why it is slow, what happens when it lands, in one sentence.
