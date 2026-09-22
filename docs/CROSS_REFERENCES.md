@@ -640,18 +640,17 @@ Both files also name `$CEH_WORKFLOW_BUILD_DIR` and its `.agents_workspace/` defa
 
 ---
 
-## Docs page naming + furniture (`<PREFIX>-<NN>` files, breadcrumb, prev/next footer)
+## Documentation standard (`references/docs-standard.md`)
 
-**Files:**
+**Files:** — all four are word-for-word identical
 
-| File | Section | Scope |
-|------|---------|-------|
-| `plugins/ceh-documentation/skills/user-operator-guide/SKILL.md` | "Phase 3 — Structure" naming rules and "Phase 4 — Page furniture" | canonical — full naming scheme, renumbering rule, footer and line-break rules |
-| `plugins/ceh-documentation/skills/write-concept-docs/SKILL.md` | "Step 4 — Layout and furniture" | compact copy applied to `docs/concepts/` with prefix `CO` |
-| `plugins/ceh-documentation/skills/write-project-docs/SKILL.md` | "Examples" paragraph | one-line use of the scheme for `docs/examples/` with prefix `EX` |
+| File | Scope |
+|------|-------|
+| `plugins/ceh-documentation/skills/write-project-docs/references/docs-standard.md` | canonical |
+| `plugins/ceh-documentation/skills/user-operator-guide/references/docs-standard.md` | copy |
+| `plugins/ceh-documentation/skills/write-api-reference/references/docs-standard.md` | copy |
+| `plugins/ceh-documentation/skills/write-concept-docs/references/docs-standard.md` | copy |
 
-**What is shared:** subfolder files are `<PREFIX>-<NN>-<kebab-name>.md`, two digits, contiguous from `01`, the number carrying reading order; a subfolder needs at least two files; the H1 repeats the ID; a breadcrumb under the H1 and a prev/next footer within the subfolder.
+**What is shared:** the whole file — docs layout, page modes, file naming and the fixed prefix table, page anatomy (H1, breadcrumb, summary, footer, hubs), Markdown and link rules, marker literals, voice, frontmatter, and the report shape. Each skill ships its own copy so it works when loaded alone; `update-readme` does not use it.
 
-**What diverges:**
-- `write-concept-docs` gives `docs/concepts/` its own `index.md` hub and points the breadcrumb at it, because the concepts tree hangs off the site front page rather than off `docs/guide/index.md`.
-- `write-api-reference` deliberately does **not** use the scheme: reference pages are looked up by name, not read in order, so they are named after the code module. Do not "fix" that divergence.
+**What diverges:** nothing in the file. The skills cite it by section number (`§3`, `§4`, `§10`), so renumbering a section means grepping `docs-standard.md §` across the four `SKILL.md` files. Verify identity with `md5sum plugins/ceh-documentation/skills/*/references/docs-standard.md`.

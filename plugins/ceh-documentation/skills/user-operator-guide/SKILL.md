@@ -25,7 +25,7 @@ Write task-oriented docs that let a reader reach a goal without already knowing 
 
 ## Non-negotiable rules
 
-- **Task-oriented, not feature-oriented.** Organize by what the reader wants to *do* ("Reset a password"), not by what the software *has* ("Settings Panel"). Features go in a reference appendix, not the spine.
+- **Task-oriented, not feature-oriented.** Organize by what the reader wants to *do* ("Reset a password"), not by what the software *has* ("Settings Panel"). Feature detail goes in the reference, not the spine.
 - **One procedure = one numbered list.** Numbered = ordered sequence; bullets = unordered options only.
 - **Every step has a verifiable result.** "Click **Save**; the banner turns green." A step the reader can't confirm is broken.
 - **Imperative, second person.** "Run the migration", not "The migration should be run."
@@ -35,7 +35,10 @@ Write task-oriented docs that let a reader reach a goal without already knowing 
 
 ## Phase 1 — Audience, scope, source of truth
 
-Pin down before writing:
+Pin down before writing. When `ceh-documentation:write-project-docs` called this skill, its survey
+table already answers 1, 3, and 4 — take them from it rather than re-deriving them. When sources
+conflict (the README says `uvicorn`, the user says Docker), the user's stated setup sets the scope;
+record the contradiction as an open item.
 
 1. **Audience** — user, operator, or both? Sets voice, assumed knowledge, structure.
 2. **Scope** — name the tasks in scope. Covering everything covers nothing.
@@ -48,7 +51,7 @@ Most guides combine a getting-started front and a how-to body.
 
 | Type | Reader's goal | Spine |
 |------|---------------|-------|
-| **Getting Started** | Zero to first success | Install → configure → run the smallest real task → "you're set up" |
+| **Getting Started** | Zero to first success | Install → configure → run the smallest real task → "you're set up" — under `write-project-docs`, install → run → verify, with configuration left to how-to pages |
 | **How-To Guide** | One specific task | Goal → prerequisites → steps → verify → troubleshoot |
 | **User Manual** | Reference for the whole product | Task-grouped chapters + feature reference + glossary |
 | **Operator Runbook** | Operate/recover a system | Architecture → routine ops → incident procedures → escalation |
@@ -57,121 +60,96 @@ Most guides combine a getting-started front and a how-to body.
 
 ## Phase 3 — Structure
 
+Read `references/docs-standard.md` before writing — it fixes the layout, file naming, page
+anatomy (H1, breadcrumb, summary, footer), Markdown rules, link rules, markers, and the report
+format. Everything below is what is specific to guides.
+
 ### Where files go
 
-New docs always go under `docs/guide/`. When revising or extending docs that already live elsewhere, edit them in place — don't relocate or duplicate them into `docs/guide/`.
+Work against `<root>`: the project path the caller or user gave, else the current working
+directory. New guides go under `<root>/docs/guide/`, the **Guide** section of the standard, with
+`index.md` as its hub. Docs that already live elsewhere are edited in place, never relocated.
 
-A focused single-topic guide is one file: `docs/guide/index.md`. Anything broader — many tasks, both audiences, or a docs-site target — becomes a cross-linked tree rooted at `docs/guide/`, with `index.md` as the overview and table of contents. Link between pages; never duplicate. The per-audience split below applies only when a guide serves both users and operators; for a single audience, drop the `operations/` subtree and lay sections out directly.
+A focused single-topic guide is `docs/guide/index.md` alone. Anything broader is a tree:
 
-```
+```text
 docs/guide/
-├── index.md            # root level: overview + table of contents linking every page
+├── index.md            # hub: every page, grouped, each with "read this when…"
 ├── getting-started.md
 ├── troubleshooting.md
-├── how-to/             # HT
+├── how-to/             # HT-NN
 │   ├── HT-01-reset-password.md
 │   └── HT-02-export-data.md
-└── operations/         # OP — operator content, its own subtree, never interleaved
+└── operations/         # OP-NN — operator content, its own subtree, never interleaved
     ├── OP-01-install.md
     ├── OP-02-configure.md
-    └── database/       # OP-DB — nested folder chains its parent prefix
+    └── database/       # OP-DB-NN
         ├── OP-DB-01-backup.md
         └── OP-DB-02-restore.md
 ```
 
-### How to name the files
+- **User-only guide:** drop `operations/`.
+- **Operator-only runbook:** keep `operations/`, drop `how-to/` and `getting-started.md` — the
+  operator's first success is the install page. Symptom-keyed entries live in the incidents page,
+  so `troubleshooting.md` is dropped too unless end users also hit errors.
 
-Files sitting directly in `docs/guide/` keep plain kebab-case names — **no prefix, no number**. Every file inside a subfolder is `<PREFIX>-<NN>-<kebab-name>.md`:
-
-- **Prefix** — a capitalized abbreviation of the subfolder name, as short as stays readable, minimum 2 characters: `how-to/` → `HT`, `operations/` → `OP`, `troubleshooting/` → `TS`. One prefix per subfolder, unique across the whole tree; if two subfolders abbreviate to the same letters, lengthen one of them (`onboarding/` → `ONB` next to `operations/` → `OP`).
-- **Number** — two digits, starting at `01`, restarting at `01` inside each subfolder. `HT-01` and `OP-01` coexist; the prefix keeps them apart.
-- **Reading order** — the number *is* the order the reader should follow, so it stays contiguous. Appending a guide at the end takes the next number and renumbers nothing. Inserting or removing one renumbers the rest of that subfolder — update every link to a renamed file in the same pass. Never leave a gap.
-- **Nested subfolder** — chains its parent prefix and adds its own (`operations/database/` → `OP-DB-`), and starts its own `01` sequence.
-- **At least two files per subfolder.** One file is not a folder: put it at the root level instead, unprefixed and unnumbered. The same applies in reverse — once a root-level topic grows to two or more files, move them into a subfolder and prefix/number them.
-
-This naming scheme wins over any docs-system convention. If the target docs system (Docusaurus, MkDocs, mdBook) needs a particular nav order or page metadata, express it in frontmatter (`sidebar_position`, `title`) or the nav config — never by renaming a file out of the scheme.
+Numbering, prefixes, the two-page minimum for a folder, and renumbering all follow the standard's §3.
+A **runbook page** (the multi-procedure `OP` pages) is thin when it would hold one procedure of
+under five steps: merge it into its neighbour and renumber. A one-task how-to page is never merged
+for being short, and Concept and Reference pages are never thin.
 
 ### User guide skeleton
 
+```text
+getting-started.md   — shortest path to first success; no options
+how-to/HT-NN-<task>  — one task per page: goal, prerequisites, steps, verify, if it fails
+troubleshooting.md   — symptom or literal error text → cause → fix
 ```
-# <Product> User Guide
-## Overview          — what it does, who it's for (2-3 sentences)
-## Before you begin  — prerequisites, access, supported platforms
-## Getting started   — shortest path to first success
-## How-to: <task>    — one section per task, numbered steps + verify
-## Troubleshooting   — symptom → fix table for common stumbles
-## Reference         — features, settings, shortcuts (appendix)
-## Glossary          — only if the domain has unfamiliar jargon
-```
+
+Feature and settings detail belongs in `docs/reference/` (see `write-api-reference`); link to it
+from the how-to pages instead of copying it into an appendix. When there is no reference section,
+end the guide with a `## Reference` section on the page that needs it.
 
 ### Operator guide / runbook skeleton
 
-```
-# <System> Operator Guide
-## System overview     — components, data flow, where things run (diagram if it helps)
-## Prerequisites       — access, tools, credentials, network
-## Installation        — steps + post-install health check
-## Configuration       — each setting: name, purpose, default, valid range, effect
-## Routine operations  — start/stop/restart, deploy, backup, scale, rotate secrets
-## Monitoring          — what to watch, healthy ranges, where dashboards/logs live
-## Incident procedures — per failure: detection → diagnosis → remediation → verification
-## Rollback / recovery — safe revert and restore from backup
-## Escalation          — who/what to page when the runbook runs out
+```text
+operations/OP-01-system-overview  — Concept: components, data flow, where things run (Mermaid), the "Names used in this guide" table
+operations/OP-02-install          — How-to: prerequisites, steps, post-install health check
+operations/OP-03-configuration    — Reference: each setting's name, purpose, default, valid values, effect
+operations/OP-04-routine-ops      — How-to: start/stop/restart, change a setting, deploy, backup, rotate secrets
+operations/OP-05-monitoring       — How-to: what to watch, healthy ranges, where dashboards and logs live
+operations/OP-06-incidents        — How-to: per symptom, detection → diagnosis → remediation → verification
+operations/OP-07-recovery         — How-to: rollback, restore from backup, escalation when the runbook runs out
 ```
 
-## Phase 4 — Page furniture and markdown that renders
+Each page keeps one mode: OP-01 explains and OP-03 lists, so neither holds a procedure — changing a
+setting is a procedure in OP-04. **Under `write-project-docs`**, drop OP-01 and OP-03: the overview
+belongs in `docs/concepts/` and the settings in `docs/reference/configuration.md`, and the runbook
+links to both instead of repeating them.
 
-A human reads these pages in a Markdown renderer; nothing parses them. Two faults spoil that more than any other: a page with no way out, and line breaks that silently collapse.
+## Phase 4 — Write each procedure
 
-### Every page carries navigation
+A how-to page holds one task. Three kinds of page group several: `troubleshooting.md`, the runbook
+pages that name several operations (`OP-04-routine-ops`, `OP-06-incidents`, `OP-07-recovery`), and a
+single-file guide. On those, each procedure is a `##` section with the same body, and a `##` section
+that is not a procedure (a constraint such as "Do not scale past one replica") is short prose with no
+When/Prerequisites block. Drop any of the three bullets that would be empty or obvious — **Time /
+impact** is usually "seconds, no downtime" for a library.
 
-Put a breadcrumb directly under the H1, and a prev/next/index footer at the bottom. The footer follows `NN` order **within the page's own subfolder** — each subfolder is a separate chain, never linked across.
+An **incident entry** (`OP-06-incidents`, and operator entries in `troubleshooting.md`) is headed by
+the symptom and uses these fields in place of the three bullets: **Detection** (the alert or what the
+operator sees), **Cause**, then numbered steps — diagnosis first, remediation after — then **Verify**
+and **If it fails**.
 
-```markdown
-# HT-02 — Reset a password
+`````markdown
+# HT-02 — Rotate the API signing key
 
-[← Guide index](../index.md)
+[← Guide](../index.md)
 
-<body>
+Replace the signing key without logging users out. Run this when the key is due for rotation or may
+have leaked.
 
----
-
-[← HT-01 Change your email](HT-01-change-email.md) · [Guide index](../index.md) · [HT-03 Export data →](HT-03-export-data.md)
-```
-
-- The H1 repeats the file's ID, so a printed or pasted page still says where it came from.
-- The first page in a chain drops the prev link, the last drops the next. Never leave a dead link.
-- Prev/next point at siblings in the same subfolder, so they need no path prefix; the breadcrumb climbs to the root `index.md` — `../index.md` from a subfolder, `../../index.md` from a nested one. Check each link resolves rather than copying the neighbour's footer.
-- Root-level pages are unnumbered and belong to no chain: breadcrumb only, no prev/next.
-- `index.md` gets no footer — it *is* the hub. It lists every page grouped by subfolder in `NN` order, each with a one-line "read this when…".
-- Renumbering a subfolder (Phase 3) means fixing the affected footers in the same pass, not only the links in prose.
-
-### Line-break rules
-
-**A single newline is not a line break.** Two lines separated by one newline render as one paragraph — the most common way a finished guide arrives looking wrong.
-
-| Want | Write |
-|------|-------|
-| A new paragraph | A blank line between the two lines |
-| A hard break inside one paragraph | Two trailing spaces at the end of the first line |
-| A stack of labelled fields | A bullet list — not stacked bold labels |
-
-Prefer the blank line. Trailing spaces are invisible in review and formatters strip them, so use them only where a blank line would wrongly split a block.
-
-Blank lines that carry the same weight:
-
-- One blank line **before and after** every list, table, fenced code block, blockquote, and heading. A list or table glued to the paragraph above it renders as literal text in strict parsers.
-- Inside a numbered step, indent a nested fence or paragraph by **3 spaces** so it stays in the item; any less and the list restarts at 1.
-- One `#` H1 per page, then `##`/`###` — never skip a level.
-- Don't hard-wrap paragraphs at a fixed column. Wrapping is the renderer's job, and hard wraps read badly on a narrow screen.
-- Tables need the header separator row and leading/trailing `|`. A table past ~5 columns is a list in disguise.
-
-## Phase 5 — Write each procedure
-
-````markdown
-### <Goal-stated task, e.g. "Rotate the API signing key">
-
-- **When:** <triggering condition — for runbooks, the alert/symptom>
+- **When:** <triggering condition — for runbooks, the alert or symptom>
 - **Prerequisites:** <access, tools, preconditions>
 - **Time / impact:** <duration; for ops, whether it causes downtime>
 
@@ -185,24 +163,30 @@ Blank lines that carry the same weight:
 
    Expected output:
 
-   ```
+   ```text
    the real output to compare against
    ```
 
 **Verify:** <the single check that proves it worked>
 
 **If it fails:** <1-2 likely failure modes + fix, or a link to troubleshooting>
-````
+
+---
+
+[← HT-01 Change your email](HT-01-change-email.md) · [Guide](../index.md) · [HT-03 Export data →](HT-03-export-data.md)
+`````
 
 Step standards:
 - One action per step; if a step has an "and", consider splitting.
-- Warnings go **before** the dangerous step: `> **Warning:** this drops the table.`
+- A warning is the first block **inside** the dangerous step, indented 3 spaces:
+  `> **Warning:** this drops the table.` (standard §7).
 - Bold UI labels exactly as shown: click **Advanced settings**.
-- Fence every command and path; never leave a command inline where whitespace is ambiguous.
+- Fence every command the reader runs as a step. A short command or path named inside a sentence
+  or table cell stays inline (standard §5).
 - For destructive/irreversible ops, state blast radius and recovery in the same block.
 - Cross-reference, don't repeat: link to the canonical procedure instead of copy-pasting it.
 
-## Phase 6 — Self-review
+## Phase 5 — Self-review
 
 - [ ] Every command, flag, path, env var, UI label comes from a real source — none invented; unverifiable items marked `[VERIFY: …]`.
 - [ ] A reader with only the stated prerequisites can complete each task end to end.
@@ -213,11 +197,11 @@ Step standards:
 - [ ] Destructive ops state blast radius and recovery.
 - [ ] Spine is tasks, not a feature dump.
 - [ ] Terminology is consistent throughout.
-- [ ] Every subfolder file is `<PREFIX>-<NN>-<name>.md`; root-level files carry no prefix and no number.
-- [ ] Each subfolder holds at least two files, numbered contiguously from `01`, and every link to a renamed file was updated.
-- [ ] Every page has its breadcrumb and — inside a subfolder — a prev/next footer; no dead links, no link across two subfolders' chains; `index.md` lists every page.
-- [ ] No two lines rely on a single newline for a break; blank lines surround every list, table, and code fence.
+- [ ] Every page passes `references/docs-standard.md`: file names and prefixes (§3), H1 + breadcrumb + summary + footer (§4), Markdown rules (§5), every link and anchor resolves (§6), markers verbatim (§7).
+- [ ] `index.md` lists every page of the guide, grouped, in reading order.
 
 ## Output
 
-All files live under `docs/guide/` — one `index.md` for a focused guide, or a cross-linked tree rooted there with `index.md` as the entry point, root-level files unnumbered and subfolder files named `<PREFIX>-<NN>-<name>.md`, each page carrying its breadcrumb and prev/next footer (Phases 3-4). Open with a one-line summary: what you produced, the audience, and the file layout if multi-file. List anything assumed or unverified under a final **Open items** heading — never bury invented detail in confident prose.
+Files under `<root>/docs/guide/` in the layout of Phase 3. End the reply with the report of
+`references/docs-standard.md` §10 — or, when `write-project-docs` called this skill, return only the
+rows and open items for it to merge. Never bury an assumed or invented detail in confident prose.

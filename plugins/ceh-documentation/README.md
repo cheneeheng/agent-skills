@@ -41,28 +41,34 @@ Pass a path to document another project: `/ceh-documentation:write-project-docs 
 
 ## What It Produces
 
-Markdown written under `docs/guide/` — a single `index.md` for a focused guide, or a cross-linked tree rooted there with `index.md` as the entry point for a full manual or runbook:
-- Audience-correct voice (friendly for users, terse and precise for operators)
-- Task-oriented structure — organized by what the reader is trying to do, not by feature
-- Numbered procedures where every step has a verifiable result
-- Prerequisites and warnings before the steps that need them
-- A fixed file-naming scheme — root-level pages keep plain names, subfolder pages are `<PREFIX>-<NN>-<name>.md` (`how-to/HT-01-reset-password.md`), numbered contiguously from `01` per subfolder
-- Page furniture that survives a real renderer — an index breadcrumb and prev/next footer on every subfolder page, and Markdown that breaks lines where it looks like it does
-- An **Open items** list of anything assumed or left unverified — never invented detail
+Markdown under `docs/` in one fixed format, whichever skill writes the page. The format lives in
+`references/docs-standard.md`, shipped word-for-word in each of the four writing skills
+(`update-readme` excepted) so each works when loaded alone:
+
+- **Layout** — `docs/index.md` front page, site-level `why.md` / `migration.md`, and the sections
+  `guide/`, `concepts/`, `reference/`, `examples/`, each with an `index.md` hub
+- **One mode per page** — tutorial, how-to, concept, reference, or example; a page needing two is two pages
+- **File naming** — numbered folders use `<PREFIX>-<NN>-<name>.md` with fixed prefixes (`HT`, `OP`,
+  `TS`, `CO`, `EX`), contiguous from `01`; reference pages are named after the code, never numbered
+- **Page anatomy** — one H1 (repeating the ID on numbered pages), a breadcrumb to the nearest hub, a
+  one-to-two-sentence summary, and a prev · hub · next footer on numbered pages
+- **Markdown that survives a renderer** — blank lines around every block, a language tag on every
+  fence, Mermaid for diagrams, relative `.md` links with verified anchors
+- **Fixed markers** — `[VERIFY: …]`, `*Added in vX.Y.*`, the deprecation, warning, and note blockquotes
+- **One report shape** — a page table plus **Open items** listing every unverified claim
 
 ### File naming — two rules worth knowing
 
 **Numbers stay contiguous.** The number carries reading order, so there are never gaps. Appending a
-guide at the end takes the next number and renumbers nothing; inserting or deleting one renumbers
-the rest of that subfolder, and every link to a renamed file is updated in the same pass. The
+page at the end takes the next number and renumbers nothing; inserting or deleting one renumbers
+the rest of that folder, and every link to a renamed file is updated in the same pass. The
 alternative — append-only numbers with gaps — was rejected because it turns the number into an
 arbitrary ID, at which point numbering earns nothing. Revisit only if these filenames become
 externally referenced (published URLs, tickets, support macros); stable IDs then beat reading order.
 
 **The scheme beats the docs system.** Docusaurus, MkDocs and mdBook derive nav order from filenames,
 which would otherwise compete with the prefix. It does not get to: nav order and page metadata are
-expressed in frontmatter (`sidebar_position`, `title`) or nav config, never by renaming a file out
-of the scheme.
+expressed in frontmatter or nav config, never by renaming a file out of the scheme.
 
 ## Document Types Supported
 

@@ -25,12 +25,15 @@ other page short: a term explained once here is linked from guides and reference
 re-explained on each.
 
 Work against `<root>` — the project path handed over by the caller, or the current working
-directory. Write under `<root>/docs/concepts/`.
+directory. Write under `<root>/docs/concepts/`. Read `references/docs-standard.md` before writing:
+it fixes the file naming, page anatomy, Markdown and link rules, markers, and report format that
+every page here follows.
 
 ## Step 1 — Pick the concepts
 
 A concept earns a page when **at least two guide or reference pages would otherwise have to explain
-it**. Candidates, in the order to check:
+it** — on the strength of its model and behavior alone. A concept with no recorded rationale still
+gets its page. Candidates, in the order to check:
 
 1. The core objects a user creates or receives (the public classes and resources, and how they
    relate).
@@ -56,7 +59,8 @@ Collect the "why" before writing, ordered by how much to trust each source:
 
 **Never invent a reason.** A plausible-sounding rationale that is wrong is worse than none: an
 expert will act on it. When no source states why, write what the behavior *is* and its
-consequence, and put `[VERIFY: why <behavior>]` in the "Why" section so the owner can fill it.
+consequence, and put `[VERIFY: why <behavior>]` in the "Why" section so the owner can fill it,
+followed by `Source: none found in the repository.`
 
 ## Step 3 — Write each page
 
@@ -88,6 +92,7 @@ sequenceDiagram
 ## Why it works this way
 
 <The decision, the alternative that was rejected and why, the trade-off accepted.>
+
 Source: <link to the ADR, commit, or changelog entry>.
 
 ## What this means for you
@@ -104,25 +109,20 @@ Source: <link to the ADR, commit, or changelog entry>.
   links to it.
 - **Exact values live in the reference.** Say "the timeout resets per chunk" here, and link to the
   reference for the default.
-- **Every "Why" names its source** or carries a `[VERIFY: …]`.
+- **Every "Why" names its source** or carries a `[VERIFY: …]`. A section explaining several
+  decisions gives each its own paragraph and its own `Source:` line.
 
-## Step 4 — Layout and furniture
+## Step 4 — Layout
 
-```
+```text
 docs/concepts/
-├── index.md             # hub: every page in reading order, one line each — "read this when…"
+├── index.md             # hub: every page in reading order, "read this when…"
 ├── CO-01-<name>.md      # foundational first; later pages may assume earlier ones
 └── CO-02-<name>.md
 ```
 
-File naming follows the scheme canonical in `ceh-documentation:user-operator-guide` (Phase 3):
-`CO-<NN>-<kebab-name>.md`, two digits, contiguous from `01`, the number carrying reading order.
-Inserting or removing a page renumbers the rest and fixes every link to a renamed file in the same
-pass. A single concept is not a folder: write it as `docs/concepts.md` instead.
-
-Every page has the breadcrumb `[← Concepts](index.md)` under its H1 and a prev/next footer in `CO`
-order; the first page drops prev, the last drops next. The H1 repeats the ID (`# CO-03 — Streaming`).
-Blank lines surround every list, table, and fence.
+`concepts/` is a numbered section with prefix `CO` (standard §3). A single concept is
+`docs/concepts.md` instead, with no hub. Breadcrumbs, footers, and the hub format follow standard §4.
 
 ## Self-review
 
@@ -130,9 +130,10 @@ Blank lines surround every list, table, and fence.
 - [ ] Every "Why it works this way" section cites a source, or carries `[VERIFY: …]`.
 - [ ] No rationale reads as fact without a source; inferred reasons say "inferred from the code".
 - [ ] No procedures; exact values linked to the reference, not restated.
-- [ ] Files numbered contiguously in reading order; footers and breadcrumbs resolve.
+- [ ] Every page passes `references/docs-standard.md` §3–§7: naming, anatomy, Markdown, links, markers.
 
 ## Output
 
-Report pages written, the concept list in reading order with each page's source for its "Why", and
-**Open items** — every `[VERIFY: …]` with its file.
+End the reply with the report of `references/docs-standard.md` §10 — or, when `write-project-docs`
+called this skill, return only the rows and open items for it to merge. Append each concept page's
+"Why" source to its Status (`written — why: ADR 0001`, `written — why: none found`).
