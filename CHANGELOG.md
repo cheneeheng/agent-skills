@@ -7,6 +7,18 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+### Changed
+
+- **`ceh-blog` v1.0.12** — `blog-repurpose` now follows the house voice. It previously required a
+  CTA closing tweet, an engagement question on LinkedIn, and a "what to do" TL;DR, all of which the
+  other three skills ban. It gains a Voice section, and every format ends on the post's open thread
+  or a bare link. `blog-writer`, `blog-interviewer`, and `blog-editor` now say where to find the
+  existing blog (user-given path, then a posts directory in the repo, then ask once) and where the
+  draft goes (a file matching the blog's front matter inside a blog repo, chat otherwise).
+  `blog-editor` states that the author's register wins but banned tells are still quieted.
+  `blog-interviewer` moves Series Awareness out of the repo-only Phase 0 and uses Claude Code tool
+  names (`WebFetch`, `gh`, `Glob`, `Read`).
+
 ## [6.9.1] — 2026-09-22
 
 The repo-local `add-plugin-component` skill covered adding a component to an existing plugin but

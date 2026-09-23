@@ -74,7 +74,9 @@ Read all provided material before doing anything else. Then assess:
 
 ### Series Awareness
 
-Read the existing posts in the target blog first. If the new post continues a project:
+Read the existing posts in the target blog first. **Finding the blog:** use a path or URL the user gave; otherwise look in the current repo for a posts directory (`content/`, `posts/`, `_posts/`, `src/content/`, `blog/`); if neither turns one up, ask once where the blog lives — "no existing blog" is a valid answer and skips this section.
+
+If the new post continues a project:
 
 - Open by picking up the live thread the previous episode left ("Last time I said…") and cross-link it.
 - End by leaving a live thread of your own — closure instead if the series is finished.
@@ -205,3 +207,5 @@ Once the user is satisfied, mention: *"When you're ready to share this, `/ceh-bl
 **Before drafting** (if noting thread selection or flagging a gap): one short paragraph, then the draft immediately.
 
 **Final draft**: complete post, ready to copy-paste — title; body (subheadings only if length warrants); one-line meta description `> **Meta:** [description]` — ~150 chars, specific angle, readable without the title.
+
+**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise output the draft in chat.

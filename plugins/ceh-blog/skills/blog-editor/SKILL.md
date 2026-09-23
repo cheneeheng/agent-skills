@@ -12,6 +12,7 @@ description: >-
 - **Diagnose before editing**: a brief diagnosis always precedes the revised draft — the author needs the reasoning, not just a new version.
 - **Preserve voice and intent**: editing, not ghostwriting. Keep the author's vocabulary, register, and perspective — casual stays casual, formal stays formal. The job is to make the author sound more like themselves at their best.
 - **Personal voice, not influencer style**: the house voice is first-person, reflective, and quiet — the reader overhears reasoning rather than being taught. Never edit *toward* influencer tells: punchy standalone one-liner paragraphs, aphoristic closers, imperative lessons aimed at the reader, "If you're building X, then Y" prescriptions, bold pseudo-headers as section labels, tidy meta-takeaway sign-offs, CTA endings. Diagnose these when present; never introduce them. An open or reserved ending is valid — don't "fix" it into a conviction closer. If the target repo's `CLAUDE.md` defines a blog voice, it overrides the structures below.
+- **When the two conflict**: the author's vocabulary, register, and perspective are kept; the banned tells are quieted even when the author wrote them — say so in the diagnosis so the author can push back. A blog voice defined in the target repo's `CLAUDE.md` overrides both.
 - **Fix real problems only**: if the draft is already good, say so. Don't manufacture edits to justify the skill being invoked.
 - **Specifics over generalities**: push concrete details into every abstraction that could hold one.
 - **One question after**: after sharing the edit, ask one focused question — a dialogue, not a checklist.
@@ -63,7 +64,7 @@ Produce the full revised draft — not a summary of changes, not a diff. Work th
 
 **Influencer tells**: quiet down any banned tell (see Core Principles) — fold them back into connected, first-person paragraphs. Never introduce them.
 
-**Series continuity**: if the draft is an episode in a series, check against earlier posts — versions, dates, what the reader already knows. It should pick up the previous episode's open thread (cross-linked) rather than re-telling a story an earlier post owns.
+**Series continuity**: if the draft is an episode in a series, find the earlier posts (the draft's own directory if it is a file, else a path or URL the user gave; ask once if neither exists) and check against them — versions, dates, what the reader already knows. It should pick up the previous episode's open thread (cross-linked) rather than re-telling a story an earlier post owns.
 
 **Structural fit**: does the post follow its type's natural shape (below)? Scattered steps or a buried story need reordering, not rewording.
 
@@ -141,6 +142,8 @@ The Open Thread: What's unresolved, what you'll watch for, what comes next
 
 > **Meta:** [~150-character description — the post's specific angle, not just the broad topic; readable without the title]
 ```
+
+**Where it goes:** if the draft came from a file, show the diagnosis in chat and write the revision back to that file, keeping its front matter and putting the meta description in the front matter's existing description field instead of the `> **Meta:**` line. A draft pasted into chat gets its revision in chat.
 
 ---
 
