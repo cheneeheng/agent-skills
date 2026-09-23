@@ -4,6 +4,7 @@ description: >-
   Draft a complete blog post straight from raw material — notes, bullets, an outline, or fragments —
   with no interview. For a bare topic or a repo use blog-interviewer; for existing prose use
   blog-editor.
+argument-hint: '[notes file or pasted notes] [blog posts path]'
 ---
 
 # Blog Writer Skill

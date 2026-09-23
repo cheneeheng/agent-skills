@@ -17,7 +17,9 @@ Versions refer to the Marketplace versions.
   draft goes (a file matching the blog's front matter inside a blog repo, chat otherwise).
   `blog-editor` states that the author's register wins but banned tells are still quieted.
   `blog-interviewer` moves Series Awareness out of the repo-only Phase 0 and uses Claude Code tool
-  names (`WebFetch`, `gh`, `Glob`, `Read`).
+  names (`WebFetch`, `gh`, `Glob`, `Read`). All four skills gain an `argument-hint` naming the
+  context they take (topic or repo, notes, draft, post and formats, plus the blog posts path), and
+  the plugin README lists them with examples.
 
 ## [6.9.1] — 2026-09-22
 

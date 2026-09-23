@@ -3,6 +3,7 @@ name: blog-repurpose
 description: >-
   Adapt a finished blog post into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb.
   Requires a complete draft — otherwise use blog-interviewer, blog-writer, or blog-editor first.
+argument-hint: '[post file or URL] [thread | linkedin | tldr | newsletter]'
 ---
 
 # Blog Repurpose Skill

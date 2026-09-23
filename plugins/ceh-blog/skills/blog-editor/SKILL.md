@@ -3,6 +3,7 @@ name: blog-editor
 description: >-
   Diagnose and revise an existing blog draft — polish, tighten, or fix structure while preserving
   the author's voice. For notes or a bare topic use blog-writer or blog-interviewer instead.
+argument-hint: '[draft file or pasted draft]'
 ---
 
 # Blog Editor Skill

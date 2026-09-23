@@ -29,6 +29,19 @@ These skills are designed for **manual invocation** — pick the one matching yo
 /ceh-blog:blog-repurpose     # a finished post to adapt for other channels
 ```
 
+Each takes optional arguments, shown as a hint when you type the command. Pass them if you have
+them. Anything you leave out, the skill asks for or finds in the current repo:
+
+| Skill | Arguments | Example |
+|-------|-----------|---------|
+| `blog-interviewer` | `[topic, repo URL, or repo path] [blog posts path]` | `/ceh-blog:blog-interviewer https://github.com/me/tool content/posts` |
+| `blog-writer` | `[notes file or pasted notes] [blog posts path]` | `/ceh-blog:blog-writer notes/launch.md content/posts` |
+| `blog-editor` | `[draft file or pasted draft]` | `/ceh-blog:blog-editor content/posts/2026-09-part-3.md` |
+| `blog-repurpose` | `[post file or URL] [thread \| linkedin \| tldr \| newsletter]` | `/ceh-blog:blog-repurpose content/posts/2026-09-part-3.md thread linkedin` |
+
+The blog posts path is how the drafting skills find earlier episodes for series continuity, and
+where they save the new post.
+
 They can still load automatically when a request clearly matches ("help me write a blog post about this repo", "turn these notes into a post", "edit this draft", "make a thread from this"), but manual invocation is the primary path.
 
 ## What It Produces
