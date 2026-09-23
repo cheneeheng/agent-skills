@@ -4,6 +4,7 @@ description: >-
   Interview the user to shape a blog post, then draft it — for when the starting point is only a
   topic, idea, repo, or experience with nothing written yet. For ready-made notes use blog-writer;
   for an existing draft use blog-editor.
+argument-hint: '[topic, repo URL, or repo path] [blog posts path]'
 ---
 
 # Blog Interviewer Skill
@@ -52,28 +53,30 @@ they cost the author, not warnings issued to the reader.
 
 ---
 
-## Phase 0 — Repo / Code Source Handling (when user provides a repo)
+## Series Awareness (every flow, before the first question)
 
-If the user provides a GitHub URL, pasted README, file contents, or any code artefact, **read it before asking anything**.
+Read the blog, not just the repo. **Finding the blog:** use a path or URL the user gave; otherwise look in the current repo for a posts directory (`content/`, `posts/`, `_posts/`, `src/content/`, `blog/`); if neither turns one up, ask once where the blog lives — "no existing blog" is a valid answer and skips this section.
 
-- **GitHub URL**: `web_fetch` the URL, then `https://raw.githubusercontent.com/{owner}/{repo}/main/README.md` (`master` if `main` fails). Browse key files if needed (`package.json`, `pyproject.toml`, main entry point).
-- **Local path**: explore with bash — `ls -la`, `cat README.md` (or `.rst`/`.txt`), then key manifests/entry points for stack and structure. No README: `find . -maxdepth 2 -type f`.
-- **Pasted content**: read it directly.
-
-### Step 1: Extract what the repo already tells you
-
-Infer without asking: **what it does** (README, module names, entry points); **who it's for** (docs, example usage); **stack and key design decisions** (structure, dependencies); **current state** (finished tool, experiment, WIP?).
-
-### Step 1.5: Read the blog, not just the repo (Series Awareness)
-
-If the post is going into an existing blog, read the previous posts before asking anything — especially the latest episode in the same series. Then:
+Read the previous posts before asking anything — especially the latest episode in the same series. Then:
 
 - **Pick up the thread**: if the last post ended on a live thread, ask *"the last post ended on X — is this the post that answers it?"* If yes, that thread is the new post's opening.
 - **Pin chronology**: ask *"When did this happen, relative to the last post?"* — one timestamp question prevents continuity bugs (wrong versions, events out of order).
 - **Check continuity facts** against earlier episodes: versions, dates, what the reader already knows. Don't re-tell a story a previous episode owns — call back in a sentence and link.
 - **Leave a thread**: plan what this episode leaves open; closure instead if the series is finished.
 
-Applies in the no-repo flow too — if the user has an existing blog, read it before interviewing.
+---
+
+## Phase 0 — Repo / Code Source Handling (when user provides a repo)
+
+If the user provides a GitHub URL, pasted README, file contents, or any code artefact, **read it before asking anything**.
+
+- **GitHub URL**: fetch the README with `WebFetch` (`https://raw.githubusercontent.com/{owner}/{repo}/main/README.md`, `master` if `main` fails), or with `gh repo view {owner}/{repo}` when `gh` is available — the only route that works for a private repo. Browse key files if needed (`package.json`, `pyproject.toml`, main entry point).
+- **Local path**: `Glob` the top two levels, `Read` the README (or `.rst`/`.txt`), then key manifests/entry points for stack and structure.
+- **Pasted content**: read it directly.
+
+### Step 1: Extract what the repo already tells you
+
+Infer without asking: **what it does** (README, module names, entry points); **who it's for** (docs, example usage); **stack and key design decisions** (structure, dependencies); **current state** (finished tool, experiment, WIP?).
 
 ### Step 2: Identify viable post angles
 
@@ -280,6 +283,8 @@ Once the user is satisfied, mention: *"When you're ready to share this, `/ceh-bl
 **During interview:** conversational, one question at a time, no lists, no preamble.
 
 **Final draft**: complete post, ready to copy-paste — title; body (subheadings only if length warrants); one-line meta description `> **Meta:** [description]` — ~150 chars, specific angle, readable without the title.
+
+**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise output the draft in chat.
 
 ---
 

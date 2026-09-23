@@ -7,6 +7,39 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.9.2] — 2026-09-23
+
+A review of the `ceh-blog` skills found one contradiction and three gaps. `blog-repurpose` asked for
+the influencer endings the other three skills ban: a CTA closing tweet, an engagement question on
+LinkedIn, and a "what to do" TL;DR. The drafting skills told the model to read earlier posts in the
+series without saying where the blog lives, never said whether a draft goes to chat or to a file,
+and `blog-editor` gave no rule for when the author's own voice uses a banned tell. The skills also
+took no argument hint, so a user typing `/ceh-blog:` had no clue what context to pass.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-blog` | v1.0.12 |
+
+### Changed
+
+- **`ceh-blog`** — `blog-repurpose` gains a Voice section, and every format ends on the post's open
+  thread or a bare link. `blog-writer`, `blog-interviewer`, and `blog-editor` now say where to find
+  the existing blog (user-given path, then a posts directory in the repo, then ask once) and where
+  the draft goes (a file matching the blog's front matter inside a blog repo, chat otherwise).
+  `blog-editor` states that the author's register wins but banned tells are still quieted. All four
+  skills gain an `argument-hint`, and the plugin README lists them with examples.
+
+### Fixed
+
+- **`ceh-blog`** — `blog-interviewer` ran Series Awareness only inside the repo-only Phase 0, so a
+  verbal prompt skipped it. It is now its own section that runs in every flow. Phase 0 names the
+  Claude Code tools (`WebFetch`, `gh repo view` for private repos, `Glob`, `Read`) instead of
+  claude.ai's `web_fetch` and raw shell commands.
+- `docs/CROSS_REFERENCES.md` registers `blog-repurpose` as a fourth copy of the blog Voice section
+  and adds an entry for the shared blog-location and draft-destination paragraphs.
+
 ## [6.9.1] — 2026-09-22
 
 The repo-local `add-plugin-component` skill covered adding a component to an existing plugin but

@@ -251,12 +251,31 @@ notes live in the detailed entries referenced below.
 | `plugins/ceh-blog/skills/blog-writer/SKILL.md` | "Voice" section (top of file) | canonical — full section |
 | `plugins/ceh-blog/skills/blog-interviewer/SKILL.md` | "Voice" section (top of file) | word-for-word copy |
 | `plugins/ceh-blog/skills/blog-editor/SKILL.md` | "Personal voice, not influencer style" bullet (Core Principles) + "Influencer tells" checklist item | condensed restatement — same banned-tells list, framed for diagnosis |
+| `plugins/ceh-blog/skills/blog-repurpose/SKILL.md` | "Voice" section (after the intro line) | adapted for social formats — same banned-tells list, never-invent and open-thread endings; no prefer/series/tutorial paragraphs |
 
 **What is shared:** personal voice, not influencer style; the reader overhears the reasoning, not a lecture; the `CLAUDE.md` blog-voice override; the prefer list (first person, connected paragraphs, doubt kept in, open inside a moment); the banned tells (one-liner paragraphs, aphoristic closers, imperative lessons, "If you're building X, then Y", bold pseudo-headers, meta-takeaway sign-offs, CTA endings); never invent scenes/feelings/chronology — flag the gap instead; the open-thread endings definition (honest current state; reserved verdict valid; closure only for a finished series' final post); series-as-serials framing; tutorial pitfalls narrated as cost to the author.
 
 **What diverges:**
 - writer and interviewer copies are word-for-word identical — keep them in lockstep.
 - editor restates the banned tells as diagnostic targets ("never edit toward, never introduce") rather than drafting rules, and omits the prefer/series/tutorial paragraphs; it carries the open-thread definition in its "Closing" checklist item and template preamble instead (it has no Voice section).
+- repurpose adds engagement prompts ("follow for more", "what do you think?") to the CTA ban, says a bare `[link]` is not a CTA, and scopes never-invent to "the adaptation compresses the post, it doesn't add to it".
+
+---
+
+## Blog location and draft destination ("Finding the blog", "Where it goes")
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-blog/skills/blog-writer/SKILL.md` | "Series Awareness" (Phase 1) + "Where it goes" (Output Format) | canonical |
+| `plugins/ceh-blog/skills/blog-interviewer/SKILL.md` | "Series Awareness" section (before Phase 0) + "Where it goes" (Output Format) | word-for-word copy of both paragraphs |
+| `plugins/ceh-blog/skills/blog-editor/SKILL.md` | "Series continuity" checklist item + "Where it goes" (Output Format) | adapted — the draft's own file drives both |
+
+**What is shared:** the lookup order for the blog (user-given path/URL, then a posts directory in the current repo — `content/`, `posts/`, `_posts/`, `src/content/`, `blog/` — then ask once; "no existing blog" is valid); a post in a blog repo is written as a file matching the existing posts' filename pattern and front matter, with title and meta description in the front matter instead of the `> **Meta:**` line; chat output otherwise.
+
+**What diverges:**
+- editor looks for earlier posts in the draft's own directory first, and writes the revision back to the draft's file rather than creating a new one; the diagnosis always stays in chat.
 
 ---
 
