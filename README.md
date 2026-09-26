@@ -39,7 +39,7 @@ through their stack plugin.
 
 Several plugins are deliberately outside every bundle: `ceh-fabled`, `ceh-advisor` and
 `ceh-orchestration` (experimental),
-and `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned` (installed once, on
+and `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-explainer` (installed once, on
 their own, when you want them). A dependency is always installed — `defaultEnabled: false` does not
 protect one — so omission is the only way to keep them opt-in.
 
@@ -61,6 +61,7 @@ The table below is the reference list of what those bundles are made of.
 | Git Workflow | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations |
 | Ops | `ceh-ops` | Incident response, rollback, deploy pipeline; CI agents |
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
+| Explainer | `ceh-explainer` | Explain a topic one part at a time from what the accessible workspaces contain — every claim cited, gaps named instead of guessed, each part standalone or linked to the part it builds on |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
 | Documentation | `ceh-documentation` | End-user/operator docs in one fixed format — a whole docs set under `docs/` (guides, operations runbook, concepts, API reference, examples, migration), or any one section on its own |
@@ -85,7 +86,7 @@ into four tiers:
 |------|--------|---------|
 | **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below. `ceh-scenario-core` holds the cross-cutting base the others include |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-explainer`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 Each plugin is self-contained: a
@@ -152,6 +153,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-ops` | Incidents | `/ceh-ops:incidents` | Responding to a production incident or writing a post-mortem |
 | `ceh-ops` | Rollback | `/ceh-ops:rollback` | Deciding to roll back a deployment or recovering from a failed migration |
 | `ceh-summarize-chat` | Summarize Chat | `/ceh-summarize-chat:summarize-chat` | Summarizing the current session for handoff to a future LLM session |
+| `ceh-explainer` | Explain in Chunks | `/ceh-explainer:explain-in-chunks` | Having a topic explained one part per turn, using only what the accessible workspaces contain, with every claim cited |
 | `ceh-lessons-learned` | Lessons Learned | `/ceh-lessons-learned:lessons-learned` | Extracting lessons learned from the current session into `LESSONS_LEARNED.md` |
 | `ceh-blog` | Blog Interviewer | `/ceh-blog:blog-interviewer` | Turn a rough idea, project, or experience into a compelling, publishable blog post |
 | `ceh-blog` | Blog Writer | `/ceh-blog:blog-writer` | Draft straight from existing notes, bullets, or outline — no interview |
@@ -274,6 +276,7 @@ in automatically. Install individual plugins only when you want a set no bundle 
 /plugin install ceh-scaffolding@ceh-plugins --scope user
 /plugin install ceh-ops@ceh-plugins --scope user
 /plugin install ceh-summarize-chat@ceh-plugins --scope user
+/plugin install ceh-explainer@ceh-plugins --scope user
 /plugin install ceh-lessons-learned@ceh-plugins --scope user
 /plugin install ceh-blog@ceh-plugins --scope user
 /plugin install ceh-documentation@ceh-plugins --scope user
@@ -327,6 +330,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-scaffolding" },
     { "path": "~/agent-skills/plugins/ceh-ops" },
     { "path": "~/agent-skills/plugins/ceh-summarize-chat" },
+    { "path": "~/agent-skills/plugins/ceh-explainer" },
     { "path": "~/agent-skills/plugins/ceh-lessons-learned" },
     { "path": "~/agent-skills/plugins/ceh-blog" },
     { "path": "~/agent-skills/plugins/ceh-documentation" },

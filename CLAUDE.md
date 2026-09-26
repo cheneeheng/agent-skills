@@ -24,7 +24,7 @@ Plugins fall into four tiers:
 |------|--------|---------|
 | **Scenario bundle** | one per situation | `ceh-scenario-core`, `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial`, `ceh-scenario-ideation`, `ceh-scenario-agent-tooling` |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
-| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
+| **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-explainer`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
@@ -99,6 +99,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-ops` | Deploy pipeline, incidents, rollback; CI agents |
 | `ceh-seo` | SEO/GEO for anything internet-exposed: web pages (meta, structured data, sitemap, llms.txt) and public-facing text (README first screen, package descriptions, repo topics) |
 | `ceh-summarize-chat` | Session summary for LLM handoff |
+| `ceh-explainer` | Explain a topic one part per turn, grounded only in the accessible workspaces, every claim cited, each part standalone or linked to the one it builds on |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-blog` | Interview-driven blog post writing |
 | `ceh-documentation` | A whole `docs/` set under one shared docs standard (guides, operations runbooks, concepts, API reference, examples, migration) or any one section alone; runnable `examples/` programs (feature tour + copy-paste recipes) |

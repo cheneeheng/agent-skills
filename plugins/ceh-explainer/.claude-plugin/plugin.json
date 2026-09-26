@@ -1,0 +1,9 @@
+{
+  "name": "ceh-explainer",
+  "version": "1.0.0",
+  "description": "CEH explainer: explain a topic one part at a time, using only what the accessible workspaces contain, each part cited and standalone or linked to the part it builds on.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/agent-skills",
+  "license": "Apache-2.0",
+  "keywords": ["explain", "explainer", "onboarding", "grounded", "workspace", "step-by-step"]
+}

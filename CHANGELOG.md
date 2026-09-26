@@ -7,6 +7,23 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+New standalone plugin `ceh-explainer` for having a topic explained in parts rather than all at
+once. Its one skill, `explain-in-chunks`, checks that the accessible workspaces actually cover the
+topic, plans it as 3–7 ordered parts, and delivers one part per turn. Every claim cites a
+`path:line`, and gaps are named rather than filled from general knowledge. Each part is either
+standalone or opens by restating the one fact it needs from an earlier part. It sits outside every
+scenario bundle and has no dependencies.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-explainer` | v1.0.0 |
+
+### Added
+
+- `ceh-explainer` plugin with the `explain-in-chunks` skill.
+
 ## [6.10.0] — 2026-09-26
 
 The scenario bundles each listed the same three cross-cutting plugins, so changing that base meant
