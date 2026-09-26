@@ -17,7 +17,8 @@ Checks:
                mentions in SKILL.md/agent files resolve to a real file.
   skill-refs - `plugin:component` references resolve to a real skill or agent.
   deps       - every `dependencies` entry names a plugin in this repo, the graph is acyclic,
-               and a ceh-scenario-* directory holds only plugin.json + README.md.
+               a ceh-scenario-* directory holds only plugin.json + README.md, every bundle
+               reaches ceh-scenario-core, and only a bundle depends on a bundle.
   invocations- every `Invoke the Skill tool with skill="X"` resolves, is in-plugin or in a
                declared dependency, and does not set `disable-model-invocation: true`.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
@@ -315,6 +316,21 @@ def plugin_deps() -> dict[str, list[str]]:
     return out
 
 
+CORE_BUNDLE = "ceh-scenario-core"
+
+
+def reaches(src: str, target: str, deps: dict[str, list[str]]) -> bool:
+    seen, stack = set(), [src]
+    while stack:
+        node = stack.pop()
+        if node == target:
+            return True
+        if node not in seen:
+            seen.add(node)
+            stack.extend(deps.get(node, []))
+    return False
+
+
 def check_dependencies() -> None:
     """Deps resolve, the graph is acyclic, and ceh-scenario-* dirs hold a manifest only."""
     deps = plugin_deps()
@@ -323,6 +339,8 @@ def check_dependencies() -> None:
         for t in targets:
             if t not in deps:
                 fail(where, f"dependency '{t}' is not a plugin in this repo")
+            elif t.startswith("ceh-scenario-") and not name.startswith("ceh-scenario-"):
+                fail(where, f"only a scenario bundle may depend on scenario bundle '{t}'")
 
     # acyclicity (iterative DFS with a colour map, so the cycle path is reportable)
     colour: dict[str, int] = {}
@@ -346,6 +364,8 @@ def check_dependencies() -> None:
         where = rel(d / ".claude-plugin/plugin.json")
         if not deps[d.name]:
             fail(where, "scenario bundle has no 'dependencies'")
+        if d.name != CORE_BUNDLE and not reaches(d.name, CORE_BUNDLE, deps):
+            fail(where, f"scenario bundle must depend on '{CORE_BUNDLE}', directly or transitively")
         allowed = {d / ".claude-plugin/plugin.json", d / "README.md"}
         for f in sorted(d.rglob("*")):
             if f.is_file() and f not in allowed:

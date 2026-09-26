@@ -22,6 +22,7 @@ its dependencies install and enable automatically.
 | `ceh-scenario-webapp-greenfield` | Starting a web frontend from nothing |
 | `ceh-scenario-webapp-iterate` | Working on a web frontend that already ships |
 | `ceh-scenario-editorial` | Writing what readers see — blog posts, user/operator docs, discoverability |
+| `ceh-scenario-core` | Coding in a stack no other bundle covers (Go, Rust, scripts) — the base every bundle above includes |
 
 ```
 /plugin install ceh-scenario-service-iterate@ceh-plugins --scope user
@@ -29,7 +30,8 @@ its dependencies install and enable automatically.
 
 A `-greenfield` bundle contains everything its `-iterate` twin does, plus scaffolding and business
 planning — so the phase transition is a no-op. You never switch bundles; you just stop reaching for
-the planning skills.
+the planning skills. Every bundle depends on `ceh-scenario-core` (`ceh-coding-agent`,
+`ceh-git-workflow`, `ceh-testing`), so the cross-cutting set is defined in one place.
 
 Several plugins are deliberately outside every bundle: `ceh-fabled`, `ceh-advisor` and
 `ceh-orchestration` (experimental),
@@ -76,7 +78,7 @@ into four tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below |
+| **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below. `ceh-scenario-core` holds the cross-cutting base the others include |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |

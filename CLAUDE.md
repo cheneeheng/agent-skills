@@ -22,16 +22,19 @@ Plugins fall into four tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Scenario bundle** | one per situation | `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial` |
+| **Scenario bundle** | one per situation | `ceh-scenario-core`, `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial` |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
-`-iterate` twin plus the planning delta, so the phase transition is a no-op. **Name the phase
-halves `-greenfield` / `-iterate`, never `-maintenance`** — "maintenance" reads as bugfix-only and
-already caused `ceh-plan-build-review` to be filed on the wrong side. Design record:
+`-iterate` twin plus the planning delta, so the phase transition is a no-op. Every other bundle
+depends on `ceh-scenario-core` (`ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`) instead of
+listing those three itself, so the cross-cutting base changes in one manifest. Experimental plugins
+never enter it. **Name the phase halves `-greenfield` / `-iterate`, never `-maintenance`** —
+"maintenance" reads as bugfix-only and already caused `ceh-plan-build-review` to be filed on the
+wrong side. Design record:
 `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md`.
 
 Categorization rules of thumb:
@@ -63,7 +66,7 @@ Categorization rules of thumb:
 ```
 .agents_workspace/            # Session artifacts — not a plugin, git-ignored in full. Local-only: DECISION_LOG.md, the two PLUGIN_*_PLAN.md design records, skill-evals/<skill>/run-NNN/SKILL_EVAL.md (ceh-evaluation output)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
-docs/                         # Maintainer docs — CROSS_REFERENCES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md
+docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md
 plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
 ├── ceh-scenario-<name>/      # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
 └── ceh-<plugin-name>/
@@ -273,6 +276,7 @@ and why, a `### Plugin versions` table listing every plugin bumped, then `### Ad
 | `docs/CROSS_REFERENCES.md` | Content duplicated across skills: canonical source and every copy |
 | `CHANGELOG.md` | Release notes per repo tag, each with a `### Plugin versions` table |
 | `docs/CHANGELOG-v1-v2.md` | Release notes for v1.0.0–v2.8.0, before the v3.0.0 reorganisation |
+| `docs/PLUGIN_DEPENDENCIES.md` | Current dependency graph: every edge with its evidence, what each scenario bundle installs |
 | `docs/TESTING_WORKFLOW.md` | How `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
 | `.agents_workspace/DECISION_LOG.md` | Agent decision log — **git-ignored, local only**, append-only, next sequential entry ID |
 | `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` | Dependency graph and scenario bundles: decisions, reference audit, checklist — git-ignored, local only |
