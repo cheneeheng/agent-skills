@@ -7,7 +7,7 @@ Each plugin is a standalone, self-contained **use case**.
 
 Plugins split on one axis: **use case**. This replaced a mixed axis (tech-domain +
 lifecycle-phase) that baked in a fullstack-web assumption and forced the same standard into several
-plugins, where the copies drifted. Rationale: `.agents_workspace/PLUGIN_REORG_PLAN.md`.
+plugins, where the copies drifted. Rationale: `.agents_workspace/archive/PLUGIN_REORG_PLAN.md`.
 
 Two consequences drive how skills are written and where they live:
 
@@ -35,7 +35,7 @@ listing those three itself, so the cross-cutting base changes in one manifest. E
 never enter it. **Name the phase halves `-greenfield` / `-iterate`, never `-maintenance`** —
 "maintenance" reads as bugfix-only and already caused `ceh-plan-build-review` to be filed on the
 wrong side. Design record:
-`.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md`.
+`.agents_workspace/archive/PLUGIN_DEPENDENCY_PLAN.md`.
 
 Categorization rules of thumb:
 
@@ -279,7 +279,7 @@ and why, a `### Plugin versions` table listing every plugin bumped, then `### Ad
 | `docs/PLUGIN_DEPENDENCIES.md` | Current dependency graph: every edge with its evidence, what each scenario bundle installs |
 | `docs/TESTING_WORKFLOW.md` | How `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
 | `.agents_workspace/DECISION_LOG.md` | Agent decision log — **git-ignored, local only**, append-only, next sequential entry ID |
-| `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` | Dependency graph and scenario bundles: decisions, reference audit, checklist — git-ignored, local only |
+| `.agents_workspace/archive/PLUGIN_DEPENDENCY_PLAN.md` | Dependency graph and scenario bundles: decisions, reference audit, checklist — git-ignored, local only |
 
 ## Cross-Reference Rule
 
