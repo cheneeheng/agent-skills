@@ -64,7 +64,7 @@ Categorization rules of thumb:
 ## Structure
 
 ```
-.agents_workspace/            # Session artifacts — not a plugin, git-ignored in full. Local-only: DECISION_LOG.md, the two PLUGIN_*_PLAN.md design records, skill-evals/<skill>/run-NNN/SKILL_EVAL.md (ceh-evaluation output)
+.agents_workspace/            # Session artifacts — not a plugin, git-ignored in full. Local-only: DECISION_LOG.md, archive/*_PLAN.md design records, skill-evals/<skill>/<evaluator>/run-NNN/ (ceh-evaluation / skill-creator output)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md
 plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
@@ -213,7 +213,7 @@ Whatever else gets skipped, these four land in the **same commit** or CI fails:
 4. `python tools/validate-plugins/validate.py` green.
 
 `.agents_workspace/` is git-ignored, so its records never land in a commit. Still update
-`PLUGIN_DEPENDENCY_PLAN.md` §4 locally when the change adds or removes a dependency edge or a
+`.agents_workspace/archive/PLUGIN_DEPENDENCY_PLAN.md` §4 locally when the change adds or removes a dependency edge or a
 `ceh-scenario-*` bundle — the graph it holds is what the next session reasons from.
 
 ## Commands

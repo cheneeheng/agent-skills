@@ -157,7 +157,7 @@ cross-cutting, use-case workflow, stack/build — see `CLAUDE.md`), then:
 5. `CLAUDE.md` — a row in the **Plugins** table and the plugin in the tier table.
 6. A `ceh-scenario-*` bundle, only if the plugin belongs in that situation's install set. A bundle
    holds `plugin.json` (with `dependencies`) and `README.md` and nothing else — `validate.py`
-   enforces it. Update `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` §4 locally for any new edge.
+   enforces it. Update `.agents_workspace/archive/PLUGIN_DEPENDENCY_PLAN.md` §4 locally for any new edge.
 
 The repo tag bumps MINOR and `CHANGELOG.md` lists the plugin at `1.0.0` under `### Added`.
 
