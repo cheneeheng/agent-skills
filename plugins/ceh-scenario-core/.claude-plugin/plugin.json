@@ -1,7 +1,7 @@
 {
   "name": "ceh-scenario-core",
   "version": "1.0.0",
-  "description": "CEH scenario bundle: coding in any repo, including a stack no ceh-* plugin covers — the coding-agent contract, git workflow, and test technique every other scenario builds on.",
+  "description": "CEH scenario bundle: coding in any repo, including a stack no ceh-* plugin covers — the coding-agent contract, git workflow, and README upkeep every other scenario builds on.",
   "author": {
     "name": "cheneeheng",
     "email": "eeheng.chen@gmail.com"
@@ -10,7 +10,7 @@
   "dependencies": [
     "ceh-coding-agent",
     "ceh-git-workflow",
-    "ceh-testing"
+    "ceh-readme"
   ],
   "license": "Apache-2.0",
   "keywords": [

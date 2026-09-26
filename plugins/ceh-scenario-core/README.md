@@ -1,6 +1,6 @@
 # ceh-scenario-core
 
-CEH scenario bundle: coding in any repo, including a stack no ceh-* plugin covers — the coding-agent contract, git workflow, and test technique every other scenario builds on.
+CEH scenario bundle: coding in any repo, including a stack no ceh-* plugin covers — the coding-agent contract, git workflow, and README upkeep every other scenario builds on.
 
 This plugin ships **no skills, agents, or hooks**. It is a scenario bundle: a manifest whose only
 job is to name the set of `ceh-*` plugins that belong together for one situation, so you install
@@ -24,9 +24,13 @@ them at the same scope.
 |--------|
 | `ceh-coding-agent` |
 | `ceh-git-workflow` |
-| `ceh-testing` |
+| `ceh-readme` |
 
 ## Notes
+
+- `ceh-testing` is not here: each stack plugin (`ceh-python-service`, `ceh-python-library`,
+  `ceh-web-frontend`) depends on it, so every stack bundle gets it without core forcing test
+  technique onto non-code scenarios.
 
 - Disabling any plugin above is refused while this bundle is enabled. Disable the bundle first.
 - Experimental plugins (`ceh-fabled`, `ceh-advisor`), session-mechanics plugins

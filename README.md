@@ -10,7 +10,7 @@ testing skills route between each other, with the trigger phrases and sequence f
 
 ## Start here — scenario bundles
 
-You should not have to remember 22 plugins. Pick the bundle that matches the situation you are in;
+You should not have to remember 23 plugins. Pick the bundle that matches the situation you are in;
 its dependencies install and enable automatically.
 
 | Bundle | Install when |
@@ -22,6 +22,8 @@ its dependencies install and enable automatically.
 | `ceh-scenario-webapp-greenfield` | Starting a web frontend from nothing |
 | `ceh-scenario-webapp-iterate` | Working on a web frontend that already ships |
 | `ceh-scenario-editorial` | Writing what readers see — blog posts, user/operator docs, discoverability |
+| `ceh-scenario-ideation` | Shaping an idea before a stack is chosen — product brainstorm, product-market fit, build plan, architecture sketch |
+| `ceh-scenario-agent-tooling` | Building Claude Code skills and agentic workflows, then evaluating them |
 | `ceh-scenario-core` | Coding in a stack no other bundle covers (Go, Rust, scripts) — the base every bundle above includes |
 
 ```
@@ -31,7 +33,9 @@ its dependencies install and enable automatically.
 A `-greenfield` bundle contains everything its `-iterate` twin does, plus scaffolding and business
 planning — so the phase transition is a no-op. You never switch bundles; you just stop reaching for
 the planning skills. Every bundle depends on `ceh-scenario-core` (`ceh-coding-agent`,
-`ceh-git-workflow`, `ceh-testing`), so the cross-cutting set is defined in one place.
+`ceh-git-workflow`, `ceh-readme`), so the cross-cutting set is defined in one place. `ceh-testing`
+is not in core: each stack plugin depends on it, so the service, library and webapp bundles get it
+through their stack plugin.
 
 Several plugins are deliberately outside every bundle: `ceh-fabled`, `ceh-advisor` and
 `ceh-orchestration` (experimental),
@@ -59,7 +63,8 @@ The table below is the reference list of what those bundles are made of.
 | Summarize Chat | `ceh-summarize-chat` | Structured session summary for LLM handoff |
 | Lessons Learned | `ceh-lessons-learned` | Session retrospectives into `LESSONS_LEARNED.md` |
 | Blog | `ceh-blog` | Interview-driven blog post writing — from rough idea to publication-ready draft |
-| Documentation | `ceh-documentation` | End-user/operator docs in one fixed format — a whole docs set under `docs/` (guides, operations runbook, concepts, API reference, examples, migration), or any one section on its own; plus README maintenance |
+| Documentation | `ceh-documentation` | End-user/operator docs in one fixed format — a whole docs set under `docs/` (guides, operations runbook, concepts, API reference, examples, migration), or any one section on its own |
+| README | `ceh-readme` | Keep `README.md` accurate after a significant change — surgical edits, and a gate that does nothing when nothing material changed |
 | SEO | `ceh-seo` | SEO/GEO discoverability for anything internet-exposed — public web pages (meta, structured data, sitemap, llms.txt, rendering) and public-facing text (README first screen, package descriptions, repo topics) |
 | Orchestration *(experimental)* | `ceh-orchestration` | Thin-orchestrator mode for cost-optimized multi-step work: plan/delegate-only main session + executor/verifier subagents (and the built-in Explore agent) |
 | Business Plan | `ceh-business-plan` | Turn a product idea or app plan into a validated business plan via a product-market-fit interview loop — draft, interrogate the weakest assumption, revise until a PMF gate passes |
@@ -79,7 +84,7 @@ into four tiers:
 | Tier | Loaded | Plugins |
 |------|--------|---------|
 | **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below. `ceh-scenario-core` holds the cross-cutting base the others include |
-| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
+| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
@@ -153,7 +158,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-blog` | Blog Editor | `/ceh-blog:blog-editor` | Diagnose and polish an existing draft — diagnosis first, then a full revised version |
 | `ceh-blog` | Blog Repurpose | `/ceh-blog:blog-repurpose` | Adapt a finished post into Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb |
 | `ceh-documentation` | Write Guides and Runbooks | `/ceh-documentation:write-guides-and-runbooks` | Writing a user guide, operator runbook, getting-started/install/config guide, or troubleshooting reference |
-| `ceh-documentation` | Update README | `/ceh-documentation:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
+| `ceh-readme` | Update README | `/ceh-readme:update-readme` | Refresh README after a significant change (new feature, changed install steps, new API surface) |
 | `ceh-documentation` | Write Project Docs | `/ceh-documentation:write-project-docs` | Write a full Markdown docs set for the current workspace or a given project path — survey, one-job-per-page plan, then reference → concepts → guides → examples/migration → front pages → link pass |
 | `ceh-documentation` | Write API Reference | `/ceh-documentation:write-api-reference` | Exhaustive reference for every public function, endpoint, CLI flag, config key, and error — coverage counted against the public surface, "Added in" markers for recent releases |
 | `ceh-documentation` | Write Concept Docs | `/ceh-documentation:write-concept-docs` | User-facing concept pages: the mental model plus why it is built that way, every rationale traced to a design record, commit, or changelog entry |
@@ -272,6 +277,7 @@ in automatically. Install individual plugins only when you want a set no bundle 
 /plugin install ceh-lessons-learned@ceh-plugins --scope user
 /plugin install ceh-blog@ceh-plugins --scope user
 /plugin install ceh-documentation@ceh-plugins --scope user
+/plugin install ceh-readme@ceh-plugins --scope user
 /plugin install ceh-workflow-builder@ceh-plugins --scope user
 /plugin install ceh-orchestration@ceh-plugins --scope user
 /plugin install ceh-business-plan@ceh-plugins --scope user
@@ -324,6 +330,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-lessons-learned" },
     { "path": "~/agent-skills/plugins/ceh-blog" },
     { "path": "~/agent-skills/plugins/ceh-documentation" },
+    { "path": "~/agent-skills/plugins/ceh-readme" },
     { "path": "~/agent-skills/plugins/ceh-orchestration" },
     { "path": "~/agent-skills/plugins/ceh-business-plan" },
     { "path": "~/agent-skills/plugins/ceh-evaluation" },

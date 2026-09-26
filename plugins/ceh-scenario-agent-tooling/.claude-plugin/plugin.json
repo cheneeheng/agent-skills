@@ -1,0 +1,24 @@
+{
+  "name": "ceh-scenario-agent-tooling",
+  "version": "1.0.0",
+  "description": "CEH scenario bundle: building Claude Code skills and agentic workflows — turning a repetitive task into a runnable skill, then evaluating it until a readiness gate passes.",
+  "author": {
+    "name": "cheneeheng",
+    "email": "eeheng.chen@gmail.com"
+  },
+  "repository": "https://github.com/cheneeheng/agent-skills",
+  "dependencies": [
+    "ceh-scenario-core",
+    "ceh-workflow-builder",
+    "ceh-evaluation"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "scenario",
+    "bundle",
+    "agent-tooling",
+    "skills",
+    "workflow"
+  ]
+}

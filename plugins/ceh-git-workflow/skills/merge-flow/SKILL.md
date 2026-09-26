@@ -41,7 +41,7 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 |---|------|-------------|-----------------------|
 | 1 | Confirm the branch — on a non-default branch, up to date with `main` | see above | Named feature branch, rebased on latest `main` |
 | 2 | Log the change under `## [Unreleased]` — **no version, no date header** | Invoke the Skill tool with skill="ceh-git-workflow:update-changelog" — tell it **Unreleased mode** | Bullets under `[Unreleased]`, no new versioned section, no manifest version touched |
-| 3 | Refresh the README if the change is user-facing | `ceh-documentation:update-readme` if that plugin is installed, else a surgical edit | Updated, or "no update needed" recorded |
+| 3 | Refresh the README if the change is user-facing | `ceh-readme:update-readme` if that plugin is installed, else a surgical edit | Updated, or "no update needed" recorded |
 | 4 | Commit the work + docs | Invoke the Skill tool with skill="ceh-git-workflow:commit" | Conventional Commits subject, attribution footer present, tree clean |
 | 5 | Open the PR — on repos that allow auto-merge, `open-pr` already queues it here | Invoke the Skill tool with skill="ceh-git-workflow:open-pr" | PR open, self-review + definition-of-done passed |
 | 6 | Merge and clean up — if step 5 queued auto-merge, this just confirms it lands; otherwise prefer `--auto` (or a direct merge once green). Don't poll CI by hand | Invoke the Skill tool with skill="ceh-git-workflow:merge" | CI green, approvals met, merged to `main`, remote-branch state reported |

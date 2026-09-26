@@ -31,10 +31,15 @@ LAYER 3 — scenario bundles (plugin.json + README.md only)
         │  ceh-scenario-core,
         │  ceh-architecture, ceh-documentation, ceh-usability-audit, ceh-plan-build-review
         │  + one stack plugin: ceh-python-service | ceh-python-library | ceh-web-frontend
+        │  + service only: ceh-git-datastore
         ▼
   ceh-scenario-core   ◄──   ceh-scenario-editorial
         │                     + ceh-blog, ceh-documentation, ceh-seo
-        │  ceh-coding-agent, ceh-git-workflow, ceh-testing
+        │             ◄──   ceh-scenario-ideation
+        │                     + ceh-business-plan, ceh-plan-build-review, ceh-architecture
+        │             ◄──   ceh-scenario-agent-tooling
+        │                     + ceh-workflow-builder, ceh-evaluation
+        │  ceh-coding-agent, ceh-git-workflow, ceh-readme
 
 LAYER 2 — plugins that depend on Layer 1 (five edges)
 
@@ -46,7 +51,7 @@ LAYER 2 — plugins that depend on Layer 1 (five edges)
 
 LAYER 1 — cross-cutting leaves, declare nothing
 
-  ceh-coding-agent   ceh-git-workflow   ceh-testing
+  ceh-coding-agent   ceh-git-workflow   ceh-readme   ceh-testing
   ceh-fabled         ceh-advisor        (experimental)
 ```
 
@@ -72,22 +77,30 @@ All remaining explicit invocations (`ceh-git-workflow` flows, `ceh-documentation
 
 The full transitive closure. `●` = listed directly, `○` = arrives through another dependency.
 
-| Plugin | core | service-iterate | library-iterate | webapp-iterate | *-greenfield | editorial |
-|--------|:-:|:-:|:-:|:-:|:-:|:-:|
-| `ceh-coding-agent` | ● | ○ | ○ | ○ | ○ | ○ |
-| `ceh-git-workflow` | ● | ○ | ○ | ○ | ○ | ○ |
-| `ceh-testing` | ● | ○ | ○ | ○ | ○ | ○ |
-| `ceh-architecture` | | ● | ● | ● | ○ | |
-| `ceh-documentation` | | ● | ● | ● | ○ | ● |
-| `ceh-usability-audit` | | ● | ● | ● | ○ | |
-| `ceh-plan-build-review` | | ● | ● | ● | ○ | |
-| `ceh-python-service` | | ● | | | ○ (service) | |
-| `ceh-python-library` | | | ● | | ○ (library) | |
-| `ceh-web-frontend` | | | | ● | ○ (webapp) | |
-| `ceh-scaffolding` | | | | | ● | |
-| `ceh-business-plan` | | | | | ● | |
-| `ceh-blog` | | | | | | ● |
-| `ceh-seo` | | | | | | ● |
+| Plugin | core | service-iterate | library-iterate | webapp-iterate | *-greenfield | editorial | ideation | agent-tooling |
+|--------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| `ceh-coding-agent` | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| `ceh-git-workflow` | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| `ceh-readme` | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| `ceh-testing` | | ○ | ○ | ○ | ○ | | | |
+| `ceh-architecture` | | ● | ● | ● | ○ | | ● | |
+| `ceh-documentation` | | ● | ● | ● | ○ | ● | | |
+| `ceh-usability-audit` | | ● | ● | ● | ○ | | | |
+| `ceh-plan-build-review` | | ● | ● | ● | ○ | | ● | |
+| `ceh-python-service` | | ● | | | ○ (service) | | | |
+| `ceh-python-library` | | | ● | | ○ (library) | | | |
+| `ceh-web-frontend` | | | | ● | ○ (webapp) | | | |
+| `ceh-git-datastore` | | ● | | | ○ (service) | | | |
+| `ceh-scaffolding` | | | | | ● | | | |
+| `ceh-business-plan` | | | | | ● | | ● | |
+| `ceh-blog` | | | | | | ● | | |
+| `ceh-seo` | | | | | | ● | | |
+| `ceh-workflow-builder` | | | | | | | | ● |
+| `ceh-evaluation` | | | | | | | | ● |
+
+`ceh-testing` reaches the stack bundles through the stack plugin (`ceh-python-service`,
+`ceh-python-library`, `ceh-web-frontend` all depend on it), not through core. Core, editorial,
+ideation and agent-tooling do not install it.
 
 `ceh-scenario-core` is also an install entry point on its own, for a stack no other bundle covers.
 Every other bundle reaches it, directly or through its `-iterate` twin.
@@ -102,7 +115,6 @@ leaf.
 | Experimental, installed deliberately | `ceh-fabled`, `ceh-advisor` (installs always-on session hooks), `ceh-orchestration` |
 | Session mechanics, install once at user scope | `ceh-summarize-chat`, `ceh-lessons-learned` |
 | Opt-in per moment | `ceh-ops` (deploy), `ceh-seo` outside editorial (a public surface is a per-release property) |
-| Standalone workflows | `ceh-evaluation`, `ceh-git-datastore`, `ceh-workflow-builder` |
 
 ## Rules for an edge
 
@@ -125,7 +137,7 @@ References that look like edges but deliberately are not:
 | `ceh-coding-agent:refactor-repo` / `shrink-diff` → `ceh-testing`, `ceh-git-workflow` | Conditional, and Layer 1 declares nothing |
 | `ceh-usability-audit` → `ceh-web-frontend:accessibility` | Conditional on the subject having a UI |
 | `ceh-scaffolding` → the three stack plugins | Advisory: an edge would install all three stacks |
-| `ceh-git-workflow` flows → `ceh-documentation:update-readme` | Conditional on the change being user-facing |
+| `ceh-git-workflow` flows → `ceh-readme:update-readme` | Conditional on the change being user-facing |
 | `ceh-ops:deploy` → `ceh-git-workflow:release` | A precondition, not a call |
 | `ceh-business-plan` → `ceh-plan-build-review` `plan-schema.md` | Removed by duplicating the file (see `docs/CROSS_REFERENCES.md`) |
 

@@ -8,7 +8,7 @@ description: >-
   "ops runbook", "getting-started guide", "installation guide", "document how to use this",
   "document how to operate this", or asks to produce end-user or operations documentation. Not for
   API reference docs generated from code, blog posts (use ceh-blog), or README files (use
-  update-readme).
+  ceh-readme:update-readme).
 ---
 
 # Write Guides and Runbooks

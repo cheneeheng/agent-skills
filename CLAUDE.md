@@ -22,15 +22,15 @@ Plugins fall into four tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Scenario bundle** | one per situation | `ceh-scenario-core`, `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial` |
-| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
+| **Scenario bundle** | one per situation | `ceh-scenario-core`, `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial`, `ceh-scenario-ideation`, `ceh-scenario-agent-tooling` |
+| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
 `-iterate` twin plus the planning delta, so the phase transition is a no-op. Every other bundle
-depends on `ceh-scenario-core` (`ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`) instead of
+depends on `ceh-scenario-core` (`ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`) instead of
 listing those three itself, so the cross-cutting base changes in one manifest. Experimental plugins
 never enter it. **Name the phase halves `-greenfield` / `-iterate`, never `-maintenance`** —
 "maintenance" reads as bugfix-only and already caused `ceh-plan-build-review` to be filed on the
@@ -101,7 +101,8 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-blog` | Interview-driven blog post writing |
-| `ceh-documentation` | A whole `docs/` set under one shared docs standard (guides, operations runbooks, concepts, API reference, examples, migration) or any one section alone; runnable `examples/` programs (feature tour + copy-paste recipes); README maintenance |
+| `ceh-documentation` | A whole `docs/` set under one shared docs standard (guides, operations runbooks, concepts, API reference, examples, migration) or any one section alone; runnable `examples/` programs (feature tour + copy-paste recipes) |
+| `ceh-readme` | README maintenance after a significant change (`update-readme`); cross-cutting, so it ships in `ceh-scenario-core` |
 | `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents |
 | `ceh-business-plan` | Interview-driven business plan: draft from an app plan or idea, loop until a product-market-fit gate passes |
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive criteria, measure structure/triggering/content/behavioral lift with evidence, loop until a readiness gate passes |

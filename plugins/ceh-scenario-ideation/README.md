@@ -1,6 +1,6 @@
-# ceh-scenario-service-iterate
+# ceh-scenario-ideation
 
-CEH scenario bundle: working on a Python backend service that already ships — features, fixes, tests, docs, releases.
+CEH scenario bundle: shaping an idea before a stack is chosen — brainstorming the product, testing it for product-market fit, planning the build, and sketching the architecture.
 
 This plugin ships **no skills, agents, or hooks**. It is a scenario bundle: a manifest whose only
 job is to name the set of `ceh-*` plugins that belong together for one situation, so you install
@@ -9,7 +9,7 @@ one thing instead of remembering a catalogue.
 ## Install
 
 ```
-/plugin install ceh-scenario-service-iterate@ceh-plugins --scope user
+/plugin install ceh-scenario-ideation@ceh-plugins --scope user
 ```
 
 Its dependencies are resolved and installed automatically, and enabling this plugin enables all of
@@ -20,12 +20,9 @@ them at the same scope.
 | Plugin |
 |--------|
 | `ceh-scenario-core` |
-| `ceh-architecture` |
-| `ceh-python-service` |
-| `ceh-documentation` |
-| `ceh-usability-audit` |
+| `ceh-business-plan` |
 | `ceh-plan-build-review` |
-| `ceh-git-datastore` |
+| `ceh-architecture` |
 
 ## Notes
 

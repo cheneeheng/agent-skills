@@ -1,6 +1,6 @@
-# ceh-scenario-service-iterate
+# ceh-scenario-agent-tooling
 
-CEH scenario bundle: working on a Python backend service that already ships — features, fixes, tests, docs, releases.
+CEH scenario bundle: building Claude Code skills and agentic workflows — turning a repetitive task into a runnable skill, then evaluating it until a readiness gate passes.
 
 This plugin ships **no skills, agents, or hooks**. It is a scenario bundle: a manifest whose only
 job is to name the set of `ceh-*` plugins that belong together for one situation, so you install
@@ -9,7 +9,7 @@ one thing instead of remembering a catalogue.
 ## Install
 
 ```
-/plugin install ceh-scenario-service-iterate@ceh-plugins --scope user
+/plugin install ceh-scenario-agent-tooling@ceh-plugins --scope user
 ```
 
 Its dependencies are resolved and installed automatically, and enabling this plugin enables all of
@@ -20,12 +20,8 @@ them at the same scope.
 | Plugin |
 |--------|
 | `ceh-scenario-core` |
-| `ceh-architecture` |
-| `ceh-python-service` |
-| `ceh-documentation` |
-| `ceh-usability-audit` |
-| `ceh-plan-build-review` |
-| `ceh-git-datastore` |
+| `ceh-workflow-builder` |
+| `ceh-evaluation` |
 
 ## Notes
 
