@@ -7,7 +7,6 @@ Claude Code plugin for writing end-user and operator-facing documentation — ta
 | Skill | Description |
 |-------|-------------|
 | `write-guides-and-runbooks` | Write or revise user guides (`docs/guide/`) and operator runbooks (`docs/operations/`) — one section per audience, the right document type, task-oriented verifiable procedures |
-| `update-readme` | Keep `README.md` accurate after significant changes (new features, CLI changes, config changes) |
 | `write-project-docs` | Write a full docs set under `docs/` for the current workspace or a given project path — index, why, quickstart, guides, concepts, reference, examples, migration — one job per page; sequences the three skills below and itself |
 | `write-api-reference` | The exhaustive layer: every public item, counted against the surface, alphabetical within kind, "Added in" markers for the last three releases, rationale behind "Why" links |
 | `write-concept-docs` | The "why" layer: mental model per concept, design rationale sourced from ADRs, commits, and the changelog, never invented |
@@ -38,10 +37,9 @@ Pass a path to document another project: `/ceh-documentation:write-project-docs 
 
 Pass a path to write examples for another project: `/ceh-documentation:write-examples ../my-lib`
 
-**update-readme** loads automatically when you say:
-- `"update the readme"` / `"refresh the docs"`
-- `"document this feature"` / `"I just shipped X — update docs"`
-
+> README maintenance moved to `ceh-readme:update-readme`, a cross-cutting plugin in
+> `ceh-scenario-core`: every repo has a README, but only a software project needs a `docs/` set.
+>
 > Changelog maintenance moved to `ceh-git-workflow:update-changelog` — every input that skill reads
 > is git (`git describe --tags`, `git log`, `git tag`, `git remote`), so it fires on a git moment,
 > not a documentation one. `check-semver.py` moved with it.
@@ -50,7 +48,7 @@ Pass a path to write examples for another project: `/ceh-documentation:write-exa
 
 Markdown under `docs/` in one fixed format, whichever skill writes the page. The format lives in
 `references/docs-standard.md`, shipped word-for-word in each of the four writing skills
-(`update-readme` excepted) so each works when loaded alone:
+so each works when loaded alone:
 
 - **Layout** — `docs/index.md` front page, site-level `why.md` / `migration.md`, and the sections
   `guide/` (the user's tasks), `operations/` (the operator's runbook), `concepts/`, `reference/`,

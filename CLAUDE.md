@@ -7,7 +7,7 @@ Each plugin is a standalone, self-contained **use case**.
 
 Plugins split on one axis: **use case**. This replaced a mixed axis (tech-domain +
 lifecycle-phase) that baked in a fullstack-web assumption and forced the same standard into several
-plugins, where the copies drifted. Rationale: `.agents_workspace/PLUGIN_REORG_PLAN.md`.
+plugins, where the copies drifted. Rationale: `.agents_workspace/archive/PLUGIN_REORG_PLAN.md`.
 
 Two consequences drive how skills are written and where they live:
 
@@ -22,17 +22,20 @@ Plugins fall into four tiers:
 
 | Tier | Loaded | Plugins |
 |------|--------|---------|
-| **Scenario bundle** | one per situation | `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial` |
-| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
+| **Scenario bundle** | one per situation | `ceh-scenario-core`, `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial`, `ceh-scenario-ideation`, `ceh-scenario-agent-tooling` |
+| **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
 | **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
-`-iterate` twin plus the planning delta, so the phase transition is a no-op. **Name the phase
-halves `-greenfield` / `-iterate`, never `-maintenance`** — "maintenance" reads as bugfix-only and
-already caused `ceh-plan-build-review` to be filed on the wrong side. Design record:
-`.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md`.
+`-iterate` twin plus the planning delta, so the phase transition is a no-op. Every other bundle
+depends on `ceh-scenario-core` (`ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`) instead of
+listing those three itself, so the cross-cutting base changes in one manifest. Experimental plugins
+never enter it. **Name the phase halves `-greenfield` / `-iterate`, never `-maintenance`** —
+"maintenance" reads as bugfix-only and already caused `ceh-plan-build-review` to be filed on the
+wrong side. Design record:
+`.agents_workspace/archive/PLUGIN_DEPENDENCY_PLAN.md`.
 
 Categorization rules of thumb:
 
@@ -61,9 +64,9 @@ Categorization rules of thumb:
 ## Structure
 
 ```
-.agents_workspace/            # Session artifacts — not a plugin, git-ignored in full. Local-only: DECISION_LOG.md, the two PLUGIN_*_PLAN.md design records, skill-evals/<skill>/run-NNN/SKILL_EVAL.md (ceh-evaluation output)
+.agents_workspace/            # Session artifacts — not a plugin, git-ignored in full. Local-only: DECISION_LOG.md, archive/*_PLAN.md design records, skill-evals/<skill>/<evaluator>/run-NNN/ (ceh-evaluation / skill-creator output)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
-docs/                         # Maintainer docs — CROSS_REFERENCES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md
+docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md
 plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
 ├── ceh-scenario-<name>/      # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
 └── ceh-<plugin-name>/
@@ -98,7 +101,8 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-summarize-chat` | Session summary for LLM handoff |
 | `ceh-lessons-learned` | Session retrospectives |
 | `ceh-blog` | Interview-driven blog post writing |
-| `ceh-documentation` | A whole `docs/` set under one shared docs standard (guides, operations runbooks, concepts, API reference, examples, migration) or any one section alone; runnable `examples/` programs (feature tour + copy-paste recipes); README maintenance |
+| `ceh-documentation` | A whole `docs/` set under one shared docs standard (guides, operations runbooks, concepts, API reference, examples, migration) or any one section alone; runnable `examples/` programs (feature tour + copy-paste recipes) |
+| `ceh-readme` | README maintenance after a significant change (`update-readme`); cross-cutting, so it ships in `ceh-scenario-core` |
 | `ceh-orchestration` | Thin-orchestrator mode: plan/delegate-only main session + executor/verifier subagents |
 | `ceh-business-plan` | Interview-driven business plan: draft from an app plan or idea, loop until a product-market-fit gate passes |
 | `ceh-evaluation` | Evaluate a skill/plugin you wrote: derive criteria, measure structure/triggering/content/behavioral lift with evidence, loop until a readiness gate passes |
@@ -209,7 +213,7 @@ Whatever else gets skipped, these four land in the **same commit** or CI fails:
 4. `python tools/validate-plugins/validate.py` green.
 
 `.agents_workspace/` is git-ignored, so its records never land in a commit. Still update
-`PLUGIN_DEPENDENCY_PLAN.md` §4 locally when the change adds or removes a dependency edge or a
+`.agents_workspace/archive/PLUGIN_DEPENDENCY_PLAN.md` §4 locally when the change adds or removes a dependency edge or a
 `ceh-scenario-*` bundle — the graph it holds is what the next session reasons from.
 
 ## Commands
@@ -273,9 +277,10 @@ and why, a `### Plugin versions` table listing every plugin bumped, then `### Ad
 | `docs/CROSS_REFERENCES.md` | Content duplicated across skills: canonical source and every copy |
 | `CHANGELOG.md` | Release notes per repo tag, each with a `### Plugin versions` table |
 | `docs/CHANGELOG-v1-v2.md` | Release notes for v1.0.0–v2.8.0, before the v3.0.0 reorganisation |
+| `docs/PLUGIN_DEPENDENCIES.md` | Current dependency graph: every edge with its evidence, what each scenario bundle installs |
 | `docs/TESTING_WORKFLOW.md` | How `ceh-testing`, the three stack testing skills, and the tester agents route between each other |
 | `.agents_workspace/DECISION_LOG.md` | Agent decision log — **git-ignored, local only**, append-only, next sequential entry ID |
-| `.agents_workspace/PLUGIN_DEPENDENCY_PLAN.md` | Dependency graph and scenario bundles: decisions, reference audit, checklist — git-ignored, local only |
+| `.agents_workspace/archive/PLUGIN_DEPENDENCY_PLAN.md` | Dependency graph and scenario bundles: decisions, reference audit, checklist — git-ignored, local only |
 
 ## Cross-Reference Rule
 

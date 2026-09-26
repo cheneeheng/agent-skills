@@ -37,7 +37,7 @@ Run top to bottom. Each step gates the next — do not proceed past a red gate.
 | 2 | Branch `chore/release-vX.Y.Z` from latest `main` | Invoke the Skill tool with skill="ceh-git-workflow:branch" | On a clean branch off up-to-date `main` |
 | 3 | Bump the version in **every** manifest the project ships (`pyproject.toml`, `package.json`, `plugin.json`, `marketplace.json`, `Cargo.toml`, …) | — mechanical edit | All manifests read the same vX.Y.Z |
 | 4 | Write the vX.Y.Z changelog entry | Invoke the Skill tool with skill="ceh-git-workflow:update-changelog" | Section written and semver-validated |
-| 5 | Refresh the README if the change is user-facing | `ceh-documentation:update-readme` if that plugin is installed, else a surgical edit | Updated, or "no update needed" recorded |
+| 5 | Refresh the README if the change is user-facing | `ceh-readme:update-readme` if that plugin is installed, else a surgical edit | Updated, or "no update needed" recorded |
 | 6 | Update CLAUDE.md if project facts/structure changed | surgical edit (or `revise-claude-md` if that plugin is installed) | CLAUDE.md matches reality, or skip logged |
 | 7 | Commit the bump + docs | Invoke the Skill tool with skill="ceh-git-workflow:commit" | Subject `chore: release vX.Y.Z`, **body + attribution footer present** (see below), tree clean |
 | 8 | Open the PR — on repos that allow auto-merge, `open-pr` already queues it here | Invoke the Skill tool with skill="ceh-git-workflow:open-pr" | PR open, self-review + definition-of-done passed |

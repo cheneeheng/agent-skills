@@ -6,7 +6,7 @@ description: >-
   pyproject.toml or package.json, marketplace listings, landing-page copy. Trigger on "make this
   repo findable", "improve the pitch", "package description", "GitHub topics", "keywords", "SEO for
   the README", or when publishing a repo, library, or plugin for the first time. Not for keeping the
-  README accurate after code changes (use ceh-documentation:update-readme) and not for HTML page
+  README accurate after code changes (use ceh-readme:update-readme) and not for HTML page
   markup (use web-discoverability).
 ---
 
@@ -15,7 +15,7 @@ description: >-
 Every internet-exposed text surface — GitHub, PyPI, npm, a marketplace, a search result — shows
 an excerpt, and the excerpt decides whether anyone clicks. Search engines and AI engines index
 the same words humans skim. This skill governs the findability quality of that text; it does not
-own keeping it accurate (that is `ceh-documentation:update-readme`).
+own keeping it accurate (that is `ceh-readme:update-readme`).
 
 ## The Excerpt Rule
 
@@ -68,5 +68,5 @@ AI engines quote whichever they crawled last.
 ## Boundary
 
 This skill owns how findable public text is. Post-change accuracy of the README is
-`ceh-documentation:update-readme`; head tags, sitemaps, and structured data on HTML pages are
+`ceh-readme:update-readme`; head tags, sitemaps, and structured data on HTML pages are
 `web-discoverability`.

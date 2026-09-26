@@ -20,7 +20,7 @@ sections, standalone quotable facts, question-shaped headings.
 
 ## Boundaries
 
-- README **accuracy** after a code change belongs to `ceh-documentation:update-readme`; this
+- README **accuracy** after a code change belongs to `ceh-readme:update-readme`; this
   plugin owns README **findability**.
 - Writing the content itself (blog posts, docs) belongs to `ceh-blog` and `ceh-documentation`;
   this plugin governs how that content is found and cited.

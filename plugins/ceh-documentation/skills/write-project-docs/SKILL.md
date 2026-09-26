@@ -9,8 +9,8 @@ description: >-
   docs folder", or "our docs are missing or out of date, redo them". This skill surveys, plans the
   page set, and sequences it: the reference goes to write-api-reference, concept and
   design-rationale pages to write-concept-docs, guides to write-guides-and-runbooks. Not for one guide or
-  runbook alone (use write-guides-and-runbooks), a README refresh (use update-readme), or a maintainer
-  architecture doc (use ceh-architecture:document-architecture).
+  runbook alone (use write-guides-and-runbooks), a README refresh (use ceh-readme:update-readme),
+  or a maintainer architecture doc (use ceh-architecture:document-architecture).
 argument-hint: '[project-path]'
 compatibility: >-
   Reads the target project's files and, when present, its git history through the git CLI on PATH
@@ -205,7 +205,7 @@ marketing adjectives.
 
 Then add one line to `<root>/README.md`, directly under its title and tagline, unless it already
 links the docs: `Documentation: [docs/index.md](docs/index.md)`. Make this edit here rather than
-through `update-readme` — that skill gates on code changes and diffs the last commit, neither of
+through `ceh-readme:update-readme` — that skill gates on code changes and diffs the last commit, neither of
 which fits a docs-only change. The README stays the storefront; the docs are the manual.
 
 ## Page budgets

@@ -651,6 +651,6 @@ Both files also name `$CEH_WORKFLOW_BUILD_DIR` and its `.agents_workspace/` defa
 | `plugins/ceh-documentation/skills/write-api-reference/references/docs-standard.md` | copy |
 | `plugins/ceh-documentation/skills/write-concept-docs/references/docs-standard.md` | copy |
 
-**What is shared:** the whole file — docs layout, page modes, file naming and the fixed prefix table, page anatomy (H1, breadcrumb, summary, footer, hubs), Markdown and link rules, marker literals, voice, frontmatter, and the report shape. Each skill ships its own copy so it works when loaded alone; `update-readme` does not use it.
+**What is shared:** the whole file — docs layout, page modes, file naming and the fixed prefix table, page anatomy (H1, breadcrumb, summary, footer, hubs), Markdown and link rules, marker literals, voice, frontmatter, and the report shape. Each skill ships its own copy so it works when loaded alone; `ceh-readme:update-readme` does not use it.
 
 **What diverges:** nothing in the file. The skills cite it by section number (`§3`, `§4`, `§10`), so renumbering a section means grepping `docs-standard.md §` across the four `SKILL.md` files. Verify identity with `md5sum plugins/ceh-documentation/skills/*/references/docs-standard.md`.

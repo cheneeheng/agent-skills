@@ -19,8 +19,7 @@ them at the same scope.
 
 | Plugin |
 |--------|
-| `ceh-coding-agent` |
-| `ceh-git-workflow` |
+| `ceh-scenario-core` |
 | `ceh-blog` |
 | `ceh-documentation` |
 | `ceh-seo` |
