@@ -7,6 +7,69 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.10.0] — 2026-09-26
+
+The scenario bundles each listed the same three cross-cutting plugins, so changing that base meant
+editing four manifests. A new `ceh-scenario-core` bundle now holds the base, and every other bundle
+depends on it. Its members then changed. `ceh-testing` left core: the three stack plugins already
+depend on it, so the service, library and webapp bundles still install it, while editorial and the
+new non-code bundles no longer carry test technique they never use. README upkeep took its place.
+
+`update-readme` moved out of `ceh-documentation` into a new one-skill plugin, `ceh-readme`, so core
+gets README upkeep without the five skills that write a `docs/` set. It did not move into
+`ceh-git-workflow`: v6.x already found that its inputs are the code and the README, not git.
+
+Two new bundles cover situations no bundle described: shaping an idea before a stack is chosen,
+and building Claude Code skills and workflows. `ceh-git-datastore` joins the service bundles.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-readme` | v1.0.0 |
+| `ceh-scenario-core` | v1.0.0 |
+| `ceh-scenario-ideation` | v1.0.0 |
+| `ceh-scenario-agent-tooling` | v1.0.0 |
+| `ceh-scenario-service-iterate` | v1.2.0 |
+| `ceh-scenario-library-iterate` | v1.2.0 |
+| `ceh-scenario-webapp-iterate` | v1.2.0 |
+| `ceh-scenario-editorial` | v1.2.0 |
+| `ceh-documentation` | v1.5.0 |
+| `ceh-git-workflow` | v3.4.1 |
+| `ceh-seo` | v1.1.1 |
+| `ceh-usability-audit` | v1.0.6 |
+
+### Added
+
+- **`ceh-scenario-core`** — the cross-cutting base every other bundle depends on:
+  `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`. Also an install entry point for a stack no
+  other bundle covers.
+- **`ceh-readme`** — cross-cutting plugin holding `update-readme`. Invoke path changes from
+  `/ceh-documentation:update-readme` to `/ceh-readme:update-readme`.
+- **`ceh-scenario-ideation`** — core + `ceh-business-plan`, `ceh-plan-build-review`,
+  `ceh-architecture`.
+- **`ceh-scenario-agent-tooling`** — core + `ceh-workflow-builder`, `ceh-evaluation`.
+- **`docs/PLUGIN_DEPENDENCIES.md`** — the current dependency graph, the evidence for each edge, and
+  what each scenario installs.
+- **`validate.py`** — enforces that every bundle reaches `ceh-scenario-core` and that only a bundle
+  depends on a bundle.
+
+### Changed
+
+- **Scenario bundles** — the three `-iterate` bundles and editorial depend on `ceh-scenario-core`
+  instead of listing the cross-cutting plugins. `ceh-testing` is no longer in core. It reaches the
+  stack bundles through their stack plugin.
+- **`ceh-scenario-service-iterate`** adds `ceh-git-datastore`, so service-greenfield inherits it.
+- **`ceh-documentation`** — drops `update-readme`. Its `write-*` skills route README refreshes to
+  `ceh-readme:update-readme`.
+- **`ceh-git-workflow`, `ceh-seo`, `ceh-usability-audit`** — references renamed to
+  `ceh-readme:update-readme`. The git flows still call it conditionally, as prose, not a dependency.
+
+### Fixed
+
+- `CLAUDE.md` and `add-plugin-component` pointed at `.agents_workspace/PLUGIN_*_PLAN.md`. The
+  records live under `.agents_workspace/archive/`.
+
 ## [6.9.2] — 2026-09-23
 
 A review of the `ceh-blog` skills found one contradiction and three gaps. `blog-repurpose` asked for
