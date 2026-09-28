@@ -1,8 +1,11 @@
 """Mock AG-UI agent: no LLM, deterministic, so the canvas can be exercised end to end.
 
-- `<tool-name> <json-args>` where <tool-name> is a frontend tool the UI sent -> calls that tool.
-- A tool result as the last message -> acknowledges it.
-- Anything else -> echoes the text back.
+- Text naming a catalogue component ("show a bar chart") -> calls that frontend tool with the
+  example arguments the canvas sent in the tool's metadata.
+- `<tool-name> <json-args>` -> calls that tool with exactly those arguments (malformed or
+  schema-breaking arguments included, to test the canvas rejects them).
+- A tool result as the last message -> reports whether the canvas rendered it.
+- Anything else -> echoes the text and lists what it can show.
 
 Replace this file with a real agent; the canvas only depends on the AG-UI event stream.
 """
@@ -19,6 +22,7 @@ from ag_ui.core import (
     TextMessageContentEvent,
     TextMessageEndEvent,
     TextMessageStartEvent,
+    Tool,
     ToolCallArgsEvent,
     ToolCallEndEvent,
     ToolCallStartEvent,
@@ -48,21 +52,28 @@ def call_tool(name: str, args: str) -> list[BaseEvent]:
     ]
 
 
+def phrase(tool: Tool) -> str:
+    return tool.name.removeprefix("show_").replace("_", " ")
+
+
 def respond(run: RunAgentInput) -> list[BaseEvent]:
+    tools = run.tools or []
     last = run.messages[-1] if run.messages else None
     if last is None:
         return say("Say something.")
     if last.role == "tool":
-        return say("Rendered on the canvas.")
+        content = last.content if isinstance(last.content, str) else ""
+        return say("Rendered on the canvas." if content == "rendered" else f"The canvas refused it: {content}")
     text = last.content if isinstance(last.content, str) else ""
     name, _, args = text.strip().partition(" ")
-    if name in {tool.name for tool in run.tools or []}:
-        try:
-            json.loads(args or "{}")
-        except json.JSONDecodeError:
-            return say(f"Arguments for {name} must be a JSON object.")
+    if name in {tool.name for tool in tools}:
         return call_tool(name, args or "{}")
-    return say(f"You said: {text}")
+    for tool in tools:
+        example = (tool.metadata or {}).get("example")
+        if example is not None and phrase(tool) in text.lower():
+            return call_tool(tool.name, json.dumps(example))
+    options = ", ".join(phrase(tool) for tool in tools) or "nothing yet"
+    return say(f"You said: {text}\nI can show: {options}.")
 
 
 @app.post("/agent")
@@ -71,8 +82,11 @@ async def agent(run: RunAgentInput, request: Request) -> StreamingResponse:
 
     async def stream() -> AsyncIterator[str]:
         yield encoder.encode(RunStartedEvent(thread_id=run.thread_id, run_id=run.run_id))
-        for event in respond(run):
+        events = respond(run)
+        for event in events:
             yield encoder.encode(event)
-        yield encoder.encode(RunFinishedEvent(thread_id=run.thread_id, run_id=run.run_id))
+        # A handler may end the run itself (e.g. with an interrupt outcome).
+        if not (events and isinstance(events[-1], RunFinishedEvent)):
+            yield encoder.encode(RunFinishedEvent(thread_id=run.thread_id, run_id=run.run_id))
 
     return StreamingResponse(stream(), media_type=encoder.get_content_type())

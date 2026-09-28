@@ -25,7 +25,7 @@ Plugins fall into four tiers:
 | **Scenario bundle** | one per situation | `ceh-scenario-core`, `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial`, `ceh-scenario-ideation`, `ceh-scenario-agent-tooling` |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
-| **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
+| **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`, `ceh-architecture` |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
@@ -93,7 +93,8 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-architecture` | Stack-agnostic design: living architecture docs (3-second Overview + Mermaid + Key Decisions), domain modeling |
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
-| `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility, UI design, Cytoscape.js graph visualization, AG-UI agent frontends |
+| `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility, UI design, Cytoscape.js graph visualization |
+| `ceh-ag-ui` | Generative-UI canvases for AG-UI agents: a fixed, themed component catalogue the agent places but cannot restyle (`build-ag-ui`, `add-canvas-component`), a Claude-backed FastAPI server (`build-ag-ui-agent`), shared state, human approval. Depends on `ceh-web-frontend` for the `ui-design` theme |
 | `ceh-scaffolding` | Per-project-type setup: directory layout + config + .gitignore |
 | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
 | `ceh-ops` | Deploy pipeline, incidents, rollback; CI agents |

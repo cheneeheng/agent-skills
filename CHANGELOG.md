@@ -9,9 +9,14 @@ Versions refer to the Marketplace versions.
 
 ### Added
 
-- `ceh-web-frontend:build-ag-ui` (plugin v3.5.0) — builds a frontend for an AG-UI agent on the
-  user's own template or a bundled empty canvas (React + Vite + `@ag-ui/client`, plus a mock
-  FastAPI agent). Components are registry entries the agent places by calling frontend tools.
+- `ceh-ag-ui` (v1.0.0), a new stack plugin for generative-UI canvases on the AG-UI protocol,
+  depending on `ceh-web-frontend` for the `ui-design` theme. Five skills: `build-ag-ui` (a canvas
+  where the agent places components from a fixed catalogue — bundled React + Vite +
+  `@ag-ui/client` template with seven Tidewater-styled components and a no-LLM mock agent),
+  `add-canvas-component`, `build-ag-ui-agent` (bundled FastAPI + Claude server keeping an
+  append-only transcript per thread), `sync-agent-state`, and `add-human-approval` (AG-UI 1.0
+  interrupts). The agent can never restyle a component: schemas are content-only and checked at
+  startup, arguments are parsed so unknown keys are stripped, and components use theme tokens only.
 
 ## [6.10.0] — 2026-09-26
 

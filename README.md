@@ -57,6 +57,7 @@ The table below is the reference list of what those bundles are made of.
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | Python Library | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
 | Web Frontend | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, ESLint/Prettier, Vitest, Playwright, accessibility, UI design, Cytoscape.js graph visualization |
+| AG-UI | `ceh-ag-ui` | Generative-UI canvases for AG-UI agents — the agent places components from a fixed, Tidewater-styled catalogue and can never restyle them; catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps |
 | Scaffolding | `ceh-scaffolding` | Per-project-type setup: directory layout + config + `.gitignore` |
 | Git Workflow | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations |
 | Ops | `ceh-ops` | Incident response, rollback, deploy pipeline; CI agents |
@@ -86,7 +87,7 @@ into four tiers:
 | **Scenario bundle** | one per situation | `ceh-scenario-*` — manifest only, no skills; names the set below. `ceh-scenario-core` holds the cross-cutting base the others include |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
-| **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
+| **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`, `ceh-architecture` |
 
 Each plugin is self-contained: a
 foundational standard needed by more than one plugin is duplicated into each rather than extracted
@@ -133,7 +134,11 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-web-frontend` | Accessibility | `/ceh-web-frontend:accessibility` | Writing component markup (Svelte or React) |
 | `ceh-web-frontend` | UI Design | `/ceh-web-frontend:ui-design` | Frontend UI visual design — layout, hierarchy, navigation, states, finishing recipes for first-pass polish, plus theme/brand from bundled templates |
 | `ceh-web-frontend` | Visualize Graph (Cytoscape) | `/ceh-web-frontend:visualize-graph-cytoscape` | Building a node-link graph UI with Cytoscape.js — layout choice, data conversion, stylesheet, interactions, readable zoom |
-| `ceh-web-frontend` | Build AG-UI | `/ceh-web-frontend:build-ag-ui` | Building a frontend for an AG-UI agent — starts from the user's template or a bundled empty canvas (React + Vite + `@ag-ui/client`, mock agent), adds components the agent places via frontend tools, shared state |
+| `ceh-ag-ui` | Build AG-UI | `/ceh-ag-ui:build-ag-ui` | Starting a generative-UI canvas for an AG-UI agent — own template or the bundled one (React + Vite + `@ag-ui/client`, seven Tidewater catalogue components, mock agent), theme install, the styling lock |
+| `ceh-ag-ui` | Add Canvas Component | `/ceh-ag-ui:add-canvas-component` | Adding a component the agent can place — agent-facing description, content-only zod schema, example fixture, theme-only markup, mock verification |
+| `ceh-ag-ui` | Build AG-UI Agent | `/ceh-ag-ui:build-ag-ui-agent` | Building the Claude-backed AG-UI server — append-only transcript per thread, end the run on a frontend tool call, held backend results, RUN_ERROR on every failure |
+| `ceh-ag-ui` | Sync Agent State | `/ceh-ag-ui:sync-agent-state` | A live value the agent keeps updating — STATE_SNAPSHOT / STATE_DELTA, one writer per key, a fixed validated panel |
+| `ceh-ag-ui` | Add Human Approval | `/ceh-ag-ui:add-human-approval` | The agent must ask before acting — AG-UI interrupts, a fixed approval card, one resume for every open interrupt |
 | `ceh-scaffolding` | Scaffold Python Service | `/ceh-scaffolding:scaffold-python-service` | Starting a FastAPI/Python web service repo |
 | `ceh-scaffolding` | Scaffold Python Library | `/ceh-scaffolding:scaffold-python-library` | Starting a distributable Python library/package |
 | `ceh-scaffolding` | Scaffold Web Frontend | `/ceh-scaffolding:scaffold-web-frontend` | Starting a SvelteKit or React + Vite frontend |
@@ -272,6 +277,7 @@ in automatically. Install individual plugins only when you want a set no bundle 
 /plugin install ceh-python-service@ceh-plugins --scope user
 /plugin install ceh-python-library@ceh-plugins --scope user
 /plugin install ceh-web-frontend@ceh-plugins --scope user
+/plugin install ceh-ag-ui@ceh-plugins --scope user
 /plugin install ceh-scaffolding@ceh-plugins --scope user
 /plugin install ceh-ops@ceh-plugins --scope user
 /plugin install ceh-summarize-chat@ceh-plugins --scope user
@@ -291,7 +297,7 @@ in automatically. Install individual plugins only when you want a set no bundle 
 ```
 
 Some of those are already dependencies of others: installing `ceh-ops` brings `ceh-coding-agent`,
-and each stack plugin brings `ceh-testing`.
+each stack plugin brings `ceh-testing`, and `ceh-ag-ui` brings `ceh-web-frontend`.
 
 Or install all at once using `--scope project` for project-specific installs.
 
@@ -325,6 +331,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/agent-skills/plugins/ceh-python-service" },
     { "path": "~/agent-skills/plugins/ceh-python-library" },
     { "path": "~/agent-skills/plugins/ceh-web-frontend" },
+    { "path": "~/agent-skills/plugins/ceh-ag-ui" },
     { "path": "~/agent-skills/plugins/ceh-scaffolding" },
     { "path": "~/agent-skills/plugins/ceh-ops" },
     { "path": "~/agent-skills/plugins/ceh-summarize-chat" },

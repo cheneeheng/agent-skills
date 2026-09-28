@@ -41,6 +41,10 @@ LAYER 3 — scenario bundles (plugin.json + README.md only)
         │                     + ceh-workflow-builder, ceh-evaluation
         │  ceh-coding-agent, ceh-git-workflow, ceh-readme
 
+LAYER 2b — plugins that depend on a Layer 2 plugin (one edge)
+
+  ceh-ag-ui           ──► ceh-web-frontend
+
 LAYER 2 — plugins that depend on Layer 1 (five edges)
 
   ceh-python-service  ──► ceh-testing
@@ -69,6 +73,7 @@ handoffs never create an edge (see Rules below).
 | `ceh-python-library` ──► `ceh-testing` | Explicit invocation of `ceh-testing:design-test-cases` in `python-library-testing` |
 | `ceh-ops` ──► `ceh-coding-agent` | `skills:` preload of `ceh-coding-agent:agent-coding-contract` in `github-actions` and `gitlab-ci` |
 | `ceh-orchestration` ──► `ceh-coding-agent` | `skills:` preload of `ceh-coding-agent:agent-coding-contract` in `executor` |
+| `ceh-ag-ui` ──► `ceh-web-frontend` | Explicit invocation of `ceh-web-frontend:ui-design` in `build-ag-ui` (theme install) and `add-canvas-component` (token and class contract) — every canvas and every component is built against it |
 
 All remaining explicit invocations (`ceh-git-workflow` flows, `ceh-documentation:write-project-docs`,
 `ceh-workflow-builder:build-agentic-workflow`) call skills inside their own plugin.
@@ -105,8 +110,8 @@ ideation and agent-tooling do not install it.
 `ceh-scenario-core` is also an install entry point on its own, for a stack no other bundle covers.
 Every other bundle reaches it, directly or through its `-iterate` twin.
 
-Worst-case closure for a single non-bundle plugin is 2 plugins, because every Layer 1 plugin is a
-leaf.
+Worst-case closure for a single non-bundle plugin is 3 plugins (`ceh-ag-ui` → `ceh-web-frontend` →
+`ceh-testing`); every other non-bundle plugin closes in 2, because every Layer 1 plugin is a leaf.
 
 ## Never bundled
 
@@ -114,6 +119,7 @@ leaf.
 |--------|---------|
 | Experimental, installed deliberately | `ceh-fabled`, `ceh-advisor` (installs always-on session hooks), `ceh-orchestration` |
 | Session mechanics, install once at user scope | `ceh-summarize-chat`, `ceh-lessons-learned` |
+| Opt-in per project type | `ceh-ag-ui` (only projects with an agent canvas) |
 | Opt-in per moment | `ceh-ops` (deploy), `ceh-seo` outside editorial (a public surface is a per-release property) |
 
 ## Rules for an edge
