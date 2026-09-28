@@ -654,3 +654,25 @@ Both files also name `$CEH_WORKFLOW_BUILD_DIR` and its `.agents_workspace/` defa
 **What is shared:** the whole file — docs layout, page modes, file naming and the fixed prefix table, page anatomy (H1, breadcrumb, summary, footer, hubs), Markdown and link rules, marker literals, voice, frontmatter, and the report shape. Each skill ships its own copy so it works when loaded alone; `ceh-readme:update-readme` does not use it.
 
 **What diverges:** nothing in the file. The skills cite it by section number (`§3`, `§4`, `§10`), so renumbering a section means grepping `docs-standard.md §` across the four `SKILL.md` files. Verify identity with `md5sum plugins/ceh-documentation/skills/*/references/docs-standard.md`.
+
+---
+
+## AG-UI styling lock and canvas extensions
+
+**Files:**
+
+| File | Section | Scope |
+|------|---------|-------|
+| `plugins/ceh-ag-ui/skills/build-ag-ui/assets/canvas-template/web/src/catalogue/define.ts` and `useAgent.ts` | `STYLE_KEY`, `defineComponent`, `render` | canonical — the enforced code |
+| `plugins/ceh-ag-ui/skills/build-ag-ui/SKILL.md` | "The styling lock" | the three layers, described |
+| `plugins/ceh-ag-ui/skills/add-canvas-component/SKILL.md` | "Schema — content only", "Component — theme only" | the same rules at authoring time |
+| `plugins/ceh-ag-ui/skills/add-live-state-panel/SKILL.md` | "Canvas side" | state is validated and styled the same way |
+| `plugins/ceh-ag-ui/skills/add-human-approval/SKILL.md` | "Canvas side" | the approval card's fixed look |
+
+**What is shared:** schemas carry content only (no `style`/`className`/`color`/`size`/`variant`…),
+a needed visual choice is a semantic enum mapped to a theme class, agent output is rendered only
+after `safeParse`, and components use theme tokens and classes only.
+
+**What diverges:** `add-live-state-panel` and `add-human-approval` inline code that edits the
+template's `useAgent.ts` (`drive`, `send`) and the mock's `respond` — if the template's hook or
+mock changes shape, update both skills' snippets in the same session.

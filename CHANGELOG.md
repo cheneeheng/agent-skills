@@ -7,6 +7,45 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.11.0] — 2026-09-28
+
+Agents that speak the AG-UI protocol can now drive a real interface, not just a chat stream. A new
+`ceh-ag-ui` plugin builds a canvas where the agent answers by placing components from a catalogue
+fixed at build time. It started as one skill in `ceh-web-frontend` and moved into its own plugin
+before release, because the canvas, the component catalogue and the agent server all share one
+component contract. The plugin depends on `ceh-web-frontend` for the `ui-design` theme, so every
+canvas is Tidewater by default and re-themes by swapping one CSS file.
+
+The agent chooses which component to show and what goes in it, and nothing else. Its look is
+locked in three places. Schemas are content-only and checked for styling keys at startup.
+Arguments are parsed, so unknown keys are stripped. Components use theme tokens only. All five
+skills are build-time: Claude Code loads one while writing the app, and none runs inside it.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-ag-ui` | v1.0.0 |
+
+### Added
+
+- **`ceh-ag-ui`** — new stack plugin, depending on `ceh-web-frontend`. Five skills:
+  - `build-ag-ui` — starts a canvas from the user's template or the bundled one: React + Vite +
+    `@ag-ui/client`, seven Tidewater-styled components (note, stat, table, list, key-values,
+    callout, bar chart), starter prompts, and a no-LLM mock agent.
+  - `add-canvas-component` — adds a catalogue entry: agent-facing description, content-only zod
+    schema, example fixture, and theme-only markup.
+  - `build-ag-ui-agent` — a bundled FastAPI + Claude server that keeps an append-only transcript
+    per thread, ends the run on a frontend tool call, and holds backend results until the canvas
+    answers.
+  - `add-live-state-panel` — a fixed panel fed by `STATE_SNAPSHOT` / `STATE_DELTA`.
+  - `add-human-approval` — AG-UI 1.0 interrupts with a fixed approval card.
+- **`examples/ceh-ag-ui/`** — eight prompt-by-prompt walkthroughs, from a blank canvas to a sales
+  assistant with a live panel and approvals. They live at the repo root, so installing the plugin
+  does not copy them.
+- **`docs/PLUGIN_DEPENDENCIES.md`** — the edge `ceh-ag-ui` ──► `ceh-web-frontend`. The worst-case
+  single-plugin install closure grows to 3.
+
 ## [6.10.0] — 2026-09-26
 
 The scenario bundles each listed the same three cross-cutting plugins, so changing that base meant

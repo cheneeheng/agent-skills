@@ -79,6 +79,16 @@
       "keywords": ["agent", "typescript", "sveltekit", "react", "vite", "frontend", "testing", "accessibility"]
     },
     {
+      "name": "ceh-ag-ui",
+      "source": "./plugins/ceh-ag-ui",
+      "description": "CEH AG-UI: generative-UI canvases for agents that speak the AG-UI protocol — a React + Vite canvas where the agent places components from a fixed, themed catalogue (Tidewater by default), adding catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps.",
+      "version": "1.0.0",
+      "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+      "repository": "https://github.com/cheneeheng/agent-skills",
+      "license": "Apache-2.0",
+      "keywords": ["agent", "typescript", "sveltekit", "react", "vite", "frontend", "testing", "accessibility"]
+    },
+    {
       "name": "ceh-git-workflow",
       "source": "./plugins/ceh-git-workflow",
       "description": "CEH Git workflow: commits, branching, PRs (with definition-of-done gate), merging, changelog entries, releases, code review, and dependency management. Includes two orchestrated flows — merge-flow lands a branch, release-flow ships a release.",

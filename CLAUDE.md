@@ -25,7 +25,7 @@ Plugins fall into four tiers:
 | **Scenario bundle** | one per situation | `ceh-scenario-core`, `ceh-scenario-{service,library,webapp}-{greenfield,iterate}`, `ceh-scenario-editorial`, `ceh-scenario-ideation`, `ceh-scenario-agent-tooling` |
 | **Cross-cutting** | most sessions | `ceh-coding-agent`, `ceh-git-workflow`, `ceh-readme`, `ceh-testing`, plus `ceh-fabled` and `ceh-advisor` *(experimental — never bundled)* |
 | **Use-case workflow** | per activity | `ceh-plan-build-review`, `ceh-blog`, `ceh-business-plan`, `ceh-evaluation`, `ceh-usability-audit`, `ceh-documentation`, `ceh-seo`, `ceh-ops`, `ceh-summarize-chat`, `ceh-lessons-learned`, `ceh-scaffolding`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-orchestration` *(experimental)* |
-| **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-architecture` |
+| **Stack / build** | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`, `ceh-architecture` |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
@@ -67,6 +67,7 @@ Categorization rules of thumb:
 .agents_workspace/            # Session artifacts — not a plugin, git-ignored in full. Local-only: DECISION_LOG.md, archive/*_PLAN.md design records, skill-evals/<skill>/<evaluator>/run-NNN/ (ceh-evaluation / skill-creator output)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md
+examples/<plugin>/            # User-facing worked examples, prompt by prompt — kept outside plugins/ so they are not copied into every install
 plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
 ├── ceh-scenario-<name>/      # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
 └── ceh-<plugin-name>/
@@ -94,6 +95,7 @@ tools/                         # Standalone meta-tooling, not itself a plugin/sk
 | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
 | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, Vitest, Playwright, accessibility, UI design, Cytoscape.js graph visualization |
+| `ceh-ag-ui` | Generative-UI canvases for AG-UI agents: a fixed, themed component catalogue the agent places but cannot restyle (`build-ag-ui`, `add-canvas-component`), a Claude-backed FastAPI server (`build-ag-ui-agent`), shared state, human approval. Depends on `ceh-web-frontend` for the `ui-design` theme |
 | `ceh-scaffolding` | Per-project-type setup: directory layout + config + .gitignore |
 | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
 | `ceh-ops` | Deploy pipeline, incidents, rollback; CI agents |
