@@ -133,6 +133,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-web-frontend` | Accessibility | `/ceh-web-frontend:accessibility` | Writing component markup (Svelte or React) |
 | `ceh-web-frontend` | UI Design | `/ceh-web-frontend:ui-design` | Frontend UI visual design — layout, hierarchy, navigation, states, finishing recipes for first-pass polish, plus theme/brand from bundled templates |
 | `ceh-web-frontend` | Visualize Graph (Cytoscape) | `/ceh-web-frontend:visualize-graph-cytoscape` | Building a node-link graph UI with Cytoscape.js — layout choice, data conversion, stylesheet, interactions, readable zoom |
+| `ceh-web-frontend` | Build AG-UI | `/ceh-web-frontend:build-ag-ui` | Building a frontend for an AG-UI agent — starts from the user's template or a bundled empty canvas (React + Vite + `@ag-ui/client`, mock agent), adds components the agent places via frontend tools, shared state |
 | `ceh-scaffolding` | Scaffold Python Service | `/ceh-scaffolding:scaffold-python-service` | Starting a FastAPI/Python web service repo |
 | `ceh-scaffolding` | Scaffold Python Library | `/ceh-scaffolding:scaffold-python-library` | Starting a distributable Python library/package |
 | `ceh-scaffolding` | Scaffold Web Frontend | `/ceh-scaffolding:scaffold-web-frontend` | Starting a SvelteKit or React + Vite frontend |

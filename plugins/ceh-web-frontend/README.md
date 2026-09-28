@@ -16,6 +16,7 @@ stay single-sourced.
 | Accessibility | `/ceh-web-frontend:accessibility` | Writing component markup (Svelte or React) |
 | UI Design | `/ceh-web-frontend:ui-design` | Any frontend UI visual design decision — layout archetypes, hierarchy, navigation placement, empty/loading/error states, density, finishing recipes (command dock, humanized tables, lifecycle steppers) — plus theming from bundled token-driven templates (Meridian, Tidewater) |
 | Visualize Graph (Cytoscape) | `/ceh-web-frontend:visualize-graph-cytoscape` | Building a network, dependency map, org chart, knowledge graph, or any clickable node-link diagram with Cytoscape.js — layout by graph shape, converting real data into elements JSON, stylesheet, tap-to-highlight, readable zoom defaults, and when a node-link diagram is the wrong tool |
+| Build AG-UI | `/ceh-web-frontend:build-ag-ui` | Building or extending a UI for an AG-UI agent — starts from the user's own template or copies the bundled empty canvas (React + Vite + `@ag-ui/client`, plus a mock agent), then adds registry components the agent places via frontend tools, wires shared state, and swaps in the real agent |
 
 > `environment` consolidates the former `coding-style` and `linting` skills so TypeScript style and
 > quality gates fire on file edits, matching the Python plugins' single environment skill

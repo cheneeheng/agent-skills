@@ -7,6 +7,12 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+### Added
+
+- `ceh-web-frontend:build-ag-ui` (plugin v3.5.0) — builds a frontend for an AG-UI agent on the
+  user's own template or a bundled empty canvas (React + Vite + `@ag-ui/client`, plus a mock
+  FastAPI agent). Components are registry entries the agent places by calling frontend tools.
+
 ## [6.10.0] — 2026-09-26
 
 The scenario bundles each listed the same three cross-cutting plugins, so changing that base meant
