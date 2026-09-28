@@ -8,7 +8,7 @@ description: >-
   per interrupt. Trigger on "ask the user before", "human in the loop", "approval step", "confirm
   before the agent does X", "interrupt and resume", or the client error "pending interrupt(s) not
   addressed by resume". Builds on a canvas from ceh-ag-ui:build-ag-ui. Not for live progress
-  (ceh-ag-ui:sync-agent-state) or placing components (ceh-ag-ui:add-canvas-component).
+  (ceh-ag-ui:add-live-state-panel) or placing components (ceh-ag-ui:add-canvas-component).
 compatibility: >-
   Needs the canvas's toolchain (Bun or Node.js 20+, @ag-ui/client 1.x) and, for the mock agent,
   uv with Python 3.11+ and ag-ui-protocol 1.x, which carries the interrupt outcome and resume.

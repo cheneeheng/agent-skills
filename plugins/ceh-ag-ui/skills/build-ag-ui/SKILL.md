@@ -9,7 +9,7 @@ description: >-
   template when they give one, otherwise copies the bundled canvas (React + Vite + @ag-ui/client,
   seven Tidewater-styled catalogue components, a deterministic mock agent). Not for adding one
   component to an existing canvas (ceh-ag-ui:add-canvas-component), the real agent server
-  (ceh-ag-ui:build-ag-ui-agent), live shared state (ceh-ag-ui:sync-agent-state), or approval
+  (ceh-ag-ui:build-ag-ui-agent), live shared state (ceh-ag-ui:add-live-state-panel), or approval
   steps (ceh-ag-ui:add-human-approval).
 compatibility: >-
   The canvas needs Bun (or Node.js 20+) and network access for the first install; react, vite, zod
@@ -49,11 +49,11 @@ the empty state offers starter prompts built from the catalogue.
 
 ## Step 2: install the theme
 
-Invoke the Skill tool with skill="ceh-web-frontend:ui-design" and follow its *Theme layer*.
-Tidewater is the default. Copy the `tidewater/brand.css` file from that skill's references
-directory to `web/src/brand.css`, which `app.css` imports first. Use Meridian (or the user's own token file
-with the same token and class contract) only when the user asks. Switching later means replacing
-that one file, and no markup changes.
+Invoke the Skill tool with skill="ceh-web-frontend:ui-design" and follow its *Theme layer*, with
+one override: the theme is already chosen. Use **Tidewater** without asking, unless the user named
+Meridian or brought their own token file with the same token and class contract. Copy the
+`tidewater/brand.css` file from that skill's references directory to `web/src/brand.css`, which
+`app.css` imports first. Switching later means replacing that one file, and no markup changes.
 
 ## Step 3: shape the catalogue
 
@@ -129,7 +129,7 @@ Keep `agent/` for testing components, and delete it only when the user asks.
 - **Stop is `abortRun()`.** It does not remove components that were already placed.
 
 Later, the canvas can grow **shared state**, where the agent keeps a live value the UI mirrors
-(`ceh-ag-ui:sync-agent-state`). It can also get **approval steps**, where the agent pauses until the
+(`ceh-ag-ui:add-live-state-panel`). It can also get **approval steps**, where the agent pauses until the
 user decides (`ceh-ag-ui:add-human-approval`).
 
 ## Done when

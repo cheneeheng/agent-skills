@@ -57,7 +57,7 @@ The table below is the reference list of what those bundles are made of.
 | Python Service | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv, testing, observability, security |
 | Python Library | `ceh-python-library` | Packaging, public API, semver, uv, testing (no web deps) |
 | Web Frontend | `ceh-web-frontend` | SvelteKit + React (Vite), Bun, TS style, ESLint/Prettier, Vitest, Playwright, accessibility, UI design, Cytoscape.js graph visualization |
-| AG-UI | `ceh-ag-ui` | Generative-UI canvases for AG-UI agents — the agent places components from a fixed, Tidewater-styled catalogue and can never restyle them; catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps |
+| AG-UI | `ceh-ag-ui` | Generative-UI canvases for AG-UI agents — the agent places components from a fixed, Tidewater-styled catalogue and can never restyle them; catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps. Worked examples: [`examples/ceh-ag-ui/`](examples/ceh-ag-ui/) |
 | Scaffolding | `ceh-scaffolding` | Per-project-type setup: directory layout + config + `.gitignore` |
 | Git Workflow | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations |
 | Ops | `ceh-ops` | Incident response, rollback, deploy pipeline; CI agents |
@@ -137,7 +137,7 @@ orthogonal tier — they hold a discipline that applies whatever you are buildin
 | `ceh-ag-ui` | Build AG-UI | `/ceh-ag-ui:build-ag-ui` | Starting a generative-UI canvas for an AG-UI agent — own template or the bundled one (React + Vite + `@ag-ui/client`, seven Tidewater catalogue components, mock agent), theme install, the styling lock |
 | `ceh-ag-ui` | Add Canvas Component | `/ceh-ag-ui:add-canvas-component` | Adding a component the agent can place — agent-facing description, content-only zod schema, example fixture, theme-only markup, mock verification |
 | `ceh-ag-ui` | Build AG-UI Agent | `/ceh-ag-ui:build-ag-ui-agent` | Building the Claude-backed AG-UI server — append-only transcript per thread, end the run on a frontend tool call, held backend results, RUN_ERROR on every failure |
-| `ceh-ag-ui` | Sync Agent State | `/ceh-ag-ui:sync-agent-state` | A live value the agent keeps updating — STATE_SNAPSHOT / STATE_DELTA, one writer per key, a fixed validated panel |
+| `ceh-ag-ui` | Add Live State Panel | `/ceh-ag-ui:add-live-state-panel` | A live value the agent keeps updating — STATE_SNAPSHOT / STATE_DELTA, one writer per key, a fixed validated panel |
 | `ceh-ag-ui` | Add Human Approval | `/ceh-ag-ui:add-human-approval` | The agent must ask before acting — AG-UI interrupts, a fixed approval card, one resume for every open interrupt |
 | `ceh-scaffolding` | Scaffold Python Service | `/ceh-scaffolding:scaffold-python-service` | Starting a FastAPI/Python web service repo |
 | `ceh-scaffolding` | Scaffold Python Library | `/ceh-scaffolding:scaffold-python-library` | Starting a distributable Python library/package |

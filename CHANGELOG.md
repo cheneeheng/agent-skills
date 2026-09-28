@@ -14,9 +14,12 @@ Versions refer to the Marketplace versions.
   where the agent places components from a fixed catalogue — bundled React + Vite +
   `@ag-ui/client` template with seven Tidewater-styled components and a no-LLM mock agent),
   `add-canvas-component`, `build-ag-ui-agent` (bundled FastAPI + Claude server keeping an
-  append-only transcript per thread), `sync-agent-state`, and `add-human-approval` (AG-UI 1.0
+  append-only transcript per thread), `add-live-state-panel`, and `add-human-approval` (AG-UI 1.0
   interrupts). The agent can never restyle a component: schemas are content-only and checked at
   startup, arguments are parsed so unknown keys are stripped, and components use theme tokens only.
+- `examples/ceh-ag-ui/`: eight worked examples, prompt by prompt, from a blank canvas to a
+  sales assistant with a live progress panel and approval steps. Kept at the repo root so
+  installing the plugin does not copy them.
 
 ## [6.10.0] — 2026-09-26
 

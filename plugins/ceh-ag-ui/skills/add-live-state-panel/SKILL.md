@@ -1,13 +1,14 @@
 ---
-name: sync-agent-state
+name: add-live-state-panel
 description: >-
-  Load this skill when an AG-UI canvas needs a live value the agent keeps up to date while it
-  works (a progress tracker, a plan, a running tally, a draft document) instead of a new
-  component per answer: wiring STATE_SNAPSHOT and STATE_DELTA (JSON Patch) from the agent,
-  onStateChanged in @ag-ui/client, a fixed state panel on the canvas, and UI-to-agent state via
-  RunAgentInput.state. Trigger on "show the agent's progress live", "shared state", "sync state
-  with the agent", "the agent should update this panel as it goes", or any mention of
-  STATE_SNAPSHOT or STATE_DELTA. Builds on a canvas from ceh-ag-ui:build-ag-ui. Not for placing a
+  Load this skill when adding a live panel to an AG-UI canvas: one fixed area showing a value the
+  agent keeps updating while it works (a progress tracker, a plan checklist, a running tally, a
+  draft document), instead of a new component per answer. Wires STATE_SNAPSHOT and STATE_DELTA
+  (JSON Patch) from the agent, onStateChanged in @ag-ui/client, a fixed state panel on the canvas,
+  and UI-to-agent state via RunAgentInput.state. Trigger on "show the agent's progress live",
+  "shared state", "sync state with the agent", "the agent should update this panel as it goes", or
+  any mention of STATE_SNAPSHOT or STATE_DELTA. A build-time skill: it writes the panel and the
+  agent code that feeds it. Builds on a canvas from ceh-ag-ui:build-ag-ui. Not for placing a
   one-off component (ceh-ag-ui:add-canvas-component) or asking the user to approve something
   (ceh-ag-ui:add-human-approval).
 compatibility: >-
@@ -15,7 +16,7 @@ compatibility: >-
   agent, uv with Python 3.11+ and ag-ui-protocol 1.x.
 ---
 
-# Sync agent state with the canvas
+# Add a live state panel to the canvas
 
 Catalogue components are **snapshots**: once placed, a component never changes. Shared state is for
 the opposite case, a **value that changes while the user watches**. A progress tracker ticks, a

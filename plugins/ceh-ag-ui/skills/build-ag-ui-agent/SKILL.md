@@ -23,8 +23,9 @@ The canvas owns what the user sees, and this server owns what the model sees. Mo
 AG-UI backend come from mixing the two up: building the model's history out of the UI's messages,
 or running a tool that belongs to the canvas.
 
-Start from `${CLAUDE_SKILL_DIR}/assets/agent-server/` (`main.py`, `pyproject.toml`). Copy it next
-to the canvas and run `uv run uvicorn main:app --port 8000`. The canvas's Vite proxy already points
+Start from `${CLAUDE_SKILL_DIR}/assets/agent-server/` (`main.py`, `pyproject.toml`). Copy it to
+`server/` beside the canvas's `web/`, keeping `agent/` (the mock, still the fastest way to test a
+component), and run `uv run uvicorn main:app --port 8000` from `server/`, with the mock stopped. The canvas's Vite proxy already points
 at that port, and `AGENT_ORIGIN` overrides it. It uses Claude through the official `anthropic` SDK
 by default, with `AGENT_MODEL` defaulting to `claude-opus-5-5`. For a different provider, keep the
 structure below and swap only `run_claude`.

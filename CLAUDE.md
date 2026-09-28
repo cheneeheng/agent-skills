@@ -67,6 +67,7 @@ Categorization rules of thumb:
 .agents_workspace/            # Session artifacts — not a plugin, git-ignored in full. Local-only: DECISION_LOG.md, archive/*_PLAN.md design records, skill-evals/<skill>/<evaluator>/run-NNN/ (ceh-evaluation / skill-creator output)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, TESTING_WORKFLOW.md, CHANGELOG-v1-v2.md
+examples/<plugin>/            # User-facing worked examples, prompt by prompt — kept outside plugins/ so they are not copied into every install
 plugins/                      # All plugins live here — flat, one directory per plugin, no tier subfolders
 ├── ceh-scenario-<name>/      # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
 └── ceh-<plugin-name>/
