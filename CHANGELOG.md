@@ -7,6 +7,34 @@ Versions refer to the Marketplace versions.
 
 ## [Unreleased]
 
+## [6.12.0] — 2026-09-29
+
+The response format and honesty rules used to live only in the maintainer's user-level
+`CLAUDE.md`, so nobody else who installed `ceh-coding-agent` got them. They now ship as a plugin
+output style that the plugin forces on. `keep-coding-instructions: true` keeps Claude Code's own
+engineering instructions in place, so the style only adds rules on top of them.
+
+The wording was tuned by simulation, with every run excluding the user-level `CLAUDE.md`. The
+first wording, a straight copy, produced the summary table on 6 of 9 multi-topic prompts. The
+shipped wording produced it on 9 of 9. It defines what counts as a topic, allows no text before
+the table, reserves "verified" for things actually run and marks conclusions from reading code
+"inferred", and adds one example shape. The example removed the lead-in sentence that rules alone
+still let through in 2 of 9 runs.
+
+### Plugin versions
+
+| Plugin | Version |
+|--------|---------|
+| `ceh-coding-agent` | v3.3.0 |
+
+### Added
+
+- **`ceh-coding-agent`** — the `CEH Coding Agent` output style
+  (`output-styles/ceh-coding-agent.md`, `force-for-plugin: true`): a Topic / Outcome / Status
+  summary table for 2+ topics, code before prose, one complete thought per bullet, and honest
+  verified / inferred / assumed status. It reaches the main conversation and forks only. Other
+  subagents run their own system prompt.
+
 ## [6.11.0] — 2026-09-28
 
 Agents that speak the AG-UI protocol can now drive a real interface, not just a chat stream. A new
