@@ -74,6 +74,7 @@ plugins/                      # All plugins live here — flat, one directory pe
     ├── .claude-plugin/           # plugin.json — version and dependencies live here
     ├── agents/                   # Optional — subagents for complex autonomous tasks
     ├── hooks/                    # Optional — hooks.json wiring scripts via ${CLAUDE_PLUGIN_ROOT}
+    ├── output-styles/            # Optional — output style .md files (only ceh-coding-agent, force-for-plugin)
     ├── scripts/                  # Optional — hook scripts and shell helpers
     └── skills/
         └── <skill-name>/

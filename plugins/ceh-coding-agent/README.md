@@ -44,6 +44,17 @@ agent push I/O-heavy reading onto a small model so file contents never reach the
 | `bulk-reader` | Read large or numerous files and return a compressed, line-anchored answer to one specific question. Runs on `haiku` with `Read`/`Grep`/`Glob` only — the model line is the entire cost saving, and the recall ceiling. Measured over 30 dispatches (`skills/delegate-bulk-reads/tests/`): 100% recall on enumerative questions, 69% when the answer has to be assembled, which is why `delegate-bulk-reads` makes the caller confirm coverage. Read-only, never edits |
 | `repo-tree-mapper` | Map or document a repository's structure into an annotated tree; auto-triggers on orientation requests |
 
+## Output style
+
+| Output style | When it applies | What it does |
+|--------------|-----------------|--------------|
+| `CEH Coding Agent` (`output-styles/ceh-coding-agent.md`) | Every session while the plugin is enabled (`force-for-plugin: true`) | Response format and honesty rules: a Topic / Outcome / Status summary table for 2+ topics, code before prose, one complete thought per bullet, plain "I don't know", and reporting what was verified versus assumed. Sets `keep-coding-instructions: true`, so Claude Code's built-in engineering instructions stay in place. |
+
+`force-for-plugin` overrides any `outputStyle` the user set, and if several enabled plugins force a
+style, Claude Code uses the first one loaded. Output styles reach the main conversation and forks
+only. Other subagents run their own system prompt, so rules that must hold there stay in
+`CLAUDE.md` or the contract.
+
 ## How the skills auto-load
 
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled —
