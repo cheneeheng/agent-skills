@@ -1,5 +1,14 @@
 # CEH Agent Skills Plugins
 
+> [!WARNING]
+> **This project has been sunset and is no longer maintained.** It has moved to
+> [`cheneeheng/ceh-claude-code-library`](https://github.com/cheneeheng/ceh-claude-code-library),
+> where all further work on the `ceh-*` plugins happens. This repo is archived as-is: it stays
+> public and the `ceh-plugins` marketplace stays installable, frozen at `v6.12.0`, but there will be
+> no further development, bug fixes, or compatibility updates. **Use at your own risk** — the
+> plugins may break with future versions of Claude Code. See [`sunset.md`](sunset.md) for why, what
+> changed in the successor, and how to switch.
+
 A collection of Claude Code plugins providing engineering standards for AI coding agents. Plugins are
 organized around **use cases** — load the ones that match what you are building.
 
