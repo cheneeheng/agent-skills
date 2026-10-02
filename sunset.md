@@ -23,11 +23,24 @@ services, Python libraries, and web frontends.
 
 ## Why sunset it
 
-The project was not abandoned, it moved. The plugins were migrated to
-[`ceh-claude-code-library`](https://github.com/cheneeheng/ceh-claude-code-library), which started on
-2026-09-30 as the new home for the `ceh-*` marketplace. Maintaining two copies of the same plugins
-would only let them drift, so this repo is frozen at its last release and the successor carries the
-work forward.
+The project was not abandoned, it moved. The repo had grown past what it needed to be:
+
+- **Too many plugins.** The marketplace had more plugins than anyone could keep in their head, which
+  is why scenario bundles had to exist as an install entry point at all.
+- **Too many dependencies.** Plugins depended on plugins, so installing one pulled in a closure of
+  others.
+- **Too many layers.** Four tiers, with bundles depending on bundles, sat between a user and the
+  skill they wanted.
+- **Too many experimental and unused plugins.** Several were never bundled or never reached for, and
+  still had to be versioned, validated, and documented.
+
+Migrating to [`ceh-claude-code-library`](https://github.com/cheneeheng/ceh-claude-code-library),
+started on 2026-09-30, was the chance to clean all of that up instead of trimming it in place. It
+was also an experiment in its own right: to see how much of a repo migration Claude could do on its
+own.
+
+Maintaining two copies of the same plugins would only let them drift, so this repo is frozen at its
+last release and the successor carries the work forward.
 
 ## What changed in the successor
 
